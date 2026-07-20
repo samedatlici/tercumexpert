@@ -5,41 +5,22 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0a0a0a" />
-    <meta name="color-scheme" content="light" />
     <title>TercümExpert — Profesyonel Çeviri Hizmetleri</title>
-    <meta name="description" content="Yeminli tercüme, noter onayı ve kurumsal çeviri çözümleri. Belgenizi yükleyin, anında ön fiyat teklifini alın." />
-
-    <script>
-      (function () {
-        function show(kind, detail) {
-          try {
-            var el = document.getElementById('root') || document.body
-            el.innerHTML =
-              '<div style="padding:20px;font-family:ui-monospace,monospace;color:#111;max-width:900px;margin:0 auto">' +
-              '<h1 style="color:#b00020;font-size:18px;margin:0 0 8px">TercümExpert — Gecici Tani Ekrani</h1>' +
-              '<p style="margin:0 0 8px;color:#555">Bir hata yakalandi. Asagidaki metnin ekran goruntusunu paylasin.</p>' +
-              '<p style="font-weight:bold;margin:0 0 6px">[' + kind + ']</p>' +
-              '<pre style="white-space:pre-wrap;background:#f4f4f5;padding:12px;border-radius:6px;font-size:12px;overflow:auto">' +
-              String(detail).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') +
-              '</pre></div>'
-          } catch (e) {}
-        }
-        window.addEventListener('error', function (e) {
-          if (e && (e.error || e.message)) show('error', (e.error && e.error.stack) || e.message)
-        })
-        window.addEventListener('unhandledrejection', function (e) {
-          var r = e && e.reason
-          show('promise', (r && (r.stack || r.message)) || String(r))
-        })
-      })()
-    </script>
-
+    <meta name="description" content="Yeminli tercüme, noter onayı ve kurumsal çeviri çözümleri." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" /></noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <script>
+      window.addEventListener('error', function (e) {
+        var d = (e && e.error && e.error.stack) || (e && e.message) || 'bilinmeyen hata'
+        var el = document.getElementById('root') || document.body
+        el.innerHTML = '<pre style="white-space:pre-wrap;padding:20px;color:#b00020;font:13px ui-monospace,monospace">TANI: ' + String(d).replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</pre>'
+      })
+    </script>
   </head>
   <body>
     <div id="root"></div>
-    <noscript>Bu uygulamayi goruntulemek icin lutfen JavaScript'i etkinlestirin.</noscript>
-    <script
+    <noscript>Bu uygulamayi goruntulemek icin JavaScript gerekir.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
