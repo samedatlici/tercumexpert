@@ -1,0 +1,128 @@
+import { useState, type ReactNode } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { Button } from '@/components/common/Button'
+import { Icon } from '@/components/common/Icon'
+import { PageHero } from '@/components/common/PageHero'
+import { Seo } from '@/components/seo/Seo'
+import { useI18n } from '@/hooks/useI18n'
+import { company, whatsappLink } from '@/app/config/site.config'
+
+const isPlaceholder = (v: string) => v.trim().startsWith('[')
+
+const schema = z.object({
+  name: z.string().min(2, 'Ad Soyad zorunludur.'),
+  email: z.string().email('Geçerli bir e-posta girin.'),
+  phone: z.string().optional(),
+  subject: z.string().min(2, 'Konu zorunludur.'),
+  message: z.string().min(10, 'Mesaj en az 10 karakter olmalıdır.'),
+  consent: z.boolean().refine((v) => v === true, { message: 'Devam etmek için onay gereklidir.' }),
+  // Honeypot (bot koruması §29): boş kalmalı
+  company_website: z.string().max(0).optional(),
+})
+type ContactForm = z.infer<typeof schema>
+
+const fieldClass =
+  'min-h-[44px] w-full rounded-md border border-border bg-surface px-3 py-2 text-base focus-visible:outline-none'
+
+export default function ContactPage() {
+  const { dict } = useI18n()
+  const c = dict.contact
+  const [sent, setSent] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactForm>({ resolver: zodResolver(schema) })
+
+  const onSubmit = async () => {
+    // Demo: veriler sunucuya GÖNDERİLMEZ, console'a PII yazılmaz (§22, §29).
+    setSent(true)
+  }
+
+  const wa = whatsappLink()
+
+  return (
+    <>
+      <Seo title={c.seo.title} description={c.seo.description} routeId="contact" />
+      <PageHero title={c.hero.title} subtitle={c.hero.subtitle} />
+
+      <section className="section">
+        <div className="container-base grid gap-10 lg:grid-cols-2">
+          {/* Bilgiler */}
+          <div>
+            <h2 className="text-xl font-semibold">{c.infoTitle}</h2>
+            <ul className="mt-4 space-y-3 text-sm">
+              {!isPlaceholder(company.phone.value) && (
+                <li><a href={`tel:${company.phone.value}`} className="inline-flex items-center gap-2 hover:text-primary"><Icon name="Phone" className="size-4" />{company.phone.value}</a></li>
+              )}
+              {!isPlaceholder(company.email.value) && (
+                <li><a href={`mailto:${company.email.value}`} className="inline-flex items-center gap-2 hover:text-primary"><Icon name="Mail" className="size-4" />{company.email.value}</a></li>
+              )}
+              {wa && (
+                <li><a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-primary"><Icon name="MessageCircle" className="size-4" />{c.labels.whatsapp}</a></li>
+              )}
+              {!isPlaceholder(company.address.value) && (
+                <li className="flex items-start gap-2"><Icon name="MapPin" className="mt-0.5 size-4" />{company.address.value}</li>
+              )}
+              <li className="text-text-secondary">{c.labels.hours}: {company.workingHours.value}</li>
+            </ul>
+          </div>
+
+          {/* Form */}
+          <div>
+            <h2 className="text-xl font-semibold">{c.form.title}</h2>
+            {sent ? (
+              <div role="status" aria-live="polite" className="mt-4 rounded-md border border-border bg-surface-muted p-4">
+                <p className="font-medium text-success">{c.form.success}</p>
+                <p className="mt-1 text-xs text-text-muted">{dict.common.states.demoNotice}</p>
+              </div>
+            ) : (
+              <form className="mt-4 space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
+                <Field label={c.form.fields.name} error={errors.name?.message}>
+                  <input className={fieldClass} {...register('name')} aria-invalid={!!errors.name} />
+                </Field>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label={c.form.fields.email} error={errors.email?.message}>
+                    <input type="email" className={fieldClass} {...register('email')} aria-invalid={!!errors.email} />
+                  </Field>
+                  <Field label={c.form.fields.phone} error={errors.phone?.message}>
+                    <input type="tel" className={fieldClass} {...register('phone')} />
+                  </Field>
+                </div>
+                <Field label={c.form.fields.subject} error={errors.subject?.message}>
+                  <input className={fieldClass} {...register('subject')} aria-invalid={!!errors.subject} />
+                </Field>
+                <Field label={c.form.fields.message} error={errors.message?.message}>
+                  <textarea rows={5} className={fieldClass} {...register('message')} aria-invalid={!!errors.message} />
+                </Field>
+                {/* Honeypot (gizli) */}
+                <input type="text" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" {...register('company_website')} />
+                <label className="flex items-start gap-3 text-sm">
+                  <input type="checkbox" className="mt-1 size-4" {...register('consent')} aria-invalid={!!errors.consent} />
+                  <span>{c.form.fields.consent}</span>
+                </label>
+                {errors.consent && <p className="text-sm text-danger">{errors.consent.message}</p>}
+                <Button type="submit" intent="primary" size="lg" block disabled={isSubmitting}>
+                  {c.form.submit}
+                </Button>
+                <p className="text-center text-xs text-text-muted">{dict.common.states.demoNotice}</p>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}
+
+function Field({ label, error, children }: { label: string; error?: string; children: ReactNode }) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-sm font-medium">{label}</label>
+      {children}
+      {error && <p className="mt-1 text-sm text-danger">{error}</p>}
+    </div>
+  )
+}
