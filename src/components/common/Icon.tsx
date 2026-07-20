@@ -96,6 +96,7 @@ interface IconProps extends Omit<LucideProps, 'ref'> {
 
 export function Icon({ name, label, strokeWidth = 1.75, ...props }: IconProps) {
   const Cmp = REGISTRY[name]
+  if (!Cmp) return null
   return (
     <Cmp
       strokeWidth={strokeWidth}
