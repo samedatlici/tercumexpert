@@ -12,14 +12,17 @@ export interface StatItem {
   /** Doğrulanana kadar gösterilecek güvenli değer. */
   safeDisplay: string
   labelTr: string
+  /** Lucide ikon anahtarı (components/common/Icon). Opsiyonel. */
+  icon?: string
   status: VerificationStatus
 }
 
+// NOT: Değerler DOĞRULANMAMIŞtır; DEMO amaçlı referanstaki gibi gösterilir (§28).
 export const STATISTICS: StatItem[] = [
-  { key: 'completed', rawValue: '15.000+', safeDisplay: 'Doğrulanacak', labelTr: 'Tamamlanan iş', status: 'unverified' },
-  { key: 'corporate', rawValue: '500+', safeDisplay: 'Doğrulanacak', labelTr: 'Kurumsal müşteri', status: 'unverified' },
-  { key: 'satisfaction', rawValue: '%98', safeDisplay: 'Doğrulanacak', labelTr: 'Müşteri memnuniyeti', status: 'unverified' },
-  { key: 'languages', rawValue: '50+', safeDisplay: '50+', labelTr: 'Dil desteği', status: 'unverified' },
+  { key: 'satisfaction', rawValue: '%98', safeDisplay: '%98', labelTr: 'Müşteri Memnuniyeti', icon: 'TrendingUp', status: 'unverified' },
+  { key: 'completed', rawValue: '15.000+', safeDisplay: '15.000+', labelTr: 'Tamamlanan İş', icon: 'CircleCheck', status: 'unverified' },
+  { key: 'languages', rawValue: '50+', safeDisplay: '50+', labelTr: 'Dil Desteği', icon: 'Globe', status: 'unverified' },
+  { key: 'corporate', rawValue: '500+', safeDisplay: '500+', labelTr: 'Kurumsal Müşteri', icon: 'Building2', status: 'unverified' },
 ]
 
 /** Kurumsal sayfa istatistikleri (§14). Doğrulanmamış. */

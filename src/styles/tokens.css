@@ -24,11 +24,11 @@
   --neutral-900: #18181b;
   --neutral-950: #0a0a0a;
 
-  /* Kurumsal koyu mavi (CTA) — ölçülü, doygun değil */
-  --blue-500: #2563eb;
-  --blue-600: #1d4ed8;
-  --blue-700: #1e40af;
-  --blue-800: #1e3a8a;
+  /* Kurumsal royal mavi (CTA) — referans siteye kalibre edildi */
+  --blue-500: #3b52e8;
+  --blue-600: #2743e0;
+  --blue-700: #1e34c4;
+  --blue-800: #182aa0;
 
   /* Durum renkleri */
   --green-600: #16a34a;
@@ -39,7 +39,7 @@
   --background: var(--white);
   --foreground: var(--black);
   --surface: var(--white);
-  --surface-muted: var(--neutral-50);
+  --surface-muted: #f6f7f9;
   --surface-inverse: var(--black);
   --border: var(--neutral-200);
   --border-strong: var(--neutral-300);

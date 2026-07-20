@@ -1,22 +1,36 @@
 import {
+  Activity,
   ArrowRight,
+  BarChart3,
+  Building2,
   Check,
+  CircleCheck,
   ChevronDown,
+  Clock,
   Cog,
   FileCheck2,
+  FileText,
   Globe,
   Globe2,
   GraduationCap,
   HeartPulse,
+  Languages,
   Mail,
   MapPin,
   Menu,
   MessageCircle,
+  MessageSquare,
+  PackageCheck,
   Phone,
+  QrCode,
   Scale,
+  Settings,
   ShieldCheck,
   Stamp,
+  Star,
+  TrendingUp,
   Upload,
+  Wallet,
   X,
   type LucideProps,
 } from 'lucide-react'
@@ -26,6 +40,7 @@ import {
  * aria-hidden; anlam taşıyan ikonlar `label` ile erişilebilir olur.
  */
 const REGISTRY = {
+  // Hizmetler
   Stamp,
   FileCheck2,
   Globe2,
@@ -34,17 +49,41 @@ const REGISTRY = {
   HeartPulse,
   GraduationCap,
   Globe,
+  // Nasıl çalışır
+  Upload,
+  Settings,
+  CircleCheck,
+  Activity,
+  PackageCheck,
+  // Neden biz
+  TrendingUp,
+  MessageSquare,
+  Languages,
+  Building2,
+  // İstatistik
+  BarChart3,
+  // İş ortaklığı
+  Wallet,
+  QrCode,
+  // Genel
   ShieldCheck,
   ArrowRight,
   Check,
   ChevronDown,
   Menu,
   X,
-  Upload,
   MessageCircle,
   Phone,
   Mail,
   MapPin,
+  Clock,
+  FileText,
+  Star,
+  // Sosyal
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
 } as const
 
 export type IconName = keyof typeof REGISTRY

@@ -16,25 +16,30 @@ export interface CompanyInfo {
   workingHours: Verifiable<string>
 }
 
+// NOT: Aşağıdaki iletişim değerleri DEMO/placeholder'dır (referanstaki gibi görünmesi
+// için). Hiçbiri doğrulanmış gerçek bilgi DEĞİLDİR; yayından önce değiştirilmelidir
+// (PROJECT_CHECKLIST.md). Adres doğrulanmadan harita embed EDİLMEZ.
 export const company: CompanyInfo = {
   legalName: verifiable('[ŞİRKET UNVANI EKLENECEK]', 'requires-legal-review', 'Resmî ticaret unvanı.'),
   mersis: verifiable('[MERSİS NO EKLENECEK]', 'requires-legal-review'),
   taxOffice: verifiable('[VERGİ DAİRESİ / NO EKLENECEK]', 'requires-legal-review'),
-  address: verifiable('[AÇIK ADRES EKLENECEK]', 'unverified', 'Adres doğrulanmadan harita embed edilmez.'),
-  phone: verifiable('[TELEFON EKLENECEK]', 'unverified'),
-  email: verifiable('info@tercumexpert.com', 'unverified', 'Kurumsal e-posta doğrulanacak.'),
-  workingHours: verifiable('Hafta içi 09:00–18:00', 'unverified'),
+  address: verifiable('Beşiktaş, İstanbul, Türkiye', 'unverified', 'DEMO adres — doğrulanmadan harita embed edilmez.'),
+  phone: verifiable('+90 555 123 45 67', 'unverified', 'DEMO numara — gerçek numarayla değiştirilecek.'),
+  email: verifiable('info@tercumexpert.com', 'unverified', 'DEMO e-posta — doğrulanacak.'),
+  workingHours: verifiable('Hafta İçi 09:00 - 18:00 | Mesai Dışı Hizmet Mevcuttur', 'unverified'),
 }
 
 export const siteConfig = {
   name: env.VITE_APP_NAME,
   url: env.VITE_APP_URL,
-  whatsappNumber: env.VITE_WHATSAPP_NUMBER,
+  // env doldurulmazsa DEMO numaraya düşer (referans görünümü için). Gerçek numara env'den.
+  whatsappNumber: env.VITE_WHATSAPP_NUMBER || '905551234567',
+  // DEMO sosyal linkler — gerçek hesaplarla değiştirilecek (checklist).
   social: {
-    facebook: '',
-    x: '',
-    linkedin: '',
-    instagram: '',
+    facebook: 'https://facebook.com',
+    x: 'https://x.com',
+    linkedin: 'https://linkedin.com',
+    instagram: 'https://instagram.com',
   },
 } as const
 

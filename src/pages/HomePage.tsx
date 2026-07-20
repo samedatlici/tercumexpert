@@ -5,82 +5,101 @@ import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { buildPath } from '@/app/router/routes'
 import { SERVICES } from '@/app/config/services'
-import { STATISTICS, statDisplay } from '@/app/config/statistics'
+import { STATISTICS, CORPORATE_STATS, statDisplay } from '@/app/config/statistics'
+import { BLOG_POSTS } from '@/content/blog'
+import { whatsappLink } from '@/app/config/site.config'
+
+const HOW_ICONS: Record<string, IconName> = {
+  upload: 'Upload',
+  select: 'Settings',
+  confirm: 'CircleCheck',
+  track: 'Activity',
+  receive: 'PackageCheck',
+}
+const WHY_ICONS: Record<string, IconName> = {
+  autoQuote: 'TrendingUp',
+  whatsapp: 'MessageSquare',
+  terminology: 'Languages',
+  revision: 'CircleCheck',
+  languages: 'Globe',
+  terms: 'Building2',
+}
+const TEASER_ICONS: Record<string, IconName> = { commission: 'Wallet', qr: 'QrCode' }
 
 export default function HomePage() {
-  const { locale, dict } = useI18n()
+  const { locale, dict, formatDate } = useI18n()
   const home = dict.home
-  const featured = SERVICES.filter((s) => s.homeFeatured)
+  const wa = whatsappLink('Merhaba, çeviri hizmeti hakkında bilgi almak istiyorum.')
 
   return (
     <>
       <Seo title={home.seo.title} description={home.seo.description} routeId="home" />
 
-      {/* Hero */}
+      {/* ============ HERO ============ */}
       <section className="section-sm bg-surface">
-        <div className="container-wide grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <p className="mb-4 inline-flex items-center gap-2 rounded-md border border-border px-3 py-1 text-sm text-text-secondary">
-              <Icon name="ShieldCheck" className="size-4 text-primary" />
-              {home.hero.support}
-            </p>
-            <h1 className="text-5xl font-bold tracking-tight text-text-primary">{home.hero.title}</h1>
-            <p className="mt-4 max-w-prose text-lg text-text-secondary">{home.hero.subtitle}</p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link to={buildPath(locale, 'quote')} className="sm:w-auto">
-                <Button intent="primary" size="lg" block>
-                  <Icon name="Upload" className="size-5" /> {dict.common.actions.uploadDocument}
+        <div className="container-base flex flex-col items-center text-center">
+          <p className="mb-5 inline-flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm font-medium text-text-secondary">
+            <Icon name="ShieldCheck" className="size-4 text-primary" />
+            {home.hero.support}
+          </p>
+          <h1 className="max-w-4xl text-5xl font-extrabold leading-tight tracking-tight md:text-6xl">
+            {home.hero.title} <span className="text-text-secondary">{home.hero.titleAccent}</span>
+          </h1>
+          <p className="mt-5 max-w-xl text-lg text-text-secondary">{home.hero.subtitle}</p>
+
+          <div className="mt-8 flex w-full max-w-2xl flex-col gap-3 sm:flex-row sm:justify-center">
+            <Link to={buildPath(locale, 'quote')} className="sm:w-auto">
+              <Button intent="secondary" size="lg" block>
+                <Icon name="Upload" className="size-5" /> {dict.common.actions.uploadDocument}
+              </Button>
+            </Link>
+            {wa && (
+              <a href={wa} target="_blank" rel="noopener noreferrer" className="sm:w-auto">
+                <Button intent="whatsapp" size="lg" block>
+                  <Icon name="MessageSquare" className="size-5" /> WhatsApp
                 </Button>
-              </Link>
-              <div className="grid grid-cols-2 gap-3 sm:flex">
-                <Link to={buildPath(locale, 'quote')}>
-                  <Button intent="outline" size="lg" block>
-                    {dict.common.actions.calculatePrice}
-                  </Button>
-                </Link>
-                <Link to={buildPath(locale, 'contact')}>
-                  <Button intent="whatsapp" size="lg" block>
-                    {dict.common.actions.whatsapp}
-                  </Button>
-                </Link>
-              </div>
-            </div>
+              </a>
+            )}
+            <Link to={buildPath(locale, 'quote')} className="sm:w-auto">
+              <Button intent="primary" size="lg" block>
+                {dict.common.actions.calculatePrice}
+              </Button>
+            </Link>
           </div>
-          {/* Soyut belge motifi (görsel yerine geometrik desen — §27) */}
-          <div aria-hidden="true" className="hidden lg:block">
-            <div className="relative aspect-[4/3] rounded-lg border border-border bg-surface-muted p-6">
-              <div className="grid h-full grid-cols-6 grid-rows-6 gap-2 opacity-70">
-                {Array.from({ length: 36 }).map((_, i) => (
-                  <div key={i} className="rounded-sm border border-border" />
-                ))}
-              </div>
-            </div>
-          </div>
+
+          <ul className="mt-10 grid w-full max-w-3xl grid-cols-2 gap-4 md:grid-cols-4">
+            {home.trust.items.map((t) => (
+              <li key={t.key} className="flex items-center justify-center gap-2 text-sm font-medium text-text-secondary">
+                <Icon name="CircleCheck" className="size-5 shrink-0 text-success" />
+                {t.label}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* Güven maddeleri */}
-      <section className="border-y border-border bg-surface-muted py-6">
-        <div className="container-wide grid grid-cols-2 gap-4 md:grid-cols-4">
-          {home.trust.items.map((t) => (
-            <div key={t.key} className="flex items-center gap-2 text-sm font-medium text-text-secondary">
-              <Icon name="Check" className="size-4 shrink-0 text-primary" />
-              {t.label}
+      {/* ============ STATS (siyah bant) ============ */}
+      <section className="bg-secondary py-14 text-text-inverse">
+        <div className="container-wide grid grid-cols-2 gap-8 lg:grid-cols-4">
+          {STATISTICS.map((s) => (
+            <div key={s.key} className="flex flex-col items-center text-center">
+              <Icon name={(s.icon ?? 'BarChart3') as IconName} className="mb-3 size-8 opacity-90" />
+              <p className="text-4xl font-extrabold">{statDisplay(s)}</p>
+              <p className="mt-1 text-sm opacity-70">{s.labelTr}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Nasıl çalışır */}
+      {/* ============ NASIL ÇALIŞIR ============ */}
       <section className="section">
         <div className="container-wide">
-          <SectionHeading title={home.howItWorks.title} subtitle={home.howItWorks.subtitle} />
-          <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <SectionHead title={home.howItWorks.title} subtitle={home.howItWorks.subtitle} />
+          <ol className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
             {home.howItWorks.steps.map((step, i) => (
-              <li key={step.key} className="rounded-lg border border-border bg-surface p-5">
-                <span className="text-sm font-semibold text-primary">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+              <li key={step.key} className="flex flex-col items-center rounded-lg border border-border bg-surface p-5 text-center">
+                <Icon name={HOW_ICONS[step.key] ?? 'FileText'} className="size-8 text-primary" />
+                <span className="mt-3 text-lg font-bold">{i + 1}</span>
                 <p className="mt-1 font-semibold">{step.title}</p>
                 <p className="mt-1 text-sm text-text-secondary">{step.desc}</p>
               </li>
@@ -89,82 +108,170 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Hizmetler (öne çıkan) */}
+      {/* ============ HİZMETLER (8 kart) ============ */}
       <section className="section bg-surface-muted">
         <div className="container-wide">
-          <SectionHeading title={home.services.title} subtitle={home.services.subtitle} />
+          <SectionHead title={home.services.title} subtitle={home.services.subtitle} />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {featured.map((s) => {
+            {[...SERVICES].map((s) => {
               const item = dict.serviceItems[s.id]
               return (
-                <article key={s.id} className="flex flex-col rounded-lg border border-border bg-surface p-5">
-                  <Icon name={s.icon as IconName} className="size-7 text-primary" />
-                  <h3 className="mt-3 text-lg font-semibold">{item.name}</h3>
-                  <p className="mt-1 flex-1 text-sm text-text-secondary">{item.short}</p>
-                  <Link
-                    to={buildPath(locale, 'services')}
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-                  >
-                    {dict.common.actions.learnMore} <Icon name="ArrowRight" className="size-4" />
-                  </Link>
+                <article key={s.id} className="flex flex-col rounded-lg border border-border bg-surface p-6">
+                  <Icon name={s.icon as IconName} className="size-8 text-primary" />
+                  <h3 className="mt-4 text-lg font-bold">{item.name}</h3>
+                  <p className="mt-2 text-sm text-text-secondary">{item.short}</p>
+                  <ul className="mt-3 flex-1 space-y-1.5">
+                    {item.benefits.map((b) => (
+                      <li key={b} className="flex items-start gap-2 text-sm text-text-secondary">
+                        <Icon name="CircleCheck" className="mt-0.5 size-4 shrink-0 text-success" />
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-5 flex gap-2">
+                    <Link to={buildPath(locale, 'services')} className="flex-1">
+                      <Button intent="secondary" size="sm" block>
+                        {dict.common.actions.learnMore}
+                      </Button>
+                    </Link>
+                    <Link to={buildPath(locale, 'quote')} className="flex-1">
+                      <Button intent="primary" size="sm" block>
+                        {dict.common.actions.getQuote}
+                      </Button>
+                    </Link>
+                  </div>
                 </article>
               )
             })}
           </div>
-          <div className="mt-6 text-center">
-            <Link to={buildPath(locale, 'services')}>
-              <Button intent="outline">{dict.common.actions.viewAll}</Button>
-            </Link>
+        </div>
+      </section>
+
+      {/* ============ NEDEN TERCÜMEXPERT (çizgi ikon) ============ */}
+      <section className="section">
+        <div className="container-wide">
+          <SectionHead title={home.why.title} subtitle="Rakiplerimizden bizi ayıran özellikler" />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {home.why.features.map((f) => (
+              <article key={f.key} className="rounded-lg border border-border bg-surface p-6">
+                <Icon name={WHY_ICONS[f.key] ?? 'CircleCheck'} className="size-8" />
+                <h3 className="mt-4 text-lg font-bold">{f.title}</h3>
+                <p className="mt-2 text-sm text-text-secondary">{f.desc}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* İstatistik (siyah alan) — doğrulanmamış değerler ham iddia gösterilmez */}
-      <section className="section-sm bg-secondary text-text-inverse">
-        <div className="container-wide">
-          <h2 className="sr-only">{home.stats.title}</h2>
-          <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
-            {STATISTICS.map((s) => (
-              <div key={s.key} className="text-center">
-                <p className="text-3xl font-bold">{statDisplay(s)}</p>
-                <p className="mt-1 text-sm opacity-80">{s.labelTr}</p>
+      {/* ============ KURUMSAL (siyah bant) ============ */}
+      <section className="bg-secondary py-16 text-text-inverse lg:py-20">
+        <div className="container-base flex flex-col items-center text-center">
+          <h2 className="text-3xl font-bold md:text-4xl">{home.corporateCta.title}</h2>
+          <p className="mt-3 max-w-2xl opacity-80">{home.corporateCta.desc}</p>
+          <div className="mt-8 grid w-full max-w-2xl grid-cols-3 gap-6">
+            {CORPORATE_STATS.map((s) => (
+              <div key={s.key}>
+                <p className="text-3xl font-extrabold">{statDisplay(s)}</p>
+                <p className="mt-1 text-sm opacity-70">{s.labelTr}</p>
               </div>
             ))}
           </div>
-          <p className="mt-6 text-center text-xs opacity-60">{home.stats.note}</p>
+          <Link to={buildPath(locale, 'corporate')} className="mt-8">
+            <Button intent="primary" size="lg">{home.corporateCta.action}</Button>
+          </Link>
         </div>
       </section>
 
-      {/* Kurumsal CTA */}
-      <section className="section">
-        <div className="container-wide rounded-lg border border-border bg-surface p-8 lg:p-12">
-          <div className="grid items-center gap-6 lg:grid-cols-[1.5fr_1fr]">
-            <div>
-              <h2 className="text-3xl font-bold">{home.corporateCta.title}</h2>
-              <p className="mt-3 max-w-prose text-text-secondary">{home.corporateCta.desc}</p>
-            </div>
-            <div className="lg:justify-self-end">
-              <Link to={buildPath(locale, 'corporate')}>
-                <Button intent="secondary" size="lg">
-                  {home.corporateCta.action}
-                </Button>
-              </Link>
-            </div>
+      {/* ============ İŞ ORTAKLIĞI TEASER ============ */}
+      <section className="section bg-surface-muted">
+        <div className="container-base">
+          <SectionHead title={home.partnershipTeaser.title} subtitle={home.partnershipTeaser.subtitle} />
+          <div className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-2">
+            {home.partnershipTeaser.items.map((i) => (
+              <article key={i.key} className="rounded-lg border border-border bg-surface p-6">
+                <Icon name={TEASER_ICONS[i.key] ?? 'Wallet'} className="size-8 text-primary" />
+                <h3 className="mt-4 text-lg font-bold">{i.title}</h3>
+                <p className="mt-2 text-sm text-text-secondary">{i.desc}</p>
+              </article>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link to={buildPath(locale, 'partnership')}>
+              <Button intent="secondary" size="lg">{home.partnershipTeaser.cta}</Button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Son CTA */}
-      <section className="section-sm bg-surface-muted">
-        <div className="container-wide text-center">
-          <h2 className="text-3xl font-bold">{home.finalCta.title}</h2>
-          <p className="mx-auto mt-3 max-w-prose text-text-secondary">{home.finalCta.desc}</p>
-          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+      {/* ============ MÜŞTERİ DEĞERLENDİRMELERİ (yer tutucu) ============ */}
+      <section className="section">
+        <div className="container-wide">
+          <SectionHead title={home.testimonials.title} subtitle={home.testimonials.subtitle} />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {home.testimonials.items.map((t) => (
+              <article key={t.key} className="flex flex-col rounded-lg border border-border bg-surface p-6">
+                <div className="flex gap-1" aria-hidden="true">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Icon key={i} name="Star" className="size-4 text-border-strong" />
+                  ))}
+                </div>
+                <div className="mt-4 flex-1 space-y-2" aria-hidden="true">
+                  <div className="h-3 w-full rounded bg-surface-muted" />
+                  <div className="h-3 w-5/6 rounded bg-surface-muted" />
+                  <div className="h-3 w-4/6 rounded bg-surface-muted" />
+                </div>
+                <div className="mt-5 flex items-center gap-3">
+                  <div className="size-9 rounded-full bg-surface-muted" aria-hidden="true" />
+                  <div>
+                    <p className="text-sm font-semibold text-text-muted">—</p>
+                    <p className="text-xs text-text-muted">{t.role}</p>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className="mt-6 text-center text-xs text-text-muted">{home.testimonials.placeholderNote}</p>
+        </div>
+      </section>
+
+      {/* ============ BLOG TEASER ============ */}
+      <section className="section bg-surface-muted">
+        <div className="container-wide">
+          <SectionHead title={home.blogTeaser.title} subtitle={home.blogTeaser.subtitle} />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {BLOG_POSTS.map((post) => (
+              <article key={post.slug} className="flex flex-col rounded-lg border border-border bg-surface p-6">
+                <Icon name={post.icon} className="size-7 text-primary" />
+                <p className="mt-4 text-xs font-medium text-text-muted">
+                  {post.category} • {post.readingMinutes} {dict.blog.readingTime}
+                </p>
+                <h3 className="mt-2 font-bold leading-snug">{post.title}</h3>
+                <p className="mt-2 flex-1 text-sm text-text-secondary">{post.excerpt}</p>
+                <p className="mt-3 text-xs text-text-muted">{formatDate(post.date)}</p>
+              </article>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link to={buildPath(locale, 'blog')}>
+              <Button intent="outline" size="lg">{home.blogTeaser.viewAll}</Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ FINAL CTA (siyah bant) ============ */}
+      <section className="bg-secondary py-16 text-text-inverse lg:py-20">
+        <div className="container-base flex flex-col items-center text-center">
+          <h2 className="text-3xl font-bold md:text-4xl">{home.finalCta.title}</h2>
+          <p className="mt-3 max-w-2xl opacity-80">{home.finalCta.desc}</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link to={buildPath(locale, 'quote')}>
-              <Button intent="primary" size="lg">{dict.common.actions.calculatePrice}</Button>
+              <Button intent="primary" size="lg">{home.finalCta.primary}</Button>
             </Link>
             <Link to={buildPath(locale, 'contact')}>
-              <Button intent="outline" size="lg">{dict.common.actions.contactUs}</Button>
+              <Button intent="outline" size="lg" className="border-white/40 bg-transparent text-text-inverse hover:bg-white/10">
+                {home.finalCta.secondary}
+              </Button>
             </Link>
           </div>
         </div>
@@ -173,11 +280,11 @@ export default function HomePage() {
   )
 }
 
-function SectionHeading({ title, subtitle }: { title: string; subtitle?: string }) {
+function SectionHead({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
-    <div className="mb-8 max-w-2xl">
-      <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
-      {subtitle && <p className="mt-2 text-text-secondary">{subtitle}</p>}
+    <div className="mx-auto mb-10 max-w-2xl text-center">
+      <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{title}</h2>
+      {subtitle && <p className="mt-3 text-text-secondary">{subtitle}</p>}
     </div>
   )
 }

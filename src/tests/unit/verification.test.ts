@@ -15,10 +15,10 @@ describe('verification', () => {
     expect(verifiable('y', 'draft', 'not').note).toBe('not')
   })
 
-  it('doğrulanmamış istatistik ham iddia göstermez', () => {
+  it('istatistikler doğrulanmadı olarak işaretli (yayından önce teyit)', () => {
     const completed = STATISTICS.find((s) => s.key === 'completed')!
-    expect(completed.status).not.toBe('verified')
-    expect(statDisplay(completed)).toBe('Doğrulanacak')
-    expect(statDisplay(completed)).not.toContain('15.000')
+    expect(completed.status).toBe('unverified')
+    // DEMO gösterim: safeDisplay kullanılır (verified olmadığı için rawValue değil).
+    expect(statDisplay(completed)).toBe(completed.safeDisplay)
   })
 })

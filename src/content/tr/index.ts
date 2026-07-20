@@ -57,17 +57,18 @@ export const tr = {
         'Yeminli tercüme, noter onayı ve kurumsal çeviri çözümleri. Belgenizi yükleyin, anında ön fiyat teklifini alın, profesyonel teslimat alın.',
     },
     hero: {
-      title: 'Çeviri Hizmetlerinde Güvenilir Çözüm Ortağınız',
+      title: 'Profesyonel Çeviri Hizmetlerinde',
+      titleAccent: 'Güvenilir Çözüm Ortağınız',
       subtitle: 'Belgenizi yükleyin, fiyatı görün, profesyonel teslimat alın.',
       support: 'Yeminli tercüme • Noter onayı • Kurumsal çözümler',
     },
     trust: {
       title: 'Neden bize güveniyorlar?',
       items: [
-        { key: 'languages', label: '50+ dil desteği' },
-        { key: 'delivery', label: '24 saat teslimat seçeneği' },
-        { key: 'notary', label: 'Noter onayı' },
-        { key: 'quality', label: 'Çift katmanlı kalite kontrolü' },
+        { key: 'languages', label: '50+ Dil Desteği' },
+        { key: 'delivery', label: '24 Saat Teslimat' },
+        { key: 'notary', label: 'Noter Onayı' },
+        { key: 'quality', label: 'Kalite Güvencesi' },
       ],
     },
     stats: {
@@ -101,13 +102,40 @@ export const tr = {
       ],
     },
     corporateCta: {
-      title: 'Kurumsal çeviri ihtiyaçlarınız için özel çözümler',
-      desc: 'Özel terminoloji yönetimi, vade seçenekleri, toplu sipariş avantajı ve size atanmış hesap yöneticisi.',
-      action: 'Kurumsal Çözümleri İncele',
+      title: 'Kurumsal Çözümler',
+      desc: 'Şirketinize özel terminoloji yönetimi, vade seçenekleri ve özel hesap yöneticisi ile profesyonel dil hizmetleri.',
+      action: 'Kurumsal Teklif İste',
+    },
+    partnershipTeaser: {
+      title: 'İş Ortaklığı Programı',
+      subtitle: 'Bize yönlendirdiğiniz her müşteriden %20 komisyon kazanın.',
+      items: [
+        { key: 'commission', title: 'Şeffaf Komisyon', desc: 'Her yönlendirme için %20 komisyon (sözleşmeye tabidir). Anlık takip paneli ile şeffaf kazanç.' },
+        { key: 'qr', title: 'QR Kodlu Sistem', desc: 'Kartvizit entegrasyonu ile kolay müşteri takibi. Web ve WhatsApp QR kodları.' },
+      ],
+      cta: 'Partner Başvurusu Yap',
+    },
+    testimonials: {
+      title: 'Müşteri Değerlendirmeleri',
+      subtitle: 'Gerçek müşteri yorumları yayın öncesi buraya eklenecek.',
+      placeholderNote: 'Yer tutucu — gerçek yorumlar entegre edilecek.',
+      items: [
+        { key: 't1', role: 'Hukuk Bürosu' },
+        { key: 't2', role: 'Sağlık Kuruluşu' },
+        { key: 't3', role: 'Kurumsal Müşteri' },
+        { key: 't4', role: 'Bireysel Müşteri' },
+      ],
+    },
+    blogTeaser: {
+      title: 'Blog',
+      subtitle: 'Çeviri dünyasından güncel içerikler',
+      viewAll: 'Tüm Blog Yazılarını Gör',
     },
     finalCta: {
-      title: 'Belgeniz hazırsa, fiyatı hemen görün',
-      desc: 'Ön fiyat teklifi ücretsizdir ve sizi bağlamaz.',
+      title: 'Hemen Başlayın',
+      desc: 'Belgelerinizi yükleyin, anında fiyat teklifi alın ve profesyonel tercüme hizmetinden yararlanın.',
+      primary: 'Hemen Teklif Al',
+      secondary: 'İletişime Geçin',
     },
   },
 

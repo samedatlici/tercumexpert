@@ -36,7 +36,8 @@ export const en: PartialDictionary = {
         'Sworn translation, notarization and corporate translation solutions. Upload your document and get an instant preliminary quote.',
     },
     hero: {
-      title: 'Your Reliable Partner in Translation Services',
+      title: 'Your Reliable Partner',
+      titleAccent: 'in Professional Translation',
       subtitle: 'Upload your document, see the price, get professional delivery.',
       support: 'Sworn translation • Notarization • Corporate solutions',
     },
