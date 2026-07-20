@@ -12,15 +12,17 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <script>
       window.addEventListener('error', function (e) {
-        var d = (e && e.error && e.error.stack) || (e && e.message) || 'bilinmeyen hata'
+        var out = 'bilinmeyen hata'
+        try {
+          if (e && e.error) out = (e.error.name || 'Error') + ': ' + (e.error.message || '(mesaj yok)') + '\n\nSTACK:\n' + (e.error.stack || '')
+          else if (e && e.message) out = e.message
+          if (e && e.filename) out += '\n\n@ ' + e.filename + ':' + e.lineno + ':' + e.colno
+        } catch (x) {}
         var el = document.getElementById('root') || document.body
-        el.innerHTML = '<pre style="white-space:pre-wrap;padding:20px;color:#b00020;font:13px ui-monospace,monospace">TANI: ' + String(d).replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</pre>'
+        el.innerHTML = '<pre style="white-space:pre-wrap;padding:20px;color:#b00020;font:13px ui-monospace,monospace">TANI 2: ' + String(out).replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</pre>'
       })
     </script>
   </head>
   <body>
     <div id="root"></div>
-    <noscript>Bu uygulamayi goruntulemek icin JavaScript gerekir.</noscript>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+    <noscript>Bu uygulamayi
