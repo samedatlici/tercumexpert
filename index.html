@@ -2,27 +2,25 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0a0a0a" />
-    <title>TercümExpert — Profesyonel Çeviri Hizmetleri</title>
-    <meta name="description" content="Yeminli tercüme, noter onayı ve kurumsal çeviri çözümleri." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TercümExpert</title>
     <script>
-      window.addEventListener('error', function (e) {
-        var out = 'bilinmeyen hata'
-        try {
-          if (e && e.error) out = (e.error.name || 'Error') + ': ' + (e.error.message || '(mesaj yok)') + '\n\nSTACK:\n' + (e.error.stack || '')
-          else if (e && e.message) out = e.message
-          if (e && e.filename) out += '\n\n@ ' + e.filename + ':' + e.lineno + ':' + e.colno
-        } catch (x) {}
+      function teShow(t, d) {
         var el = document.getElementById('root') || document.body
-        el.innerHTML = '<pre style="white-space:pre-wrap;padding:20px;color:#b00020;font:13px ui-monospace,monospace">TANI 2: ' + String(out).replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</pre>'
+        el.innerHTML = '<pre style="white-space:pre-wrap;padding:20px;color:#b00020;font:13px monospace">HATA (' + t + '): ' + String(d).replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</pre>'
+      }
+      window.addEventListener('error', function (e) {
+        var x = e && e.error
+        teShow('error', x ? (x.name + ': ' + x.message + '\n' + (x.stack||'')) : (e && e.message))
+      })
+      window.addEventListener('unhandledrejection', function (e) {
+        var x = e && e.reason
+        teShow('promise', x ? ((x.name||'') + ': ' + (x.message||'') + '\n' + (x.stack||'')) : String(x))
       })
     </script>
   </head>
   <body>
     <div id="root"></div>
-    <noscript>Bu uygulamayi
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
