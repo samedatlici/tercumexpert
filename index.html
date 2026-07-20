@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- A11y §25: zoom engellenmez, user-scalable=no KULLANILMAZ. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="color-scheme" content="light" />
+
+    <!-- SEO defaults runtime'da sayfa bazında yönetilir (components/seo/Seo.tsx). -->
+    <title>TercümExpert — Profesyonel Çeviri Hizmetleri</title>
+    <meta name="description" content="Yeminli tercüme, noter onayı ve kurumsal çeviri çözümleri. Belgenizi yükleyin, anında ön fiyat teklifini alın." />
+
+    <!-- Font: Inter (tam Türkçe karakter desteği). preconnect + swap; system fallback tanımlı. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      />
+    </noscript>
+
+    <!-- Search Console doğrulaması env ile enjekte edilir (components/seo). -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Bu uygulamayı görüntülemek için lütfen JavaScript'i etkinleştirin.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
