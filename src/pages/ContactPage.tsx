@@ -114,6 +114,37 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      {/* Harita alanı — ileride Google Maps ile entegre edilecek */}
+      <section className="section bg-surface-muted">
+        <div className="container-base">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold tracking-tight">{c.map.title}</h2>
+            <p className="mt-1 text-text-secondary">{c.map.subtitle}</p>
+          </div>
+          {/*
+            Google Maps entegrasyonu: aşağıdaki placeholder yerine bir <iframe> gelecek. Örnek:
+            <iframe src="https://www.google.com/maps/embed?pb=..." className="h-full w-full border-0"
+              loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade"
+              title={c.map.title} />
+          */}
+          <div className="relative overflow-hidden rounded-lg border border-border bg-surface">
+            <div className="flex aspect-[16/9] w-full flex-col items-center justify-center gap-3 text-center">
+              <span className="inline-flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <Icon name="MapPin" className="size-7" />
+              </span>
+              <p className="text-lg font-semibold">{c.map.placeholder}</p>
+              <p className="max-w-md text-sm text-text-secondary">{c.map.note}</p>
+              {!isPlaceholder(company.address.value) && (
+                <p className="mt-1 inline-flex items-center gap-2 text-sm text-text-secondary">
+                  <Icon name="MapPin" className="size-4" />
+                  {company.address.value}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   )
 }

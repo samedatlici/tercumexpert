@@ -525,6 +525,12 @@ export const tr = {
       submit: 'Mesajı Gönder',
       success: 'Mesajınız alındı. En kısa sürede dönüş yapacağız.',
     },
+    map: {
+      title: 'Konumumuz',
+      subtitle: 'Bizi haritada bulun',
+      placeholder: 'Harita alanı',
+      note: 'Konum haritası yakında burada gösterilecek.',
+    },
   },
 
   blog: {
