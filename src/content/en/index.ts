@@ -1,4 +1,5 @@
 import type { PartialDictionary } from '@/types/i18n'
+import { FAQ_CATEGORIES_EN, FAQ_ITEMS_EN } from '@/content/faq-data.en'
 
 /**
  * ENGLISH — full base translation. English is the fallback base (§10):
@@ -605,6 +606,8 @@ export const en: PartialDictionary = {
     categoriesTitle: 'Categories',
     searchPlaceholder: 'Search questions or keywords…',
     empty: 'No questions matched your search. Try a different word or contact us.',
+    categories: FAQ_CATEGORIES_EN,
+    items: FAQ_ITEMS_EN,
     notFound: {
       title: 'Didn’t find the answer to your question?',
       contact: 'Contact Us',
