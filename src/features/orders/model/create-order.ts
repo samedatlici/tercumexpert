@@ -24,6 +24,10 @@ export interface CreateOrderInput {
   contactEmail?: string | null
   contactPhone?: string | null
   note?: string | null
+  deliveryAddress?: string | null
+  deliveryCity?: string | null
+  deliveryPostalCode?: string | null
+  deliveryCountry?: string | null
 }
 
 export interface CreateOrderResult {
@@ -77,6 +81,10 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
       contact_email: input.contactEmail ?? null,
       contact_phone: input.contactPhone ?? null,
       note: input.note ?? null,
+      delivery_address: input.deliveryAddress ?? null,
+      delivery_city: input.deliveryCity ?? null,
+      delivery_postal_code: input.deliveryPostalCode ?? null,
+      delivery_country: input.deliveryCountry ?? null,
     })
     .select('id, order_no')
     .single()

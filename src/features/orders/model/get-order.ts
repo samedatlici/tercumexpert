@@ -19,10 +19,15 @@ export interface OrderDetail {
   note: string | null
   tracking_url: string | null
   carrier: string | null
+  contact_phone: string | null
+  delivery_address: string | null
+  delivery_city: string | null
+  delivery_postal_code: string | null
+  delivery_country: string | null
 }
 
 const COLUMNS =
-  'id, order_no, created_at, status, service, source_lang, target_lang, document_type, word_count, urgent, notarization, physical_delivery, total, delivery_days, input_mode, note, tracking_url, carrier'
+  'id, order_no, created_at, status, service, source_lang, target_lang, document_type, word_count, urgent, notarization, physical_delivery, total, delivery_days, input_mode, note, tracking_url, carrier, contact_phone, delivery_address, delivery_city, delivery_postal_code, delivery_country'
 
 /**
  * Sipariş numarasına göre tek siparişi getirir. RLS gereği yalnızca

@@ -247,6 +247,12 @@ export default function OrderDetailPage() {
             )}
             <DetailRow label={o.fields.delivery} value={`${order.delivery_days ?? 0} ${dict.quote.result.deliveryUnit}`} />
             {order.total != null && <DetailRow label={o.fields.total} value={formatCurrency(order.total)} strong />}
+            {order.delivery_address && (
+              <DetailRow
+                label={o.fields.deliveryAddress}
+                value={[order.delivery_address, order.delivery_postal_code, order.delivery_city, order.delivery_country].filter(Boolean).join(', ')}
+              />
+            )}
             {order.note && <DetailRow label={o.fields.note} value={order.note} />}
           </dl>
         </div>

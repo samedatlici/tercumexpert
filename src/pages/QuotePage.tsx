@@ -40,6 +40,16 @@ interface FileEntry {
   status: ExtractStatus | 'pending'
 }
 
+interface DeliveryInfo {
+  firstName: string
+  lastName: string
+  phone: string
+  address: string
+  city: string
+  postalCode: string
+  country: string
+}
+
 export default function QuotePage() {
   const { locale, dict, formatCurrency } = useI18n()
   const { user } = useAuth()
@@ -69,6 +79,7 @@ export default function QuotePage() {
   const [ordering, setOrdering] = useState(false)
   const [note, setNote] = useState('')
   const [orderError, setOrderError] = useState<string | null>(null)
+  const [checkoutOpen, setCheckoutOpen] = useState(false)
 
   // Kullanıcı giriş yapınca (veya misafir doğrulaması tamamlanınca) bekleyen fiyatı göster.
   useEffect(() => {
@@ -144,10 +155,21 @@ export default function QuotePage() {
     }
   }
 
-  const handleOrder = async () => {
+  // "Sipariş Ver": fiziksel teslimatta önce adres formunu aç; değilse doğrudan oluştur.
+  const onPlaceOrder = () => {
+    if (!user || !result || ordering) return
+    if (physicalDelivery) setCheckoutOpen(true)
+    else void submitOrder()
+  }
+
+  const submitOrder = async (delivery?: DeliveryInfo) => {
     if (!user || !result || ordering) return
     setOrdering(true)
     setOrderError(null)
+    const accountName = (user.user_metadata?.full_name as string | undefined) ?? null
+    const contactName = delivery
+      ? `${delivery.firstName} ${delivery.lastName}`.trim()
+      : accountName
     const res = await createOrder({
       userId: user.id,
       service,
@@ -162,9 +184,14 @@ export default function QuotePage() {
       inputMode: mode,
       sourceText: mode === 'text' ? text : undefined,
       files: files.map((f) => ({ file: f.file, words: f.status === 'ok' ? f.words : 0 })),
-      contactName: (user.user_metadata?.full_name as string | undefined) ?? null,
+      contactName,
       contactEmail: user.email ?? null,
+      contactPhone: delivery?.phone ?? null,
       note: note.trim() || null,
+      deliveryAddress: delivery?.address ?? null,
+      deliveryCity: delivery?.city ?? null,
+      deliveryPostalCode: delivery?.postalCode ?? null,
+      deliveryCountry: delivery?.country ?? null,
     })
     if (res.error || res.orderNo == null) {
       setOrdering(false)
@@ -398,7 +425,7 @@ export default function QuotePage() {
 
                 {orderError && <p className="mt-3 text-sm text-danger">{orderError}</p>}
                 <div className="mt-4 space-y-2">
-                  <Button intent="secondary" block onClick={() => void handleOrder()} disabled={ordering}>
+                  <Button intent="secondary" block onClick={onPlaceOrder} disabled={ordering}>
                     {ordering ? q.orderConfirm.submitting : q.result.order}
                   </Button>
                   {wa && (
@@ -418,7 +445,138 @@ export default function QuotePage() {
           </div>
         </div>
       </section>
+
+      {checkoutOpen && user && (
+        <CheckoutModal
+          initialFirstName={(user.user_metadata?.first_name as string | undefined) ?? ''}
+          initialLastName={(user.user_metadata?.last_name as string | undefined) ?? ''}
+          busy={ordering}
+          error={orderError}
+          onClose={() => { if (!ordering) setCheckoutOpen(false) }}
+          onSubmit={(d) => void submitOrder(d)}
+        />
+      )}
     </>
+  )
+}
+
+/** Fiziksel teslimat adres formu (Siparis Ver sonrasi acilir). */
+function CheckoutModal({
+  initialFirstName,
+  initialLastName,
+  busy,
+  error,
+  onClose,
+  onSubmit,
+}: {
+  initialFirstName: string
+  initialLastName: string
+  busy: boolean
+  error: string | null
+  onClose: () => void
+  onSubmit: (d: DeliveryInfo) => void
+}) {
+  const { dict } = useI18n()
+  const c = dict.quote.checkout
+  const [firstName, setFirstName] = useState(initialFirstName)
+  const [lastName, setLastName] = useState(initialLastName)
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
+  const [city, setCity] = useState('')
+  const [postalCode, setPostalCode] = useState('')
+  const [country, setCountry] = useState('')
+  const [err, setErr] = useState<string | null>(null)
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault()
+    if (![firstName, lastName, phone, address, city, country].every((v) => v.trim())) {
+      return setErr(c.errRequired)
+    }
+    setErr(null)
+    onSubmit({
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      phone: phone.trim(),
+      address: address.trim(),
+      city: city.trim(),
+      postalCode: postalCode.trim(),
+      country: country.trim(),
+    })
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-drawer flex items-end justify-center bg-black/40 sm:items-center sm:p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={c.title}
+    >
+      <div className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-2xl bg-surface p-6 shadow-lg sm:rounded-2xl">
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-bold">{c.title}</h2>
+            <p className="mt-1 text-sm text-text-secondary">{c.subtitle}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={busy}
+            aria-label={c.cancel}
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-md text-text-secondary hover:bg-surface-muted"
+          >
+            <Icon name="X" className="size-5" />
+          </button>
+        </div>
+        <form className="space-y-3" onSubmit={submit} noValidate>
+          <div className="grid grid-cols-2 gap-3">
+            <ModalField label={c.firstName}>
+              <input className={fieldClass} value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="given-name" />
+            </ModalField>
+            <ModalField label={c.lastName}>
+              <input className={fieldClass} value={lastName} onChange={(e) => setLastName(e.target.value)} autoComplete="family-name" />
+            </ModalField>
+          </div>
+          <ModalField label={c.phone}>
+            <input type="tel" dir="ltr" className={fieldClass} value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" placeholder="+90 5xx xxx xx xx" />
+          </ModalField>
+          <ModalField label={c.address}>
+            <textarea
+              rows={2}
+              className="w-full rounded-md border border-border bg-surface p-3 text-base focus-visible:outline-none"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder={c.addressPlaceholder}
+              autoComplete="street-address"
+            />
+          </ModalField>
+          <div className="grid grid-cols-2 gap-3">
+            <ModalField label={c.city}>
+              <input className={fieldClass} value={city} onChange={(e) => setCity(e.target.value)} autoComplete="address-level2" />
+            </ModalField>
+            <ModalField label={c.postalCode}>
+              <input className={fieldClass} value={postalCode} onChange={(e) => setPostalCode(e.target.value)} autoComplete="postal-code" />
+            </ModalField>
+          </div>
+          <ModalField label={c.country}>
+            <input className={fieldClass} value={country} onChange={(e) => setCountry(e.target.value)} autoComplete="country-name" />
+          </ModalField>
+          {(err || error) && <p className="text-sm text-danger">{err || error}</p>}
+          <Button type="submit" intent="secondary" size="lg" block disabled={busy}>
+            {busy ? c.submitting : c.submit}
+          </Button>
+          <p className="text-xs text-text-muted">{c.note}</p>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+function ModalField({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-sm font-medium">{label}</label>
+      {children}
+    </div>
   )
 }
 
