@@ -171,7 +171,7 @@ export default function QuotePage() {
                       }}
                     />
                     <Button
-                      intent="primary"
+                      intent="secondary"
                       onClick={() => fileInputRef.current?.click()}
                     >
                       <Icon name="Upload" className="size-5" /> {u.chooseFile}
@@ -275,7 +275,7 @@ export default function QuotePage() {
 
             {needInput && wordCount <= 0 && <p className="text-sm text-danger">{u.needInput}</p>}
 
-            <Button type="submit" intent="primary" size="lg" block>
+            <Button type="submit" intent="secondary" size="lg" block>
               {q.fields.calculate}
             </Button>
           </form>
@@ -295,9 +295,8 @@ export default function QuotePage() {
                   <Row label={q.result.total} value={formatCurrency(result.total)} strong />
                   <Row label={q.result.delivery} value={`${result.deliveryDays} ${q.result.deliveryUnit}`} />
                 </dl>
-                <p className="mt-4 rounded-md bg-surface-muted p-3 text-xs text-text-secondary">{q.result.disclaimer}</p>
-                <div className="mt-4 space-y-2">
-                  <Button intent="primary" block>{q.result.order}</Button>
+                <div className="mt-5 space-y-2">
+                  <Button intent="secondary" block>{q.result.order}</Button>
                   {wa && (
                     <a href={wa} target="_blank" rel="noopener noreferrer">
                       <Button intent="whatsapp" block>{q.result.whatsapp}</Button>
@@ -360,7 +359,7 @@ function Field({ label, htmlFor, children }: { label: string; htmlFor: string; c
 function Checkbox({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <label className="flex min-h-[44px] cursor-pointer items-center gap-3 rounded-md border border-border px-3">
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="size-4" />
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="size-4 accent-black" />
       <span className="text-sm">{label}</span>
     </label>
   )
