@@ -36,6 +36,9 @@ export const tr = {
       closeMenu: 'Menüyü kapat',
       selectLanguage: 'Dil seçin',
       skipToContent: 'İçeriğe geç',
+      login: 'Giriş Yap',
+      logout: 'Çıkış Yap',
+      account: 'Hesabım',
     },
     states: {
       loading: 'Yükleniyor…',
@@ -519,6 +522,56 @@ export const tr = {
       subtitle: 'Bizi haritada bulun',
       placeholder: 'Harita alanı',
       note: 'Konum haritası yakında burada gösterilecek.',
+    },
+  },
+
+  auth: {
+    seo: {
+      title: 'Giriş Yap / Üye Ol',
+      description: 'TercümExpert hesabınıza giriş yapın veya yeni bir hesap oluşturun.',
+    },
+    tabs: { login: 'Giriş Yap', register: 'Üye Ol' },
+    google: 'Google ile devam et',
+    or: 'veya',
+    fields: {
+      firstName: 'Ad',
+      lastName: 'Soyad',
+      email: 'E-posta',
+      password: 'Şifre',
+      code: 'Doğrulama Kodu',
+    },
+    login: {
+      title: 'Hesabınıza giriş yapın',
+      submit: 'Giriş Yap',
+      noAccount: 'Hesabınız yok mu?',
+      switchToRegister: 'Üye olun',
+    },
+    register: {
+      title: 'Yeni hesap oluşturun',
+      submit: 'Üye Ol',
+      haveAccount: 'Zaten hesabınız var mı?',
+      switchToLogin: 'Giriş yapın',
+      consent: 'Üyelik oluşturarak KVKK Aydınlatma Metni’ni ve Gizlilik Politikası’nı kabul ediyorum.',
+    },
+    verify: {
+      title: 'E-postanızı doğrulayın',
+      desc: 'adresine gönderdiğimiz 6 haneli kodu girin.',
+      submit: 'Doğrula ve Devam Et',
+      resend: 'Kodu yeniden gönder',
+      resent: 'Yeni kod gönderildi.',
+      back: 'Geri dön',
+    },
+    signedIn: {
+      title: 'Giriş yaptınız',
+      greeting: 'Hoş geldiniz',
+      logout: 'Çıkış Yap',
+    },
+    errors: {
+      nameRequired: 'Ad ve soyad zorunludur.',
+      emailInvalid: 'Geçerli bir e-posta girin.',
+      passwordShort: 'Şifre en az 6 karakter olmalıdır.',
+      codeInvalid: 'Lütfen 6 haneli kodu girin.',
+      consentRequired: 'Devam etmek için onay gereklidir.',
     },
   },
 

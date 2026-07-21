@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { QueryProvider } from './QueryProvider'
 import { ThemeProvider } from './ThemeProvider'
+import { AuthProvider } from './AuthProvider'
 import { ConsentProvider } from '@/features/legal/ConsentProvider'
 
 /**
@@ -11,7 +12,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
       <QueryProvider>
-        <ConsentProvider>{children}</ConsentProvider>
+        <AuthProvider>
+          <ConsentProvider>{children}</ConsentProvider>
+        </AuthProvider>
       </QueryProvider>
     </ThemeProvider>
   )

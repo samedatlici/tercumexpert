@@ -16,6 +16,7 @@ export type RouteId =
   | 'blogPost'
   | 'faq'
   | 'contact'
+  | 'auth'
   | 'legalKvkk'
   | 'legalPrivacy'
   | 'legalDistanceSales'
@@ -32,6 +33,7 @@ const ROUTE_SLUGS: Record<RouteId, Partial<Record<Locale, string>>> = {
   blogPost: { tr: 'blog', en: 'blog' },
   faq: { tr: 'sss', en: 'faq', fr: 'faq', de: 'faq', es: 'faq', it: 'faq', ru: 'faq', ar: 'faq' },
   contact: { tr: 'iletisim', en: 'contact', fr: 'contact', de: 'kontakt', es: 'contacto', it: 'contatti', ru: 'kontakty', ar: 'ittisal' },
+  auth: { tr: 'giris', en: 'login', fr: 'connexion', de: 'anmelden', es: 'acceso', it: 'accedi', ru: 'vhod', ar: 'dukhul' },
   legalKvkk: { tr: 'kvkk', en: 'data-protection' },
   legalPrivacy: { tr: 'gizlilik-politikasi', en: 'privacy-policy' },
   legalDistanceSales: { tr: 'mesafeli-satis-sozlesmesi', en: 'distance-sales-agreement' },

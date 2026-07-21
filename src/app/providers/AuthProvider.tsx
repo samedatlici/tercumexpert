@@ -1,0 +1,122 @@
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import type { Session, User } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
+
+interface SignUpArgs {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+}
+
+interface AuthContextValue {
+  user: User | null
+  session: Session | null
+  loading: boolean
+  /** Google ile giriş (OAuth yönlendirmesi). */
+  signInWithGoogle: (redirectTo: string) => Promise<{ error: string | null }>
+  /** E-posta + şifre ile giriş. */
+  signInWithPassword: (email: string, password: string) => Promise<{ error: string | null }>
+  /** E-posta + şifre ile kayıt. Ardından e-posta doğrulama kodu gönderilir. */
+  signUp: (args: SignUpArgs) => Promise<{ error: string | null; needsVerification: boolean }>
+  /** E-postaya gelen 6 haneli doğrulama kodunu onaylar. */
+  verifyEmailCode: (email: string, code: string) => Promise<{ error: string | null }>
+  /** Doğrulama kodunu yeniden gönderir. */
+  resendCode: (email: string) => Promise<{ error: string | null }>
+  signOut: () => Promise<void>
+}
+
+const AuthContext = createContext<AuthContextValue | null>(null)
+
+/** Supabase hata mesajlarını kullanıcı dostu Türkçeye çevirir. */
+function trError(message: string | undefined): string {
+  if (!message) return 'Bir hata oluştu. Lütfen tekrar deneyin.'
+  const m = message.toLowerCase()
+  if (m.includes('invalid login credentials')) return 'E-posta veya şifre hatalı.'
+  if (m.includes('email not confirmed')) return 'E-postanız henüz doğrulanmadı. Lütfen kodu girin.'
+  if (m.includes('user already registered') || m.includes('already been registered'))
+    return 'Bu e-posta ile zaten bir hesap var. Giriş yapmayı deneyin.'
+  if (m.includes('password should be at least')) return 'Şifre en az 6 karakter olmalıdır.'
+  if (m.includes('token has expired') || m.includes('invalid') && m.includes('otp'))
+    return 'Kod hatalı veya süresi dolmuş. Yeni kod isteyin.'
+  if (m.includes('rate limit') || m.includes('too many')) return 'Çok fazla deneme. Lütfen biraz bekleyin.'
+  return message
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [session, setSession] = useState<Session | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let active = true
+    supabase.auth.getSession().then(({ data }) => {
+      if (!active) return
+      setSession(data.session)
+      setLoading(false)
+    })
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
+      setSession(s)
+      setLoading(false)
+    })
+    return () => {
+      active = false
+      sub.subscription.unsubscribe()
+    }
+  }, [])
+
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      user: session?.user ?? null,
+      session,
+      loading,
+      async signInWithGoogle(redirectTo) {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo },
+        })
+        return { error: error ? trError(error.message) : null }
+      },
+      async signInWithPassword(email, password) {
+        const { error } = await supabase.auth.signInWithPassword({ email, password })
+        return { error: error ? trError(error.message) : null }
+      },
+      async signUp({ firstName, lastName, email, password }) {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              full_name: `${firstName} ${lastName}`.trim(),
+            },
+          },
+        })
+        if (error) return { error: trError(error.message), needsVerification: false }
+        // Oturum yoksa e-posta doğrulaması gerekiyordur.
+        const needsVerification = !data.session
+        return { error: null, needsVerification }
+      },
+      async verifyEmailCode(email, code) {
+        const { error } = await supabase.auth.verifyOtp({ email, token: code, type: 'signup' })
+        return { error: error ? trError(error.message) : null }
+      },
+      async resendCode(email) {
+        const { error } = await supabase.auth.resend({ type: 'signup', email })
+        return { error: error ? trError(error.message) : null }
+      },
+      async signOut() {
+        await supabase.auth.signOut()
+      },
+    }),
+    [session, loading],
+  )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
+export function useAuth(): AuthContextValue {
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error('useAuth, AuthProvider içinde kullanılmalıdır.')
+  return ctx
+}

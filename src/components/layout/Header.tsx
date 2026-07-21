@@ -4,6 +4,7 @@ import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
 import { LanguageSwitcher } from '@/components/navigation/LanguageSwitcher'
 import { useI18n } from '@/hooks/useI18n'
+import { useAuth } from '@/app/providers/AuthProvider'
 import { useScrollLock } from '@/hooks/useScrollLock'
 import { cn } from '@/lib/cn'
 import { company } from '@/app/config/site.config'
@@ -16,6 +17,7 @@ import { buildPath } from '@/app/router/routes'
  */
 export function Header() {
   const { locale, dict } = useI18n()
+  const { user } = useAuth()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const drawerRef = useRef<HTMLDivElement>(null)
@@ -102,6 +104,12 @@ export function Header() {
             <div className="hidden lg:block">
               <LanguageSwitcher />
             </div>
+            <Link to={buildPath(locale, 'auth')} className="hidden sm:block">
+              <Button intent="ghost" size="md">
+                <Icon name="Users" className="size-4" />
+                {user ? dict.common.actions.account : dict.common.actions.login}
+              </Button>
+            </Link>
             <Link to={buildPath(locale, 'quote')} className="hidden sm:block">
               <Button intent="secondary" size="md">
                 {dict.common.actions.getQuote}
@@ -160,6 +168,12 @@ export function Header() {
             </nav>
             <div className="space-y-3 border-t border-border p-4">
               <LanguageSwitcher onNavigate={() => setMenuOpen(false)} />
+              <Link to={buildPath(locale, 'auth')}>
+                <Button intent="outline" block>
+                  <Icon name="Users" className="size-4" />
+                  {user ? dict.common.actions.account : dict.common.actions.login}
+                </Button>
+              </Link>
               <Link to={buildPath(locale, 'quote')}>
                 <Button intent="secondary" block>
                   {dict.common.actions.getQuote}
