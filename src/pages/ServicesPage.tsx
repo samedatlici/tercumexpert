@@ -60,12 +60,7 @@ export default function ServicesPage() {
       <section className="section">
         <div className="container-wide grid gap-8 lg:grid-cols-3">
           <div className="rounded-lg border border-border p-6">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                <Icon name="PackageCheck" className="size-6" />
-              </span>
-              <h2 className="text-xl font-semibold">{s.delivery.title}</h2>
-            </div>
+            <h2 className="text-xl font-semibold">{s.delivery.title}</h2>
             <ul className="mt-4 space-y-2">
               {s.delivery.items.map((d) => (
                 <li key={d} className="flex items-start gap-2 text-sm text-text-secondary">
@@ -76,21 +71,11 @@ export default function ServicesPage() {
             </ul>
           </div>
           <div className="rounded-lg border border-border p-6">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                <Icon name="Stamp" className="size-6" />
-              </span>
-              <h2 className="text-xl font-semibold">{s.notaryApostille.title}</h2>
-            </div>
+            <h2 className="text-xl font-semibold">{s.notaryApostille.title}</h2>
             <p className="mt-4 text-sm leading-relaxed text-text-secondary">{s.notaryApostille.desc}</p>
           </div>
           <div className="rounded-lg border border-border p-6">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                <Icon name="Truck" className="size-6" />
-              </span>
-              <h2 className="text-xl font-semibold">{s.fullService.title}</h2>
-            </div>
+            <h2 className="text-xl font-semibold">{s.fullService.title}</h2>
             <p className="mt-4 text-sm leading-relaxed text-text-secondary">{s.fullService.note}</p>
           </div>
         </div>
