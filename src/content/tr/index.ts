@@ -168,7 +168,7 @@ export const tr = {
     },
     fullService: {
       title: 'Kapınıza Kadar Anahtar Teslim',
-      note: 'Belgelerinizi bize iletin; çeviri, noter onayı ve apostil dâhil tüm süreci uçtan uca biz yönetelim. Onaylı belgeleriniz hazır olduğunda kapınıza kadar kargoyla ulaştıralım. Siz işinize odaklanın, tüm koşuşturmayı biz üstlenelim.',
+      note: 'Belgelerinizi bize iletin; çeviri, noter onayı ve apostil dâhil tüm süreci biz yönetelim. Hazır belgeleriniz kapınıza kadar kargoyla gelsin. Siz işinize odaklanın, gerisini bize bırakın.',
     },
     cta: {
       title: 'Hangi hizmete ihtiyacınız olduğundan emin değil misiniz?',
