@@ -2,7 +2,7 @@ import {
   Stamp, FileCheck2, Globe2, Scale, Cog, HeartPulse, GraduationCap, Globe, Upload, Settings,
   CircleCheck, Activity, PackageCheck, TrendingUp, MessageSquare, Languages, Building2, BarChart3,
   Wallet, QrCode, ShieldCheck, ArrowRight, Check, ChevronDown, Menu, X, MessageCircle, Phone, Mail,
-  MapPin, Clock, FileText, Star, Lock, Target, Users, type LucideProps,
+  MapPin, Clock, FileText, Star, Lock, Target, Users, Home, Plane, Briefcase, Code, type LucideProps,
 } from 'lucide-react'
 
 /** İkon registry (§7: emoji YOK, tek stroke ailesi Lucide). Marka ikonları (Facebook vb.)
@@ -11,7 +11,7 @@ const REGISTRY = {
   Stamp, FileCheck2, Globe2, Scale, Cog, HeartPulse, GraduationCap, Globe, Upload, Settings,
   CircleCheck, Activity, PackageCheck, TrendingUp, MessageSquare, Languages, Building2, BarChart3,
   Wallet, QrCode, ShieldCheck, ArrowRight, Check, ChevronDown, Menu, X, MessageCircle, Phone, Mail,
-  MapPin, Clock, FileText, Star, Lock, Target, Users,
+  MapPin, Clock, FileText, Star, Lock, Target, Users, Home, Plane, Briefcase, Code,
 } as const
 
 export type IconName = keyof typeof REGISTRY
