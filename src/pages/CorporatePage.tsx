@@ -82,9 +82,7 @@ export default function CorporatePage() {
           <div className="grid gap-4 md:grid-cols-3">
             {c.features.items.map((f) => (
               <article key={f.key} className="rounded-lg border border-border bg-surface p-6">
-                <span className="inline-flex size-12 items-center justify-center rounded-md bg-primary/10 text-primary">
-                  <Icon name={f.icon as IconName} className="size-6" />
-                </span>
+                <Icon name={f.icon as IconName} className="size-12 text-primary" />
                 <h3 className="mt-4 text-lg font-semibold">{f.title}</h3>
                 <ul className="mt-3 space-y-2">
                   {f.points.map((p) => (
@@ -193,11 +191,18 @@ export default function CorporatePage() {
               {/* Honeypot (gizli) */}
               <input type="text" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" {...register('company_website')} />
               <label className="flex items-start gap-3 text-sm text-white/80">
-                <input type="checkbox" className="mt-1 size-4 accent-primary" {...register('consent')} aria-invalid={!!errors.consent} />
+                <input type="checkbox" className="mt-1 size-4 accent-white" {...register('consent')} aria-invalid={!!errors.consent} />
                 <span>{c.form.fields.consent}</span>
               </label>
               {errors.consent && <p className="text-sm text-danger">{errors.consent.message}</p>}
-              <Button type="submit" intent="primary" size="lg" block disabled={isSubmitting}>
+              <Button
+                type="submit"
+                intent="outline"
+                size="lg"
+                block
+                disabled={isSubmitting}
+                className="border-white bg-white text-black hover:bg-white/90"
+              >
                 {c.form.submit}
               </Button>
               <p className="text-center text-xs text-white/50">{dict.common.states.demoNotice}</p>
