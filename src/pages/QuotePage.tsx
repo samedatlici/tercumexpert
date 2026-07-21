@@ -1,6 +1,7 @@
 import { useId, useRef, useState, type ReactNode } from 'react'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
+import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
 import { PageHero } from '@/components/common/PageHero'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
@@ -299,7 +300,7 @@ export default function QuotePage() {
                   <Button intent="secondary" block>{q.result.order}</Button>
                   {wa && (
                     <a href={wa} target="_blank" rel="noopener noreferrer">
-                      <Button intent="whatsapp" block>{q.result.whatsapp}</Button>
+                      <Button intent="whatsapp" block><WhatsAppIcon className="size-5" /> {q.result.whatsapp}</Button>
                     </a>
                   )}
                 </div>

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon, type IconName } from '@/components/common/Icon'
+import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { buildPath } from '@/app/router/routes'
@@ -55,7 +56,7 @@ export default function HomePage() {
             {wa && (
               <a href={wa} target="_blank" rel="noopener noreferrer" className="sm:w-auto">
                 <Button intent="whatsapp" size="lg" block>
-                  <Icon name="MessageSquare" className="size-5" /> WhatsApp
+                  <WhatsAppIcon className="size-5" /> WhatsApp
                 </Button>
               </a>
             )}
@@ -153,7 +154,11 @@ export default function HomePage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {home.why.features.map((f) => (
               <article key={f.key} className="rounded-lg border border-border bg-surface p-6">
-                <Icon name={WHY_ICONS[f.key] ?? 'CircleCheck'} className="size-12" />
+                {f.key === 'whatsapp' ? (
+                  <WhatsAppIcon className="size-12" />
+                ) : (
+                  <Icon name={WHY_ICONS[f.key] ?? 'CircleCheck'} className="size-12" />
+                )}
                 <h3 className="mt-4 text-lg font-bold">{f.title}</h3>
                 <p className="mt-2 text-sm text-text-secondary">{f.desc}</p>
               </article>

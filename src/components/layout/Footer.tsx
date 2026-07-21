@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Icon } from '@/components/common/Icon'
+import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
 import { Button } from '@/components/common/Button'
 import { useI18n } from '@/hooks/useI18n'
 import { company, siteConfig, whatsappLink } from '@/app/config/site.config'
@@ -144,7 +145,7 @@ export function Footer() {
           {wa && (
             <a href={wa} target="_blank" rel="noopener noreferrer" className="mt-4 block">
               <Button intent="whatsapp" block>
-                <Icon name="MessageCircle" className="size-5" /> WhatsApp Destek
+                <WhatsAppIcon className="size-5" /> WhatsApp Destek
               </Button>
             </a>
           )}

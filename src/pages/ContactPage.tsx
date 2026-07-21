@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
+import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
 import { PageHero } from '@/components/common/PageHero'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
@@ -61,7 +62,7 @@ export default function ContactPage() {
                 <li><a href={`mailto:${company.email.value}`} className="inline-flex items-center gap-2 hover:text-primary"><Icon name="Mail" className="size-4" />{company.email.value}</a></li>
               )}
               {wa && (
-                <li><a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-primary"><Icon name="MessageCircle" className="size-4" />{c.labels.whatsapp}</a></li>
+                <li><a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-primary"><WhatsAppIcon className="size-4" />{c.labels.whatsapp}</a></li>
               )}
               {!isPlaceholder(company.address.value) && (
                 <li className="flex items-start gap-2"><Icon name="MapPin" className="mt-0.5 size-4" />{company.address.value}</li>

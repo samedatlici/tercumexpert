@@ -2,6 +2,7 @@ import { useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
+import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
 import { PageHero } from '@/components/common/PageHero'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
@@ -94,7 +95,7 @@ export default function FaqPage() {
               </Link>
               {wa && (
                 <a href={wa} target="_blank" rel="noopener noreferrer">
-                  <Button intent="whatsapp">{f.notFound.whatsapp}</Button>
+                  <Button intent="whatsapp"><WhatsAppIcon className="size-5" /> {f.notFound.whatsapp}</Button>
                 </a>
               )}
             </div>
