@@ -3,6 +3,8 @@
  * tipinin KAYNAĞIDIR (typeof); diğer diller bunun DeepPartial'ıdır ve fallback'le
  * tamamlanır. Metinler JSX'e gömülmez; buradan yönetilir (§4).
  */
+import { FAQ_CATEGORIES, FAQ_ITEMS } from '@/content/faq-data'
+
 export const tr = {
   common: {
     brand: 'TercümExpert',
@@ -474,23 +476,10 @@ export const tr = {
     },
     hero: { title: 'Sık Sorulan Sorular', subtitle: 'Aradığınız cevap burada.' },
     categoriesTitle: 'Kategoriler',
-    categories: [
-      { key: 'general', label: 'Genel' },
-      { key: 'pricing', label: 'Fiyatlandırma' },
-      { key: 'delivery', label: 'Teslimat' },
-      { key: 'notary', label: 'Noter ve Apostil' },
-      { key: 'corporate', label: 'Kurumsal' },
-      { key: 'privacy', label: 'Gizlilik' },
-      { key: 'upload', label: 'Dosya Yükleme' },
-    ],
-    items: [
-      { key: 'sworn', category: 'general', q: 'Yeminli tercüme nedir ve ne zaman gereklidir?', a: 'Yeminli tercüme, yeminli çevirmenin imza ve kaşesiyle onayladığı çeviridir. Resmî kurum başvurularında sıklıkla istenir; kesin gereklilik belgenin sunulacağı kuruma göre değişir.' },
-      { key: 'delivery', category: 'delivery', q: 'Teslimat süresi ne kadar?', a: 'Süre; belge uzunluğu, dil çifti ve seçtiğiniz ek hizmetlere göre değişir. Fiyat hesaplama ekranında tahmini teslim süresi gösterilir.' },
-      { key: 'pricing', category: 'pricing', q: 'Fiyatlandırma nasıl yapılıyor?', a: 'Fiyat; hizmet türü, dil çifti, kelime sayısı, belge türü ve ek hizmetlere göre hesaplanır. Ön fiyatı anında görebilirsiniz.' },
-      { key: 'notary', category: 'notary', q: 'Noter onayı nasıl yapılıyor?', a: 'Yeminli çeviri, gerektiğinde noter tarafından onaylanır. Süreci sizin adınıza yönetebiliriz.' },
-      { key: 'revision', category: 'general', q: 'Revize hakkı var mı?', a: 'Evet. Teslim sonrası, kapsamda kalan düzeltme talepleriniz için revize hakkı sunulur.' },
-      { key: 'corporate', category: 'corporate', q: 'Kurumsal müşteriler için özel şartlar var mı?', a: 'Evet. Toplu sipariş indirimi, vade seçenekleri, terminoloji yönetimi ve özel hesap yöneticisi sunulur.' },
-    ],
+    searchPlaceholder: 'Soru veya anahtar kelime ara…',
+    empty: 'Aramanızla eşleşen soru bulunamadı. Farklı bir kelime deneyin veya bizimle iletişime geçin.',
+    categories: FAQ_CATEGORIES,
+    items: FAQ_ITEMS,
     notFound: {
       title: 'Sorunuzun cevabını bulamadınız mı?',
       contact: 'İletişime Geçin',
