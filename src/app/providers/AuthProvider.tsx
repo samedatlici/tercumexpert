@@ -17,12 +17,12 @@ interface AuthContextValue {
   signInWithGoogle: (redirectTo: string) => Promise<{ error: string | null }>
   /** E-posta + şifre ile giriş. */
   signInWithPassword: (email: string, password: string) => Promise<{ error: string | null }>
-  /** E-posta + şifre ile kayıt. Ardından e-posta doğrulama kodu gönderilir. */
-  signUp: (args: SignUpArgs) => Promise<{ error: string | null; needsVerification: boolean }>
-  /** E-postaya gelen 6 haneli doğrulama kodunu onaylar. */
+  /** E-posta + şifre ile kayıt. Ardından e-postaya doğrulama bağlantısı gönderilir. */
+  signUp: (args: SignUpArgs, redirectTo: string) => Promise<{ error: string | null; needsVerification: boolean }>
+  /** E-postaya gelen 6 haneli doğrulama kodunu onaylar (SMTP + kod şablonu ile). */
   verifyEmailCode: (email: string, code: string) => Promise<{ error: string | null }>
-  /** Doğrulama kodunu yeniden gönderir. */
-  resendCode: (email: string) => Promise<{ error: string | null }>
+  /** Doğrulama e-postasını yeniden gönderir. */
+  resendCode: (email: string, redirectTo: string) => Promise<{ error: string | null }>
   signOut: () => Promise<void>
 }
 
@@ -80,11 +80,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         return { error: error ? trError(error.message) : null }
       },
-      async signUp({ firstName, lastName, email, password }) {
+      async signUp({ firstName, lastName, email, password }, redirectTo) {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
+            emailRedirectTo: redirectTo,
             data: {
               first_name: firstName,
               last_name: lastName,
@@ -101,8 +102,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { error } = await supabase.auth.verifyOtp({ email, token: code, type: 'signup' })
         return { error: error ? trError(error.message) : null }
       },
-      async resendCode(email) {
-        const { error } = await supabase.auth.resend({ type: 'signup', email })
+      async resendCode(email, redirectTo) {
+        const { error } = await supabase.auth.resend({
+          type: 'signup',
+          email,
+          options: { emailRedirectTo: redirectTo },
+        })
         return { error: error ? trError(error.message) : null }
       },
       async signOut() {
