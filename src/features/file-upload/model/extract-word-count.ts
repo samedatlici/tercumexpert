@@ -62,26 +62,6 @@ function isImage(e: string, type: string): boolean {
   return ['png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif', 'tif', 'tiff'].includes(e)
 }
 
-async function extractImageText(file: File): Promise<string> {
-  // Görselden (PNG/JPG/JPEG…) metin çıkarımı: OCR (tesseract.js). Türkçe + İngilizce.
-  // Ağır kütüphane -> yalnızca görsel yüklendiğinde dinamik yüklenir.
-  const mod = (await import('tesseract.js')) as unknown as {
-    recognize?: (image: File | Blob, langs?: string, opts?: unknown) => Promise<{ data: { text: string } }>
-    default?: {
-      recognize: (image: File | Blob, langs?: string, opts?: unknown) => Promise<{ data: { text: string } }>
-    }
-  }
-  const recognize = mod.recognize ?? mod.default?.recognize
-  if (!recognize) throw new Error('tesseract yüklenemedi')
-  const { data } = await recognize(file, 'tur+eng')
-  return data.text ?? ''
-}
-
-function isImage(e: string, type: string): boolean {
-  if (type.startsWith('image/')) return true
-  return ['png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif', 'tif', 'tiff'].includes(e)
-}
-
 async function extractPdfText(file: File): Promise<string> {
   const pdfjs = await import('pdfjs-dist')
   // Worker'ı sürüme uygun CDN'den yükle (Vite asset paketlemesine bağımlı olmadan).
