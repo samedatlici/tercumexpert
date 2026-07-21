@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
@@ -43,6 +43,7 @@ interface FileEntry {
 export default function QuotePage() {
   const { locale, dict, formatCurrency } = useI18n()
   const { user } = useAuth()
+  const navigate = useNavigate()
   const q = dict.quote
   const u = q.upload
   const ids = useId()
@@ -66,7 +67,7 @@ export default function QuotePage() {
   const [gateOpen, setGateOpen] = useState(false)
   const [needInput, setNeedInput] = useState(false)
   const [ordering, setOrdering] = useState(false)
-  const [orderNo, setOrderNo] = useState<number | null>(null)
+  const [note, setNote] = useState('')
   const [orderError, setOrderError] = useState<string | null>(null)
 
   // Kullanıcı giriş yapınca (veya misafir doğrulaması tamamlanınca) bekleyen fiyatı göster.
@@ -163,13 +164,15 @@ export default function QuotePage() {
       files: files.map((f) => ({ file: f.file, words: f.status === 'ok' ? f.words : 0 })),
       contactName: (user.user_metadata?.full_name as string | undefined) ?? null,
       contactEmail: user.email ?? null,
+      note: note.trim() || null,
     })
-    setOrdering(false)
     if (res.error || res.orderNo == null) {
+      setOrdering(false)
       setOrderError(q.orderConfirm.error)
       return
     }
-    setOrderNo(res.orderNo)
+    // Onay + takip için ayrı sipariş sayfasına yönlendir.
+    navigate(buildPath(locale, 'order', { slug: String(res.orderNo) }))
   }
 
   const wa = whatsappLink('Merhaba, fiyat teklifi hakkında bilgi almak istiyorum.')
@@ -364,28 +367,7 @@ export default function QuotePage() {
 
           {/* SAĞ: sonuç */}
           <div aria-live="polite" className="lg:sticky lg:top-24">
-            {orderNo != null ? (
-              <div className="rounded-lg border border-border bg-surface p-6 text-center">
-                <span className="mx-auto inline-flex size-14 items-center justify-center rounded-full bg-success/10 text-success">
-                  <Icon name="CircleCheck" className="size-8" />
-                </span>
-                <h2 className="mt-4 text-xl font-bold">{q.orderConfirm.title}</h2>
-                <p className="mt-2 text-sm text-text-secondary">{q.orderConfirm.desc}</p>
-                <p className="mt-4 rounded-md border border-border bg-surface-muted px-4 py-3 text-sm">
-                  {q.orderConfirm.number}: <span className="font-bold">#{orderNo}</span>
-                </p>
-                <div className="mt-5 space-y-2">
-                  <Link to={buildPath(locale, 'auth')}>
-                    <Button intent="secondary" block>{q.orderConfirm.viewOrders}</Button>
-                  </Link>
-                  {wa && (
-                    <a href={wa} target="_blank" rel="noopener noreferrer">
-                      <Button intent="whatsapp" block><WhatsAppIcon className="size-5" /> {q.result.whatsapp}</Button>
-                    </a>
-                  )}
-                </div>
-              </div>
-            ) : result ? (
+            {result ? (
               <div className="rounded-lg border border-border bg-surface p-6">
                 <h2 className="text-xl font-semibold">{q.result.title}</h2>
                 <p className="mt-1 text-sm text-text-muted">{wordCount} {u.wordsUnit}</p>
@@ -398,8 +380,24 @@ export default function QuotePage() {
                   <Row label={q.result.total} value={formatCurrency(result.total)} strong />
                   <Row label={q.result.delivery} value={`${result.deliveryDays} ${q.result.deliveryUnit}`} />
                 </dl>
+
+                {/* Sipariş notu */}
+                <div className="mt-5">
+                  <label htmlFor={`${ids}-note`} className="mb-1.5 block text-sm font-medium">
+                    {q.note.label}
+                  </label>
+                  <textarea
+                    id={`${ids}-note`}
+                    rows={3}
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder={q.note.placeholder}
+                    className="w-full rounded-md border border-border bg-surface p-3 text-sm focus-visible:outline-none"
+                  />
+                </div>
+
                 {orderError && <p className="mt-3 text-sm text-danger">{orderError}</p>}
-                <div className="mt-5 space-y-2">
+                <div className="mt-4 space-y-2">
                   <Button intent="secondary" block onClick={() => void handleOrder()} disabled={ordering}>
                     {ordering ? q.orderConfirm.submitting : q.result.order}
                   </Button>

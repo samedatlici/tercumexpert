@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Icon } from '@/components/common/Icon'
 import { useI18n } from '@/hooks/useI18n'
+import { buildPath } from '@/app/router/routes'
 import { listMyOrders, type OrderRow } from '@/features/orders/model/list-orders'
 
 /** "Hesabım" altında kullanıcının kendi siparişlerini listeler. */
 export function OrdersList() {
-  const { dict, formatCurrency, formatDate } = useI18n()
+  const { locale, dict, formatCurrency, formatDate } = useI18n()
   const o = dict.auth.orders
   const [orders, setOrders] = useState<OrderRow[] | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -30,21 +33,29 @@ export function OrdersList() {
   return (
     <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border">
       {orders.map((ord) => (
-        <li key={ord.id} className="flex items-center justify-between gap-3 bg-surface px-4 py-3 text-sm">
-          <div className="min-w-0">
-            <p className="font-semibold">#{ord.order_no}</p>
-            <p className="truncate text-xs text-text-muted">
-              {formatDate(ord.created_at)}
-              {ord.source_lang && ord.target_lang
-                ? ` · ${ord.source_lang.toUpperCase()} → ${ord.target_lang.toUpperCase()}`
-                : ''}
-              {ord.word_count ? ` · ${ord.word_count} ${dict.quote.upload.wordsUnit}` : ''}
-            </p>
-          </div>
-          <div className="shrink-0 text-right">
-            <p className="font-semibold">{ord.total != null ? formatCurrency(ord.total) : '—'}</p>
-            <span className="text-xs text-text-secondary">{statusLabel(ord.status)}</span>
-          </div>
+        <li key={ord.id}>
+          <Link
+            to={buildPath(locale, 'order', { slug: String(ord.order_no) })}
+            className="flex items-center justify-between gap-3 bg-surface px-4 py-3 text-sm transition-colors hover:bg-surface-muted"
+          >
+            <div className="min-w-0">
+              <p className="font-semibold">#{ord.order_no}</p>
+              <p className="truncate text-xs text-text-muted">
+                {formatDate(ord.created_at)}
+                {ord.source_lang && ord.target_lang
+                  ? ` · ${ord.source_lang.toUpperCase()} → ${ord.target_lang.toUpperCase()}`
+                  : ''}
+                {ord.word_count ? ` · ${ord.word_count} ${dict.quote.upload.wordsUnit}` : ''}
+              </p>
+              <span className="mt-1 inline-block rounded-full border border-border bg-surface-muted px-2 py-0.5 text-xs font-medium text-text-secondary">
+                {statusLabel(ord.status)}
+              </span>
+            </div>
+            <div className="flex shrink-0 items-center gap-2 text-right">
+              <p className="font-semibold">{ord.total != null ? formatCurrency(ord.total) : '—'}</p>
+              <Icon name="ArrowRight" className="size-4 text-text-muted" />
+            </div>
+          </Link>
         </li>
       ))}
     </ul>

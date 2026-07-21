@@ -1,5 +1,5 @@
 import { useState, type FormEvent, type ReactNode } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
 import { GoogleIcon } from '@/components/common/GoogleIcon'
@@ -53,11 +53,6 @@ export default function AuthPage() {
                   <p className="mt-1 text-text-secondary">{a.signedIn.greeting}, {name}.</p>
                 </div>
                 <Button intent="outline" onClick={() => void signOut()}>{a.signedIn.logout}</Button>
-              </div>
-              <div className="mt-5">
-                <Link to={buildPath(locale, 'quote')}>
-                  <Button intent="secondary">{dict.common.actions.calculatePrice}</Button>
-                </Link>
               </div>
             </div>
 
