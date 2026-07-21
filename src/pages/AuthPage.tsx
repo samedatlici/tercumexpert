@@ -116,8 +116,13 @@ export default function AuthPage() {
     if (code.trim().length < 6) return setError(a.errors.codeInvalid)
     setBusy(true)
     const { error } = await verifyEmailCode(email, code.trim())
+    if (error) {
+      setBusy(false)
+      return setError(error)
+    }
+    // Doğrulama başarılı — oturumu garantiye almak için şifreyle giriş yap.
+    await signInWithPassword(email, password)
     setBusy(false)
-    if (error) return setError(error)
     navigate(buildPath(locale, 'quote'))
   }
 
