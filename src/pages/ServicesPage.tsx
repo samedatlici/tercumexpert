@@ -75,8 +75,13 @@ export default function ServicesPage() {
             <p className="mt-3 text-sm text-text-secondary">{s.notaryApostille.desc}</p>
           </div>
           <div className="rounded-lg border border-border p-6">
-            <h2 className="text-xl font-semibold">{s.languagePairs.title}</h2>
-            <p className="mt-3 text-sm text-text-secondary">{s.languagePairs.note}</p>
+            <div className="flex items-center gap-3">
+              <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                <Icon name="PackageCheck" className="size-6" />
+              </span>
+              <h2 className="text-xl font-semibold">{s.fullService.title}</h2>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-text-secondary">{s.fullService.note}</p>
           </div>
         </div>
       </section>

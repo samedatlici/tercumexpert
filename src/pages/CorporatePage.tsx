@@ -9,7 +9,6 @@ import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { cn } from '@/lib/cn'
 import { company } from '@/app/config/site.config'
-import { CORPORATE_STATS, statDisplay } from '@/app/config/statistics'
 
 const isPlaceholder = (v: string) => v.trim().startsWith('[')
 
@@ -63,30 +62,21 @@ export default function CorporatePage() {
         </div>
       </PageHero>
 
-      {/* İstatistik (doğrulanmamış -> güvenli gösterim) */}
-      <section className="section-sm bg-secondary text-text-inverse">
-        <div className="container-wide grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {CORPORATE_STATS.map((s) => (
-            <div key={s.key} className="text-center">
-              <p className="text-3xl font-bold">{statDisplay(s)}</p>
-              <p className="mt-1 text-sm opacity-80">{s.labelTr}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Kurumsal özellikler */}
-      <section className="section">
+      {/* Kurumsal özellikler (siyah bant) */}
+      <section className="section bg-secondary text-text-inverse">
         <div className="container-wide">
-          <SectionHeading title={c.features.title} subtitle={c.features.subtitle} />
+          <div className="mb-8 max-w-2xl">
+            <h2 className="text-3xl font-bold tracking-tight">{c.features.title}</h2>
+            <p className="mt-2 text-white/70">{c.features.subtitle}</p>
+          </div>
           <div className="grid gap-4 md:grid-cols-3">
             {c.features.items.map((f) => (
-              <article key={f.key} className="rounded-lg border border-border bg-surface p-6">
+              <article key={f.key} className="rounded-lg border border-white/10 bg-white/5 p-6">
                 <Icon name={f.icon as IconName} className="size-12 text-primary" />
                 <h3 className="mt-4 text-lg font-semibold">{f.title}</h3>
                 <ul className="mt-3 space-y-2">
                   {f.points.map((p) => (
-                    <li key={p} className="flex items-start gap-2 text-sm text-text-secondary">
+                    <li key={p} className="flex items-start gap-2 text-sm text-white/70">
                       <Icon name="Check" className="mt-0.5 size-4 shrink-0 text-primary" />
                       {p}
                     </li>
