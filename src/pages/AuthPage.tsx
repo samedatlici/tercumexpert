@@ -153,13 +153,13 @@ export default function AuthPage() {
           </p>
           <form className="mt-6 space-y-4" onSubmit={onVerify} noValidate>
             <input
-              className={`${inputClass} text-center text-xl tracking-[0.5em]`}
+              className={`${inputClass} text-center text-xl tracking-[0.3em]`}
               inputMode="numeric"
               autoComplete="one-time-code"
-              maxLength={6}
+              maxLength={10}
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-              placeholder="______"
+              placeholder="Kodu girin"
               aria-label={a.fields.code}
             />
             {error && <Alert kind="error">{error}</Alert>}
