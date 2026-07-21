@@ -54,6 +54,7 @@ export const en: PartialDictionary = {
       emailLabel: 'Email',
       hoursLabel: 'Working Hours',
       afterHours: 'After-hours urgent translation support is available.',
+      workingHours: 'Weekdays 09:00 - 18:00 | After-hours service available',
     },
   },
 
@@ -81,6 +82,12 @@ export const en: PartialDictionary = {
     stats: {
       title: 'TercümExpert in Numbers',
       note: 'The figures below are not presented as definitive claims until verified.',
+      labels: {
+        satisfaction: 'Customer Satisfaction',
+        completed: 'Completed Jobs',
+        languages: 'Language Support',
+        corporate: 'Corporate Clients',
+      },
     },
     howItWorks: {
       title: 'How does it work?',
@@ -99,6 +106,7 @@ export const en: PartialDictionary = {
     },
     why: {
       title: 'Why TercümExpert?',
+      subtitle: 'The features that set us apart from the competition',
       features: [
         { key: 'autoQuote', title: 'Automatic price calculation', desc: 'A preliminary price in seconds.' },
         { key: 'whatsapp', title: 'Quick WhatsApp quote', desc: 'One-tap contact.' },
@@ -228,6 +236,11 @@ export const en: PartialDictionary = {
   },
 
   corporate: {
+    statsLabels: {
+      corporate: 'Corporate clients',
+      discount: 'Bulk order discount',
+      term: 'Payment term',
+    },
     seo: {
       title: 'Corporate Solutions',
       description:
@@ -458,6 +471,26 @@ export const en: PartialDictionary = {
       notarization: 'Notary Approval',
       physicalDelivery: 'Physical Delivery',
     },
+    languages: {
+      tr: 'Turkish',
+      en: 'English',
+      de: 'German',
+      fr: 'French',
+      es: 'Spanish',
+      it: 'Italian',
+      ru: 'Russian',
+      ar: 'Arabic',
+    },
+    documentTypes: {
+      diploma: 'Diploma',
+      passport: 'Passport',
+      'civil-registry': 'Civil Registry Extract',
+      contract: 'Contract',
+      'medical-report': 'Medical Report',
+      'technical-doc': 'Technical Document',
+      'court-doc': 'Court Document',
+      other: 'Other',
+    },
     result: {
       title: 'Preliminary Quote',
       basePrice: 'Base service fee',
@@ -594,7 +627,7 @@ export const en: PartialDictionary = {
       hours: 'Working hours',
     },
     form: {
-      title: 'Write to us',
+      title: 'Contact Us',
       fields: {
         name: 'Full Name',
         email: 'Email',
@@ -768,6 +801,7 @@ export const en: PartialDictionary = {
       cookies: 'Cookie Policy',
     },
     socialTitle: 'Follow us',
+    whatsapp: 'WhatsApp Support',
     rights: 'All rights reserved.',
   },
 

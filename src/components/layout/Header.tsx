@@ -71,7 +71,7 @@ export function Header() {
               <Icon name="Mail" className="size-3.5" /> {company.email.value}
             </a>
           </div>
-          <span className="opacity-80">{company.workingHours.value}</span>
+          <span className="opacity-80">{dict.common.topbar.workingHours}</span>
         </div>
       </div>
 

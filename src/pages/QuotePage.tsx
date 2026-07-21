@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
@@ -8,6 +8,7 @@ import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { useAuth } from '@/app/providers/AuthProvider'
 import { buildPath } from '@/app/router/routes'
+import { createOrder } from '@/features/orders/model/create-order'
 import { cn } from '@/lib/cn'
 import { calculateQuote } from '@/features/quote-calculator/model/calculate'
 import type { QuoteBreakdown } from '@/features/quote-calculator/model/types'
@@ -33,6 +34,7 @@ type Mode = 'file' | 'text'
 
 interface FileEntry {
   key: string
+  file: File
   name: string
   words: number
   status: ExtractStatus | 'pending'
@@ -41,6 +43,7 @@ interface FileEntry {
 export default function QuotePage() {
   const { locale, dict, formatCurrency } = useI18n()
   const { user } = useAuth()
+  const navigate = useNavigate()
   const q = dict.quote
   const u = q.upload
   const ids = useId()
@@ -63,6 +66,9 @@ export default function QuotePage() {
   const [result, setResult] = useState<QuoteBreakdown | null>(null)
   const [gateOpen, setGateOpen] = useState(false)
   const [needInput, setNeedInput] = useState(false)
+  const [ordering, setOrdering] = useState(false)
+  const [note, setNote] = useState('')
+  const [orderError, setOrderError] = useState<string | null>(null)
 
   // Kullanıcı giriş yapınca (veya misafir doğrulaması tamamlanınca) bekleyen fiyatı göster.
   useEffect(() => {
@@ -87,7 +93,7 @@ export default function QuotePage() {
       }
       keyCounter.current += 1
       const key = `f${keyCounter.current}`
-      setFiles((prev) => [...prev, { key, name: f.name, words: 0, status: 'pending' }])
+      setFiles((prev) => [...prev, { key, file: f, name: f.name, words: 0, status: 'pending' }])
       extractWordCount(f)
         .then((res) =>
           setFiles((prev) =>
@@ -136,6 +142,37 @@ export default function QuotePage() {
       setResult(null)
       setGateOpen(true)
     }
+  }
+
+  const handleOrder = async () => {
+    if (!user || !result || ordering) return
+    setOrdering(true)
+    setOrderError(null)
+    const res = await createOrder({
+      userId: user.id,
+      service,
+      sourceLang,
+      targetLang,
+      documentType,
+      wordCount,
+      urgent,
+      notarization,
+      physicalDelivery,
+      breakdown: result,
+      inputMode: mode,
+      sourceText: mode === 'text' ? text : undefined,
+      files: files.map((f) => ({ file: f.file, words: f.status === 'ok' ? f.words : 0 })),
+      contactName: (user.user_metadata?.full_name as string | undefined) ?? null,
+      contactEmail: user.email ?? null,
+      note: note.trim() || null,
+    })
+    if (res.error || res.orderNo == null) {
+      setOrdering(false)
+      setOrderError(q.orderConfirm.error)
+      return
+    }
+    // Onay + takip için ayrı sipariş sayfasına yönlendir.
+    navigate(buildPath(locale, 'order', { slug: String(res.orderNo) }))
   }
 
   const wa = whatsappLink('Merhaba, fiyat teklifi hakkında bilgi almak istiyorum.')
@@ -285,14 +322,14 @@ export default function QuotePage() {
               <Field label={q.fields.sourceLang} htmlFor={`${ids}-src`}>
                 <select id={`${ids}-src`} className={fieldClass} value={sourceLang} onChange={(e) => setSourceLang(e.target.value)}>
                   {QUOTE_LANGUAGES.map((l) => (
-                    <option key={l.code} value={l.code}>{l.labelTr}</option>
+                    <option key={l.code} value={l.code}>{(q.languages as Record<string, string>)[l.code] ?? l.labelTr}</option>
                   ))}
                 </select>
               </Field>
               <Field label={q.fields.targetLang} htmlFor={`${ids}-tgt`}>
                 <select id={`${ids}-tgt`} className={fieldClass} value={targetLang} onChange={(e) => setTargetLang(e.target.value)}>
                   {QUOTE_LANGUAGES.map((l) => (
-                    <option key={l.code} value={l.code}>{l.labelTr}</option>
+                    <option key={l.code} value={l.code}>{(q.languages as Record<string, string>)[l.code] ?? l.labelTr}</option>
                   ))}
                 </select>
               </Field>
@@ -309,7 +346,7 @@ export default function QuotePage() {
             <Field label={q.fields.documentType} htmlFor={`${ids}-doc`}>
               <select id={`${ids}-doc`} className={fieldClass} value={documentType} onChange={(e) => setDocumentType(e.target.value as DocumentTypeId)}>
                 {DOCUMENT_TYPES.map((d) => (
-                  <option key={d.id} value={d.id}>{d.labelTr}</option>
+                  <option key={d.id} value={d.id}>{(q.documentTypes as Record<string, string>)[d.id] ?? d.labelTr}</option>
                 ))}
               </select>
             </Field>
@@ -343,15 +380,33 @@ export default function QuotePage() {
                   <Row label={q.result.total} value={formatCurrency(result.total)} strong />
                   <Row label={q.result.delivery} value={`${result.deliveryDays} ${q.result.deliveryUnit}`} />
                 </dl>
-                <div className="mt-5 space-y-2">
-                  <Button intent="secondary" block>{q.result.order}</Button>
+
+                {/* Sipariş notu */}
+                <div className="mt-5">
+                  <label htmlFor={`${ids}-note`} className="mb-1.5 block text-sm font-medium">
+                    {q.note.label}
+                  </label>
+                  <textarea
+                    id={`${ids}-note`}
+                    rows={3}
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder={q.note.placeholder}
+                    className="w-full rounded-md border border-border bg-surface p-3 text-sm focus-visible:outline-none"
+                  />
+                </div>
+
+                {orderError && <p className="mt-3 text-sm text-danger">{orderError}</p>}
+                <div className="mt-4 space-y-2">
+                  <Button intent="secondary" block onClick={() => void handleOrder()} disabled={ordering}>
+                    {ordering ? q.orderConfirm.submitting : q.result.order}
+                  </Button>
                   {wa && (
                     <a href={wa} target="_blank" rel="noopener noreferrer">
                       <Button intent="whatsapp" block><WhatsAppIcon className="size-5" /> {q.result.whatsapp}</Button>
                     </a>
                   )}
                 </div>
-                <p className="mt-3 text-center text-xs text-text-muted">{dict.common.states.demoNotice}</p>
               </div>
             ) : gateOpen && !user ? (
               <PriceGate />

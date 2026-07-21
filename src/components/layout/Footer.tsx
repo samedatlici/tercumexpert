@@ -145,7 +145,7 @@ export function Footer() {
           {wa && (
             <a href={wa} target="_blank" rel="noopener noreferrer" className="mt-4 block">
               <Button intent="whatsapp" block>
-                <WhatsAppIcon className="size-5" /> WhatsApp Destek
+                <WhatsAppIcon className="size-5" /> {dict.footer.whatsapp}
               </Button>
             </a>
           )}

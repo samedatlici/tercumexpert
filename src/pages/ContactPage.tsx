@@ -67,7 +67,7 @@ export default function ContactPage() {
               {!isPlaceholder(company.address.value) && (
                 <li className="flex items-start gap-2"><Icon name="MapPin" className="mt-0.5 size-4" />{company.address.value}</li>
               )}
-              <li className="text-text-secondary">{c.labels.hours}: {company.workingHours.value}</li>
+              <li className="text-text-secondary">{c.labels.hours}: {dict.common.topbar.workingHours}</li>
             </ul>
           </div>
 

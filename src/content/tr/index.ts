@@ -52,6 +52,7 @@ export const tr = {
       emailLabel: 'E-posta',
       hoursLabel: 'Çalışma Saatleri',
       afterHours: 'Mesai dışı acil çeviri desteği mevcuttur.',
+      workingHours: 'Hafta İçi 09:00 - 18:00 | Mesai dışı hizmet mevcuttur',
     },
   },
 
@@ -79,6 +80,12 @@ export const tr = {
     stats: {
       title: 'Rakamlarla TercümExpert',
       note: 'Aşağıdaki değerler doğrulanana kadar kesin iddia olarak sunulmaz.',
+      labels: {
+        satisfaction: 'Müşteri Memnuniyeti',
+        completed: 'Tamamlanan İş',
+        languages: 'Dil Desteği',
+        corporate: 'Kurumsal Müşteri',
+      },
     },
     howItWorks: {
       title: 'Nasıl çalışır?',
@@ -97,6 +104,7 @@ export const tr = {
     },
     why: {
       title: 'Neden TercümExpert?',
+      subtitle: 'Rakiplerimizden bizi ayıran özellikler',
       features: [
         { key: 'autoQuote', title: 'Otomatik fiyat hesaplama', desc: 'Saniyeler içinde ön fiyat.' },
         { key: 'whatsapp', title: 'WhatsApp hızlı teklif', desc: 'Tek dokunuşla iletişim.' },
@@ -227,6 +235,11 @@ export const tr = {
   },
 
   corporate: {
+    statsLabels: {
+      corporate: 'Kurumsal müşteri',
+      discount: 'Toplu sipariş indirimi',
+      term: 'Ödeme vadesi',
+    },
     seo: {
       title: 'Kurumsal Çözümler',
       description:
@@ -457,6 +470,26 @@ export const tr = {
       notarization: 'Noter Onayı',
       physicalDelivery: 'Fiziksel Teslimat',
     },
+    languages: {
+      tr: 'Türkçe',
+      en: 'İngilizce',
+      de: 'Almanca',
+      fr: 'Fransızca',
+      es: 'İspanyolca',
+      it: 'İtalyanca',
+      ru: 'Rusça',
+      ar: 'Arapça',
+    },
+    documentTypes: {
+      diploma: 'Diploma',
+      passport: 'Pasaport',
+      'civil-registry': 'Nüfus Kayıt Örneği',
+      contract: 'Sözleşme',
+      'medical-report': 'Medikal Rapor',
+      'technical-doc': 'Teknik Doküman',
+      'court-doc': 'Mahkeme Belgesi',
+      other: 'Diğer',
+    },
     result: {
       title: 'Ön Fiyat Teklifi',
       basePrice: 'Temel hizmet bedeli',
@@ -470,6 +503,14 @@ export const tr = {
       order: 'Sipariş Ver',
       whatsapp: "WhatsApp'tan İletişime Geç",
       estimatedWords: 'Tahmini kelime (otomatik — demo)',
+    },
+    orderConfirm: {
+      title: 'Siparişiniz alındı',
+      number: 'Sipariş No',
+      desc: 'Talebiniz ve belgeleriniz kaydedildi. Uzman ekibimiz belgeyi inceleyip en kısa sürede sizinle iletişime geçecek.',
+      viewOrders: 'Siparişlerim',
+      submitting: 'Sipariş oluşturuluyor…',
+      error: 'Sipariş oluşturulurken bir sorun oldu. Lütfen tekrar deneyin.',
     },
     gate: {
       title: 'Fiyatınız hazır',
@@ -490,6 +531,67 @@ export const tr = {
       errEmail: 'Geçerli bir e-posta girin.',
       errCode: 'Lütfen kodu eksiksiz girin.',
       note: 'E-postanız yalnızca fiyat teklifi ve sipariş için kullanılır.',
+    },
+    note: {
+      label: 'Siparişinizle ilgili not (isteğe bağlı)',
+      placeholder: 'Teslimat, terminoloji veya özel isteklerinizi buraya yazabilirsiniz.',
+    },
+  },
+
+  order: {
+    seo: {
+      title: 'Sipariş Takibi',
+      description: 'Siparişinizin durumunu takip edin.',
+    },
+    numberLabel: 'Sipariş No',
+    placedOn: 'Sipariş tarihi',
+    estimatedLabel: 'Tahmini çeviri teslimi',
+    cargoEstimatedLabel: 'Tahmini kargo tarihi',
+    timelineTitle: 'Sipariş durumu',
+    steps: {
+      received: 'Siparişiniz alındı',
+      in_progress: 'İşleme alındı',
+      translated: 'Çeviri tamamlandı',
+      shipped: 'Kargoya verildi',
+      delivered: 'Teslim edildi',
+      cancelled: 'Sipariş iptal edildi',
+    },
+    stepDesc: {
+      received: 'Talebiniz ve belgeleriniz sistemimize ulaştı. Uzman ekibimiz en kısa sürede inceleyip işleme alacak.',
+      in_progress: 'Uzman tercümanımız çevirinize başladı.',
+      translated: 'Çeviriniz tamamlandı ve son kontrolleri yapıldı.',
+      shipped: 'Belgeniz kargoya teslim edildi; aşağıdaki butondan takip edebilirsiniz.',
+      delivered: 'Belgeniz e-posta ile tarafınıza iletildi.',
+      cancelled: 'Bu sipariş iptal edilmiştir. Sorularınız için bizimle iletişime geçebilirsiniz.',
+    },
+    cargoReady: 'Belgeniz kargoya verildi. Tek tuşla takip edebilirsiniz:',
+    cargoPending: 'Kargo takip kodu, belgeniz kargoya verildiğinde burada görünecek.',
+    trackCargo: 'Kargonu Takip Et',
+    digitalPending: 'Çeviriniz tamamlandığında dosyalarınız e-posta ile tarafınıza iletilecek.',
+    digitalDelivered: 'Çeviriniz e-posta ile tarafınıza iletildi. Gelen kutunuzu (ve spam klasörünü) kontrol edin.',
+    detailsTitle: 'Sipariş detayları',
+    fields: {
+      service: 'Hizmet',
+      langs: 'Diller',
+      documentType: 'Belge türü',
+      words: 'Kelime',
+      delivery: 'Tahmini süre',
+      total: 'Tutar',
+      note: 'Notunuz',
+    },
+    myOrders: 'Siparişlerim',
+    backHome: 'Ana Sayfaya Dön',
+    whatsapp: "WhatsApp'tan İletişime Geç",
+    loading: 'Sipariş yükleniyor…',
+    loginRequired: {
+      title: 'Siparişinizi görmek için giriş yapın',
+      desc: 'Sipariş detaylarınıza yalnızca hesabınızla giriş yaptıktan sonra ulaşabilirsiniz.',
+      login: 'Giriş Yap',
+    },
+    notFound: {
+      title: 'Sipariş bulunamadı',
+      desc: 'Bu sipariş numarası size ait değil veya mevcut değil. Lütfen bağlantıyı kontrol edin.',
+      home: 'Ana Sayfaya Dön',
     },
   },
 
@@ -584,9 +686,24 @@ export const tr = {
       back: 'Geri dön',
     },
     signedIn: {
-      title: 'Giriş yaptınız',
+      title: 'Hesabım',
       greeting: 'Hoş geldiniz',
       logout: 'Çıkış Yap',
+    },
+    orders: {
+      title: 'Siparişlerim',
+      empty: 'Henüz siparişiniz yok. Fiyat Hesapla’dan ilk siparişinizi oluşturabilirsiniz.',
+      loading: 'Siparişler yükleniyor…',
+      error: 'Siparişler yüklenemedi. Lütfen sayfayı yenileyin.',
+      status: {
+        received: 'Alındı',
+        in_progress: 'İşleme alındı',
+        translated: 'Çeviri tamamlandı',
+        shipped: 'Kargoya verildi',
+        delivered: 'Teslim edildi',
+        cancelled: 'İptal edildi',
+      },
+      track: 'Takip Et',
     },
     errors: {
       nameRequired: 'Ad ve soyad zorunludur.',
@@ -685,6 +802,7 @@ export const tr = {
       cookies: 'Çerez Politikası',
     },
     socialTitle: 'Bizi takip edin',
+    whatsapp: 'WhatsApp Destek',
     rights: 'Tüm hakları saklıdır.',
   },
 

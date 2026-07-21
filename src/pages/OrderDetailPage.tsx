@@ -64,7 +64,7 @@ export default function OrderDetailPage() {
   if (!user) {
     return (
       <>
-        <Seo title={o.seo.title} description={o.seo.description} routeId="order" />
+        <Seo title={o.seo.title} description={o.seo.description} routeId="order" noindex />
         <Shell>
           <Center icon="Lock" title={o.loginRequired.title} desc={o.loginRequired.desc}>
             <Link to={buildPath(locale, 'auth')}>
@@ -79,7 +79,7 @@ export default function OrderDetailPage() {
   if (state === 'loading') {
     return (
       <>
-        <Seo title={o.seo.title} description={o.seo.description} routeId="order" />
+        <Seo title={o.seo.title} description={o.seo.description} routeId="order" noindex />
         <Shell>
           <p className="py-16 text-center text-sm text-text-secondary">{o.loading}</p>
         </Shell>
@@ -90,9 +90,9 @@ export default function OrderDetailPage() {
   if (state !== 'ok' || !order) {
     return (
       <>
-        <Seo title={o.seo.title} description={o.seo.description} routeId="order" />
+        <Seo title={o.seo.title} description={o.seo.description} routeId="order" noindex />
         <Shell>
-          <Center icon="FileText" title={o.notFound.title} desc={o.notFound.desc}>
+          <Center icon="TriangleAlert" title={o.notFound.title} desc={o.notFound.desc}>
             <Link to={home}>
               <Button intent="secondary" block>{o.notFound.home}</Button>
             </Link>
@@ -104,7 +104,7 @@ export default function OrderDetailPage() {
 
   return (
     <>
-      <Seo title={o.seo.title} description={o.seo.description} routeId="order" />
+      <Seo title={o.seo.title} description={o.seo.description} routeId="order" noindex />
       <Shell>
         <OrderView order={order} />
         <div className="mt-6 space-y-2">
@@ -132,8 +132,12 @@ export default function OrderDetailPage() {
     const currentIndex = cancelled ? -1 : Math.max(0, steps.indexOf(status as StepKey))
 
     const langLabel = (code: string | null) =>
-      QUOTE_LANGUAGES.find((l) => l.code === code)?.labelTr ?? (code ? code.toUpperCase() : '—')
-    const docLabel = DOCUMENT_TYPES.find((d) => d.id === order.document_type)?.labelTr
+      (dict.quote.languages as Record<string, string>)[code ?? ''] ??
+      QUOTE_LANGUAGES.find((l) => l.code === code)?.labelTr ??
+      (code ? code.toUpperCase() : '—')
+    const docLabel =
+      (dict.quote.documentTypes as Record<string, string>)[order.document_type ?? ''] ??
+      DOCUMENT_TYPES.find((d) => d.id === order.document_type)?.labelTr
     const svcName = order.service ? dict.serviceItems[order.service as keyof typeof dict.serviceItems]?.name : undefined
 
     const estIso = addDays(order.created_at, order.delivery_days ?? 0)
@@ -267,7 +271,7 @@ function Center({
   desc,
   children,
 }: {
-  icon: 'Lock' | 'FileText'
+  icon: 'Lock' | 'TriangleAlert'
   title: string
   desc: string
   children: React.ReactNode

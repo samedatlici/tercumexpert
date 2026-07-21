@@ -85,7 +85,7 @@ export default function HomePage() {
             <div key={s.key} className="flex flex-col items-center text-center">
               <Icon name={(s.icon ?? 'BarChart3') as IconName} className="mb-3 size-12 opacity-90" />
               <p className="text-4xl font-extrabold">{statDisplay(s)}</p>
-              <p className="mt-1 text-sm opacity-70">{s.labelTr}</p>
+              <p className="mt-1 text-sm opacity-70">{(home.stats.labels as Record<string, string>)[s.key] ?? s.labelTr}</p>
             </div>
           ))}
         </div>
@@ -150,7 +150,7 @@ export default function HomePage() {
       {/* ============ NEDEN TERCÜMEXPERT (çizgi ikon) ============ */}
       <section className="section">
         <div className="container-wide">
-          <SectionHead title={home.why.title} subtitle="Rakiplerimizden bizi ayıran özellikler" />
+          <SectionHead title={home.why.title} subtitle={home.why.subtitle} />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {home.why.features.map((f) => (
               <article key={f.key} className="rounded-lg border border-border bg-surface p-6">
@@ -175,8 +175,8 @@ export default function HomePage() {
           <div className="mt-8 grid w-full max-w-2xl grid-cols-3 gap-6">
             {CORPORATE_STATS.map((s) => (
               <div key={s.key}>
-                <p className="text-3xl font-extrabold">{statDisplay(s)}</p>
-                <p className="mt-1 text-sm opacity-70">{s.labelTr}</p>
+                <p className="text-3xl font-extrabold">{s.status === 'verified' ? s.rawValue : dict.common.states.unverified}</p>
+                <p className="mt-1 text-sm opacity-70">{(dict.corporate.statsLabels as Record<string, string>)[s.key] ?? s.labelTr}</p>
               </div>
             ))}
           </div>
