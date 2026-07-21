@@ -17,7 +17,6 @@ export type RouteId =
   | 'faq'
   | 'contact'
   | 'auth'
-  | 'order'
   | 'legalKvkk'
   | 'legalPrivacy'
   | 'legalDistanceSales'
@@ -35,7 +34,6 @@ const ROUTE_SLUGS: Record<RouteId, Partial<Record<Locale, string>>> = {
   faq: { tr: 'sss', en: 'faq', fr: 'faq', de: 'faq', es: 'faq', it: 'faq', ru: 'faq', ar: 'faq' },
   contact: { tr: 'iletisim', en: 'contact', fr: 'contact', de: 'kontakt', es: 'contacto', it: 'contatti', ru: 'kontakty', ar: 'ittisal' },
   auth: { tr: 'giris', en: 'login', fr: 'connexion', de: 'anmelden', es: 'acceso', it: 'accedi', ru: 'vhod', ar: 'dukhul' },
-  order: { tr: 'siparis', en: 'order', fr: 'commande', de: 'bestellung', es: 'pedido', it: 'ordine', ru: 'zakaz', ar: 'talab' },
   legalKvkk: { tr: 'kvkk', en: 'data-protection' },
   legalPrivacy: { tr: 'gizlilik-politikasi', en: 'privacy-policy' },
   legalDistanceSales: { tr: 'mesafeli-satis-sozlesmesi', en: 'distance-sales-agreement' },
@@ -57,7 +55,7 @@ export function buildPath(
   const slug = getSlug(routeId, locale)
   const segments = [`/${locale}`]
   if (slug) segments.push(slug)
-  if ((routeId === 'blogPost' || routeId === 'order') && params?.slug) segments.push(params.slug)
+  if (routeId === 'blogPost' && params?.slug) segments.push(params.slug)
   return segments.join('/')
 }
 
@@ -83,11 +81,6 @@ export function resolveRouteId(locale: Locale, splat: string): ResolvedRoute | n
   // Blog yazısı: <blogSlug>/<postSlug>
   if (first === getSlug('blog', locale) && segments.length >= 2) {
     return { routeId: 'blogPost', params: { slug: segments.slice(1).join('/') } }
-  }
-
-  // Sipariş detay/takip: <orderSlug>/<orderNo>
-  if (first === getSlug('order', locale) && segments.length >= 2) {
-    return { routeId: 'order', params: { slug: segments.slice(1).join('/') } }
   }
 
   // Tek segmentli route'lar
