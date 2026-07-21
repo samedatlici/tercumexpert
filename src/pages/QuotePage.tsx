@@ -20,6 +20,7 @@ import {
 import { SERVICES, type ServiceId } from '@/app/config/services'
 import { DOCUMENT_TYPES, QUOTE_LANGUAGES, type DocumentTypeId } from '@/app/config/pricing.config'
 import { whatsappLink } from '@/app/config/site.config'
+import { COUNTRIES, dialOf, defaultCountryForLocale } from '@/app/config/country-codes'
 
 const fieldClass =
   'h-11 w-full rounded-md border border-border bg-surface px-3 text-base focus-visible:outline-none'
@@ -186,7 +187,7 @@ export default function QuotePage() {
       files: files.map((f) => ({ file: f.file, words: f.status === 'ok' ? f.words : 0 })),
       contactName,
       contactEmail: user.email ?? null,
-      contactPhone: delivery?.phone ?? null,
+      contactPhone: delivery?.phone ?? ((user.user_metadata?.phone as string | undefined) || null),
       note: note.trim() || null,
       deliveryAddress: delivery?.address ?? null,
       deliveryCity: delivery?.city ?? null,
@@ -589,12 +590,15 @@ function PriceGate() {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
+  const [country, setCountry] = useState<string>(() => defaultCountryForLocale(locale))
+  const [phone, setPhone] = useState('')
   const [code, setCode] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
   const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+  const fullPhone = `${dialOf(country)} ${phone.trim()}`.trim()
 
   const onSend = async (e: FormEvent) => {
     e.preventDefault()
@@ -602,8 +606,9 @@ function PriceGate() {
     setInfo(null)
     if (firstName.trim().length < 2 || lastName.trim().length < 2) return setError(g.errNames)
     if (!emailOk(email)) return setError(g.errEmail)
+    if (phone.replace(/\D/g, '').length < 6) return setError(g.errPhone)
     setBusy(true)
-    const res = await sendGuestCode(email, firstName, lastName)
+    const res = await sendGuestCode(email, firstName, lastName, fullPhone)
     setBusy(false)
     if (res.error) return setError(res.error)
     setStep('code')
@@ -624,7 +629,7 @@ function PriceGate() {
     setError(null)
     setInfo(null)
     setBusy(true)
-    const res = await sendGuestCode(email, firstName, lastName)
+    const res = await sendGuestCode(email, firstName, lastName, fullPhone)
     setBusy(false)
     if (res.error) return setError(res.error)
     setInfo(g.resent)
@@ -653,6 +658,19 @@ function PriceGate() {
             <input className={fieldClass} placeholder={g.lastName} autoComplete="family-name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
           </div>
           <input type="email" className={fieldClass} placeholder={g.email} autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <div className="flex gap-2">
+            <select
+              className={cn(fieldClass, 'w-24 shrink-0 px-2')}
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              aria-label={g.phone}
+            >
+              {COUNTRIES.map((x) => (
+                <option key={x.iso} value={x.iso}>{x.flag} {x.dial}</option>
+              ))}
+            </select>
+            <input type="tel" dir="ltr" className={cn(fieldClass, 'flex-1')} placeholder={g.phone} autoComplete="tel-national" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          </div>
           {error && <p className="text-sm text-danger">{error}</p>}
           <Button type="submit" intent="outline" block disabled={busy}>{g.sendCode}</Button>
           <p className="text-xs text-text-muted">{g.note}</p>
