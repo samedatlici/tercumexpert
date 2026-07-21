@@ -91,7 +91,7 @@ export default function AuthPage() {
       const { error } = await signInWithPassword(email, password)
       setBusy(false)
       if (error) return setError(error)
-      navigate(buildPath(locale, 'quote'))
+      navigate(buildPath(locale, 'home'))
       return
     }
     // register
@@ -107,7 +107,7 @@ export default function AuthPage() {
     setBusy(false)
     if (error) return setError(error)
     if (needsVerification) setView('verify')
-    else navigate(buildPath(locale, 'quote'))
+    else navigate(buildPath(locale, 'home'))
   }
 
   const onVerify = async (e: FormEvent) => {
@@ -123,7 +123,7 @@ export default function AuthPage() {
     // Doğrulama başarılı — oturumu garantiye almak için şifreyle giriş yap.
     await signInWithPassword(email, password)
     setBusy(false)
-    navigate(buildPath(locale, 'quote'))
+    navigate(buildPath(locale, 'home'))
   }
 
   const onResend = async () => {
@@ -153,13 +153,13 @@ export default function AuthPage() {
           </p>
           <form className="mt-6 space-y-4" onSubmit={onVerify} noValidate>
             <input
-              className={`${inputClass} text-center text-xl tracking-[0.3em]`}
+              className={`${inputClass} text-center text-xl tracking-[0.5em]`}
               inputMode="numeric"
               autoComplete="one-time-code"
-              maxLength={10}
+              maxLength={6}
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-              placeholder="Kodu girin"
+              placeholder="______"
               aria-label={a.fields.code}
             />
             {error && <Alert kind="error">{error}</Alert>}

@@ -555,7 +555,7 @@ export const tr = {
     },
     verify: {
       title: 'E-postanızı doğrulayın',
-      desc: 'adresine gönderdiğimiz doğrulama kodunu girin.',
+      desc: 'adresine gönderdiğimiz 6 haneli kodu girin.',
       submit: 'Doğrula ve Devam Et',
       spam: 'Kod birkaç dakika gecikebilir; spam / gereksiz klasörünü de kontrol edin.',
       resend: 'Kodu yeniden gönder',
@@ -571,7 +571,7 @@ export const tr = {
       nameRequired: 'Ad ve soyad zorunludur.',
       emailInvalid: 'Geçerli bir e-posta girin.',
       passwordShort: 'Şifre en az 6 karakter olmalıdır.',
-      codeInvalid: 'Lütfen e-postadaki kodu eksiksiz girin.',
+      codeInvalid: 'Lütfen 6 haneli kodu girin.',
       consentRequired: 'Devam etmek için onay gereklidir.',
     },
   },
