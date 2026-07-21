@@ -81,9 +81,27 @@ export function Footer() {
                     className="inline-flex size-10 items-center justify-center rounded-md text-white/70 transition-colors hover:bg-white/10 hover:text-white"
                     aria-label={s.label}
                   >
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="size-5" aria-hidden="true">
-                      <path d={s.path} />
-                    </svg>
+                    {s.key === 'instagram' ? (
+                      // Instagram: kalın (stroked) çizim — diğerleriyle görsel ağırlık dengesi
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2.2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="size-5"
+                        aria-hidden="true"
+                      >
+                        <rect x="2" y="2" width="20" height="20" rx="5.5" />
+                        <circle cx="12" cy="12" r="4.2" />
+                        <circle cx="17.7" cy="6.3" r="0.9" fill="currentColor" stroke="none" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="size-5" aria-hidden="true">
+                        <path d={s.path} />
+                      </svg>
+                    )}
                   </a>
                 </li>
               ))}

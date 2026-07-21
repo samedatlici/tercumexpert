@@ -382,6 +382,27 @@ export const tr = {
       title: 'Anında Fiyat Hesaplama',
       subtitle: 'Belgeni yükle veya detayları gir, anında ön fiyat teklifini al.',
     },
+    upload: {
+      heading: 'Belgelerinizi Yükleyin',
+      privacy: 'Verileriniz gizli tutulmaktadır',
+      tabFile: 'Dosya Yükle',
+      tabText: 'Metin Gir',
+      chooseFile: 'Belgenizi Seçin',
+      formats: ".docx, .xlsx, .pdf, .pptx, .jpg, .png ve 50'den fazla format kabul edilir · Dosya başına maks. 100MB",
+      dropHint: 'Dosyanızı bu alana sürükleyip bırakabilirsiniz.',
+      textPlaceholder: 'Metninizi buraya yapıştırın veya yazın…',
+      totalWords: 'Toplam kelime sayısı',
+      extracting: 'Kelimeler sayılıyor…',
+      wordsUnit: 'kelime',
+      remove: 'Kaldır',
+      unsupported:
+        'Bu dosya türünden otomatik kelime sayımı yapılamadı. Lütfen "Metin Gir" ile metni yapıştırın; sayı teklif sırasında ekibimizce doğrulanır.',
+      empty:
+        'Dosyada seçilebilir metin bulunamadı (taranmış/görsel olabilir). Lütfen "Metin Gir" kullanın veya sayı teklif sırasında doğrulanacaktır.',
+      error: 'Dosya okunamadı. Lütfen tekrar deneyin veya "Metin Gir" kullanın.',
+      tooLarge: "Dosya 100MB'den büyük olamaz.",
+      needInput: 'Fiyat için lütfen bir dosya yükleyin veya metin girin.',
+    },
     fields: {
       upload: 'Belge Yükle (opsiyonel)',
       uploadHint: 'PDF, DOC, DOCX veya TXT — en fazla 10 MB',

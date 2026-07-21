@@ -6,7 +6,6 @@ import { useI18n } from '@/hooks/useI18n'
 import { buildPath } from '@/app/router/routes'
 import { SERVICES } from '@/app/config/services'
 import { STATISTICS, CORPORATE_STATS, statDisplay } from '@/app/config/statistics'
-import { BLOG_POSTS } from '@/content/blog'
 import { whatsappLink } from '@/app/config/site.config'
 
 const HOW_ICONS: Record<string, IconName> = {
@@ -27,7 +26,7 @@ const WHY_ICONS: Record<string, IconName> = {
 const TEASER_ICONS: Record<string, IconName> = { commission: 'Wallet', qr: 'QrCode' }
 
 export default function HomePage() {
-  const { locale, dict, formatDate } = useI18n()
+  const { locale, dict } = useI18n()
   const home = dict.home
   const wa = whatsappLink('Merhaba, çeviri hizmeti hakkında bilgi almak istiyorum.')
 
@@ -83,7 +82,7 @@ export default function HomePage() {
         <div className="container-wide grid grid-cols-2 gap-8 lg:grid-cols-4">
           {STATISTICS.map((s) => (
             <div key={s.key} className="flex flex-col items-center text-center">
-              <Icon name={(s.icon ?? 'BarChart3') as IconName} className="mb-3 size-8 opacity-90" />
+              <Icon name={(s.icon ?? 'BarChart3') as IconName} className="mb-3 size-12 opacity-90" />
               <p className="text-4xl font-extrabold">{statDisplay(s)}</p>
               <p className="mt-1 text-sm opacity-70">{s.labelTr}</p>
             </div>
@@ -98,7 +97,7 @@ export default function HomePage() {
           <ol className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
             {home.howItWorks.steps.map((step, i) => (
               <li key={step.key} className="flex flex-col items-center rounded-lg border border-border bg-surface p-5 text-center">
-                <Icon name={HOW_ICONS[step.key] ?? 'FileText'} className="size-8 text-primary" />
+                <Icon name={HOW_ICONS[step.key] ?? 'FileText'} className="size-12 text-primary" />
                 <span className="mt-3 text-lg font-bold">{i + 1}</span>
                 <p className="mt-1 font-semibold">{step.title}</p>
                 <p className="mt-1 text-sm text-text-secondary">{step.desc}</p>
@@ -117,7 +116,7 @@ export default function HomePage() {
               const item = dict.serviceItems[s.id]
               return (
                 <article key={s.id} className="flex flex-col rounded-lg border border-border bg-surface p-6">
-                  <Icon name={s.icon as IconName} className="size-8 text-primary" />
+                  <Icon name={s.icon as IconName} className="size-12 text-primary" />
                   <h3 className="mt-4 text-lg font-bold">{item.name}</h3>
                   <p className="mt-2 text-sm text-text-secondary">{item.short}</p>
                   <ul className="mt-3 flex-1 space-y-1.5">
@@ -154,7 +153,7 @@ export default function HomePage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {home.why.features.map((f) => (
               <article key={f.key} className="rounded-lg border border-border bg-surface p-6">
-                <Icon name={WHY_ICONS[f.key] ?? 'CircleCheck'} className="size-8" />
+                <Icon name={WHY_ICONS[f.key] ?? 'CircleCheck'} className="size-12" />
                 <h3 className="mt-4 text-lg font-bold">{f.title}</h3>
                 <p className="mt-2 text-sm text-text-secondary">{f.desc}</p>
               </article>
@@ -189,7 +188,7 @@ export default function HomePage() {
           <div className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-2">
             {home.partnershipTeaser.items.map((i) => (
               <article key={i.key} className="rounded-lg border border-border bg-surface p-6">
-                <Icon name={TEASER_ICONS[i.key] ?? 'Wallet'} className="size-8 text-primary" />
+                <Icon name={TEASER_ICONS[i.key] ?? 'Wallet'} className="size-12 text-primary" />
                 <h3 className="mt-4 text-lg font-bold">{i.title}</h3>
                 <p className="mt-2 text-sm text-text-secondary">{i.desc}</p>
               </article>
@@ -198,62 +197,6 @@ export default function HomePage() {
           <div className="mt-8 text-center">
             <Link to={buildPath(locale, 'partnership')}>
               <Button intent="secondary" size="lg">{home.partnershipTeaser.cta}</Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ MÜŞTERİ DEĞERLENDİRMELERİ (yer tutucu) ============ */}
-      <section className="section">
-        <div className="container-wide">
-          <SectionHead title={home.testimonials.title} subtitle={home.testimonials.subtitle} />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {home.testimonials.items.map((t) => (
-              <article key={t.key} className="flex flex-col rounded-lg border border-border bg-surface p-6">
-                <div className="flex gap-1" aria-hidden="true">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Icon key={i} name="Star" className="size-4 text-border-strong" />
-                  ))}
-                </div>
-                <div className="mt-4 flex-1 space-y-2" aria-hidden="true">
-                  <div className="h-3 w-full rounded bg-surface-muted" />
-                  <div className="h-3 w-5/6 rounded bg-surface-muted" />
-                  <div className="h-3 w-4/6 rounded bg-surface-muted" />
-                </div>
-                <div className="mt-5 flex items-center gap-3">
-                  <div className="size-9 rounded-full bg-surface-muted" aria-hidden="true" />
-                  <div>
-                    <p className="text-sm font-semibold text-text-muted">—</p>
-                    <p className="text-xs text-text-muted">{t.role}</p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-          <p className="mt-6 text-center text-xs text-text-muted">{home.testimonials.placeholderNote}</p>
-        </div>
-      </section>
-
-      {/* ============ BLOG TEASER ============ */}
-      <section className="section bg-surface-muted">
-        <div className="container-wide">
-          <SectionHead title={home.blogTeaser.title} subtitle={home.blogTeaser.subtitle} />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {BLOG_POSTS.map((post) => (
-              <article key={post.slug} className="flex flex-col rounded-lg border border-border bg-surface p-6">
-                <Icon name={post.icon} className="size-7 text-primary" />
-                <p className="mt-4 text-xs font-medium text-text-muted">
-                  {post.category} • {post.readingMinutes} {dict.blog.readingTime}
-                </p>
-                <h3 className="mt-2 font-bold leading-snug">{post.title}</h3>
-                <p className="mt-2 flex-1 text-sm text-text-secondary">{post.excerpt}</p>
-                <p className="mt-3 text-xs text-text-muted">{formatDate(post.date)}</p>
-              </article>
-            ))}
-          </div>
-          <div className="mt-8 text-center">
-            <Link to={buildPath(locale, 'blog')}>
-              <Button intent="outline" size="lg">{home.blogTeaser.viewAll}</Button>
             </Link>
           </div>
         </div>

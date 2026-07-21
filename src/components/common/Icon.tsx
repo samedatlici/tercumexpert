@@ -2,14 +2,16 @@ import {
   Stamp, FileCheck2, Globe2, Scale, Cog, HeartPulse, GraduationCap, Globe, Upload, Settings,
   CircleCheck, Activity, PackageCheck, TrendingUp, MessageSquare, Languages, Building2, BarChart3,
   Wallet, QrCode, ShieldCheck, ArrowRight, Check, ChevronDown, Menu, X, MessageCircle, Phone, Mail,
-  MapPin, Clock, FileText, Star, type LucideProps,
+  MapPin, Clock, FileText, Star, Lock, type LucideProps,
 } from 'lucide-react'
 
+/** İkon registry (§7: emoji YOK, tek stroke ailesi Lucide). Marka ikonları (Facebook vb.)
+ *  Lucide'de kaldırıldığı için KULLANILMAZ; sosyal ikonlar Footer'da inline SVG'dir. */
 const REGISTRY = {
   Stamp, FileCheck2, Globe2, Scale, Cog, HeartPulse, GraduationCap, Globe, Upload, Settings,
   CircleCheck, Activity, PackageCheck, TrendingUp, MessageSquare, Languages, Building2, BarChart3,
   Wallet, QrCode, ShieldCheck, ArrowRight, Check, ChevronDown, Menu, X, MessageCircle, Phone, Mail,
-  MapPin, Clock, FileText, Star,
+  MapPin, Clock, FileText, Star, Lock,
 } as const
 
 export type IconName = keyof typeof REGISTRY
