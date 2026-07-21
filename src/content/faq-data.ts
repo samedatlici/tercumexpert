@@ -43,7 +43,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'pricing',
     priority: 1,
     q: 'Nasıl fiyat alırım?',
-    a: "Fiyat Hesapla sayfasından belgenizi yükleyin ya da metninizi yapıştırın; ardından ad, soyad ve e-posta bilgilerinizi girip e-postanıza gelen doğrulama kodunu onaylayın. Doğrulamadan sonra ön fiyatınızı anında görürsünüz. Ücret; dil çifti, hizmet türü, kelime sayısı ve seçtiğiniz ek hizmetlere göre hesaplanır.",
+    a: "Fiyat Hesapla sayfasından belgenizi yükleyin ya da metninizi yapıştırın; dil çifti ve hizmet türünü seçtiğinizde ön fiyatınızı anında görürsünüz. Ücret; dil çifti, hizmet türü, kelime sayısı ve seçtiğiniz ek hizmetlere göre hesaplanır.",
     keywords: ['fiyat', 'teklif', 'ucret', 'fiyat alma', 'fiyat hesaplama', 'tercume fiyati'],
   },
   {
@@ -115,7 +115,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'quality',
     priority: 10,
     q: 'Çevirimi kim yapar?',
-    a: 'Çevirileriniz, ilgili alanda deneyimli profesyonel insan tercümanlar tarafından yapılır. Belgenin türüne göre uzman çevirmen atanır ve çeviri, teslimden önce kalite kontrolünden geçer. Yapay zekâ yalnızca destek amacıyla kullanılır; nihai çeviri insan denetimindedir.',
+    a: 'Çevirileriniz, ilgili alanda deneyimli profesyonel insan tercümanlar tarafından yapılır. Belgenin türüne göre uzman çevirmen atanır ve çeviri, teslimden önce kalite kontrolünden geçer.',
     keywords: ['kim cevirir', 'tercuman', 'cevirmen', 'insan tercuman', 'kim yapar'],
   },
   {
@@ -171,7 +171,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'upload',
     priority: 17,
     q: 'Dosya yüklemeden fiyat alınabilir mi?',
-    a: "Evet. Belgeniz yoksa 'Metin Gir' sekmesine metninizi yapıştırarak kelime sayısına göre ön fiyat alabilirsiniz. Fiyatı görüntülemek ve sipariş vermek için ad, soyad ve e-posta doğrulaması gerekir.",
+    a: "Evet. Belgeniz yoksa 'Metin Gir' sekmesine metninizi yapıştırarak kelime sayısına göre ön fiyat alabilirsiniz.",
     keywords: ['dosyasiz fiyat', 'metin girerek', 'dosya yuklemeden', 'metin ile fiyat'],
   },
   {
@@ -204,9 +204,9 @@ export const FAQ_ITEMS: FaqItem[] = [
     id: 'tercumexpert-nedir',
     category: 'general',
     priority: 21,
-    q: 'TercümExpert nedir?',
-    a: 'TercümExpert; yeminli tercüme, noter onaylı çeviri, hukuki, teknik, medikal ve akademik çeviri ile web/mobil lokalizasyon hizmetleri sunan çevrim içi bir çeviri hizmeti platformudur. Belgenizi yükleyip ön fiyatınızı alabilir, siparişinizi tamamen çevrim içi verebilirsiniz.',
-    keywords: ['tercumexpert', 'nedir', 'platform', 'ceviri hizmeti', 'ne is yapar'],
+    q: 'TercümExpert kimdir?',
+    a: 'TercümExpert; yeminli tercüme, noter onaylı çeviri, hukuki, teknik, medikal ve akademik çeviri ile web/mobil lokalizasyon hizmetleri sunan çevrim içi bir çeviri hizmeti sağlayıcısıdır. Belgenizi yükleyip ön fiyatınızı alabilir, siparişinizi tamamen çevrim içi verebilirsiniz.',
+    keywords: ['tercumexpert', 'kimdir', 'nedir', 'ceviri hizmeti', 'ne is yapar'],
   },
   {
     id: 'hangi-hizmetler',
@@ -292,9 +292,9 @@ export const FAQ_ITEMS: FaqItem[] = [
     id: 'yapay-zeka-mi-insan-mi',
     category: 'general',
     priority: 32,
-    q: 'Yapay zekâ ile mi, insan tercümanlarla mı çalışılır?',
-    a: 'Çevirilerinizi profesyonel insan tercümanlar yapar; yapay zekâ yalnızca destek ve hız amacıyla kullanılır. Nihai metin, her zaman insan kalite kontrolünden geçer.',
-    keywords: ['yapay zeka', 'insan tercuman', 'ai ceviri', 'makine cevirisi'],
+    q: 'Çeviriler insan tercümanlar tarafından mı yapılır?',
+    a: 'Evet. Çevirileriniz baştan sona profesyonel insan tercümanlar tarafından yapılır. Tutarlılık ve terminoloji için profesyonel çeviri araçları (CAT tool) desteği kullanılır; ancak çevirinin tamamı uzman tercümanların işidir ve kalite kontrolünden geçer.',
+    keywords: ['insan tercuman', 'cat tool', 'ceviri araci', 'makine cevirisi', 'kim cevirir'],
   },
   {
     id: 'el-yazili-belgeler',
@@ -319,7 +319,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'order',
     priority: 35,
     q: 'Sipariş nasıl verilir?',
-    a: 'Fiyat Hesapla ekranından belgenizi yükleyin veya metninizi girin, dil çifti ve hizmet türünü seçin, ad-soyad ile e-posta doğrulamasını tamamlayıp ön fiyatı onaylayın. Onayın ardından siparişiniz oluşturulur.',
+    a: 'Fiyat Hesapla ekranından belgenizi yükleyin veya metninizi girin, dil çifti ve hizmet türünü seçin ve ön fiyatı onaylayın. Onayın ardından siparişiniz oluşturulur.',
     keywords: ['siparis verme', 'nasil siparis', 'siparis olusturma'],
   },
   {
@@ -327,7 +327,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'order',
     priority: 36,
     q: 'Sipariş vermek için hangi bilgiler gerekir?',
-    a: 'Çevrilecek belge veya metin, kaynak ve hedef dil, hizmet türü ve iletişim için ad-soyad ile e-posta bilgisi gerekir. E-posta doğrulaması, fiyatı görmeniz ve siparişi tamamlamanız için gereklidir.',
+    a: 'Çevrilecek belge veya metin, kaynak ve hedef dil, hizmet türü ve iletişim için ad-soyad ile e-posta bilgisi gerekir. Bu bilgilerle siparişinizi oluşturabilirsiniz.',
     keywords: ['gerekli bilgi', 'hangi bilgiler', 'siparis bilgileri'],
   },
   {
@@ -481,7 +481,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'pricing',
     priority: 55,
     q: 'Ücretsiz fiyat teklifi alınabilir mi? Teklif ne kadar geçerlidir?',
-    a: 'Ön fiyat teklifi ücretsizdir; belgenizi yükleyip veya metni girip doğrulamayı tamamladığınızda teklifi anında görürsünüz. Teklifler, koşullar (belge içeriği/kapsam) değişmediği sürece kısa bir süre için geçerlidir.',
+    a: 'Ön fiyat teklifi ücretsizdir; belgenizi yükleyip veya metni girdiğinizde teklifi anında görürsünüz. Teklifler, koşullar (belge içeriği/kapsam) değişmediği sürece kısa bir süre için geçerlidir.',
     keywords: ['ucretsiz teklif', 'bedava fiyat', 'teklif suresi', 'gecerlilik'],
   },
   {
@@ -827,8 +827,8 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'sworn',
     priority: 97,
     q: 'Dijital/e-imzalı yeminli tercüme yapılabilir mi?',
-    a: 'Belgenin kullanılacağı kuruma göre e-imzalı veya ıslak imzalı-kaşeli teslim seçenekleri değerlendirilebilir. Hangi formun kabul edildiğini kurumdan teyit etmeniz önemlidir.',
-    keywords: ['e-imza', 'dijital yeminli', 'elektronik imza'],
+    a: 'Hayır. Yeminli tercüme, çevirmenin ıslak imzası ve kaşesiyle hazırlanır ve fiziksel olarak kargoyla teslim edilir.',
+    keywords: ['e-imza', 'dijital yeminli', 'elektronik imza', 'islak imza', 'kase'],
   },
   {
     id: 'yeminli-orijinal-gerekir',
@@ -913,14 +913,6 @@ export const FAQ_ITEMS: FaqItem[] = [
     keywords: ['turk belge yurt disi', 'giden belge', 'konsolosluk tasdiki'],
   },
   {
-    id: 'e-apostil',
-    category: 'notary',
-    priority: 108,
-    q: 'Elektronik apostil (e-apostil) kabul edilir mi?',
-    a: 'Bazı ülkeler ve kurumlar e-apostili kabul eder; bu, belgenin kullanılacağı yere göre değişir. Hangi formun geçerli olduğunu ilgili kurumdan teyit etmeniz önemlidir.',
-    keywords: ['e-apostil', 'elektronik apostil'],
-  },
-  {
     id: 'hangi-onay-gerekli-bilinmiyor',
     category: 'notary',
     priority: 109,
@@ -991,7 +983,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'quality',
     priority: 117,
     q: 'Tamamen otomatik/makine çevirisi kullanılıyor mu?',
-    a: 'Hayır. Çeviriler profesyonel insan tercümanlar tarafından yapılır; yapay zekâ yalnızca destek amaçlıdır ve çıktı her zaman insan denetiminden geçer. Yeminli çevirilerde çevirmenin kaşe ve imzasıyla aslına uygunluk beyanı yer alır.',
+    a: 'Hayır. Çeviriler baştan sona profesyonel insan tercümanlar tarafından yapılır; makineye bırakılan otomatik çeviri sunulmaz. Tutarlılık için yalnızca profesyonel çeviri araçları (CAT tool) desteği kullanılır. Yeminli çevirilerde çevirmenin kaşe ve imzasıyla aslına uygunluk beyanı yer alır.',
     keywords: ['makine cevirisi', 'otomatik ceviri', 'ai ceviri', 'ceviri beyani'],
   },
 
@@ -1040,9 +1032,9 @@ export const FAQ_ITEMS: FaqItem[] = [
     id: 'belgeler-ai-egitimi',
     category: 'privacy',
     priority: 123,
-    q: 'Belgeler yapay zekâ eğitimi için kullanılır mı?',
-    a: 'Hayır. Belgeleriniz yapay zekâ modeli eğitmek amacıyla kullanılmaz ve dış sistemlere bu amaçla aktarılmaz. Yapay zekâ yalnızca sürece destek olacak biçimde, gizlilik esasıyla kullanılır.',
-    keywords: ['yapay zeka egitimi', 'ai egitim', 'veri kullanimi'],
+    q: 'Belgelerim model eğitimi için kullanılır mı?',
+    a: 'Hayır. Belgeleriniz yalnızca sizin siparişiniz için kullanılır; herhangi bir model eğitimi amacıyla veya dış sistemlerle paylaşılmaz. Çeviriniz insan tercümanlar tarafından gizlilik esasıyla hazırlanır.',
+    keywords: ['veri egitimi', 'model egitimi', 'veri kullanimi', 'belge gizlilik'],
   },
   {
     id: 'saglik-kimlik-guvenli',
@@ -1141,7 +1133,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'support',
     priority: 135,
     q: 'Siteye nasıl üye olunur?',
-    a: 'Üyelik için ad, soyad ve e-posta bilgilerinizi girip e-postanıza gelen doğrulama kodunu onaylamanız yeterlidir. Üyelik oluşturmadan da aynı doğrulamayla fiyat alıp sipariş verebilirsiniz.',
+    a: 'Üyelik için ad, soyad ve e-posta bilgilerinizi girip e-postanıza gelen doğrulama kodunu onaylamanız yeterlidir. Apple veya Google hesabınızla da hızlıca üye olabilirsiniz.',
     keywords: ['uye olma', 'kayit', 'uyelik olusturma'],
   },
   {

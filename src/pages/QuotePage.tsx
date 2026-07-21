@@ -28,18 +28,23 @@ const ACCEPT =
 
 type Mode = 'file' | 'text'
 
+interface FileEntry {
+  key: string
+  name: string
+  words: number
+  status: ExtractStatus | 'pending'
+}
+
 export default function QuotePage() {
   const { dict, formatCurrency } = useI18n()
   const q = dict.quote
   const u = q.upload
   const ids = useId()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const keyCounter = useRef(0)
 
   const [mode, setMode] = useState<Mode>('file')
-  const [file, setFile] = useState<File | null>(null)
-  const [fileWords, setFileWords] = useState<number | null>(null)
-  const [fileStatus, setFileStatus] = useState<ExtractStatus | null>(null)
-  const [extracting, setExtracting] = useState(false)
+  const [files, setFiles] = useState<FileEntry[]>([])
   const [sizeError, setSizeError] = useState(false)
   const [text, setText] = useState('')
 
@@ -54,35 +59,39 @@ export default function QuotePage() {
   const [needInput, setNeedInput] = useState(false)
 
   const textWords = countWords(text)
-  const wordCount = mode === 'file' ? (fileWords ?? 0) : textWords
+  const fileWords = files.reduce((sum, f) => sum + (f.status === 'ok' ? f.words : 0), 0)
+  const anyExtracting = files.some((f) => f.status === 'pending')
+  const wordCount = mode === 'file' ? fileWords : textWords
 
-  const processFile = async (f: File) => {
-    setSizeError(false)
+  const processFiles = (list: FileList | File[]) => {
     setResult(null)
-    if (f.size > MAX_SIZE) {
-      setFile(null)
-      setFileWords(null)
-      setFileStatus(null)
-      setSizeError(true)
-      return
+    setSizeError(false)
+    for (const f of Array.from(list)) {
+      if (f.size > MAX_SIZE) {
+        setSizeError(true)
+        continue
+      }
+      keyCounter.current += 1
+      const key = `f${keyCounter.current}`
+      setFiles((prev) => [...prev, { key, name: f.name, words: 0, status: 'pending' }])
+      extractWordCount(f)
+        .then((res) =>
+          setFiles((prev) =>
+            prev.map((e) =>
+              e.key === key ? { ...e, words: res.status === 'ok' ? res.words : 0, status: res.status } : e,
+            ),
+          ),
+        )
+        .catch(() =>
+          setFiles((prev) => prev.map((e) => (e.key === key ? { ...e, status: 'error' as const } : e))),
+        )
     }
-    setFile(f)
-    setFileWords(null)
-    setFileStatus(null)
-    setExtracting(true)
-    const res = await extractWordCount(f)
-    setExtracting(false)
-    setFileStatus(res.status)
-    setFileWords(res.status === 'ok' ? res.words : 0)
+    if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  const clearFile = () => {
-    setFile(null)
-    setFileWords(null)
-    setFileStatus(null)
-    setSizeError(false)
+  const removeFile = (key: string) => {
+    setFiles((prev) => prev.filter((e) => e.key !== key))
     setResult(null)
-    if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
   const handleCalculate = () => {
@@ -156,8 +165,7 @@ export default function QuotePage() {
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => {
                       e.preventDefault()
-                      const f = e.dataTransfer.files?.[0]
-                      if (f) void processFile(f)
+                      if (e.dataTransfer.files?.length) processFiles(e.dataTransfer.files)
                     }}
                     className="flex flex-col items-center gap-3 rounded-md border border-dashed border-border-strong p-6 text-center"
                   >
@@ -165,10 +173,10 @@ export default function QuotePage() {
                       ref={fileInputRef}
                       type="file"
                       accept={ACCEPT}
+                      multiple
                       className="hidden"
                       onChange={(e) => {
-                        const f = e.target.files?.[0]
-                        if (f) void processFile(f)
+                        if (e.target.files?.length) processFiles(e.target.files)
                       }}
                     />
                     <Button
@@ -183,30 +191,46 @@ export default function QuotePage() {
 
                   {sizeError && <p className="mt-3 text-sm text-danger">{u.tooLarge}</p>}
 
-                  {file && (
-                    <div className="mt-3 flex items-center justify-between gap-3 rounded-md border border-border bg-surface-muted px-4 py-3">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium">{file.name}</p>
-                        <p className="text-xs text-text-muted">
-                          {extracting
-                            ? u.extracting
-                            : fileStatus === 'ok'
-                              ? `${fileWords} ${u.wordsUnit}`
-                              : fileStatus === 'unsupported'
-                                ? u.unsupported
-                                : fileStatus === 'empty'
-                                  ? u.empty
-                                  : u.error}
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={clearFile}
-                        aria-label={u.remove}
-                        className="inline-flex size-9 shrink-0 items-center justify-center rounded-md text-danger hover:bg-surface"
-                      >
-                        <Icon name="X" className="size-5" />
-                      </button>
+                  {files.length > 0 && (
+                    <ul className="mt-3 space-y-2">
+                      {files.map((f) => (
+                        <li
+                          key={f.key}
+                          className="flex items-center justify-between gap-3 rounded-md border border-border bg-surface-muted px-4 py-3"
+                        >
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-medium">{f.name}</p>
+                            <p className="text-xs text-text-muted">
+                              {f.status === 'pending'
+                                ? u.extracting
+                                : f.status === 'ok'
+                                  ? `${f.words} ${u.wordsUnit}`
+                                  : f.status === 'unsupported'
+                                    ? u.unsupported
+                                    : f.status === 'empty'
+                                      ? u.empty
+                                      : u.error}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeFile(f.key)}
+                            aria-label={u.remove}
+                            className="inline-flex size-9 shrink-0 items-center justify-center rounded-md text-danger hover:bg-surface"
+                          >
+                            <Icon name="X" className="size-5" />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {files.length > 0 && (
+                    <div className="mt-3 flex items-center justify-between border-t border-border pt-3 text-sm">
+                      <span className="text-text-secondary">{u.totalWords}:</span>
+                      <span className="font-semibold">
+                        {anyExtracting ? u.extracting : `${fileWords} ${u.wordsUnit}`}
+                      </span>
                     </div>
                   )}
                 </div>

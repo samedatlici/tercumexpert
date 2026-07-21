@@ -4,8 +4,9 @@
  *   - .txt : doğrudan okuma
  *   - .docx: mammoth ile ham metin
  *   - .pdf : pdfjs ile sayfa metni (seçilebilir metin varsa)
- * Diğer türlerde (taranmış PDF, resim, ses, video, xlsx, pptx…) tarayıcıda güvenilir
- * sayım mümkün DEĞİLDİR -> 'unsupported'/'empty' döner; UI kullanıcıyı yönlendirir.
+ *   - görsel (png/jpg/jpeg…): tesseract.js OCR ile (tur+eng) metin okunur
+ * Diğer türlerde (ses, video, xlsx, pptx…) tarayıcıda güvenilir sayım mümkün
+ * DEĞİLDİR -> 'unsupported'/'empty' döner; UI kullanıcıyı yönlendirir.
  * Ağır kütüphaneler DİNAMİK import edilir (ana paketi şişirmez).
  */
 export type ExtractStatus = 'ok' | 'empty' | 'unsupported' | 'error'
@@ -35,6 +36,26 @@ async function extractDocxText(file: File): Promise<string> {
   if (!extractRawText) throw new Error('mammoth yüklenemedi')
   const { value } = await extractRawText({ arrayBuffer: await file.arrayBuffer() })
   return value
+}
+
+async function extractImageText(file: File): Promise<string> {
+  // Görselden (PNG/JPG/JPEG…) metin çıkarımı: OCR (tesseract.js). Türkçe + İngilizce.
+  // Ağır kütüphane -> yalnızca görsel yüklendiğinde dinamik yüklenir.
+  const mod = (await import('tesseract.js')) as unknown as {
+    recognize?: (image: File | Blob, langs?: string, opts?: unknown) => Promise<{ data: { text: string } }>
+    default?: {
+      recognize: (image: File | Blob, langs?: string, opts?: unknown) => Promise<{ data: { text: string } }>
+    }
+  }
+  const recognize = mod.recognize ?? mod.default?.recognize
+  if (!recognize) throw new Error('tesseract yüklenemedi')
+  const { data } = await recognize(file, 'tur+eng')
+  return data.text ?? ''
+}
+
+function isImage(e: string, type: string): boolean {
+  if (type.startsWith('image/')) return true
+  return ['png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif', 'tif', 'tiff'].includes(e)
 }
 
 async function extractPdfText(file: File): Promise<string> {
@@ -69,6 +90,9 @@ export async function extractWordCount(file: File): Promise<ExtractResult> {
     }
     if (e === 'pdf' || type === 'application/pdf') {
       return finalize(countWords(await extractPdfText(file)))
+    }
+    if (isImage(e, type)) {
+      return finalize(countWords(await extractImageText(file)))
     }
     return { words: 0, status: 'unsupported' }
   } catch {
