@@ -139,7 +139,7 @@ export function Footer() {
           <p className="mb-4 font-bold">{dict.footer.columns.contact}</p>
           <ul className="space-y-3 text-sm text-white/60">
             <li className="flex items-start gap-2"><Icon name="MapPin" className="mt-0.5 size-4 shrink-0" />{company.address.value}</li>
-            <li><a href={`tel:${company.phone.value}`} className="inline-flex items-center gap-2 hover:text-white"><Icon name="Phone" className="size-4" />{company.phone.value}</a></li>
+            <li><a href={`tel:${company.phone.value}`} className="inline-flex items-center gap-2 hover:text-white"><Icon name="Phone" className="size-4" /><span dir="ltr">{company.phone.value}</span></a></li>
             <li><a href={`mailto:${company.email.value}`} className="inline-flex items-center gap-2 hover:text-white"><Icon name="Mail" className="size-4" />{company.email.value}</a></li>
           </ul>
           {wa && (

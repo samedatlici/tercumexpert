@@ -122,7 +122,7 @@ export default function CorporatePage() {
                 )}
               >
                 {o.recommended && (
-                  <span className="absolute -top-3 left-6 rounded-full bg-secondary px-3 py-1 text-xs font-semibold tracking-wide text-secondary-foreground">
+                  <span className="absolute -top-3 start-6 rounded-full bg-secondary px-3 py-1 text-xs font-semibold tracking-wide text-secondary-foreground">
                     {c.payment.recommendedLabel}
                   </span>
                 )}

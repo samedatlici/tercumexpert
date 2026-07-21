@@ -64,7 +64,7 @@ export default function OrderDetailPage() {
   if (!user) {
     return (
       <>
-        <Seo title={o.seo.title} description={o.seo.description} routeId="order" noindex />
+        <Seo title={o.seo.title} description={o.seo.description} routeId="order" />
         <Shell>
           <Center icon="Lock" title={o.loginRequired.title} desc={o.loginRequired.desc}>
             <Link to={buildPath(locale, 'auth')}>
@@ -79,7 +79,7 @@ export default function OrderDetailPage() {
   if (state === 'loading') {
     return (
       <>
-        <Seo title={o.seo.title} description={o.seo.description} routeId="order" noindex />
+        <Seo title={o.seo.title} description={o.seo.description} routeId="order" />
         <Shell>
           <p className="py-16 text-center text-sm text-text-secondary">{o.loading}</p>
         </Shell>
@@ -90,9 +90,9 @@ export default function OrderDetailPage() {
   if (state !== 'ok' || !order) {
     return (
       <>
-        <Seo title={o.seo.title} description={o.seo.description} routeId="order" noindex />
+        <Seo title={o.seo.title} description={o.seo.description} routeId="order" />
         <Shell>
-          <Center icon="TriangleAlert" title={o.notFound.title} desc={o.notFound.desc}>
+          <Center icon="FileText" title={o.notFound.title} desc={o.notFound.desc}>
             <Link to={home}>
               <Button intent="secondary" block>{o.notFound.home}</Button>
             </Link>
@@ -104,7 +104,7 @@ export default function OrderDetailPage() {
 
   return (
     <>
-      <Seo title={o.seo.title} description={o.seo.description} routeId="order" noindex />
+      <Seo title={o.seo.title} description={o.seo.description} routeId="order" />
       <Shell>
         <OrderView order={order} />
         <div className="mt-6 space-y-2">
@@ -179,7 +179,7 @@ export default function OrderDetailPage() {
         {!cancelled && (
           <div className="mt-8">
             <h2 className="mb-4 text-sm font-bold uppercase tracking-wide text-text-muted">{o.timelineTitle}</h2>
-            <ol className="relative space-y-6 border-l border-border pl-6">
+            <ol className="relative space-y-6 border-s border-border ps-6">
               {steps.map((step, i) => {
                 const done = i < currentIndex
                 const active = i === currentIndex
@@ -187,7 +187,7 @@ export default function OrderDetailPage() {
                   <li key={step} className="relative">
                     <span
                       className={
-                        'absolute -left-[31px] flex size-5 items-center justify-center rounded-full border-2 ' +
+                        'absolute -start-[31px] flex size-5 items-center justify-center rounded-full border-2 ' +
                         (done || active
                           ? 'border-secondary bg-secondary text-secondary-foreground'
                           : 'border-border bg-surface text-text-muted')
@@ -271,7 +271,7 @@ function Center({
   desc,
   children,
 }: {
-  icon: 'Lock' | 'TriangleAlert'
+  icon: 'Lock' | 'FileText'
   title: string
   desc: string
   children: React.ReactNode
@@ -301,7 +301,7 @@ function DetailRow({ label, value, strong }: { label: string; value: string; str
   return (
     <div className="flex items-start justify-between gap-4 bg-surface px-4 py-3">
       <dt className="shrink-0 text-text-secondary">{label}</dt>
-      <dd className={'text-right ' + (strong ? 'font-bold' : 'font-medium')}>{value}</dd>
+      <dd className={'text-end ' + (strong ? 'font-bold' : 'font-medium')}>{value}</dd>
     </div>
   )
 }

@@ -56,7 +56,7 @@ export default function ContactPage() {
             <h2 className="text-xl font-semibold">{c.infoTitle}</h2>
             <ul className="mt-4 space-y-3 text-sm">
               {!isPlaceholder(company.phone.value) && (
-                <li><a href={`tel:${company.phone.value}`} className="inline-flex items-center gap-2 hover:text-primary"><Icon name="Phone" className="size-4" />{company.phone.value}</a></li>
+                <li><a href={`tel:${company.phone.value}`} className="inline-flex items-center gap-2 hover:text-primary"><Icon name="Phone" className="size-4" /><span dir="ltr">{company.phone.value}</span></a></li>
               )}
               {!isPlaceholder(company.email.value) && (
                 <li><a href={`mailto:${company.email.value}`} className="inline-flex items-center gap-2 hover:text-primary"><Icon name="Mail" className="size-4" />{company.email.value}</a></li>

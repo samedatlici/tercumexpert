@@ -65,7 +65,7 @@ export function Header() {
         <div className="container-wide flex h-10 items-center justify-between text-sm">
           <div className="flex items-center gap-6">
             <a href={`tel:${company.phone.value}`} className="inline-flex items-center gap-2 hover:opacity-80">
-              <Icon name="Phone" className="size-3.5" /> {company.phone.value}
+              <Icon name="Phone" className="size-3.5" /> <span dir="ltr">{company.phone.value}</span>
             </a>
             <a href={`mailto:${company.email.value}`} className="inline-flex items-center gap-2 hover:opacity-80">
               <Icon name="Mail" className="size-3.5" /> {company.email.value}

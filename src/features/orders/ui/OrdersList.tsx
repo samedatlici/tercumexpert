@@ -51,7 +51,7 @@ export function OrdersList() {
                 {statusLabel(ord.status)}
               </span>
             </div>
-            <div className="flex shrink-0 items-center gap-2 text-right">
+            <div className="flex shrink-0 items-center gap-2 text-end">
               <p className="font-semibold">{ord.total != null ? formatCurrency(ord.total) : '—'}</p>
               <Icon name="ArrowRight" className="size-4 text-text-muted" />
             </div>
