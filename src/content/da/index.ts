@@ -1,4 +1,862 @@
 import type { PartialDictionary } from '@/types/i18n'
+import { FAQ_CATEGORIES_DA, FAQ_ITEMS_DA } from '@/content/faq-data.da'
 
-/** DA — placeholder; anahtarlar EN'e (fallback base) düşer. Tam çeviri sırada. */
-export const da: PartialDictionary = {}
+/**
+ * DANSK — fuld oversættelse, identisk struktur som en/index.ts.
+ * Kun tekstværdierne er oversat; nøgler, ikoner og tekniske tokens
+ * forbliver uændrede. Manglende nøgler falder tilbage til engelsk (§10).
+ * FAQ-data hentes fra content/faq-data.da.
+ */
+export const da: PartialDictionary = {
+  common: {
+    tagline: "Din pålidelige partner inden for professionelle oversættelsestjenester.",
+    nav: {
+      home: "Forside",
+      services: "Ydelser",
+      quote: "Få et tilbud",
+      corporate: "Erhverv",
+      partnership: "Partnerskab",
+      blog: "Blog",
+      faq: "Ofte stillede spørgsmål",
+      contact: "Kontakt",
+    },
+    actions: {
+      getQuote: "Få et tilbud",
+      calculatePrice: "Beregn pris",
+      uploadDocument: "Upload dokument",
+      whatsapp: "Chat på WhatsApp",
+      learnMore: "Læs mere",
+      viewAll: "Se alle",
+      showMore: "Vis mere",
+      showLess: "Vis mindre",
+      send: "Send",
+      apply: "Ansøg",
+      order: "Afgiv bestilling",
+      contactUs: "Kontakt os",
+      openMenu: "Åbn menu",
+      closeMenu: "Luk menu",
+      selectLanguage: "Vælg sprog",
+      skipToContent: "Gå til indhold",
+      login: "Log ind",
+      logout: "Log ud",
+      account: "Min konto",
+    },
+    states: {
+      loading: "Indlæser…",
+      error: "Noget gik galt. Prøv venligst igen.",
+      required: "Dette felt er påkrævet.",
+      demoNotice: "Demo: Formulardata sendes endnu ikke til en server.",
+      unverified: "Skal bekræftes",
+    },
+    topbar: {
+      phoneLabel: "Telefon",
+      emailLabel: "E-mail",
+      hoursLabel: "Åbningstider",
+      afterHours: "Akut oversættelsessupport uden for åbningstiden er tilgængelig.",
+      workingHours: "Hverdage 09:00 - 18:00 | Service uden for åbningstiden tilgængelig",
+    },
+  },
+
+  home: {
+    seo: {
+      title: "TercümExpert — Professionelle oversættelsestjenester",
+      description:
+        "Autoriseret oversættelse, notarpåtegning og oversættelsesløsninger til erhverv. Upload dit dokument, få et øjeblikkeligt foreløbigt tilbud og professionel levering.",
+    },
+    hero: {
+      title: "Din pålidelige partner inden for professionelle",
+      titleAccent: "Oversættelsestjenester",
+      subtitle: "Upload dit dokument, se prisen, få professionel levering.",
+      support: "Autoriseret oversættelse • Notarpåtegning • Løsninger til erhverv",
+    },
+    trust: {
+      title: "Hvorfor stoler de på os?",
+      items: [
+        { key: 'languages', label: "50+ sprog" },
+        { key: 'delivery', label: "Levering inden for 24 timer" },
+        { key: 'notary', label: "Notarpåtegning" },
+        { key: 'quality', label: "Kvalitetssikring" },
+      ],
+    },
+    stats: {
+      title: "TercümExpert i tal",
+      note: "Nedenstående tal præsenteres ikke som endelige udsagn, før de er bekræftet.",
+      labels: {
+        satisfaction: "Kundetilfredshed",
+        completed: "Gennemførte opgaver",
+        languages: "Sprogunderstøttelse",
+        corporate: "Erhvervskunder",
+      },
+    },
+    howItWorks: {
+      title: "Hvordan fungerer det?",
+      subtitle: "Professionel oversættelse i fem trin.",
+      steps: [
+        { key: 'upload', title: "Upload", desc: "Upload dit dokument sikkert." },
+        { key: 'select', title: "Vælg", desc: "Vælg sprog og ydelsestype." },
+        { key: 'confirm', title: "Bekræft", desc: "Bekræft din bestilling." },
+        { key: 'track', title: "Følg", desc: "Følg processen i realtid." },
+        { key: 'receive', title: "Modtag", desc: "Få din professionelle levering." },
+      ],
+    },
+    services: {
+      title: "Vores ydelser",
+      subtitle: "Ekspertoversættelse til enhver dokumenttype.",
+    },
+    why: {
+      title: "Hvorfor TercümExpert?",
+      subtitle: "De egenskaber, der adskiller os fra konkurrenterne",
+      features: [
+        { key: 'autoQuote', title: "Automatisk prisberegning", desc: "En foreløbig pris på få sekunder." },
+        { key: 'whatsapp', title: "Hurtigt tilbud via WhatsApp", desc: "Kontakt med ét tryk." },
+        { key: 'terminology', title: "Terminologistyring", desc: "Ensartet, virksomhedstilpasset sprog." },
+        { key: 'revision', title: "Revisionsret", desc: "En tilfredshedsfokuseret proces." },
+        { key: 'languages', title: "Understøttelse af 50+ sprog", desc: "Bred dækning af sprogpar." },
+        { key: 'terms', title: "Kreditsystem til erhverv", desc: "Fleksibel betaling for virksomheder." },
+      ],
+    },
+    corporateCta: {
+      title: "Løsninger til erhverv",
+      desc: "Professionelle sprogydelser med terminologistyring, kreditmuligheder og en dedikeret kundeansvarlig, der er skræddersyet til din virksomhed.",
+      action: "Anmod om et erhvervstilbud",
+    },
+    partnershipTeaser: {
+      title: "Partnerprogram",
+      subtitle: "Tjen 20 % i provision på hver kunde, du henviser til os.",
+      items: [
+        { key: 'commission', title: "Gennemsigtig provision", desc: "20 % provision for hver henvisning (efter aftale). Gennemsigtig indtjening med et sporingspanel i realtid." },
+        { key: 'qr', title: "QR-kode-system", desc: "Nem kundesporing med visitkortsintegration. QR-koder til web og WhatsApp." },
+      ],
+      cta: "Ansøg som partner",
+    },
+    testimonials: {
+      title: "Kundeanmeldelser",
+      subtitle: "Rigtige kundeanmeldelser tilføjes her inden lancering.",
+      placeholderNote: "Pladsholder — rigtige anmeldelser integreres.",
+      items: [
+        { key: 't1', role: "Advokatfirma" },
+        { key: 't2', role: "Sundhedsorganisation" },
+        { key: 't3', role: "Erhvervskunde" },
+        { key: 't4', role: "Privatkunde" },
+      ],
+    },
+    blogTeaser: {
+      title: "Blog",
+      subtitle: "Aktuelt indhold fra oversættelsens verden",
+      viewAll: "Se alle blogindlæg",
+    },
+    finalCta: {
+      title: "Kom i gang nu",
+      desc: "Upload dine dokumenter, få et øjeblikkeligt tilbud og gør brug af professionelle oversættelsestjenester.",
+      primary: "Få et tilbud",
+      secondary: "Kontakt os",
+    },
+  },
+
+  services: {
+    seo: {
+      title: "Oversættelsestjenester",
+      description:
+        "Autoriseret, notarpåtegnet, juridisk, teknisk, medicinsk og akademisk oversættelse samt web-/mobillokalisering. Dokumenttyper, proces, levering og sprogpar.",
+    },
+    hero: {
+      title: "Oversættelsestjenester",
+      subtitle: "Oversættelse med den rette terminologi til hvert fagområde.",
+    },
+    process: {
+      title: "Hvordan fungerer processen?",
+      steps: [
+        { title: "Gennemgang af dokument", desc: "Dokumenttypen og formålet vurderes." },
+        { title: "Ekspertmatch", desc: "En specialiseret oversætter på området tildeles." },
+        { title: "Oversættelse og korrektur", desc: "Oversættelse og en uafhængig endelig gennemgang." },
+        { title: "Godkendelse og levering", desc: "Notarpåtegning/apostille om nødvendigt, derefter levering." },
+      ],
+    },
+    delivery: {
+      title: "Leveringsmuligheder",
+      items: ["Digital levering (PDF/DOCX)", "Fysisk levering af dokument", "Hasteopgave"],
+    },
+    notaryApostille: {
+      title: "Sammenhæng mellem notarpåtegning og apostille",
+      desc: "Når det er påkrævet, gøres en autoriseret oversættelse gyldig over for offentlige myndigheder gennem notarpåtegning og apostilleprocessen. Det præcise krav afhænger af den myndighed, hvor dokumentet skal indleveres.",
+    },
+    fullService: {
+      title: "Nøglefærdigt, leveret til din dør",
+      note: "Send os dine dokumenter, så håndterer vi hele processen — oversættelse, notarpåtegning og apostille inklusive. Dine færdige dokumenter leveres til din dør med kurér. Fokusér på dit arbejde, og overlad resten til os.",
+    },
+    cta: {
+      title: "Er du i tvivl om, hvilken ydelse du har brug for?",
+      desc: "Upload dit dokument, så viser vi dig den mest passende ydelse og pris.",
+    },
+    documentTypesTitle: "Egnede dokumenttyper",
+  },
+
+  serviceItems: {
+    sworn: {
+      name: "Autoriseret oversættelse",
+      short: "Officielt gyldig oversættelse med en autoriseret oversætters underskrift og stempel.",
+      benefits: ["Gyldig hos offentlige myndigheder", "Godkendelse fra autoriseret oversætter", "Hurtig proces"],
+    },
+    notarized: {
+      name: "Oversættelse med notarpåtegning",
+      short: "Notarpåtegning af en autoriseret oversættelse.",
+      benefits: ["Notarpåtegning", "Egnet til officielle ansøgninger", "Vi håndterer processen"],
+    },
+    apostille: {
+      name: "Støtte til apostilleproces",
+      short: "Vejledning gennem apostilleprocessen med henblik på gyldighed i udlandet.",
+      benefits: ["International gyldighed", "Procesrådgivning", "Vejledning om myndigheder"],
+    },
+    legal: {
+      name: "Juridisk oversættelse",
+      short: "Oversættelse med styr på terminologien til kontrakter, retssager og officielle dokumenter.",
+      benefits: ["Juridisk terminologi", "Fortrolighedsgaranti", "Ekspertoversætter"],
+    },
+    technical: {
+      name: "Teknisk oversættelse",
+      short: "Ensartet oversættelse til manualer, specifikationer og tekniske dokumenter.",
+      benefits: ["Terminologistyring", "Format bevaret", "Brancheekspertise"],
+    },
+    medical: {
+      name: "Medicinsk oversættelse",
+      short: "Præcis oversættelse til journaler, indlægssedler og medicinske dokumenter.",
+      benefits: ["Medicinsk terminologi", "Fokus på nøjagtighed", "Fortrolighed"],
+    },
+    academic: {
+      name: "Akademisk oversættelse",
+      short: "Akademisk sprog til specialer, artikler og eksamensbevisoversættelser.",
+      benefits: ["Akademisk stil", "Kildekonsistens", "Levering til tiden"],
+    },
+    localization: {
+      name: "Web- og mobillokalisering",
+      short: "Kulturelt tilpasset lokalisering af websteder og applikationer.",
+      benefits: ["Kulturel tilpasning", "Teknisk integration", "SEO-kompatibilitet"],
+    },
+  },
+
+  corporate: {
+    statsLabels: {
+      corporate: "Erhvervskunder",
+      discount: "Mængderabat",
+      term: "Betalingsfrist",
+    },
+    seo: {
+      title: "Løsninger til erhverv",
+      description:
+        "Professionelle sprogydelser til virksomheder med terminologistyring, kreditmuligheder, storordrer og en dedikeret kundeansvarlig.",
+    },
+    hero: {
+      title: "Løsninger til erhverv",
+      subtitle:
+        "Professionelle sprogydelser med terminologistyring, kreditmuligheder og en dedikeret kundeansvarlig, der er skræddersyet til din virksomhed.",
+      primaryCta: "Anmod om et erhvervstilbud",
+      secondaryCta: "Send e-mail",
+    },
+    features: {
+      title: "Erhvervsfunktioner",
+      subtitle: "Løsninger skræddersyet til din virksomhed",
+      items: [
+        {
+          key: 'custom',
+          icon: 'Target',
+          title: "Skræddersyet ydelse",
+          points: ["Fast terminologi", "Bevarelse af brandets tone", "Dedikeret kundeansvarlig", "Udarbejdelse af stilguide"],
+        },
+        {
+          key: 'volume',
+          icon: 'BarChart3',
+          title: "Bulkbehandling og kredit",
+          points: ["Månedlige oversættelsesplaner", "Mængderabatter", "Kredit op til 30 dage", "Faktureringssystem"],
+        },
+        {
+          key: 'security',
+          icon: 'Lock',
+          title: "Databeskyttelse og sikkerhed",
+          points: ["NDA-protokol", "Krypteret filoverførsel", "KVKK-kompatible processer"],
+        },
+      ],
+    },
+    whyPackage: {
+      title: "Hvorfor en erhvervspakke?",
+      items: [
+        {
+          key: 'terminology',
+          icon: 'Building2',
+          title: "Fast terminologistyring",
+          desc: "Vi opbygger en termbank, der er specifik for din virksomhed. Dit brandsprog bevares på tværs af alle oversættelser, og vi sikrer konsistens. Vi lægger vægt på at bruge de samme termer i hvert projekt.",
+        },
+        {
+          key: 'manager',
+          icon: 'Users',
+          title: "Dedikeret kundeansvarlig",
+          desc: "Din dedikerede kundeansvarlige følger alle dine processer. Med en tilgængelig supportlinje står vi ved din side i akutte situationer.",
+        },
+        {
+          key: 'security',
+          icon: 'ShieldCheck',
+          title: "Databeskyttelse og sikkerhed",
+          desc: "Vi arbejder under en NDA-protokol. Dine data er sikre med en stærk sikkerhedsinfrastruktur, krypteret filoverførsel og KVKK-kompatible processer.",
+        },
+      ],
+    },
+    payment: {
+      title: "Betalingsmuligheder",
+      subtitle: "Fleksible betalingsplaner tilpasset din virksomhed",
+      recommendedLabel: "ANBEFALET",
+      options: [
+        {
+          key: 'standard',
+          label: "Øjeblikkelig betaling",
+          heading: "Standard",
+          desc: "Betaling med betalingskort eller bankoverførsel efter hver bestilling",
+          points: ["Kortbetaling i rater", "Øjeblikkelig levering"],
+          recommended: false,
+        },
+        {
+          key: 'term',
+          label: "Månedlig kredit",
+          heading: "15-30 dage",
+          desc: "Månedlig samlefakturering og kreditmulighed",
+          points: ["30 dages kredit", "Mængderabat", "Månedlig rapport"],
+          recommended: true,
+        },
+      ],
+    },
+    form: {
+      title: "Ansøgning om erhvervspakke",
+      desc: "Udfyld formularen, så kontakter vores ekspertteam dig",
+      fields: {
+        company: "Virksomhedsnavn",
+        contactName: "Kontaktpersonens fulde navn",
+        email: "E-mail",
+        phone: "Telefon",
+        need: "Fortæl os om dine oversættelsesbehov",
+        consent: "Jeg har læst og godkender KVKK-oplysningserklæringen.",
+      },
+      submit: "Send ansøgning",
+      success: "Din ansøgning er modtaget. Vi vender tilbage til dig hurtigst muligt.",
+      note: "Vi vender tilbage til dig inden for 1 arbejdsdag.",
+    },
+  },
+
+  partnership: {
+    seo: {
+      title: "Partnerprogram",
+      description:
+        "Tjen provision på hver kunde, du henviser. Gennemsigtig rapportering, henvisninger via QR-kode og professionel support.",
+    },
+    hero: {
+      title: "Partnerprogram",
+      value: "Tjen 20 % i provision på hver kunde, du henviser til os.",
+      subtitle: "Et gennemsigtigt system, pålidelige udbetalinger, langsigtet samarbejde.",
+      cta: "Ansøg nu",
+    },
+    advantages: {
+      title: "Partnerfordele",
+      subtitle: "Hvorfor blive TercümExpert-partner?",
+      items: [
+        { key: 'commission', icon: 'Wallet', title: "20 % provisionsgaranti", desc: "Et gennemsigtigt provisionssystem for hver kunde, du henviser." },
+        { key: 'qr', icon: 'QrCode', title: "Henvisning via QR-kode", desc: "Nem kundesporing med visitkortsintegration." },
+        { key: 'reporting', icon: 'BarChart3', title: "Gennemsigtig rapportering", desc: "Panel til provisions- og kundesporing i realtid." },
+        { key: 'support', icon: 'Users', title: "Professionel support", desc: "En dedikeret partnersupportlinje og kundeansvarlig." },
+      ],
+    },
+    howItWorks: {
+      title: "Hvordan fungerer det?",
+      steps: [
+        { title: "Ansøg", desc: "Udfyld den online ansøgningsformular. Del dine virksomhedsoplysninger og kontaktoplysninger. Din ansøgning gennemgås inden for 1 arbejdsdag." },
+        { title: "Bliv partner", desc: "Når din ansøgning er godkendt, får du adgang til dit dedikerede partnerpanel. Dine QR-koder og henvisningslinks er klar." },
+        { title: "Henvis kunder", desc: "Henvis dine kunder til os via QR-kode, et personligt link eller visitkort. Hver henvisning registreres automatisk i systemet." },
+        { title: "Tjen provision", desc: "Du tjener 20 % i provision, hver gang en kunde, du har henvist, afgiver en bestilling. Du modtager automatiske udbetalinger hver 15. dag." },
+      ],
+    },
+    sectors: {
+      title: "Målbrancher",
+      subtitle: "Hvilke brancher er det ideelt til?",
+      items: [
+        { key: 'law', icon: 'Scale', title: "Advokatfirmaer", desc: "Behov for autoriseret oversættelse af sagsakter, kontrakter og juridiske dokumenter." },
+        { key: 'visa', icon: 'Plane', title: "Visumrådgivning", desc: "Dokumenter, der kræver autoriseret oversættelse, såsom pas, eksamensbeviser og personattester." },
+        { key: 'education', icon: 'GraduationCap', title: "Uddannelsesrådgivning", desc: "Autoriseret oversættelse af studiedokumenter og apostilleprocesser." },
+        { key: 'health', icon: 'HeartPulse', title: "Sundhedsturisme", desc: "Oversættelse af lægejournaler, patientmapper og sundhedsdokumenter." },
+        { key: 'patent', icon: 'Building2', title: "Patent-/varemærkekontorer", desc: "Teknisk oversættelse af patent-, varemærkeregistrerings- og juridiske dokumenter." },
+        { key: 'realestate', icon: 'Home', title: "Ejendomsmæglere", desc: "Oversættelse af skøder, kontrakter og officielle dokumenter til udenlandske investorer." },
+        { key: 'hr', icon: 'Briefcase', title: "HR-rådgivning", desc: "Oversættelse af CV'er, eksamensbeviser og anbefalingsbreve til placering i udlandet." },
+        { key: 'software', icon: 'Code', title: "Softwarevirksomheder", desc: "Lokalisering af web- og mobilapps, oversættelse af tekniske dokumenter." },
+      ],
+    },
+    commission: {
+      title: "Provisionsstruktur",
+      stats: {
+        commissionLabel: "Standardprovision",
+        commissionSub: "På hver bestilling",
+        periodUnit: "Dage",
+        periodLabel: "Betalingsperiode",
+        feeLabel: "Oprettelsesgebyr",
+        feeSub: "Helt gratis",
+      },
+      exampleTitle: "Eksempel på indtjeningsberegning",
+      exampleOrderLabel: "Bestilling fra den kunde, du henviste",
+      exampleRateLabel: "Provisionssats",
+      exampleEarningLabel: "Din indtjening",
+      note: "Provisionssatser og vilkår er underlagt partneraftalen.",
+    },
+    form: {
+      title: "Partneransøgningsformular",
+      subtitle: "Udfyld formularen, så vender vi tilbage til dig inden for 1 arbejdsdag.",
+      fields: {
+        company: "Virksomhedens/organisationens navn",
+        sector: "Branche",
+        contactName: "Kontaktpersonens fulde navn",
+        titleRole: "Titel",
+        email: "E-mail",
+        phone: "Telefon",
+        potential: "Dit anslåede månedlige henvisningspotentiale",
+        note: "Eventuelle bemærkninger, du vil tilføje",
+        agreement: "Jeg har læst og accepterer vilkårene i partneraftalen.",
+      },
+      sectorPlaceholder: "Vælg",
+      sectorOptions: ["Advokatfirma", "Visumrådgivning", "Uddannelsesrådgivning", "Sundhedsturisme", "Patent-/varemærkekontor", "Ejendomsmægler", "HR-rådgivning", "Software", "Andet"],
+      potentialOptions: ["1-5 kunder", "5-10 kunder", "10-20 kunder", "20+ kunder"],
+      submit: "Send ansøgning",
+      success: "Din ansøgning er modtaget. Vi kontakter dig.",
+      note: "Din ansøgning gennemgås inden for 1 arbejdsdag.",
+    },
+  },
+
+  quote: {
+    seo: {
+      title: "Øjeblikkelig prisberegning",
+      description: "Upload dit dokument eller indtast oplysningerne, og få dit øjeblikkelige foreløbige tilbud.",
+    },
+    hero: {
+      title: "Øjeblikkelig prisberegning",
+      subtitle: "Upload dit dokument eller indtast oplysningerne, og få et øjeblikkeligt foreløbigt tilbud.",
+    },
+    upload: {
+      heading: "Upload dine dokumenter",
+      privacy: "Dine data behandles fortroligt",
+      tabFile: "Upload fil",
+      tabText: "Indtast tekst",
+      chooseFile: "Vælg dine dokumenter",
+      formats: ".docx, .xlsx, .pdf, .pptx, .jpg, .png og 50+ formater accepteres · Maks. 100MB pr. fil",
+      dropHint: "Du kan trække og slippe en eller flere filer ind i dette område.",
+      textPlaceholder: "Indsæt eller skriv din tekst her…",
+      totalWords: "Samlet ordantal",
+      extracting: "Tæller ord…",
+      wordsUnit: "ord",
+      remove: "Fjern",
+      unsupported:
+        "Automatisk ordoptælling var ikke mulig for denne filtype. Indsæt venligst teksten via \"Indtast tekst\"; antallet bekræftes af vores team ved tilbudsgivning.",
+      empty:
+        "Der blev ikke fundet nogen markerbar tekst i filen (den kan være scannet/et billede). Brug venligst \"Indtast tekst\", ellers bekræftes antallet under tilbudsgivningen.",
+      error: "Filen kunne ikke læses. Prøv venligst igen, eller brug \"Indtast tekst\".",
+      tooLarge: "Filen må ikke være større end 100MB.",
+      needInput: "For at få en pris skal du uploade en fil eller indtaste tekst.",
+    },
+    fields: {
+      upload: "Upload dokument (valgfrit)",
+      uploadHint: "PDF, DOC, DOCX eller TXT — maks. 10 MB",
+      sourceLang: "Kildesprog",
+      targetLang: "Målsprog",
+      serviceType: "Ydelsestype",
+      documentType: "Dokumenttype",
+      wordCount: "Anslået ordantal",
+      wordCountHint: "Brug skyderen, eller indtast tallet manuelt.",
+      options: "Yderligere muligheder",
+      calculate: "Beregn pris",
+    },
+    options: {
+      urgent: "Hasteopgave",
+      notarization: "Notarpåtegning",
+      physicalDelivery: "Fysisk levering",
+    },
+    languages: {
+      tr: "Tyrkisk",
+      en: "Engelsk",
+      de: "Tysk",
+      fr: "Fransk",
+      es: "Spansk",
+      it: "Italiensk",
+      ru: "Russisk",
+      ar: "Arabisk",
+      nl: "Nederlandsk",
+      az: "Aserbajdsjansk",
+      pl: "Polsk",
+      bg: "Bulgarsk",
+      pt: "Portugisisk",
+      da: "Dansk",
+    },
+    documentTypes: {
+      diploma: "Eksamensbevis",
+      passport: "Pas",
+      'civil-registry': "Personattest",
+      contract: "Kontrakt",
+      'medical-report': "Lægejournal",
+      'technical-doc': "Teknisk dokument",
+      'court-doc': "Retsdokument",
+      other: "Andet",
+    },
+    result: {
+      title: "Foreløbigt tilbud",
+      basePrice: "Grundgebyr for ydelse",
+      wordPrice: "Ordgebyr",
+      addons: "Tillægsydelser",
+      total: "I alt",
+      vat: "moms",
+      delivery: "Anslået leveringstid",
+      deliveryUnit: "arbejdsdage",
+      disclaimer: "Dette er et foreløbigt tilbud; den endelige pris bekræftes efter gennemgang af dokumentet.",
+      order: "Afgiv bestilling",
+      whatsapp: "Kontakt via WhatsApp",
+      estimatedWords: "Anslåede ord (automatisk — demo)",
+    },
+    orderConfirm: {
+      title: "Din bestilling er modtaget",
+      number: "Bestillingsnr.",
+      desc: "Din anmodning og dine dokumenter er gemt. Vores ekspertteam gennemgår dokumentet og kontakter dig hurtigst muligt.",
+      viewOrders: "Mine bestillinger",
+      submitting: "Opretter bestilling…",
+      error: "Der opstod et problem med oprettelsen af din bestilling. Prøv venligst igen.",
+    },
+    gate: {
+      title: "Din pris er klar",
+      subtitle: "Log ind, eller bekræft dine oplysninger for at se prisen og afgive en bestilling.",
+      loginCta: "Log ind / Opret konto",
+      or: "eller fortsæt hurtigt",
+      firstName: "Fornavn",
+      lastName: "Efternavn",
+      email: "E-mail",
+      sendCode: "Send bekræftelseskode",
+      codeLabel: "Bekræftelseskode",
+      codeSentA: "har fået tilsendt en bekræftelseskode.",
+      verify: "Bekræft og se pris",
+      resend: "Send kode igen",
+      resent: "En ny kode er sendt.",
+      back: "Ret oplysninger",
+      errNames: "Fornavn og efternavn er påkrævet.",
+      errEmail: "Indtast en gyldig e-mail.",
+      errCode: "Indtast venligst koden fuldstændigt.",
+      note: "Din e-mail bruges kun til tilbuddet og bestillingen.",
+    },
+    note: {
+      label: "Bemærkning til din bestilling (valgfrit)",
+      placeholder: "Du kan skrive dine ønsker om levering, terminologi eller andre særlige forhold her.",
+    },
+  },
+
+  order: {
+    seo: {
+      title: "Ordresporing",
+      description: "Følg status på din bestilling.",
+    },
+    numberLabel: "Bestillingsnr.",
+    placedOn: "Bestillingsdato",
+    estimatedLabel: "Anslået levering af oversættelse",
+    cargoEstimatedLabel: "Anslået forsendelsesdato",
+    timelineTitle: "Ordrestatus",
+    steps: {
+      received: "Din bestilling er modtaget",
+      in_progress: "Under behandling",
+      translated: "Oversættelse gennemført",
+      shipped: "Afsendt",
+      delivered: "Leveret",
+      cancelled: "Bestilling annulleret",
+    },
+    stepDesc: {
+      received: "Din anmodning og dine dokumenter er nået frem til vores system. Vores ekspertteam gennemgår det og går snart i gang.",
+      in_progress: "Vores ekspertoversætter er gået i gang med din oversættelse.",
+      translated: "Din oversættelse er færdig, og de endelige kontroller er udført.",
+      shipped: "Dit dokument er overdraget til kuréren; du kan følge det med knappen nedenfor.",
+      delivered: "Dit dokument er sendt til dig pr. e-mail.",
+      cancelled: "Denne bestilling er annulleret. Kontakt os venligst, hvis du har spørgsmål.",
+    },
+    cargoReady: "Dit dokument er afsendt. Følg det med ét tryk:",
+    cargoPending: "Sporingskoden vises her, når dit dokument er afsendt.",
+    trackCargo: "Følg min forsendelse",
+    digitalPending: "Når din oversættelse er færdig, sendes dine filer til dig pr. e-mail.",
+    digitalDelivered: "Din oversættelse er sendt til dig pr. e-mail. Tjek din indbakke (og spammappen).",
+    detailsTitle: "Bestillingsoplysninger",
+    fields: {
+      service: "Ydelse",
+      langs: "Sprog",
+      documentType: "Dokumenttype",
+      words: "Ord",
+      delivery: "Anslået tid",
+      total: "Beløb",
+      note: "Din bemærkning",
+    },
+    myOrders: "Mine bestillinger",
+    backHome: "Tilbage til forsiden",
+    whatsapp: "Kontakt via WhatsApp",
+    loading: "Indlæser bestilling…",
+    loginRequired: {
+      title: "Log ind for at se din bestilling",
+      desc: "Du kan kun få adgang til dine bestillingsoplysninger, når du er logget ind med din konto.",
+      login: "Log ind",
+    },
+    notFound: {
+      title: "Bestilling ikke fundet",
+      desc: "Dette bestillingsnummer tilhører ikke dig eller findes ikke. Tjek venligst linket.",
+      home: "Tilbage til forsiden",
+    },
+  },
+
+  faq: {
+    seo: {
+      title: "Ofte stillede spørgsmål",
+      description: "Ofte stillede spørgsmål om autoriseret oversættelse, leveringstid, priser, notarpåtegning og erhvervskredit.",
+    },
+    hero: { title: "Ofte stillede spørgsmål", subtitle: "Det svar, du leder efter, findes her." },
+    categoriesTitle: "Kategorier",
+    searchPlaceholder: "Søg efter spørgsmål eller nøgleord…",
+    empty: "Ingen spørgsmål matchede din søgning. Prøv et andet ord, eller kontakt os.",
+    categories: FAQ_CATEGORIES_DA,
+    items: FAQ_ITEMS_DA,
+    notFound: {
+      title: "Fandt du ikke svaret på dit spørgsmål?",
+      contact: "Kontakt os",
+      whatsapp: "WhatsApp-support",
+    },
+  },
+
+  contact: {
+    seo: {
+      title: "Kontakt",
+      description: "Kom i kontakt med TercümExpert: telefon, e-mail, WhatsApp og kontaktformular.",
+    },
+    hero: { title: "Kontakt", subtitle: "Hvordan kan vi hjælpe dig?" },
+    infoTitle: "Kontaktoplysninger",
+    labels: {
+      phone: "Telefon",
+      email: "E-mail",
+      whatsapp: "WhatsApp",
+      address: "Adresse",
+      hours: "Åbningstider",
+    },
+    form: {
+      title: "Kontakt os",
+      fields: {
+        name: "Fulde navn",
+        email: "E-mail",
+        phone: "Telefon",
+        subject: "Emne",
+        message: "Besked",
+        consent: "Jeg har læst og godkender KVKK-oplysningserklæringen.",
+      },
+      submit: "Send besked",
+      success: "Din besked er modtaget. Vi vender tilbage til dig hurtigst muligt.",
+    },
+    map: {
+      title: "Vores placering",
+      subtitle: "Find os på kortet",
+      placeholder: "Kortområde",
+      note: "Placeringskortet vises her snart.",
+    },
+  },
+
+  auth: {
+    seo: {
+      title: "Log ind / Opret konto",
+      description: "Log ind på din TercümExpert-konto, eller opret en ny.",
+    },
+    tabs: { login: "Log ind", register: "Opret konto" },
+    google: "Fortsæt med Google",
+    or: "eller",
+    fields: {
+      firstName: "Fornavn",
+      lastName: "Efternavn",
+      email: "E-mail",
+      password: "Adgangskode",
+      code: "Bekræftelseskode",
+    },
+    login: {
+      title: "Log ind på din konto",
+      submit: "Log ind",
+      noAccount: "Har du ikke en konto?",
+      switchToRegister: "Opret konto",
+    },
+    register: {
+      title: "Opret en ny konto",
+      submit: "Opret konto",
+      haveAccount: "Har du allerede en konto?",
+      switchToLogin: "Log ind",
+      consent: "Ved at oprette en konto accepterer jeg KVKK-oplysningserklæringen og privatlivspolitikken.",
+    },
+    verify: {
+      title: "Bekræft din e-mail",
+      desc: "— indtast den 6-cifrede kode, vi sendte til denne adresse.",
+      submit: "Bekræft og fortsæt",
+      spam: "Koden kan være forsinket et par minutter; tjek også din spam-/uønsket post-mappe.",
+      resend: "Send kode igen",
+      resent: "En ny kode er sendt.",
+      back: "Gå tilbage",
+    },
+    signedIn: {
+      title: "Min konto",
+      greeting: "Velkommen",
+      logout: "Log ud",
+    },
+    orders: {
+      title: "Mine bestillinger",
+      empty: "Du har ingen bestillinger endnu. Du kan oprette din første bestilling via Beregn pris.",
+      loading: "Indlæser bestillinger…",
+      error: "Bestillingerne kunne ikke indlæses. Opdater venligst siden.",
+      status: {
+        received: "Modtaget",
+        in_progress: "Under behandling",
+        translated: "Oversættelse gennemført",
+        shipped: "Afsendt",
+        delivered: "Leveret",
+        cancelled: "Annulleret",
+      },
+      track: "Følg",
+    },
+    errors: {
+      nameRequired: "Fornavn og efternavn er påkrævet.",
+      emailInvalid: "Indtast en gyldig e-mail.",
+      passwordShort: "Adgangskoden skal være på mindst 6 tegn.",
+      codeInvalid: "Indtast venligst den 6-cifrede kode.",
+      consentRequired: "Godkendelse er påkrævet for at fortsætte.",
+    },
+  },
+
+  blog: {
+    seo: { title: "Blog", description: "Vejledende indhold om oversættelse, notarpåtegning, apostille og lokalisering." },
+    hero: { title: "Blog", subtitle: "Vejledninger fra oversættelsens verden." },
+    searchPlaceholder: "Søg i indlæg…",
+    readingTime: "min. læsning",
+    relatedTitle: "Relaterede indlæg",
+    allCategories: "Alle",
+    empty: "Ingen indlæg matchede dette kriterium.",
+  },
+
+  legal: {
+    lastUpdatedLabel: "Senest opdateret",
+    draftNotice:
+      "Denne tekst er et udkast og bør gennemgås af en juridisk ekspert inden offentliggørelse. Virksomhedsoplysningerne er endnu ikke bekræftet.",
+    kvkk: {
+      seo: { title: "KVKK-oplysningserklæring", description: "Oplysningserklæring om beskyttelse af personoplysninger." },
+      title: "KVKK-oplysningserklæring",
+      sections: [
+        { heading: "Dataansvarlig", body: "Den dataansvarlige og kontaktoplysningerne tilføjes inden lancering." },
+        { heading: "Behandlede personoplysninger", body: "Navn, kontaktoplysninger og dokumentdata kan behandles under kontakt- og bestillingsprocesser." },
+        { heading: "Formål med behandlingen", body: "Levering af ydelser, tilbud, kommunikation og retlige forpligtelser." },
+        { heading: "Retsgrundlag", body: "Opfyldelse af en kontrakt, udtrykkeligt samtykke og legitim interesse." },
+        { heading: "Opbevaringsperioder", body: "Data opbevares i de perioder, der er fastsat i den relevante lovgivning." },
+        { heading: "Overførsel", body: "Overføres kun i det omfang, ydelsen kræver, og i overensstemmelse med lovgivningen." },
+        { heading: "Dine rettigheder", body: "Du kan udøve dine rettigheder i henhold til artikel 11 i KVKK." },
+        { heading: "Sådan ansøger du", body: "Du kan indsende dine anmodninger via de angivne kontaktkanaler." },
+      ],
+    },
+    privacy: {
+      seo: { title: "Privatlivspolitik", description: "Politik om fortrolighed af personoplysninger og dokumenter." },
+      title: "Privatlivspolitik",
+      sections: [
+        { heading: "Indsamlede oplysninger", body: "Kontaktoplysninger og uploadede dokumenter." },
+        { heading: "Anvendelse", body: "Bruges kun til levering af ydelser og kommunikation." },
+        { heading: "Dokumentsikkerhed", body: "Dokumenter behandles med krypteret overførsel og fortrolighedsprincipper." },
+        { heading: "Cookies", body: "Detaljerne findes i cookiepolitikken." },
+      ],
+    },
+    distanceSales: {
+      seo: { title: "Fjernsalgsaftale", description: "Fjernsalgsaftale for salg af ydelser." },
+      title: "Fjernsalgsaftale",
+      sections: [
+        { heading: "Parter", body: "Oplysninger om sælger og køber tilføjes inden lancering." },
+        { heading: "Ydelsens omfang", body: "Omfanget af de bestilte oversættelses-/godkendelsesydelser." },
+        { heading: "Fortrydelsesret og undtagelser", body: "Undtagelser fra fortrydelsesretten kan gælde for ydelser, der er udarbejdet specifikt til en person/bestilling." },
+        { heading: "Returnering og annullering", body: "Vilkår for returnering og annullering er anført her." },
+      ],
+    },
+    cookies: {
+      seo: { title: "Cookiepolitik", description: "Cookiekategorier, der bruges på webstedet, og administration af præferencer." },
+      title: "Cookiepolitik",
+      sections: [
+        { heading: "Hvad er en cookie?", body: "Cookies er små filer, der gemmes i din browser." },
+        { heading: "Kategorier", body: "Nødvendige, analyse-, marketing- og præferencecookies." },
+        { heading: "Administration af præferencer", body: "Du kan når som helst opdatere dine cookiepræferencer." },
+      ],
+    },
+  },
+
+  footer: {
+    tagline: "Din pålidelige partner inden for professionelle oversættelsestjenester.",
+    columns: {
+      quickLinks: "Hurtige links",
+      services: "Ydelser",
+      contact: "Kontakt",
+    },
+    quickLinks: {
+      corporate: "Erhverv",
+      services: "Vores ydelser",
+      quote: "Beregn pris",
+      blog: "Blog",
+      faq: "Ofte stillede spørgsmål",
+      contact: "Kontakt",
+    },
+    serviceLinks: {
+      sworn: "Autoriseret oversættelse",
+      notarized: "Oversættelse med notarpåtegning",
+      apostille: "Apostilleproces",
+      corporate: "Løsninger til erhverv",
+      partnership: "Partnerprogram",
+    },
+    legal: {
+      kvkk: "KVKK",
+      privacy: "Privatlivspolitik",
+      distanceSales: "Fjernsalgsaftale",
+      cookies: "Cookiepolitik",
+    },
+    socialTitle: "Følg os",
+    whatsapp: "WhatsApp-support",
+    rights: "Alle rettigheder forbeholdes.",
+  },
+
+  cookie: {
+    title: "Cookiepræferencer",
+    desc: "Vi bruger cookies til at forbedre din oplevelse. Andre cookies end de nødvendige kører kun med dit samtykke.",
+    accept: "Accepter",
+    reject: "Afvis",
+    manage: "Administrer præferencer",
+    save: "Gem præferencer",
+    categories: {
+      necessary: { label: "Nødvendige", desc: "Påkrævet for, at webstedet fungerer; kan ikke deaktiveres." },
+      analytics: { label: "Analyse", desc: "Hjælper os med at forstå brugen." },
+      marketing: { label: "Marketing", desc: "Til relevant indhold og annoncer." },
+      preferences: { label: "Præferencer", desc: "Husker dine præferencer." },
+    },
+  },
+
+  chatbot: {
+    title: "TercümExpert-support",
+    open: "Åbn chat",
+    close: "Luk chat",
+    minimize: "Minimér",
+    clear: "Ryd samtale",
+    inputPlaceholder: "Skriv din besked…",
+    send: "Send",
+    typing: "Skriver…",
+    welcome:
+      "Hej og velkommen til TercümExpert. Jeg kan hjælpe dig med oversættelse, priser, notarpåtegning, apostille eller erhvervsydelser.",
+    quickQuestions: [
+      "Hvordan beregnes prisen?",
+      "Hvad er autoriseret oversættelse?",
+      "Jeg vil uploade et dokument",
+      "Jeg vil have et erhvervstilbud",
+      "Er notarpåtegning påkrævet?",
+      "Sæt mig i forbindelse med en medarbejder",
+    ],
+    handoff: "Kom i forbindelse med en medarbejder",
+    toWhatsapp: "Overfør til WhatsApp",
+    disclaimer: "Disse oplysninger er generelle; bekræft venligst de præcise krav med den relevante myndighed.",
+    sensitiveWarning:
+      "Del venligst ikke følsomme personoplysninger via denne chat. Du kan sende dine dokumenter via det sikre uploadområde.",
+  },
+
+  notFound: {
+    seo: { title: "Siden blev ikke fundet", description: "Den side, du leder efter, kunne ikke findes." },
+    title: "Siden blev ikke fundet",
+    desc: "Den side, du leder efter, kan være blevet flyttet eller har måske aldrig eksisteret.",
+    home: "Tilbage til forsiden",
+  },
+}
