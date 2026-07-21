@@ -38,7 +38,7 @@ function safeName(name: string): string {
   const ext = dot > -1 ? name.slice(dot) : ''
   const base = (dot > -1 ? name.slice(0, dot) : name)
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[̀-ͯ]/g, '')
     .replace(/[^a-zA-Z0-9-_]+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')

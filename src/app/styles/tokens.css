@@ -1,0 +1,121 @@
+/* =========================================================================
+   DESIGN TOKENS  (kaynak: DESIGN_SYSTEM.md)
+   3 katman: PRIMITIVE (ham palet) -> SEMANTIC (rol) -> component.
+   Componentler YALNIZ semantic token kullanır (bg-background, text-primary...).
+   Dark değerler .dark altında HAZIR; `.dark` sınıfı şu an hiç eklenmiyor.
+   ========================================================================= */
+
+:root {
+  /* ---------- PRIMITIVE: Brand / Blue ---------- */
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --blue-800: #1e40af;
+  --blue-900: #1e3a8a;
+  --blue-950: #172554;
+
+  /* ---------- PRIMITIVE: Accent / Teal ---------- */
+  --teal-500: #14b8a6;
+  --teal-600: #0d9488;
+  --teal-700: #0f766e;
+
+  /* ---------- PRIMITIVE: Neutral / Slate ---------- */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  --slate-950: #020617;
+
+  /* ---------- PRIMITIVE: Status ---------- */
+  --green-500: #22c55e;
+  --amber-500: #f59e0b;
+  --red-500: #ef4444;
+  --sky-500: #0ea5e9;
+  --white: #ffffff;
+  --black: #000000;
+
+  /* ---------- SEMANTIC (LIGHT — aktif) ---------- */
+  --color-background: var(--white);
+  --color-foreground: var(--slate-900);
+  --color-muted: var(--slate-100);
+  --color-muted-foreground: var(--slate-500);
+  --color-card: var(--white);
+  --color-card-foreground: var(--slate-900);
+  --color-border: var(--slate-200);
+  --color-input: var(--slate-200);
+  --color-ring: var(--blue-600);
+  --color-primary: var(--blue-600);
+  --color-primary-foreground: var(--white);
+  --color-primary-hover: var(--blue-700);
+  --color-accent: var(--teal-600);
+  --color-accent-foreground: var(--white);
+  --color-success: var(--green-500);
+  --color-warning: var(--amber-500);
+  --color-destructive: var(--red-500);
+  --color-info: var(--sky-500);
+
+  /* ---------- Typography ---------- */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+
+  /* ---------- Radius ---------- */
+  --radius: 0.75rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 12px);
+
+  /* ---------- Shadow ---------- */
+  --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(15 23 42 / 0.08), 0 1px 2px -1px rgb(15 23 42 / 0.06);
+  --shadow-md: 0 4px 6px -1px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.06);
+  --shadow-lg: 0 10px 15px -3px rgb(15 23 42 / 0.1), 0 4px 6px -4px rgb(15 23 42 / 0.05);
+  --shadow-xl: 0 20px 25px -5px rgb(15 23 42 / 0.1), 0 8px 10px -6px rgb(15 23 42 / 0.05);
+  --shadow-2xl: 0 25px 50px -12px rgb(15 23 42 / 0.2);
+  --shadow-focus: 0 0 0 3px rgb(37 99 235 / 0.35);
+
+  /* ---------- Motion ---------- */
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+  --dur-slower: 500ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---------- Spacing (semantic) ---------- */
+  --space-section-y: clamp(4rem, 8vw, 8rem);
+  --space-container-x: clamp(1rem, 5vw, 2rem);
+}
+
+/* ---------- SEMANTIC (DARK — hazır, kapalı) ---------- */
+.dark {
+  --color-background: var(--slate-950);
+  --color-foreground: var(--slate-50);
+  --color-muted: var(--slate-900);
+  --color-muted-foreground: var(--slate-400);
+  --color-card: var(--slate-900);
+  --color-card-foreground: var(--slate-50);
+  --color-border: var(--slate-800);
+  --color-input: var(--slate-800);
+  --color-ring: var(--blue-500);
+  --color-primary: var(--blue-500);
+  --color-primary-foreground: var(--white);
+  --color-primary-hover: var(--blue-400);
+  --color-accent: var(--teal-500);
+  --color-accent-foreground: var(--slate-950);
+}
