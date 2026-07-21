@@ -470,6 +470,14 @@ export const tr = {
       whatsapp: "WhatsApp'tan İletişime Geç",
       estimatedWords: 'Tahmini kelime (otomatik — demo)',
     },
+    orderConfirm: {
+      title: 'Siparişiniz alındı',
+      number: 'Sipariş No',
+      desc: 'Talebiniz ve belgeleriniz kaydedildi. Uzman ekibimiz belgeyi inceleyip en kısa sürede sizinle iletişime geçecek.',
+      viewOrders: 'Siparişlerim',
+      submitting: 'Sipariş oluşturuluyor…',
+      error: 'Sipariş oluşturulurken bir sorun oldu. Lütfen tekrar deneyin.',
+    },
     gate: {
       title: 'Fiyatınız hazır',
       subtitle: 'Fiyatı görmek ve sipariş vermek için giriş yapın ya da bilgilerinizi doğrulayın.',
@@ -583,9 +591,22 @@ export const tr = {
       back: 'Geri dön',
     },
     signedIn: {
-      title: 'Giriş yaptınız',
+      title: 'Hesabım',
       greeting: 'Hoş geldiniz',
       logout: 'Çıkış Yap',
+    },
+    orders: {
+      title: 'Siparişlerim',
+      empty: 'Henüz siparişiniz yok. Fiyat Hesapla’dan ilk siparişinizi oluşturabilirsiniz.',
+      loading: 'Siparişler yükleniyor…',
+      error: 'Siparişler yüklenemedi. Lütfen sayfayı yenileyin.',
+      status: {
+        received: 'Alındı',
+        paid: 'Ödendi',
+        in_progress: 'Çeviri sürüyor',
+        delivered: 'Teslim edildi',
+        cancelled: 'İptal edildi',
+      },
     },
     errors: {
       nameRequired: 'Ad ve soyad zorunludur.',

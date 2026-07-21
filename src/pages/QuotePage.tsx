@@ -8,6 +8,7 @@ import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { useAuth } from '@/app/providers/AuthProvider'
 import { buildPath } from '@/app/router/routes'
+import { createOrder } from '@/features/orders/model/create-order'
 import { cn } from '@/lib/cn'
 import { calculateQuote } from '@/features/quote-calculator/model/calculate'
 import type { QuoteBreakdown } from '@/features/quote-calculator/model/types'
@@ -33,6 +34,7 @@ type Mode = 'file' | 'text'
 
 interface FileEntry {
   key: string
+  file: File
   name: string
   words: number
   status: ExtractStatus | 'pending'
@@ -63,6 +65,9 @@ export default function QuotePage() {
   const [result, setResult] = useState<QuoteBreakdown | null>(null)
   const [gateOpen, setGateOpen] = useState(false)
   const [needInput, setNeedInput] = useState(false)
+  const [ordering, setOrdering] = useState(false)
+  const [orderNo, setOrderNo] = useState<number | null>(null)
+  const [orderError, setOrderError] = useState<string | null>(null)
 
   // Kullanıcı giriş yapınca (veya misafir doğrulaması tamamlanınca) bekleyen fiyatı göster.
   useEffect(() => {
@@ -87,7 +92,7 @@ export default function QuotePage() {
       }
       keyCounter.current += 1
       const key = `f${keyCounter.current}`
-      setFiles((prev) => [...prev, { key, name: f.name, words: 0, status: 'pending' }])
+      setFiles((prev) => [...prev, { key, file: f, name: f.name, words: 0, status: 'pending' }])
       extractWordCount(f)
         .then((res) =>
           setFiles((prev) =>
@@ -136,6 +141,35 @@ export default function QuotePage() {
       setResult(null)
       setGateOpen(true)
     }
+  }
+
+  const handleOrder = async () => {
+    if (!user || !result || ordering) return
+    setOrdering(true)
+    setOrderError(null)
+    const res = await createOrder({
+      userId: user.id,
+      service,
+      sourceLang,
+      targetLang,
+      documentType,
+      wordCount,
+      urgent,
+      notarization,
+      physicalDelivery,
+      breakdown: result,
+      inputMode: mode,
+      sourceText: mode === 'text' ? text : undefined,
+      files: files.map((f) => ({ file: f.file, words: f.status === 'ok' ? f.words : 0 })),
+      contactName: (user.user_metadata?.full_name as string | undefined) ?? null,
+      contactEmail: user.email ?? null,
+    })
+    setOrdering(false)
+    if (res.error || res.orderNo == null) {
+      setOrderError(q.orderConfirm.error)
+      return
+    }
+    setOrderNo(res.orderNo)
   }
 
   const wa = whatsappLink('Merhaba, fiyat teklifi hakkında bilgi almak istiyorum.')
@@ -330,7 +364,28 @@ export default function QuotePage() {
 
           {/* SAĞ: sonuç */}
           <div aria-live="polite" className="lg:sticky lg:top-24">
-            {result ? (
+            {orderNo != null ? (
+              <div className="rounded-lg border border-border bg-surface p-6 text-center">
+                <span className="mx-auto inline-flex size-14 items-center justify-center rounded-full bg-success/10 text-success">
+                  <Icon name="CircleCheck" className="size-8" />
+                </span>
+                <h2 className="mt-4 text-xl font-bold">{q.orderConfirm.title}</h2>
+                <p className="mt-2 text-sm text-text-secondary">{q.orderConfirm.desc}</p>
+                <p className="mt-4 rounded-md border border-border bg-surface-muted px-4 py-3 text-sm">
+                  {q.orderConfirm.number}: <span className="font-bold">#{orderNo}</span>
+                </p>
+                <div className="mt-5 space-y-2">
+                  <Link to={buildPath(locale, 'auth')}>
+                    <Button intent="secondary" block>{q.orderConfirm.viewOrders}</Button>
+                  </Link>
+                  {wa && (
+                    <a href={wa} target="_blank" rel="noopener noreferrer">
+                      <Button intent="whatsapp" block><WhatsAppIcon className="size-5" /> {q.result.whatsapp}</Button>
+                    </a>
+                  )}
+                </div>
+              </div>
+            ) : result ? (
               <div className="rounded-lg border border-border bg-surface p-6">
                 <h2 className="text-xl font-semibold">{q.result.title}</h2>
                 <p className="mt-1 text-sm text-text-muted">{wordCount} {u.wordsUnit}</p>
@@ -343,15 +398,17 @@ export default function QuotePage() {
                   <Row label={q.result.total} value={formatCurrency(result.total)} strong />
                   <Row label={q.result.delivery} value={`${result.deliveryDays} ${q.result.deliveryUnit}`} />
                 </dl>
+                {orderError && <p className="mt-3 text-sm text-danger">{orderError}</p>}
                 <div className="mt-5 space-y-2">
-                  <Button intent="secondary" block>{q.result.order}</Button>
+                  <Button intent="secondary" block onClick={() => void handleOrder()} disabled={ordering}>
+                    {ordering ? q.orderConfirm.submitting : q.result.order}
+                  </Button>
                   {wa && (
                     <a href={wa} target="_blank" rel="noopener noreferrer">
                       <Button intent="whatsapp" block><WhatsAppIcon className="size-5" /> {q.result.whatsapp}</Button>
                     </a>
                   )}
                 </div>
-                <p className="mt-3 text-center text-xs text-text-muted">{dict.common.states.demoNotice}</p>
               </div>
             ) : gateOpen && !user ? (
               <PriceGate />

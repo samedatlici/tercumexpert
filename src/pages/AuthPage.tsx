@@ -6,6 +6,7 @@ import { GoogleIcon } from '@/components/common/GoogleIcon'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { useAuth } from '@/app/providers/AuthProvider'
+import { OrdersList } from '@/features/orders/ui/OrdersList'
 import { buildPath } from '@/app/router/routes'
 
 type Mode = 'login' | 'register'
@@ -43,23 +44,29 @@ export default function AuthPage() {
     return (
       <>
         <Seo title={a.seo.title} description={a.seo.description} routeId="auth" />
-        <Shell>
-          <div className="text-center">
-            <span className="mx-auto inline-flex size-14 items-center justify-center rounded-full bg-success/10 text-success">
-              <Icon name="CircleCheck" className="size-8" />
-            </span>
-            <h1 className="mt-4 text-2xl font-bold">{a.signedIn.title}</h1>
-            <p className="mt-1 text-text-secondary">{a.signedIn.greeting}, {name}.</p>
-            <div className="mt-6 space-y-3">
-              <Link to={buildPath(locale, 'quote')}>
-                <Button intent="secondary" size="lg" block>{dict.common.actions.calculatePrice}</Button>
-              </Link>
-              <Button intent="outline" size="lg" block onClick={() => void signOut()}>
-                {a.signedIn.logout}
-              </Button>
+        <section className="section">
+          <div className="mx-auto w-full max-w-2xl">
+            <div className="rounded-lg border border-border bg-surface p-6 sm:p-8">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl font-bold">{a.signedIn.title}</h1>
+                  <p className="mt-1 text-text-secondary">{a.signedIn.greeting}, {name}.</p>
+                </div>
+                <Button intent="outline" onClick={() => void signOut()}>{a.signedIn.logout}</Button>
+              </div>
+              <div className="mt-5">
+                <Link to={buildPath(locale, 'quote')}>
+                  <Button intent="secondary">{dict.common.actions.calculatePrice}</Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <h2 className="mb-3 text-lg font-bold">{a.orders.title}</h2>
+              <OrdersList />
             </div>
           </div>
-        </Shell>
+        </section>
       </>
     )
   }
