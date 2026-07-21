@@ -25,7 +25,9 @@ const schema = z.object({
 type PartnerForm = z.infer<typeof schema>
 
 const fieldClass =
-  'min-h-[44px] w-full rounded-md border border-border bg-surface px-3 py-2 text-base focus-visible:outline-none focus-visible:border-border-strong'
+  'h-[52px] w-full rounded-md border border-border bg-surface px-3 text-base focus-visible:outline-none focus-visible:border-border-strong'
+const textareaClass =
+  'min-h-[120px] w-full rounded-md border border-border bg-surface px-3 py-2 text-base focus-visible:outline-none focus-visible:border-border-strong'
 
 export default function PartnershipPage() {
   const { dict, formatCurrency } = useI18n()
@@ -203,7 +205,7 @@ export default function PartnershipPage() {
               </div>
               <div className="mt-4">
                 <Field label={p.form.fields.note}>
-                  <textarea rows={4} className={fieldClass} {...register('note')} />
+                  <textarea rows={4} className={textareaClass} {...register('note')} />
                 </Field>
               </div>
               {/* Honeypot (gizli) */}
