@@ -479,6 +479,11 @@ export const ru: PartialDictionary = {
       ru: "Русский",
       ar: "Арабский",
       nl: "Нидерландский",
+      az: "Азербайджанский",
+      pl: "Польский",
+      bg: "Болгарский",
+      pt: "Португальский",
+      da: "Датский",
     },
     documentTypes: {
       diploma: "Диплом",

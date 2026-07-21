@@ -12,6 +12,11 @@ export const LOCALES = [
   { code: 'es', label: 'Español', htmlLang: 'es', ogLocale: 'es_ES', dir: 'ltr', contentStatus: 'placeholder' },
   { code: 'ar', label: 'العربية', htmlLang: 'ar', ogLocale: 'ar_AR', dir: 'rtl', contentStatus: 'placeholder' },
   { code: 'ru', label: 'Русский', htmlLang: 'ru', ogLocale: 'ru_RU', dir: 'ltr', contentStatus: 'placeholder' },
+  { code: 'az', label: 'Azərbaycanca', htmlLang: 'az', ogLocale: 'az_AZ', dir: 'ltr', contentStatus: 'placeholder' },
+  { code: 'pl', label: 'Polski', htmlLang: 'pl', ogLocale: 'pl_PL', dir: 'ltr', contentStatus: 'placeholder' },
+  { code: 'bg', label: 'Български', htmlLang: 'bg', ogLocale: 'bg_BG', dir: 'ltr', contentStatus: 'placeholder' },
+  { code: 'pt', label: 'Português', htmlLang: 'pt', ogLocale: 'pt_PT', dir: 'ltr', contentStatus: 'placeholder' },
+  { code: 'da', label: 'Dansk', htmlLang: 'da', ogLocale: 'da_DK', dir: 'ltr', contentStatus: 'placeholder' },
   { code: 'it', label: 'Italiano', htmlLang: 'it', ogLocale: 'it_IT', dir: 'ltr', contentStatus: 'placeholder' },
 ] as const
 

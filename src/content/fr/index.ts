@@ -480,6 +480,11 @@ export const fr: PartialDictionary = {
       ru: "Russe",
       ar: "Arabe",
       nl: "Néerlandais",
+      az: "Azéri",
+      pl: "Polonais",
+      bg: "Bulgare",
+      pt: "Portugais",
+      da: "Danois",
     },
     documentTypes: {
       diploma: "Diplôme",

@@ -10,7 +10,7 @@ import { buildPath, resolveRouteId } from '@/app/router/routes'
  * Dil seçici (§8, §10). Dil değişince kullanıcı AYNI sayfanın diğer dildeki
  * karşılığına gider (routeId korunarak). Erişilebilir menü: Esc + dış tık ile kapanır.
  */
-export function LanguageSwitcher({ onNavigate }: { onNavigate?: () => void }) {
+export function LanguageSwitcher({ onNavigate, dropUp }: { onNavigate?: () => void; dropUp?: boolean }) {
   const { locale, dict } = useI18n()
   const { lang } = useParams()
   const location = useLocation()
@@ -58,7 +58,10 @@ export function LanguageSwitcher({ onNavigate }: { onNavigate?: () => void }) {
       {open && (
         <ul
           role="listbox"
-          className="absolute end-0 z-drawer mt-1 min-w-[10rem] overflow-hidden rounded-md border border-border bg-surface py-1 shadow-md"
+          className={cn(
+            'absolute z-drawer min-w-[10rem] max-h-[60vh] overflow-y-auto rounded-md border border-border bg-surface py-1 shadow-md',
+            dropUp ? 'bottom-full start-0 mb-1' : 'end-0 mt-1',
+          )}
         >
           {LOCALES.map((l) => (
             <li key={l.code} role="option" aria-selected={l.code === activeLang}>

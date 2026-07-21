@@ -106,6 +106,11 @@ export const QUOTE_LANGUAGES: { code: string; labelTr: string; tier: LanguageTie
   { code: 'it', labelTr: 'İtalyanca', tier: 'medium' },
   { code: 'ru', labelTr: 'Rusça', tier: 'medium' },
   { code: 'ar', labelTr: 'Arapça', tier: 'rare' },
+  { code: 'az', labelTr: 'Azerice', tier: 'medium' },
+  { code: 'pl', labelTr: 'Lehçe', tier: 'medium' },
+  { code: 'bg', labelTr: 'Bulgarca', tier: 'medium' },
+  { code: 'pt', labelTr: 'Portekizce', tier: 'medium' },
+  { code: 'da', labelTr: 'Danca', tier: 'medium' },
 ]
 
 export const DOCUMENT_TYPES: { id: DocumentTypeId; labelTr: string }[] = [

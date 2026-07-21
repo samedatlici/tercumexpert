@@ -38,8 +38,7 @@ export default function HomePage() {
       {/* ============ HERO ============ */}
       <section className="section-sm bg-surface">
         <div className="container-base flex flex-col items-center text-center">
-          <p className="mb-5 inline-flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm font-medium text-text-secondary">
-            <Icon name="ShieldCheck" className="size-4 text-primary" />
+          <p className="mb-5 inline-flex items-center rounded-md border border-border px-3 py-1.5 text-sm font-medium text-text-secondary">
             {home.hero.support}
           </p>
           <h1 className="max-w-4xl text-5xl font-extrabold leading-tight tracking-tight md:text-6xl">

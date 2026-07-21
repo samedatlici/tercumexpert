@@ -480,6 +480,11 @@ export const tr = {
       ru: 'Rusça',
       ar: 'Arapça',
       nl: 'Felemenkçe',
+      az: 'Azerice',
+      pl: 'Lehçe',
+      bg: 'Bulgarca',
+      pt: 'Portekizce',
+      da: 'Danca',
     },
     documentTypes: {
       diploma: 'Diploma',

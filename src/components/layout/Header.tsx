@@ -167,7 +167,7 @@ export function Header() {
               ))}
             </nav>
             <div className="space-y-3 border-t border-border p-4">
-              <LanguageSwitcher onNavigate={() => setMenuOpen(false)} />
+              <LanguageSwitcher onNavigate={() => setMenuOpen(false)} dropUp />
               <Link to={buildPath(locale, 'auth')}>
                 <Button intent="outline" block>
                   <Icon name="Users" className="size-4" />
