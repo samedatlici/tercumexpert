@@ -1,8 +1,856 @@
 import type { PartialDictionary } from '@/types/i18n'
+import { FAQ_CATEGORIES_ES, FAQ_ITEMS_ES } from '@/content/faq-data.es'
 
 /**
- * ES — PLACEHOLDER. İçerik henüz eklenmedi; kullanıcıya yarım/makine çevirisi
- * gösterilmez. Fallback zinciri (TR<-EN<-bu) sayesinde tam ve tutarlı içerik gösterilir.
- * Nihai çeviri onaylandığında bu dosya doldurulur.
+ * ESPAÑOL — traducción completa basada en la versión inglesa.
+ * Cadena de reserva: TR (origen) <- EN (base) <- otros idiomas.
+ * Las preguntas/respuestas de FAQ (faq.categories / faq.items) provienen de un
+ * conjunto de datos propio y específico del idioma (content/faq-data.es).
  */
-export const es: PartialDictionary = {}
+export const es: PartialDictionary = {
+  common: {
+    tagline: 'Su socio de confianza en servicios profesionales de traducción.',
+    nav: {
+      home: 'Inicio',
+      services: 'Servicios',
+      quote: 'Solicitar presupuesto',
+      corporate: 'Empresas',
+      partnership: 'Colaboración',
+      blog: 'Blog',
+      faq: 'Preguntas frecuentes',
+      contact: 'Contacto',
+    },
+    actions: {
+      getQuote: 'Solicitar presupuesto',
+      calculatePrice: 'Calcular precio',
+      uploadDocument: 'Subir documento',
+      whatsapp: 'Escribir por WhatsApp',
+      learnMore: 'Más información',
+      viewAll: 'Ver todo',
+      showMore: 'Ver más',
+      showLess: 'Ver menos',
+      send: 'Enviar',
+      apply: 'Solicitar',
+      order: 'Realizar pedido',
+      contactUs: 'Contáctenos',
+      openMenu: 'Abrir menú',
+      closeMenu: 'Cerrar menú',
+      selectLanguage: 'Seleccionar idioma',
+      skipToContent: 'Saltar al contenido',
+      login: 'Iniciar sesión',
+      logout: 'Cerrar sesión',
+      account: 'Mi cuenta',
+    },
+    states: {
+      loading: 'Cargando…',
+      error: 'Algo salió mal. Vuelva a intentarlo.',
+      required: 'Este campo es obligatorio.',
+      demoNotice: 'Demo: los datos del formulario aún no se envían a un servidor.',
+      unverified: 'Por verificar',
+    },
+    topbar: {
+      phoneLabel: 'Teléfono',
+      emailLabel: 'Correo electrónico',
+      hoursLabel: 'Horario de atención',
+      afterHours: 'Disponemos de soporte de traducción urgente fuera del horario habitual.',
+      workingHours: 'Días laborables 09:00 - 18:00 | Servicio disponible fuera de horario',
+    },
+  },
+
+  home: {
+    seo: {
+      title: 'TercümExpert — Servicios profesionales de traducción',
+      description:
+        'Soluciones de traducción jurada, certificación notarial y traducción corporativa. Suba su documento, obtenga un presupuesto preliminar al instante y una entrega profesional.',
+    },
+    hero: {
+      title: 'Su socio de confianza en servicios profesionales de',
+      titleAccent: 'Traducción',
+      subtitle: 'Suba su documento, consulte el precio y obtenga una entrega profesional.',
+      support: 'Traducción jurada • Certificación notarial • Soluciones para empresas',
+    },
+    trust: {
+      title: '¿Por qué confían en nosotros?',
+      items: [
+        { key: 'languages', label: '50+ idiomas' },
+        { key: 'delivery', label: 'Entrega en 24 horas' },
+        { key: 'notary', label: 'Certificación notarial' },
+        { key: 'quality', label: 'Control de calidad' },
+      ],
+    },
+    stats: {
+      title: 'TercümExpert en cifras',
+      note: 'Las cifras que se muestran a continuación no se presentan como afirmaciones definitivas hasta su verificación.',
+      labels: {
+        satisfaction: 'Satisfacción del cliente',
+        completed: 'Trabajos completados',
+        languages: 'Idiomas disponibles',
+        corporate: 'Clientes corporativos',
+      },
+    },
+    howItWorks: {
+      title: '¿Cómo funciona?',
+      subtitle: 'Traducción profesional en cinco pasos.',
+      steps: [
+        { key: 'upload', title: 'Subir', desc: 'Suba su documento de forma segura.' },
+        { key: 'select', title: 'Seleccionar', desc: 'Elija el idioma y el tipo de servicio.' },
+        { key: 'confirm', title: 'Confirmar', desc: 'Confirme su pedido.' },
+        { key: 'track', title: 'Seguir', desc: 'Siga el proceso en tiempo real.' },
+        { key: 'receive', title: 'Recibir', desc: 'Reciba su entrega profesional.' },
+      ],
+    },
+    services: {
+      title: 'Nuestros servicios',
+      subtitle: 'Traducción experta para cada tipo de documento.',
+    },
+    why: {
+      title: '¿Por qué TercümExpert?',
+      subtitle: 'Las características que nos distinguen de la competencia',
+      features: [
+        { key: 'autoQuote', title: 'Cálculo automático del precio', desc: 'Un precio preliminar en segundos.' },
+        { key: 'whatsapp', title: 'Presupuesto rápido por WhatsApp', desc: 'Contacto con un solo toque.' },
+        { key: 'terminology', title: 'Gestión terminológica', desc: 'Un lenguaje corporativo coherente.' },
+        { key: 'revision', title: 'Derecho a revisión', desc: 'Un proceso centrado en la satisfacción.' },
+        { key: 'languages', title: 'Soporte de más de 50 idiomas', desc: 'Amplia cobertura de pares de idiomas.' },
+        { key: 'terms', title: 'Sistema de pago aplazado para empresas', desc: 'Pago flexible para empresas.' },
+      ],
+    },
+    corporateCta: {
+      title: 'Soluciones para empresas',
+      desc: 'Servicios lingüísticos profesionales con gestión terminológica, opciones de pago aplazado y un gestor de cuentas dedicado adaptado a su empresa.',
+      action: 'Solicitar un presupuesto para empresas',
+    },
+    partnershipTeaser: {
+      title: 'Programa de colaboración',
+      subtitle: 'Gane un 20% de comisión por cada cliente que nos recomiende.',
+      items: [
+        { key: 'commission', title: 'Comisión transparente', desc: '20% de comisión por cada recomendación (sujeto a acuerdo). Ingresos transparentes con un panel de seguimiento en tiempo real.' },
+        { key: 'qr', title: 'Sistema de código QR', desc: 'Seguimiento sencillo de clientes con integración en tarjetas de visita. Códigos QR para web y WhatsApp.' },
+      ],
+      cta: 'Solicitar ser colaborador',
+    },
+    testimonials: {
+      title: 'Opiniones de clientes',
+      subtitle: 'Aquí se añadirán opiniones reales de clientes antes del lanzamiento.',
+      placeholderNote: 'Marcador de posición — se integrarán opiniones reales.',
+      items: [
+        { key: 't1', role: 'Bufete de abogados' },
+        { key: 't2', role: 'Organización sanitaria' },
+        { key: 't3', role: 'Cliente corporativo' },
+        { key: 't4', role: 'Cliente particular' },
+      ],
+    },
+    blogTeaser: {
+      title: 'Blog',
+      subtitle: 'Contenido actual del mundo de la traducción',
+      viewAll: 'Ver todas las entradas del blog',
+    },
+    finalCta: {
+      title: 'Comience ahora',
+      desc: 'Suba sus documentos, obtenga un presupuesto al instante y benefíciese de servicios profesionales de traducción.',
+      primary: 'Solicitar presupuesto',
+      secondary: 'Contáctenos',
+    },
+  },
+
+  services: {
+    seo: {
+      title: 'Servicios de traducción',
+      description:
+        'Traducción jurada, con certificación notarial, jurídica, técnica, médica y académica, además de localización web y móvil. Tipos de documentos, proceso, entrega y pares de idiomas.',
+    },
+    hero: {
+      title: 'Servicios de traducción',
+      subtitle: 'Traducción con la terminología adecuada para cada campo de especialización.',
+    },
+    process: {
+      title: '¿Cómo funciona el proceso?',
+      steps: [
+        { title: 'Revisión del documento', desc: 'Se evalúan el tipo de documento y su finalidad.' },
+        { title: 'Asignación del experto', desc: 'Se asigna un traductor especializado en el campo.' },
+        { title: 'Traducción y edición', desc: 'Traducción y una revisión final independiente.' },
+        { title: 'Aprobación y entrega', desc: 'Certificación notarial o apostilla si es necesario, y luego la entrega.' },
+      ],
+    },
+    delivery: {
+      title: 'Opciones de entrega',
+      items: ['Entrega digital (PDF/DOCX)', 'Entrega física de documentos', 'Entrega urgente'],
+    },
+    notaryApostille: {
+      title: 'Relación entre certificación notarial y apostilla',
+      desc: 'Cuando es necesario, la traducción jurada adquiere validez ante instituciones oficiales mediante la certificación notarial y el proceso de apostilla. El requisito exacto depende de la institución ante la que se presente el documento.',
+    },
+    fullService: {
+      title: 'Servicio integral, entregado en su puerta',
+      note: 'Envíenos sus documentos y nosotros gestionamos todo el proceso, incluidas la traducción, la certificación notarial y la apostilla. Sus documentos terminados llegan a su puerta por mensajería. Céntrese en su trabajo y déjenos el resto a nosotros.',
+    },
+    cta: {
+      title: '¿No está seguro de qué servicio necesita?',
+      desc: 'Suba su documento y le mostraremos el servicio y el precio más adecuados.',
+    },
+    documentTypesTitle: 'Tipos de documentos adecuados',
+  },
+
+  serviceItems: {
+    sworn: {
+      name: 'Traducción jurada',
+      short: 'Traducción con validez oficial con la firma y el sello de un traductor jurado.',
+      benefits: ['Válida ante instituciones oficiales', 'Certificación de traductor jurado', 'Proceso rápido'],
+    },
+    notarized: {
+      name: 'Traducción con certificación notarial',
+      short: 'Certificación notarial de una traducción jurada.',
+      benefits: ['Certificación notarial', 'Apta para trámites oficiales', 'Nos encargamos del proceso'],
+    },
+    apostille: {
+      name: 'Apoyo en el proceso de apostilla',
+      short: 'Orientación durante el proceso de apostilla para su validez en el extranjero.',
+      benefits: ['Validez internacional', 'Asesoramiento sobre el proceso', 'Orientación institucional'],
+    },
+    legal: {
+      name: 'Traducción jurídica',
+      short: 'Traducción con dominio de la terminología para contratos, documentos judiciales y oficiales.',
+      benefits: ['Terminología jurídica', 'Garantía de confidencialidad', 'Traductor experto'],
+    },
+    technical: {
+      name: 'Traducción técnica',
+      short: 'Traducción coherente para manuales, especificaciones y documentos técnicos.',
+      benefits: ['Gestión terminológica', 'Formato conservado', 'Especialización sectorial'],
+    },
+    medical: {
+      name: 'Traducción médica',
+      short: 'Traducción precisa para informes, prospectos y documentos médicos.',
+      benefits: ['Terminología médica', 'Enfoque en la precisión', 'Confidencialidad'],
+    },
+    academic: {
+      name: 'Traducción académica',
+      short: 'Lenguaje académico para tesis, artículos y traducciones de diplomas.',
+      benefits: ['Estilo académico', 'Coherencia con el original', 'Entrega puntual'],
+    },
+    localization: {
+      name: 'Localización web y móvil',
+      short: 'Localización culturalmente apropiada de sitios web y aplicaciones.',
+      benefits: ['Adaptación cultural', 'Integración técnica', 'Compatibilidad con SEO'],
+    },
+  },
+
+  corporate: {
+    statsLabels: {
+      corporate: 'Clientes corporativos',
+      discount: 'Descuento por pedidos al por mayor',
+      term: 'Plazo de pago',
+    },
+    seo: {
+      title: 'Soluciones para empresas',
+      description:
+        'Servicios lingüísticos profesionales para empresas con gestión terminológica, opciones de pago aplazado, pedidos al por mayor y un gestor de cuentas dedicado.',
+    },
+    hero: {
+      title: 'Soluciones para empresas',
+      subtitle:
+        'Servicios lingüísticos profesionales con gestión terminológica, opciones de pago aplazado y un gestor de cuentas dedicado adaptado a su empresa.',
+      primaryCta: 'Solicitar un presupuesto para empresas',
+      secondaryCta: 'Enviar correo electrónico',
+    },
+    features: {
+      title: 'Características para empresas',
+      subtitle: 'Soluciones adaptadas a su negocio',
+      items: [
+        {
+          key: 'custom',
+          icon: 'Target',
+          title: 'Servicio personalizado',
+          points: ['Terminología fija', 'Conservación del tono de voz de la marca', 'Gestor de cuentas dedicado', 'Creación de guía de estilo'],
+        },
+        {
+          key: 'volume',
+          icon: 'BarChart3',
+          title: 'Procesamiento por volumen y pago aplazado',
+          points: ['Planes mensuales de traducción', 'Descuentos por pedidos al por mayor', 'Plazos de hasta 30 días', 'Sistema de facturación'],
+        },
+        {
+          key: 'security',
+          icon: 'Lock',
+          title: 'Privacidad y seguridad',
+          points: ['Protocolo NDA', 'Transferencia cifrada de archivos', 'Procesos conformes con la KVKK'],
+        },
+      ],
+    },
+    whyPackage: {
+      title: '¿Por qué un paquete para empresas?',
+      items: [
+        {
+          key: 'terminology',
+          icon: 'Building2',
+          title: 'Gestión de terminología fija',
+          desc: 'Creamos un banco de términos específico para su empresa. El lenguaje de su marca se conserva en todas las traducciones y garantizamos la coherencia. Nos ocupamos de emplear los mismos términos en cada proyecto.',
+        },
+        {
+          key: 'manager',
+          icon: 'Users',
+          title: 'Gestor de cuentas dedicado',
+          desc: 'Su gestor de cuentas dedicado supervisa todos sus procesos. Con una línea de soporte accesible, estamos a su lado en situaciones urgentes.',
+        },
+        {
+          key: 'security',
+          icon: 'ShieldCheck',
+          title: 'Privacidad y seguridad',
+          desc: 'Trabajamos bajo un protocolo NDA. Sus datos están seguros con una sólida infraestructura de seguridad, transferencia cifrada de archivos y procesos conformes con la KVKK.',
+        },
+      ],
+    },
+    payment: {
+      title: 'Opciones de pago',
+      subtitle: 'Planes de pago flexibles adaptados a su negocio',
+      recommendedLabel: 'RECOMENDADO',
+      options: [
+        {
+          key: 'standard',
+          label: 'Pago inmediato',
+          heading: 'Estándar',
+          desc: 'Pago con tarjeta de crédito o transferencia bancaria después de cada pedido',
+          points: ['Pago a plazos con tarjeta de crédito', 'Entrega inmediata'],
+          recommended: false,
+        },
+        {
+          key: 'term',
+          label: 'Pago mensual aplazado',
+          heading: '15-30 días',
+          desc: 'Facturación mensual consolidada y opción de pago aplazado',
+          points: ['Plazo de 30 días', 'Descuento por volumen', 'Informe mensual'],
+          recommended: true,
+        },
+      ],
+    },
+    form: {
+      title: 'Solicitud de paquete para empresas',
+      desc: 'Rellene el formulario y nuestro equipo de expertos se pondrá en contacto con usted',
+      fields: {
+        company: 'Nombre de la empresa',
+        contactName: 'Nombre completo de contacto',
+        email: 'Correo electrónico',
+        phone: 'Teléfono',
+        need: 'Cuéntenos sus necesidades de traducción',
+        consent: 'He leído y acepto la Cláusula Informativa de la KVKK.',
+      },
+      submit: 'Enviar solicitud',
+      success: 'Hemos recibido su solicitud. Nos pondremos en contacto con usted lo antes posible.',
+      note: 'Le responderemos en un plazo de 1 día laborable.',
+    },
+  },
+
+  partnership: {
+    seo: {
+      title: 'Programa de colaboración',
+      description:
+        'Gane comisiones por cada cliente que recomiende. Informes transparentes, recomendaciones mediante código QR y soporte profesional.',
+    },
+    hero: {
+      title: 'Programa de colaboración',
+      value: 'Gane un 20% de comisión por cada cliente que nos recomiende.',
+      subtitle: 'Un sistema transparente, pagos fiables y una cooperación a largo plazo.',
+      cta: 'Solicitar ahora',
+    },
+    advantages: {
+      title: 'Ventajas para colaboradores',
+      subtitle: '¿Por qué convertirse en colaborador de TercümExpert?',
+      items: [
+        { key: 'commission', icon: 'Wallet', title: 'Garantía del 20% de comisión', desc: 'Un sistema de comisiones transparente por cada cliente que recomiende.' },
+        { key: 'qr', icon: 'QrCode', title: 'Recomendación por código QR', desc: 'Seguimiento sencillo de clientes con integración en tarjetas de visita.' },
+        { key: 'reporting', icon: 'BarChart3', title: 'Informes transparentes', desc: 'Panel de seguimiento de comisiones y clientes en tiempo real.' },
+        { key: 'support', icon: 'Users', title: 'Soporte profesional', desc: 'Una línea de soporte para colaboradores y un gestor de cuentas dedicados.' },
+      ],
+    },
+    howItWorks: {
+      title: '¿Cómo funciona?',
+      steps: [
+        { title: 'Solicitar', desc: 'Rellene el formulario de solicitud en línea. Comparta la información de su empresa y sus datos de contacto. Su solicitud se revisa en un plazo de 1 día laborable.' },
+        { title: 'Convertirse en colaborador', desc: 'Una vez aprobada su solicitud, obtiene acceso a su panel de colaborador dedicado. Sus códigos QR y enlaces de recomendación quedan listos.' },
+        { title: 'Recomendar clientes', desc: 'Recomiéndenos a sus clientes mediante código QR, un enlace personalizado o una tarjeta de visita. Cada recomendación se registra automáticamente en el sistema.' },
+        { title: 'Ganar comisiones', desc: 'Gana un 20% de comisión cada vez que un cliente que ha recomendado realiza un pedido. Recibe pagos automáticos cada 15 días.' },
+      ],
+    },
+    sectors: {
+      title: 'Sectores objetivo',
+      subtitle: '¿Para qué sectores es ideal?',
+      items: [
+        { key: 'law', icon: 'Scale', title: 'Bufetes de abogados', desc: 'Necesidad de traducción jurada de expedientes, contratos y documentos legales.' },
+        { key: 'visa', icon: 'Plane', title: 'Asesorías de visados', desc: 'Documentos que requieren traducción jurada, como pasaportes, diplomas y registros civiles.' },
+        { key: 'education', icon: 'GraduationCap', title: 'Asesorías educativas', desc: 'Traducción jurada de documentos de estudiantes y procesos de apostilla.' },
+        { key: 'health', icon: 'HeartPulse', title: 'Turismo sanitario', desc: 'Traducción de informes médicos, historiales de pacientes y documentos sanitarios.' },
+        { key: 'patent', icon: 'Building2', title: 'Oficinas de patentes/marcas', desc: 'Traducción técnica de patentes, registros de marcas y documentos legales.' },
+        { key: 'realestate', icon: 'Home', title: 'Agencias inmobiliarias', desc: 'Traducción de escrituras, contratos y documentos oficiales para inversores extranjeros.' },
+        { key: 'hr', icon: 'Briefcase', title: 'Asesorías de RR. HH.', desc: 'Traducción de currículos, diplomas y cartas de referencia para colocación en el extranjero.' },
+        { key: 'software', icon: 'Code', title: 'Empresas de software', desc: 'Localización de aplicaciones web y móviles, traducción de documentación técnica.' },
+      ],
+    },
+    commission: {
+      title: 'Estructura de comisiones',
+      stats: {
+        commissionLabel: 'Comisión estándar',
+        commissionSub: 'En cada pedido',
+        periodUnit: 'Días',
+        periodLabel: 'Periodo de pago',
+        feeLabel: 'Cuota de alta',
+        feeSub: 'Totalmente gratis',
+      },
+      exampleTitle: 'Cálculo de ingresos de ejemplo',
+      exampleOrderLabel: 'Pedido del cliente que ha recomendado',
+      exampleRateLabel: 'Tasa de comisión',
+      exampleEarningLabel: 'Sus ingresos',
+      note: 'Las tasas de comisión y las condiciones están sujetas al acuerdo de colaboración.',
+    },
+    form: {
+      title: 'Formulario de solicitud de colaborador',
+      subtitle: 'Rellene el formulario y le responderemos en un plazo de 1 día laborable.',
+      fields: {
+        company: 'Nombre de la empresa/organización',
+        sector: 'Sector',
+        contactName: 'Nombre completo de contacto',
+        titleRole: 'Cargo',
+        email: 'Correo electrónico',
+        phone: 'Teléfono',
+        potential: 'Su potencial mensual estimado de recomendaciones',
+        note: 'Cualquier nota que desee añadir',
+        agreement: 'He leído y acepto las condiciones del acuerdo de colaboración.',
+      },
+      sectorPlaceholder: 'Seleccionar',
+      sectorOptions: ['Bufete de abogados', 'Asesoría de visados', 'Asesoría educativa', 'Turismo sanitario', 'Oficina de patentes/marcas', 'Inmobiliaria', 'Asesoría de RR. HH.', 'Software', 'Otro'],
+      potentialOptions: ['1-5 clientes', '5-10 clientes', '10-20 clientes', 'Más de 20 clientes'],
+      submit: 'Enviar solicitud',
+      success: 'Hemos recibido su solicitud. Nos pondremos en contacto con usted.',
+      note: 'Su solicitud se revisará en un plazo de 1 día laborable.',
+    },
+  },
+
+  quote: {
+    seo: {
+      title: 'Cálculo de precio al instante',
+      description: 'Suba su documento o introduzca los datos y obtenga su presupuesto preliminar al instante.',
+    },
+    hero: {
+      title: 'Cálculo de precio al instante',
+      subtitle: 'Suba su documento o introduzca los datos y obtenga un presupuesto preliminar al instante.',
+    },
+    upload: {
+      heading: 'Suba sus documentos',
+      privacy: 'Sus datos se tratan de forma confidencial',
+      tabFile: 'Subir archivo',
+      tabText: 'Introducir texto',
+      chooseFile: 'Elija sus documentos',
+      formats: 'Se aceptan .docx, .xlsx, .pdf, .pptx, .jpg, .png y más de 50 formatos · Máx. 100MB por archivo',
+      dropHint: 'Puede arrastrar y soltar uno o varios archivos en esta zona.',
+      textPlaceholder: 'Pegue o escriba su texto aquí…',
+      totalWords: 'Recuento total de palabras',
+      extracting: 'Contando palabras…',
+      wordsUnit: 'palabras',
+      remove: 'Eliminar',
+      unsupported:
+        'No fue posible contar las palabras automáticamente para este tipo de archivo. Pegue el texto mediante "Introducir texto"; nuestro equipo verificará el recuento al elaborar el presupuesto.',
+      empty:
+        'No se encontró texto seleccionable en el archivo (puede estar escaneado o ser una imagen). Utilice "Introducir texto" o el recuento se verificará durante la elaboración del presupuesto.',
+      error: 'No se pudo leer el archivo. Vuelva a intentarlo o utilice "Introducir texto".',
+      tooLarge: 'El archivo no puede superar los 100MB.',
+      needInput: 'Para obtener un precio, suba un archivo o introduzca texto.',
+    },
+    fields: {
+      upload: 'Subir documento (opcional)',
+      uploadHint: 'PDF, DOC, DOCX o TXT — máx. 10 MB',
+      sourceLang: 'Idioma de origen',
+      targetLang: 'Idioma de destino',
+      serviceType: 'Tipo de servicio',
+      documentType: 'Tipo de documento',
+      wordCount: 'Recuento estimado de palabras',
+      wordCountHint: 'Utilice el control deslizante o introduzca el número manualmente.',
+      options: 'Opciones adicionales',
+      calculate: 'Calcular precio',
+    },
+    options: {
+      urgent: 'Entrega urgente',
+      notarization: 'Certificación notarial',
+      physicalDelivery: 'Entrega física',
+    },
+    languages: {
+      tr: 'Turco',
+      en: 'Inglés',
+      de: 'Alemán',
+      fr: 'Francés',
+      es: 'Español',
+      it: 'Italiano',
+      ru: 'Ruso',
+      ar: 'Árabe',
+    },
+    documentTypes: {
+      diploma: 'Diploma',
+      passport: 'Pasaporte',
+      'civil-registry': 'Certificado del registro civil',
+      contract: 'Contrato',
+      'medical-report': 'Informe médico',
+      'technical-doc': 'Documento técnico',
+      'court-doc': 'Documento judicial',
+      other: 'Otro',
+    },
+    result: {
+      title: 'Presupuesto preliminar',
+      basePrice: 'Tarifa base del servicio',
+      wordPrice: 'Tarifa por palabra',
+      addons: 'Servicios adicionales',
+      total: 'Total',
+      vat: 'IVA',
+      delivery: 'Plazo de entrega estimado',
+      deliveryUnit: 'días laborables',
+      disclaimer: 'Este es un presupuesto preliminar; el precio final se confirma tras la revisión del documento.',
+      order: 'Realizar pedido',
+      whatsapp: 'Contactar por WhatsApp',
+      estimatedWords: 'Palabras estimadas (automático — demo)',
+    },
+    orderConfirm: {
+      title: 'Hemos recibido su pedido',
+      number: 'N.º de pedido',
+      desc: 'Su solicitud y sus documentos se han guardado. Nuestro equipo de expertos revisará el documento y se pondrá en contacto con usted lo antes posible.',
+      viewOrders: 'Mis pedidos',
+      submitting: 'Creando pedido…',
+      error: 'Hubo un problema al crear su pedido. Vuelva a intentarlo.',
+    },
+    gate: {
+      title: 'Su precio está listo',
+      subtitle: 'Inicie sesión o verifique sus datos para ver el precio y realizar un pedido.',
+      loginCta: 'Iniciar sesión / Registrarse',
+      or: 'o continúe de forma rápida',
+      firstName: 'Nombre',
+      lastName: 'Apellidos',
+      email: 'Correo electrónico',
+      sendCode: 'Enviar código de verificación',
+      codeLabel: 'Código de verificación',
+      codeSentA: 'ha recibido un código de verificación.',
+      verify: 'Verificar y ver el precio',
+      resend: 'Reenviar código',
+      resent: 'Se ha enviado un nuevo código.',
+      back: 'Cambiar datos',
+      errNames: 'El nombre y los apellidos son obligatorios.',
+      errEmail: 'Introduzca un correo electrónico válido.',
+      errCode: 'Introduzca el código completo.',
+      note: 'Su correo electrónico se utiliza únicamente para el presupuesto y el pedido.',
+    },
+    note: {
+      label: 'Nota sobre su pedido (opcional)',
+      placeholder: 'Aquí puede escribir sus solicitudes de entrega, terminología o peticiones especiales.',
+    },
+  },
+
+  order: {
+    seo: {
+      title: 'Seguimiento del pedido',
+      description: 'Siga el estado de su pedido.',
+    },
+    numberLabel: 'N.º de pedido',
+    placedOn: 'Fecha del pedido',
+    estimatedLabel: 'Entrega estimada de la traducción',
+    cargoEstimatedLabel: 'Fecha de envío estimada',
+    timelineTitle: 'Estado del pedido',
+    steps: {
+      received: 'Hemos recibido su pedido',
+      in_progress: 'En proceso',
+      translated: 'Traducción completada',
+      shipped: 'Enviado',
+      delivered: 'Entregado',
+      cancelled: 'Pedido cancelado',
+    },
+    stepDesc: {
+      received: 'Su solicitud y sus documentos han llegado a nuestro sistema. Nuestro equipo de expertos los revisará y comenzará en breve.',
+      in_progress: 'Nuestro traductor experto ha comenzado su traducción.',
+      translated: 'Su traducción está completa y se han realizado las comprobaciones finales.',
+      shipped: 'Su documento se ha entregado a la mensajería; puede seguirlo con el botón de abajo.',
+      delivered: 'Su documento se le ha enviado por correo electrónico.',
+      cancelled: 'Este pedido se ha cancelado. Si tiene alguna pregunta, contáctenos.',
+    },
+    cargoReady: 'Su documento se ha enviado. Sígalo con un solo toque:',
+    cargoPending: 'El código de seguimiento aparecerá aquí una vez que se envíe su documento.',
+    trackCargo: 'Seguir mi envío',
+    digitalPending: 'Una vez completada su traducción, sus archivos se le enviarán por correo electrónico.',
+    digitalDelivered: 'Su traducción se le ha enviado por correo electrónico. Revise su bandeja de entrada (y la carpeta de spam).',
+    detailsTitle: 'Detalles del pedido',
+    fields: {
+      service: 'Servicio',
+      langs: 'Idiomas',
+      documentType: 'Tipo de documento',
+      words: 'Palabras',
+      delivery: 'Plazo estimado',
+      total: 'Importe',
+      note: 'Su nota',
+    },
+    myOrders: 'Mis pedidos',
+    backHome: 'Volver al inicio',
+    whatsapp: 'Contactar por WhatsApp',
+    loading: 'Cargando pedido…',
+    loginRequired: {
+      title: 'Inicie sesión para ver su pedido',
+      desc: 'Solo puede acceder a los detalles de su pedido tras iniciar sesión con su cuenta.',
+      login: 'Iniciar sesión',
+    },
+    notFound: {
+      title: 'Pedido no encontrado',
+      desc: 'Este número de pedido no le pertenece o no existe. Compruebe el enlace.',
+      home: 'Volver al inicio',
+    },
+  },
+
+  faq: {
+    seo: {
+      title: 'Preguntas frecuentes',
+      description: 'Preguntas frecuentes sobre traducción jurada, plazo de entrega, precios, certificación notarial y condiciones para empresas.',
+    },
+    hero: { title: 'Preguntas frecuentes', subtitle: 'La respuesta que busca está aquí.' },
+    categoriesTitle: 'Categorías',
+    searchPlaceholder: 'Busque preguntas o palabras clave…',
+    empty: 'Ninguna pregunta coincidió con su búsqueda. Pruebe con otra palabra o contáctenos.',
+    categories: FAQ_CATEGORIES_ES,
+    items: FAQ_ITEMS_ES,
+    notFound: {
+      title: '¿No ha encontrado la respuesta a su pregunta?',
+      contact: 'Contáctenos',
+      whatsapp: 'Soporte por WhatsApp',
+    },
+  },
+
+  contact: {
+    seo: {
+      title: 'Contacto',
+      description: 'Póngase en contacto con TercümExpert: teléfono, correo electrónico, WhatsApp y formulario de contacto.',
+    },
+    hero: { title: 'Contacto', subtitle: '¿En qué podemos ayudarle?' },
+    infoTitle: 'Información de contacto',
+    labels: {
+      phone: 'Teléfono',
+      email: 'Correo electrónico',
+      whatsapp: 'WhatsApp',
+      address: 'Dirección',
+      hours: 'Horario de atención',
+    },
+    form: {
+      title: 'Contáctenos',
+      fields: {
+        name: 'Nombre completo',
+        email: 'Correo electrónico',
+        phone: 'Teléfono',
+        subject: 'Asunto',
+        message: 'Mensaje',
+        consent: 'He leído y acepto la Cláusula Informativa de la KVKK.',
+      },
+      submit: 'Enviar mensaje',
+      success: 'Hemos recibido su mensaje. Nos pondremos en contacto con usted en breve.',
+    },
+    map: {
+      title: 'Nuestra ubicación',
+      subtitle: 'Encuéntrenos en el mapa',
+      placeholder: 'Zona del mapa',
+      note: 'El mapa de ubicación se mostrará aquí próximamente.',
+    },
+  },
+
+  auth: {
+    seo: {
+      title: 'Iniciar sesión / Registrarse',
+      description: 'Inicie sesión en su cuenta de TercümExpert o cree una nueva.',
+    },
+    tabs: { login: 'Iniciar sesión', register: 'Registrarse' },
+    google: 'Continuar con Google',
+    or: 'o',
+    fields: {
+      firstName: 'Nombre',
+      lastName: 'Apellidos',
+      email: 'Correo electrónico',
+      password: 'Contraseña',
+      code: 'Código de verificación',
+    },
+    login: {
+      title: 'Inicie sesión en su cuenta',
+      submit: 'Iniciar sesión',
+      noAccount: '¿No tiene una cuenta?',
+      switchToRegister: 'Regístrese',
+    },
+    register: {
+      title: 'Cree una cuenta nueva',
+      submit: 'Registrarse',
+      haveAccount: '¿Ya tiene una cuenta?',
+      switchToLogin: 'Inicie sesión',
+      consent: 'Al crear una cuenta, acepto la Cláusula Informativa de la KVKK y la Política de Privacidad.',
+    },
+    verify: {
+      title: 'Verifique su correo electrónico',
+      desc: '— introduzca el código de 6 dígitos que enviamos a esta dirección.',
+      submit: 'Verificar y continuar',
+      spam: 'El código puede tardar unos minutos; revise también su carpeta de spam o correo no deseado.',
+      resend: 'Reenviar código',
+      resent: 'Se ha enviado un nuevo código.',
+      back: 'Volver',
+    },
+    signedIn: {
+      title: 'Mi cuenta',
+      greeting: 'Bienvenido',
+      logout: 'Cerrar sesión',
+    },
+    orders: {
+      title: 'Mis pedidos',
+      empty: 'Todavía no tiene pedidos. Puede crear su primer pedido desde Calcular precio.',
+      loading: 'Cargando pedidos…',
+      error: 'No se pudieron cargar los pedidos. Actualice la página.',
+      status: {
+        received: 'Recibido',
+        in_progress: 'En proceso',
+        translated: 'Traducción completada',
+        shipped: 'Enviado',
+        delivered: 'Entregado',
+        cancelled: 'Cancelado',
+      },
+      track: 'Seguir',
+    },
+    errors: {
+      nameRequired: 'El nombre y los apellidos son obligatorios.',
+      emailInvalid: 'Introduzca un correo electrónico válido.',
+      passwordShort: 'La contraseña debe tener al menos 6 caracteres.',
+      codeInvalid: 'Introduzca el código de 6 dígitos.',
+      consentRequired: 'Es necesaria la aceptación para continuar.',
+    },
+  },
+
+  blog: {
+    seo: { title: 'Blog', description: 'Contenido guía sobre traducción, certificación notarial, apostilla y localización.' },
+    hero: { title: 'Blog', subtitle: 'Guías del mundo de la traducción.' },
+    searchPlaceholder: 'Buscar entradas…',
+    readingTime: 'min de lectura',
+    relatedTitle: 'Entradas relacionadas',
+    allCategories: 'Todas',
+    empty: 'Ninguna entrada coincidió con este criterio.',
+  },
+
+  legal: {
+    lastUpdatedLabel: 'Última actualización',
+    draftNotice:
+      'Este texto es un borrador y debe ser revisado por un experto jurídico antes de su publicación. La información de la empresa aún no se ha verificado.',
+    kvkk: {
+      seo: { title: 'Cláusula Informativa de la KVKK', description: 'Cláusula informativa sobre la protección de datos personales.' },
+      title: 'Cláusula Informativa de la KVKK',
+      sections: [
+        { heading: 'Responsable del tratamiento', body: 'El responsable del tratamiento y la información de contacto se añadirán antes del lanzamiento.' },
+        { heading: 'Datos personales tratados', body: 'Durante los procesos de contacto y pedido pueden tratarse datos de nombre, contacto y documentos.' },
+        { heading: 'Fines del tratamiento', body: 'Prestación del servicio, presupuestos, comunicación y obligaciones legales.' },
+        { heading: 'Bases jurídicas', body: 'Ejecución de un contrato, consentimiento explícito e interés legítimo.' },
+        { heading: 'Plazos de conservación', body: 'Los datos se conservan durante los plazos estipulados en la legislación pertinente.' },
+        { heading: 'Transferencia', body: 'Se transfieren únicamente en la medida necesaria para el servicio y de conformidad con la legislación.' },
+        { heading: 'Sus derechos', body: 'Puede ejercer sus derechos en virtud del artículo 11 de la KVKK.' },
+        { heading: 'Cómo presentar una solicitud', body: 'Puede presentar sus solicitudes a través de los canales de contacto indicados.' },
+      ],
+    },
+    privacy: {
+      seo: { title: 'Política de Privacidad', description: 'Política sobre la confidencialidad de los datos personales y los documentos.' },
+      title: 'Política de Privacidad',
+      sections: [
+        { heading: 'Información recopilada', body: 'Información de contacto y documentos subidos.' },
+        { heading: 'Uso', body: 'Se utiliza únicamente para la prestación del servicio y la comunicación.' },
+        { heading: 'Seguridad de los documentos', body: 'Los documentos se tratan con transferencia cifrada y principios de confidencialidad.' },
+        { heading: 'Cookies', body: 'Los detalles se encuentran en la Política de Cookies.' },
+      ],
+    },
+    distanceSales: {
+      seo: { title: 'Contrato de Venta a Distancia', description: 'Contrato de venta a distancia para la venta de servicios.' },
+      title: 'Contrato de Venta a Distancia',
+      sections: [
+        { heading: 'Partes', body: 'La información del vendedor y del comprador se añadirá antes del lanzamiento.' },
+        { heading: 'Alcance del servicio', body: 'El alcance de los servicios de traducción/certificación contratados.' },
+        { heading: 'Derecho de desistimiento y excepciones', body: 'Pueden aplicarse excepciones al desistimiento en servicios preparados específicamente para una persona/pedido.' },
+        { heading: 'Devoluciones y cancelación', body: 'Aquí se establecen las condiciones de devolución y cancelación.' },
+      ],
+    },
+    cookies: {
+      seo: { title: 'Política de Cookies', description: 'Categorías de cookies utilizadas en el sitio y gestión de preferencias.' },
+      title: 'Política de Cookies',
+      sections: [
+        { heading: '¿Qué es una cookie?', body: 'Las cookies son pequeños archivos almacenados en su navegador.' },
+        { heading: 'Categorías', body: 'Cookies necesarias, analíticas, de marketing y de preferencias.' },
+        { heading: 'Gestión de preferencias', body: 'Puede actualizar sus preferencias de cookies en cualquier momento.' },
+      ],
+    },
+  },
+
+  footer: {
+    tagline: 'Su socio de confianza en servicios profesionales de traducción.',
+    columns: {
+      quickLinks: 'Enlaces rápidos',
+      services: 'Servicios',
+      contact: 'Contacto',
+    },
+    quickLinks: {
+      corporate: 'Empresas',
+      services: 'Nuestros servicios',
+      quote: 'Calcular precio',
+      blog: 'Blog',
+      faq: 'Preguntas frecuentes',
+      contact: 'Contacto',
+    },
+    serviceLinks: {
+      sworn: 'Traducción jurada',
+      notarized: 'Traducción con certificación notarial',
+      apostille: 'Proceso de apostilla',
+      corporate: 'Soluciones para empresas',
+      partnership: 'Programa de colaboración',
+    },
+    legal: {
+      kvkk: 'KVKK',
+      privacy: 'Política de Privacidad',
+      distanceSales: 'Contrato de Venta a Distancia',
+      cookies: 'Política de Cookies',
+    },
+    socialTitle: 'Síganos',
+    whatsapp: 'Soporte por WhatsApp',
+    rights: 'Todos los derechos reservados.',
+  },
+
+  cookie: {
+    title: 'Preferencias de cookies',
+    desc: 'Utilizamos cookies para mejorar su experiencia. Las cookies distintas de las necesarias solo se activan con su consentimiento.',
+    accept: 'Aceptar',
+    reject: 'Rechazar',
+    manage: 'Gestionar preferencias',
+    save: 'Guardar preferencias',
+    categories: {
+      necessary: { label: 'Necesarias', desc: 'Imprescindibles para el funcionamiento del sitio; no se pueden desactivar.' },
+      analytics: { label: 'Analíticas', desc: 'Nos ayudan a comprender el uso.' },
+      marketing: { label: 'Marketing', desc: 'Para contenido y anuncios relevantes.' },
+      preferences: { label: 'Preferencias', desc: 'Recuerda sus preferencias.' },
+    },
+  },
+
+  chatbot: {
+    title: 'Soporte de TercümExpert',
+    open: 'Abrir chat',
+    close: 'Cerrar chat',
+    minimize: 'Minimizar',
+    clear: 'Borrar conversación',
+    inputPlaceholder: 'Escriba su mensaje…',
+    send: 'Enviar',
+    typing: 'Escribiendo…',
+    welcome:
+      'Hola y bienvenido a TercümExpert. Puedo ayudarle con traducción, precios, certificación notarial, apostilla o servicios para empresas.',
+    quickQuestions: [
+      '¿Cómo se calcula el precio?',
+      '¿Qué es la traducción jurada?',
+      'Quiero subir un documento',
+      'Quiero un presupuesto para empresas',
+      '¿Es necesaria la certificación notarial?',
+      'Póngame en contacto con un representante',
+    ],
+    handoff: 'Conectar con un representante',
+    toWhatsapp: 'Transferir a WhatsApp',
+    disclaimer: 'Esta información es general; confirme los requisitos exactos con la institución correspondiente.',
+    sensitiveWarning:
+      'No comparta datos personales sensibles a través de este chat. Puede enviar sus documentos mediante la zona de carga segura.',
+  },
+
+  notFound: {
+    seo: { title: 'Página no encontrada', description: 'No se pudo encontrar la página que busca.' },
+    title: 'Página no encontrada',
+    desc: 'Es posible que la página que busca se haya movido o que nunca haya existido.',
+    home: 'Volver al inicio',
+  },
+}
