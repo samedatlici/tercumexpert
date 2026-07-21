@@ -23,6 +23,10 @@ interface AuthContextValue {
   verifyEmailCode: (email: string, code: string) => Promise<{ error: string | null }>
   /** Doğrulama e-postasını yeniden gönderir. */
   resendCode: (email: string, redirectTo: string) => Promise<{ error: string | null }>
+  /** Misafir hızlı geçiş: şifresiz e-posta kodu gönderir (ad/soyad kaydedilir). */
+  sendGuestCode: (email: string, firstName: string, lastName: string) => Promise<{ error: string | null }>
+  /** Misafir hızlı geçiş: e-posta koduyla oturum açar. */
+  verifyGuestCode: (email: string, code: string) => Promise<{ error: string | null }>
   signOut: () => Promise<void>
 }
 
@@ -108,6 +112,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email,
           options: { emailRedirectTo: redirectTo },
         })
+        return { error: error ? trError(error.message) : null }
+      },
+      async sendGuestCode(email, firstName, lastName) {
+        const { error } = await supabase.auth.signInWithOtp({
+          email,
+          options: {
+            shouldCreateUser: true,
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              full_name: `${firstName} ${lastName}`.trim(),
+            },
+          },
+        })
+        return { error: error ? trError(error.message) : null }
+      },
+      async verifyGuestCode(email, code) {
+        const { error } = await supabase.auth.verifyOtp({ email, token: code, type: 'email' })
         return { error: error ? trError(error.message) : null }
       },
       async signOut() {

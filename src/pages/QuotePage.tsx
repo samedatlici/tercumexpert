@@ -1,10 +1,13 @@
-import { useId, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
 import { PageHero } from '@/components/common/PageHero'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
+import { useAuth } from '@/app/providers/AuthProvider'
+import { buildPath } from '@/app/router/routes'
 import { cn } from '@/lib/cn'
 import { calculateQuote } from '@/features/quote-calculator/model/calculate'
 import type { QuoteBreakdown } from '@/features/quote-calculator/model/types'
@@ -36,12 +39,14 @@ interface FileEntry {
 }
 
 export default function QuotePage() {
-  const { dict, formatCurrency } = useI18n()
+  const { locale, dict, formatCurrency } = useI18n()
+  const { user } = useAuth()
   const q = dict.quote
   const u = q.upload
   const ids = useId()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const keyCounter = useRef(0)
+  const pendingRef = useRef<QuoteBreakdown | null>(null)
 
   const [mode, setMode] = useState<Mode>('file')
   const [files, setFiles] = useState<FileEntry[]>([])
@@ -56,7 +61,16 @@ export default function QuotePage() {
   const [notarization, setNotarization] = useState(false)
   const [physicalDelivery, setPhysicalDelivery] = useState(false)
   const [result, setResult] = useState<QuoteBreakdown | null>(null)
+  const [gateOpen, setGateOpen] = useState(false)
   const [needInput, setNeedInput] = useState(false)
+
+  // Kullanıcı giriş yapınca (veya misafir doğrulaması tamamlanınca) bekleyen fiyatı göster.
+  useEffect(() => {
+    if (user && gateOpen && pendingRef.current) {
+      setResult(pendingRef.current)
+      setGateOpen(false)
+    }
+  }, [user, gateOpen])
 
   const textWords = countWords(text)
   const fileWords = files.reduce((sum, f) => sum + (f.status === 'ok' ? f.words : 0), 0)
@@ -98,21 +112,30 @@ export default function QuotePage() {
     if (wordCount <= 0) {
       setNeedInput(true)
       setResult(null)
+      setGateOpen(false)
       return
     }
     setNeedInput(false)
-    setResult(
-      calculateQuote({
-        service,
-        documentType,
-        sourceLang,
-        targetLang,
-        wordCount,
-        urgent,
-        notarization,
-        physicalDelivery,
-      }),
-    )
+    const breakdown = calculateQuote({
+      service,
+      documentType,
+      sourceLang,
+      targetLang,
+      wordCount,
+      urgent,
+      notarization,
+      physicalDelivery,
+    })
+    if (user) {
+      // Giriş yapılmışsa fiyatı doğrudan göster.
+      setResult(breakdown)
+      setGateOpen(false)
+    } else {
+      // Giriş yoksa fiyatı gizle; kapıyı aç (giriş veya misafir doğrulaması).
+      pendingRef.current = breakdown
+      setResult(null)
+      setGateOpen(true)
+    }
   }
 
   const wa = whatsappLink('Merhaba, fiyat teklifi hakkında bilgi almak istiyorum.')
@@ -330,6 +353,8 @@ export default function QuotePage() {
                 </div>
                 <p className="mt-3 text-center text-xs text-text-muted">{dict.common.states.demoNotice}</p>
               </div>
+            ) : gateOpen && !user ? (
+              <PriceGate />
             ) : (
               <div className="rounded-lg border border-dashed border-border p-6 text-sm text-text-secondary">
                 {q.hero.subtitle}
@@ -339,6 +364,115 @@ export default function QuotePage() {
         </div>
       </section>
     </>
+  )
+}
+
+/** Fiyat kapısı: giriş yoksa fiyatı gösterir yerine giriş / misafir doğrulaması ister. */
+function PriceGate() {
+  const { locale, dict } = useI18n()
+  const g = dict.quote.gate
+  const { sendGuestCode, verifyGuestCode } = useAuth()
+  const [step, setStep] = useState<'info' | 'code'>('info')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [code, setCode] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [info, setInfo] = useState<string | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+
+  const onSend = async (e: FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setInfo(null)
+    if (firstName.trim().length < 2 || lastName.trim().length < 2) return setError(g.errNames)
+    if (!emailOk(email)) return setError(g.errEmail)
+    setBusy(true)
+    const res = await sendGuestCode(email, firstName, lastName)
+    setBusy(false)
+    if (res.error) return setError(res.error)
+    setStep('code')
+  }
+
+  const onVerify = async (e: FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    if (code.trim().length < 6) return setError(g.errCode)
+    setBusy(true)
+    const res = await verifyGuestCode(email, code.trim())
+    setBusy(false)
+    if (res.error) return setError(res.error)
+    // Başarılı → oturum açılır; üst bileşendeki effect fiyatı gösterir.
+  }
+
+  const onResend = async () => {
+    setError(null)
+    setInfo(null)
+    setBusy(true)
+    const res = await sendGuestCode(email, firstName, lastName)
+    setBusy(false)
+    if (res.error) return setError(res.error)
+    setInfo(g.resent)
+  }
+
+  return (
+    <div className="rounded-lg border border-border bg-surface p-6">
+      <div className="flex items-center gap-2">
+        <Icon name="Lock" className="size-5 text-primary" />
+        <h2 className="text-lg font-bold">{g.title}</h2>
+      </div>
+      <p className="mt-1 text-sm text-text-secondary">{g.subtitle}</p>
+
+      <Link to={buildPath(locale, 'auth')} className="mt-4 block">
+        <Button intent="secondary" block>{g.loginCta}</Button>
+      </Link>
+
+      <div className="my-4 flex items-center gap-3 text-xs text-text-muted">
+        <span className="h-px flex-1 bg-border" /> {g.or} <span className="h-px flex-1 bg-border" />
+      </div>
+
+      {step === 'info' ? (
+        <form className="space-y-3" onSubmit={onSend} noValidate>
+          <div className="grid grid-cols-2 gap-3">
+            <input className={fieldClass} placeholder={g.firstName} autoComplete="given-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+            <input className={fieldClass} placeholder={g.lastName} autoComplete="family-name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+          </div>
+          <input type="email" className={fieldClass} placeholder={g.email} autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          {error && <p className="text-sm text-danger">{error}</p>}
+          <Button type="submit" intent="outline" block disabled={busy}>{g.sendCode}</Button>
+          <p className="text-xs text-text-muted">{g.note}</p>
+        </form>
+      ) : (
+        <form className="space-y-3" onSubmit={onVerify} noValidate>
+          <p className="text-sm text-text-secondary">
+            <span className="font-medium text-text-primary">{email}</span> {g.codeSentA}
+          </p>
+          <input
+            className={cn(fieldClass, 'text-center tracking-[0.4em]')}
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            maxLength={8}
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+            placeholder="______"
+            aria-label={g.codeLabel}
+          />
+          {error && <p className="text-sm text-danger">{error}</p>}
+          {info && <p className="text-sm text-success">{info}</p>}
+          <Button type="submit" intent="secondary" block disabled={busy}>{g.verify}</Button>
+          <div className="flex items-center justify-between text-xs">
+            <button type="button" onClick={() => { setStep('info'); setError(null) }} className="text-text-secondary underline underline-offset-4 hover:text-text-primary">
+              {g.back}
+            </button>
+            <button type="button" onClick={() => void onResend()} disabled={busy} className="text-text-secondary underline underline-offset-4 hover:text-text-primary">
+              {g.resend}
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
   )
 }
 
