@@ -8,6 +8,7 @@ export const LOCALES = [
   { code: 'en', label: 'English', htmlLang: 'en', ogLocale: 'en_US', dir: 'ltr', contentStatus: 'base' },
   { code: 'fr', label: 'Français', htmlLang: 'fr', ogLocale: 'fr_FR', dir: 'ltr', contentStatus: 'base' },
   { code: 'de', label: 'Deutsch', htmlLang: 'de', ogLocale: 'de_DE', dir: 'ltr', contentStatus: 'placeholder' },
+  { code: 'nl', label: 'Nederlands', htmlLang: 'nl', ogLocale: 'nl_NL', dir: 'ltr', contentStatus: 'placeholder' },
   { code: 'es', label: 'Español', htmlLang: 'es', ogLocale: 'es_ES', dir: 'ltr', contentStatus: 'placeholder' },
   { code: 'ar', label: 'العربية', htmlLang: 'ar', ogLocale: 'ar_AR', dir: 'rtl', contentStatus: 'placeholder' },
   { code: 'ru', label: 'Русский', htmlLang: 'ru', ogLocale: 'ru_RU', dir: 'ltr', contentStatus: 'placeholder' },

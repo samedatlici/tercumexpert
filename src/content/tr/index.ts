@@ -479,6 +479,7 @@ export const tr = {
       it: 'İtalyanca',
       ru: 'Rusça',
       ar: 'Arapça',
+      nl: 'Felemenkçe',
     },
     documentTypes: {
       diploma: 'Diploma',

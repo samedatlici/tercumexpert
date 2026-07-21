@@ -481,6 +481,7 @@ export const en: PartialDictionary = {
       it: 'Italian',
       ru: 'Russian',
       ar: 'Arabic',
+      nl: 'Dutch',
     },
     documentTypes: {
       diploma: 'Diploma',

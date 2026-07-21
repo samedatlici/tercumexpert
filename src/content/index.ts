@@ -9,8 +9,9 @@ import { es } from './es'
 import { ar } from './ar'
 import { ru } from './ru'
 import { it } from './it'
+import { nl } from './nl'
 
-const PARTIALS: Record<Locale, PartialDictionary> = { tr, en, fr, de, es, ar, ru, it }
+const PARTIALS: Record<Locale, PartialDictionary> = { tr, en, fr, de, es, ar, ru, it, nl }
 
 /**
  * İstenen dilin tam sözlüğünü üretir. Fallback zinciri (§10):

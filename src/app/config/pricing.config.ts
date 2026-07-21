@@ -100,6 +100,7 @@ export const QUOTE_LANGUAGES: { code: string; labelTr: string; tier: LanguageTie
   { code: 'tr', labelTr: 'Türkçe', tier: 'common' },
   { code: 'en', labelTr: 'İngilizce', tier: 'common' },
   { code: 'de', labelTr: 'Almanca', tier: 'common' },
+  { code: 'nl', labelTr: 'Felemenkçe', tier: 'medium' },
   { code: 'fr', labelTr: 'Fransızca', tier: 'medium' },
   { code: 'es', labelTr: 'İspanyolca', tier: 'medium' },
   { code: 'it', labelTr: 'İtalyanca', tier: 'medium' },
