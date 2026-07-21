@@ -1,8 +1,856 @@
 import type { PartialDictionary } from '@/types/i18n'
+import { FAQ_CATEGORIES_DE, FAQ_ITEMS_DE } from '@/content/faq-data.de'
 
 /**
- * DE — PLACEHOLDER. İçerik henüz eklenmedi; kullanıcıya yarım/makine çevirisi
- * gösterilmez. Fallback zinciri (TR<-EN<-bu) sayesinde tam ve tutarlı içerik gösterilir.
- * Nihai çeviri onaylandığında bu dosya doldurulur.
+ * DEUTSCH — vollständige Übersetzung auf Basis der englischen Fassung.
+ * Fallback-Kette: TR (Quelle) <- EN (Basis) <- weitere Sprachen.
+ * FAQ-Fragen/-Antworten (faq.categories / faq.items) stammen aus einem
+ * eigenen, sprachspezifischen Datensatz (content/faq-data.de).
  */
-export const de: PartialDictionary = {}
+export const de: PartialDictionary = {
+  common: {
+    tagline: 'Ihr zuverlässiger Partner für professionelle Übersetzungsdienstleistungen.',
+    nav: {
+      home: 'Startseite',
+      services: 'Leistungen',
+      quote: 'Angebot einholen',
+      corporate: 'Unternehmen',
+      partnership: 'Partnerschaft',
+      blog: 'Blog',
+      faq: 'FAQ',
+      contact: 'Kontakt',
+    },
+    actions: {
+      getQuote: 'Angebot einholen',
+      calculatePrice: 'Preis berechnen',
+      uploadDocument: 'Dokument hochladen',
+      whatsapp: 'Über WhatsApp schreiben',
+      learnMore: 'Mehr erfahren',
+      viewAll: 'Alle anzeigen',
+      showMore: 'Mehr anzeigen',
+      showLess: 'Weniger anzeigen',
+      send: 'Senden',
+      apply: 'Bewerben',
+      order: 'Bestellung aufgeben',
+      contactUs: 'Kontakt',
+      openMenu: 'Menü öffnen',
+      closeMenu: 'Menü schließen',
+      selectLanguage: 'Sprache auswählen',
+      skipToContent: 'Zum Inhalt springen',
+      login: 'Anmelden',
+      logout: 'Abmelden',
+      account: 'Mein Konto',
+    },
+    states: {
+      loading: 'Wird geladen…',
+      error: 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
+      required: 'Dieses Feld ist erforderlich.',
+      demoNotice: 'Demo: Formulardaten werden noch nicht an einen Server gesendet.',
+      unverified: 'Noch zu bestätigen',
+    },
+    topbar: {
+      phoneLabel: 'Telefon',
+      emailLabel: 'E-Mail',
+      hoursLabel: 'Öffnungszeiten',
+      afterHours: 'Auch außerhalb der Geschäftszeiten ist ein Eil-Übersetzungsservice verfügbar.',
+      workingHours: 'Wochentags 09:00 - 18:00 Uhr | Service außerhalb der Geschäftszeiten verfügbar',
+    },
+  },
+
+  home: {
+    seo: {
+      title: 'TercümExpert — Professionelle Übersetzungsdienstleistungen',
+      description:
+        'Beglaubigte Übersetzung, notarielle Beglaubigung und Übersetzungslösungen für Unternehmen. Laden Sie Ihr Dokument hoch, erhalten Sie sofort ein unverbindliches Angebot und eine professionelle Lieferung.',
+    },
+    hero: {
+      title: 'Ihr zuverlässiger Partner für professionelle',
+      titleAccent: 'Übersetzungsdienstleistungen',
+      subtitle: 'Laden Sie Ihr Dokument hoch, sehen Sie den Preis und erhalten Sie eine professionelle Lieferung.',
+      support: 'Beglaubigte Übersetzung • Notarielle Beglaubigung • Lösungen für Unternehmen',
+    },
+    trust: {
+      title: 'Warum vertraut man uns?',
+      items: [
+        { key: 'languages', label: 'Über 50 Sprachen' },
+        { key: 'delivery', label: 'Lieferung in 24 Stunden' },
+        { key: 'notary', label: 'Notarielle Beglaubigung' },
+        { key: 'quality', label: 'Qualitätssicherung' },
+      ],
+    },
+    stats: {
+      title: 'TercümExpert in Zahlen',
+      note: 'Die folgenden Zahlen werden bis zu ihrer Bestätigung nicht als endgültige Angaben dargestellt.',
+      labels: {
+        satisfaction: 'Kundenzufriedenheit',
+        completed: 'Abgeschlossene Aufträge',
+        languages: 'Sprachunterstützung',
+        corporate: 'Firmenkunden',
+      },
+    },
+    howItWorks: {
+      title: 'Wie funktioniert es?',
+      subtitle: 'Professionelle Übersetzung in fünf Schritten.',
+      steps: [
+        { key: 'upload', title: 'Hochladen', desc: 'Laden Sie Ihr Dokument sicher hoch.' },
+        { key: 'select', title: 'Auswählen', desc: 'Wählen Sie Sprache und Serviceart.' },
+        { key: 'confirm', title: 'Bestätigen', desc: 'Bestätigen Sie Ihre Bestellung.' },
+        { key: 'track', title: 'Verfolgen', desc: 'Verfolgen Sie den Prozess in Echtzeit.' },
+        { key: 'receive', title: 'Erhalten', desc: 'Erhalten Sie Ihre professionelle Lieferung.' },
+      ],
+    },
+    services: {
+      title: 'Unsere Leistungen',
+      subtitle: 'Fachgerechte Übersetzung für jeden Dokumententyp.',
+    },
+    why: {
+      title: 'Warum TercümExpert?',
+      subtitle: 'Die Merkmale, die uns vom Wettbewerb abheben',
+      features: [
+        { key: 'autoQuote', title: 'Automatische Preisberechnung', desc: 'Ein Richtpreis in Sekunden.' },
+        { key: 'whatsapp', title: 'Schnelles WhatsApp-Angebot', desc: 'Kontakt mit einem Fingertipp.' },
+        { key: 'terminology', title: 'Terminologiemanagement', desc: 'Einheitliche, unternehmensgerechte Sprache.' },
+        { key: 'revision', title: 'Korrekturrecht', desc: 'Ein auf Zufriedenheit ausgerichteter Prozess.' },
+        { key: 'languages', title: 'Unterstützung von über 50 Sprachen', desc: 'Breite Abdeckung an Sprachpaaren.' },
+        { key: 'terms', title: 'Firmenkonto-System', desc: 'Flexible Zahlung für Unternehmen.' },
+      ],
+    },
+    corporateCta: {
+      title: 'Lösungen für Unternehmen',
+      desc: 'Professionelle Sprachdienstleistungen mit Terminologiemanagement, Zahlungszieloptionen und einem persönlichen Kundenbetreuer, individuell auf Ihr Unternehmen zugeschnitten.',
+      action: 'Firmenangebot anfordern',
+    },
+    partnershipTeaser: {
+      title: 'Partnerprogramm',
+      subtitle: 'Verdienen Sie 20 % Provision für jeden Kunden, den Sie an uns vermitteln.',
+      items: [
+        { key: 'commission', title: 'Transparente Provision', desc: '20 % Provision für jede Vermittlung (nach Vereinbarung). Transparente Einnahmen mit einem Echtzeit-Tracking-Panel.' },
+        { key: 'qr', title: 'QR-Code-System', desc: 'Einfache Kundenverfolgung mit Visitenkartenintegration. Web- und WhatsApp-QR-Codes.' },
+      ],
+      cta: 'Als Partner bewerben',
+    },
+    testimonials: {
+      title: 'Kundenbewertungen',
+      subtitle: 'Echte Kundenbewertungen werden hier vor dem Start ergänzt.',
+      placeholderNote: 'Platzhalter — echte Bewertungen werden integriert.',
+      items: [
+        { key: 't1', role: 'Anwaltskanzlei' },
+        { key: 't2', role: 'Gesundheitseinrichtung' },
+        { key: 't3', role: 'Firmenkunde' },
+        { key: 't4', role: 'Privatkunde' },
+      ],
+    },
+    blogTeaser: {
+      title: 'Blog',
+      subtitle: 'Aktuelle Inhalte aus der Welt der Übersetzung',
+      viewAll: 'Alle Blogbeiträge anzeigen',
+    },
+    finalCta: {
+      title: 'Jetzt loslegen',
+      desc: 'Laden Sie Ihre Dokumente hoch, erhalten Sie sofort ein Angebot und profitieren Sie von professionellen Übersetzungsdienstleistungen.',
+      primary: 'Angebot einholen',
+      secondary: 'Kontakt',
+    },
+  },
+
+  services: {
+    seo: {
+      title: 'Übersetzungsdienstleistungen',
+      description:
+        'Beglaubigte, notariell beglaubigte, juristische, technische, medizinische und akademische Übersetzung sowie Web-/Mobile-Lokalisierung. Dokumententypen, Ablauf, Lieferung und Sprachpaare.',
+    },
+    hero: {
+      title: 'Übersetzungsdienstleistungen',
+      subtitle: 'Übersetzung mit der richtigen Terminologie für jedes Fachgebiet.',
+    },
+    process: {
+      title: 'Wie läuft der Prozess ab?',
+      steps: [
+        { title: 'Dokumentenprüfung', desc: 'Dokumententyp und Verwendungszweck werden beurteilt.' },
+        { title: 'Fachliche Zuordnung', desc: 'Ein auf das Fachgebiet spezialisierter Übersetzer wird zugewiesen.' },
+        { title: 'Übersetzung & Lektorat', desc: 'Übersetzung und eine unabhängige Endkontrolle.' },
+        { title: 'Beglaubigung & Lieferung', desc: 'Bei Bedarf notarielle Beglaubigung/Apostille, anschließend Lieferung.' },
+      ],
+    },
+    delivery: {
+      title: 'Lieferoptionen',
+      items: ['Digitale Lieferung (PDF/DOCX)', 'Lieferung physischer Dokumente', 'Eillieferung'],
+    },
+    notaryApostille: {
+      title: 'Zusammenhang zwischen notarieller Beglaubigung und Apostille',
+      desc: 'Bei Bedarf wird eine beglaubigte Übersetzung durch notarielle Beglaubigung und das Apostille-Verfahren für offizielle Institutionen gültig gemacht. Die genaue Anforderung hängt von der Institution ab, bei der das Dokument eingereicht wird.',
+    },
+    fullService: {
+      title: 'Schlüsselfertig, bis zu Ihrer Haustür geliefert',
+      note: 'Senden Sie uns Ihre Dokumente und wir übernehmen den gesamten Prozess — Übersetzung, notarielle Beglaubigung und Apostille inklusive. Ihre fertigen Dokumente kommen per Kurier bis an Ihre Haustür. Konzentrieren Sie sich auf Ihre Arbeit und überlassen Sie den Rest uns.',
+    },
+    cta: {
+      title: 'Nicht sicher, welche Leistung Sie benötigen?',
+      desc: 'Laden Sie Ihr Dokument hoch und wir zeigen Ihnen die passendste Leistung und den passenden Preis.',
+    },
+    documentTypesTitle: 'Geeignete Dokumententypen',
+  },
+
+  serviceItems: {
+    sworn: {
+      name: 'Beglaubigte Übersetzung',
+      short: 'Offiziell gültige Übersetzung mit Unterschrift und Stempel eines vereidigten Übersetzers.',
+      benefits: ['Gültig bei offiziellen Institutionen', 'Bestätigung durch vereidigten Übersetzer', 'Schneller Ablauf'],
+    },
+    notarized: {
+      name: 'Notariell beglaubigte Übersetzung',
+      short: 'Notarielle Beglaubigung einer beglaubigten Übersetzung.',
+      benefits: ['Notarielle Beurkundung', 'Geeignet für offizielle Anträge', 'Wir übernehmen den Prozess'],
+    },
+    apostille: {
+      name: 'Unterstützung beim Apostille-Verfahren',
+      short: 'Begleitung durch das Apostille-Verfahren für die Gültigkeit im Ausland.',
+      benefits: ['Internationale Gültigkeit', 'Verfahrensberatung', 'Behördenführung'],
+    },
+    legal: {
+      name: 'Juristische Übersetzung',
+      short: 'Übersetzung mit sicherer Beherrschung der Terminologie für Verträge, Gerichts- und amtliche Dokumente.',
+      benefits: ['Juristische Terminologie', 'Vertraulichkeitsgarantie', 'Fachübersetzer'],
+    },
+    technical: {
+      name: 'Technische Übersetzung',
+      short: 'Einheitliche Übersetzung für Handbücher, Spezifikationen und technische Dokumente.',
+      benefits: ['Terminologiemanagement', 'Format bleibt erhalten', 'Branchenexpertise'],
+    },
+    medical: {
+      name: 'Medizinische Übersetzung',
+      short: 'Präzise Übersetzung für Befunde, Beipackzettel und medizinische Dokumente.',
+      benefits: ['Medizinische Terminologie', 'Genauigkeitsorientiert', 'Vertraulichkeit'],
+    },
+    academic: {
+      name: 'Akademische Übersetzung',
+      short: 'Akademische Sprache für Abschlussarbeiten, Artikel und Diplomübersetzungen.',
+      benefits: ['Akademischer Stil', 'Quellenkonsistenz', 'Termingerechte Lieferung'],
+    },
+    localization: {
+      name: 'Web- und Mobile-Lokalisierung',
+      short: 'Kulturell angemessene Lokalisierung von Websites und Anwendungen.',
+      benefits: ['Kulturelle Anpassung', 'Technische Integration', 'SEO-Kompatibilität'],
+    },
+  },
+
+  corporate: {
+    statsLabels: {
+      corporate: 'Firmenkunden',
+      discount: 'Rabatt bei Sammelaufträgen',
+      term: 'Zahlungsziel',
+    },
+    seo: {
+      title: 'Lösungen für Unternehmen',
+      description:
+        'Professionelle Sprachdienstleistungen für Unternehmen mit Terminologiemanagement, Zahlungszieloptionen, Sammelaufträgen und einem persönlichen Kundenbetreuer.',
+    },
+    hero: {
+      title: 'Lösungen für Unternehmen',
+      subtitle:
+        'Professionelle Sprachdienstleistungen mit Terminologiemanagement, Zahlungszieloptionen und einem persönlichen Kundenbetreuer, individuell auf Ihr Unternehmen zugeschnitten.',
+      primaryCta: 'Firmenangebot anfordern',
+      secondaryCta: 'E-Mail senden',
+    },
+    features: {
+      title: 'Funktionen für Unternehmen',
+      subtitle: 'Auf Ihr Unternehmen zugeschnittene Lösungen',
+      items: [
+        {
+          key: 'custom',
+          icon: 'Target',
+          title: 'Maßgeschneiderter Service',
+          points: ['Feste Terminologie', 'Wahrung der Markentonalität', 'Persönlicher Kundenbetreuer', 'Erstellung eines Style Guides'],
+        },
+        {
+          key: 'volume',
+          icon: 'BarChart3',
+          title: 'Sammelabwicklung und Zahlungsziele',
+          points: ['Monatliche Übersetzungspläne', 'Rabatte bei Sammelaufträgen', 'Zahlungsziele bis zu 30 Tagen', 'Rechnungssystem'],
+        },
+        {
+          key: 'security',
+          icon: 'Lock',
+          title: 'Datenschutz und Sicherheit',
+          points: ['NDA-Protokoll', 'Verschlüsselte Dateiübertragung', 'KVKK-konforme Prozesse'],
+        },
+      ],
+    },
+    whyPackage: {
+      title: 'Warum ein Firmenpaket?',
+      items: [
+        {
+          key: 'terminology',
+          icon: 'Building2',
+          title: 'Festes Terminologiemanagement',
+          desc: 'Wir bauen eine unternehmensspezifische Terminologiedatenbank auf. Ihre Markensprache bleibt über alle Übersetzungen hinweg erhalten und wir sorgen für Konsistenz. Wir achten darauf, in jedem Projekt dieselben Begriffe zu verwenden.',
+        },
+        {
+          key: 'manager',
+          icon: 'Users',
+          title: 'Persönlicher Kundenbetreuer',
+          desc: 'Ihr persönlicher Kundenbetreuer verfolgt alle Ihre Prozesse. Mit einer gut erreichbaren Support-Line stehen wir Ihnen in dringenden Situationen zur Seite.',
+        },
+        {
+          key: 'security',
+          icon: 'ShieldCheck',
+          title: 'Datenschutz und Sicherheit',
+          desc: 'Wir arbeiten unter einem NDA-Protokoll. Ihre Daten sind mit einer starken Sicherheitsinfrastruktur, verschlüsselter Dateiübertragung und KVKK-konformen Prozessen sicher.',
+        },
+      ],
+    },
+    payment: {
+      title: 'Zahlungsoptionen',
+      subtitle: 'Flexible Zahlungspläne, passend zu Ihrem Unternehmen',
+      recommendedLabel: 'EMPFOHLEN',
+      options: [
+        {
+          key: 'standard',
+          label: 'Sofortzahlung',
+          heading: 'Standard',
+          desc: 'Zahlung per Kreditkarte oder Banküberweisung nach jeder Bestellung',
+          points: ['Kreditkartenraten', 'Sofortige Lieferung'],
+          recommended: false,
+        },
+        {
+          key: 'term',
+          label: 'Monatliches Zahlungsziel',
+          heading: '15-30 Tage',
+          desc: 'Monatlich zusammengefasste Rechnungsstellung und Zahlungszieloption',
+          points: ['30 Tage Zahlungsziel', 'Mengenrabatt', 'Monatsbericht'],
+          recommended: true,
+        },
+      ],
+    },
+    form: {
+      title: 'Antrag auf ein Firmenpaket',
+      desc: 'Füllen Sie das Formular aus und unser Expertenteam wird sich mit Ihnen in Verbindung setzen',
+      fields: {
+        company: 'Firmenname',
+        contactName: 'Vollständiger Name der Kontaktperson',
+        email: 'E-Mail',
+        phone: 'Telefon',
+        need: 'Beschreiben Sie uns Ihren Übersetzungsbedarf',
+        consent: 'Ich habe die KVKK-Datenschutzerklärung gelesen und stimme ihr zu.',
+      },
+      submit: 'Antrag absenden',
+      success: 'Ihr Antrag ist bei uns eingegangen. Wir melden uns schnellstmöglich bei Ihnen.',
+      note: 'Wir melden uns innerhalb von 1 Werktag bei Ihnen.',
+    },
+  },
+
+  partnership: {
+    seo: {
+      title: 'Partnerprogramm',
+      description:
+        'Verdienen Sie Provision für jeden Kunden, den Sie vermitteln. Transparente Berichterstattung, QR-Code-Vermittlungen und professioneller Support.',
+    },
+    hero: {
+      title: 'Partnerprogramm',
+      value: 'Verdienen Sie 20 % Provision für jeden Kunden, den Sie an uns vermitteln.',
+      subtitle: 'Ein transparentes System, zuverlässige Zahlungen, langfristige Zusammenarbeit.',
+      cta: 'Jetzt bewerben',
+    },
+    advantages: {
+      title: 'Partnervorteile',
+      subtitle: 'Warum TercümExpert-Partner werden?',
+      items: [
+        { key: 'commission', icon: 'Wallet', title: '20 % Provisionsgarantie', desc: 'Ein transparentes Provisionssystem für jeden Kunden, den Sie vermitteln.' },
+        { key: 'qr', icon: 'QrCode', title: 'QR-Code-Vermittlung', desc: 'Einfache Kundenverfolgung mit Visitenkartenintegration.' },
+        { key: 'reporting', icon: 'BarChart3', title: 'Transparente Berichterstattung', desc: 'Echtzeit-Panel zur Provisions- und Kundenverfolgung.' },
+        { key: 'support', icon: 'Users', title: 'Professioneller Support', desc: 'Eine eigene Partner-Support-Line und ein Kundenbetreuer.' },
+      ],
+    },
+    howItWorks: {
+      title: 'Wie funktioniert es?',
+      steps: [
+        { title: 'Bewerben', desc: 'Füllen Sie das Online-Bewerbungsformular aus. Teilen Sie Ihre Firmen- und Kontaktdaten mit. Ihre Bewerbung wird innerhalb von 1 Werktag geprüft.' },
+        { title: 'Partner werden', desc: 'Sobald Ihre Bewerbung genehmigt ist, erhalten Sie Zugang zu Ihrem persönlichen Partner-Panel. Ihre QR-Codes und Vermittlungslinks sind bereit.' },
+        { title: 'Kunden vermitteln', desc: 'Vermitteln Sie Ihre Kunden per QR-Code, individuellem Link oder Visitenkarte an uns. Jede Vermittlung wird automatisch im System erfasst.' },
+        { title: 'Provision verdienen', desc: 'Sie verdienen 20 % Provision, jedes Mal wenn ein von Ihnen vermittelter Kunde eine Bestellung aufgibt. Sie erhalten alle 15 Tage automatische Zahlungen.' },
+      ],
+    },
+    sectors: {
+      title: 'Zielbranchen',
+      subtitle: 'Für welche Branchen ist es ideal?',
+      items: [
+        { key: 'law', icon: 'Scale', title: 'Anwaltskanzleien', desc: 'Bedarf an beglaubigter Übersetzung von Akten, Verträgen und juristischen Dokumenten.' },
+        { key: 'visa', icon: 'Plane', title: 'Visa-Beratung', desc: 'Dokumente, die eine beglaubigte Übersetzung erfordern, wie Reisepässe, Diplome und Personenstandsurkunden.' },
+        { key: 'education', icon: 'GraduationCap', title: 'Bildungsberatung', desc: 'Beglaubigte Übersetzung von Studierendendokumenten und Apostille-Verfahren.' },
+        { key: 'health', icon: 'HeartPulse', title: 'Gesundheitstourismus', desc: 'Übersetzung von medizinischen Befunden, Patientenakten und Gesundheitsdokumenten.' },
+        { key: 'patent', icon: 'Building2', title: 'Patent-/Markenämter', desc: 'Technische Übersetzung von Patent-, Markenanmeldungs- und Rechtsdokumenten.' },
+        { key: 'realestate', icon: 'Home', title: 'Immobilienbüros', desc: 'Übersetzung von Grundbuchauszügen, Verträgen und amtlichen Dokumenten für ausländische Investoren.' },
+        { key: 'hr', icon: 'Briefcase', title: 'Personalberatung', desc: 'Übersetzung von Lebensläufen, Diplomen und Empfehlungsschreiben für die Vermittlung ins Ausland.' },
+        { key: 'software', icon: 'Code', title: 'Softwareunternehmen', desc: 'Lokalisierung von Web- und Mobile-Apps, Übersetzung technischer Dokumente.' },
+      ],
+    },
+    commission: {
+      title: 'Provisionsstruktur',
+      stats: {
+        commissionLabel: 'Standardprovision',
+        commissionSub: 'Bei jeder Bestellung',
+        periodUnit: 'Tage',
+        periodLabel: 'Zahlungszeitraum',
+        feeLabel: 'Startgebühr',
+        feeSub: 'Völlig kostenlos',
+      },
+      exampleTitle: 'Beispielhafte Verdienstberechnung',
+      exampleOrderLabel: 'Bestellung des von Ihnen vermittelten Kunden',
+      exampleRateLabel: 'Provisionssatz',
+      exampleEarningLabel: 'Ihr Verdienst',
+      note: 'Provisionssätze und -bedingungen unterliegen der Partnervereinbarung.',
+    },
+    form: {
+      title: 'Partner-Bewerbungsformular',
+      subtitle: 'Füllen Sie das Formular aus und wir melden uns innerhalb von 1 Werktag bei Ihnen.',
+      fields: {
+        company: 'Name des Unternehmens/der Organisation',
+        sector: 'Branche',
+        contactName: 'Vollständiger Name der Kontaktperson',
+        titleRole: 'Position',
+        email: 'E-Mail',
+        phone: 'Telefon',
+        potential: 'Ihr geschätztes monatliches Vermittlungspotenzial',
+        note: 'Anmerkungen, die Sie hinzufügen möchten',
+        agreement: 'Ich habe die Bedingungen der Partnervereinbarung gelesen und akzeptiere sie.',
+      },
+      sectorPlaceholder: 'Auswählen',
+      sectorOptions: ['Anwaltskanzlei', 'Visa-Beratung', 'Bildungsberatung', 'Gesundheitstourismus', 'Patent-/Markenamt', 'Immobilien', 'Personalberatung', 'Software', 'Sonstige'],
+      potentialOptions: ['1-5 Kunden', '5-10 Kunden', '10-20 Kunden', 'Über 20 Kunden'],
+      submit: 'Antrag absenden',
+      success: 'Ihre Bewerbung ist bei uns eingegangen. Wir werden Sie kontaktieren.',
+      note: 'Ihre Bewerbung wird innerhalb von 1 Werktag geprüft.',
+    },
+  },
+
+  quote: {
+    seo: {
+      title: 'Sofortige Preisberechnung',
+      description: 'Laden Sie Ihr Dokument hoch oder geben Sie die Details ein und erhalten Sie sofort Ihr unverbindliches Angebot.',
+    },
+    hero: {
+      title: 'Sofortige Preisberechnung',
+      subtitle: 'Laden Sie Ihr Dokument hoch oder geben Sie die Details ein und erhalten Sie sofort ein unverbindliches Angebot.',
+    },
+    upload: {
+      heading: 'Laden Sie Ihre Dokumente hoch',
+      privacy: 'Ihre Daten werden vertraulich behandelt',
+      tabFile: 'Datei hochladen',
+      tabText: 'Text eingeben',
+      chooseFile: 'Wählen Sie Ihre Dokumente',
+      formats: '.docx, .xlsx, .pdf, .pptx, .jpg, .png und über 50 Formate werden akzeptiert · Max. 100 MB pro Datei',
+      dropHint: 'Sie können eine oder mehrere Dateien in diesen Bereich ziehen und ablegen.',
+      textPlaceholder: 'Fügen Sie Ihren Text hier ein oder tippen Sie ihn…',
+      totalWords: 'Gesamtwortzahl',
+      extracting: 'Wörter werden gezählt…',
+      wordsUnit: 'Wörter',
+      remove: 'Entfernen',
+      unsupported:
+        'Für diesen Dateityp war eine automatische Wortzählung nicht möglich. Bitte fügen Sie den Text über „Text eingeben“ ein; die Zählung wird bei der Angebotserstellung von unserem Team überprüft.',
+      empty:
+        'In der Datei wurde kein auswählbarer Text gefunden (möglicherweise ein Scan/Bild). Bitte verwenden Sie „Text eingeben“, andernfalls wird die Zählung bei der Angebotserstellung überprüft.',
+      error: 'Die Datei konnte nicht gelesen werden. Bitte versuchen Sie es erneut oder verwenden Sie „Text eingeben“.',
+      tooLarge: 'Die Datei darf nicht größer als 100 MB sein.',
+      needInput: 'Für einen Preis laden Sie bitte eine Datei hoch oder geben Sie Text ein.',
+    },
+    fields: {
+      upload: 'Dokument hochladen (optional)',
+      uploadHint: 'PDF, DOC, DOCX oder TXT — max. 10 MB',
+      sourceLang: 'Ausgangssprache',
+      targetLang: 'Zielsprache',
+      serviceType: 'Serviceart',
+      documentType: 'Dokumententyp',
+      wordCount: 'Geschätzte Wortzahl',
+      wordCountHint: 'Verwenden Sie den Schieberegler oder geben Sie die Zahl manuell ein.',
+      options: 'Zusätzliche Optionen',
+      calculate: 'Preis berechnen',
+    },
+    options: {
+      urgent: 'Eillieferung',
+      notarization: 'Notarielle Beglaubigung',
+      physicalDelivery: 'Physische Lieferung',
+    },
+    languages: {
+      tr: 'Türkisch',
+      en: 'Englisch',
+      de: 'Deutsch',
+      fr: 'Französisch',
+      es: 'Spanisch',
+      it: 'Italienisch',
+      ru: 'Russisch',
+      ar: 'Arabisch',
+    },
+    documentTypes: {
+      diploma: 'Diplom',
+      passport: 'Reisepass',
+      'civil-registry': 'Personenstandsauszug',
+      contract: 'Vertrag',
+      'medical-report': 'Ärztlicher Befund',
+      'technical-doc': 'Technisches Dokument',
+      'court-doc': 'Gerichtsdokument',
+      other: 'Sonstiges',
+    },
+    result: {
+      title: 'Unverbindliches Angebot',
+      basePrice: 'Grundservicegebühr',
+      wordPrice: 'Wortgebühr',
+      addons: 'Zusatzleistungen',
+      total: 'Gesamt',
+      vat: 'MwSt.',
+      delivery: 'Voraussichtliche Lieferzeit',
+      deliveryUnit: 'Werktage',
+      disclaimer: 'Dies ist ein unverbindliches Angebot; der Endpreis wird nach der Dokumentenprüfung bestätigt.',
+      order: 'Bestellung aufgeben',
+      whatsapp: 'Kontakt über WhatsApp',
+      estimatedWords: 'Geschätzte Wörter (automatisch — Demo)',
+    },
+    orderConfirm: {
+      title: 'Ihre Bestellung ist eingegangen',
+      number: 'Bestellnr.',
+      desc: 'Ihre Anfrage und Dokumente wurden gespeichert. Unser Expertenteam prüft das Dokument und setzt sich schnellstmöglich mit Ihnen in Verbindung.',
+      viewOrders: 'Meine Bestellungen',
+      submitting: 'Bestellung wird erstellt…',
+      error: 'Beim Erstellen Ihrer Bestellung ist ein Problem aufgetreten. Bitte versuchen Sie es erneut.',
+    },
+    gate: {
+      title: 'Ihr Preis ist bereit',
+      subtitle: 'Melden Sie sich an oder bestätigen Sie Ihre Daten, um den Preis zu sehen und eine Bestellung aufzugeben.',
+      loginCta: 'Anmelden / Registrieren',
+      or: 'oder schnell fortfahren',
+      firstName: 'Vorname',
+      lastName: 'Nachname',
+      email: 'E-Mail',
+      sendCode: 'Bestätigungscode senden',
+      codeLabel: 'Bestätigungscode',
+      codeSentA: 'wurde ein Bestätigungscode gesendet.',
+      verify: 'Bestätigen und Preis ansehen',
+      resend: 'Code erneut senden',
+      resent: 'Ein neuer Code wurde gesendet.',
+      back: 'Daten ändern',
+      errNames: 'Vor- und Nachname sind erforderlich.',
+      errEmail: 'Geben Sie eine gültige E-Mail-Adresse ein.',
+      errCode: 'Bitte geben Sie den Code vollständig ein.',
+      note: 'Ihre E-Mail-Adresse wird nur für das Angebot und die Bestellung verwendet.',
+    },
+    note: {
+      label: 'Anmerkung zu Ihrer Bestellung (optional)',
+      placeholder: 'Hier können Sie Ihre Wünsche zu Lieferung, Terminologie oder besondere Anliegen notieren.',
+    },
+  },
+
+  order: {
+    seo: {
+      title: 'Bestellverfolgung',
+      description: 'Verfolgen Sie den Status Ihrer Bestellung.',
+    },
+    numberLabel: 'Bestellnr.',
+    placedOn: 'Bestelldatum',
+    estimatedLabel: 'Voraussichtliche Lieferung der Übersetzung',
+    cargoEstimatedLabel: 'Voraussichtliches Versanddatum',
+    timelineTitle: 'Bestellstatus',
+    steps: {
+      received: 'Ihre Bestellung ist eingegangen',
+      in_progress: 'In Bearbeitung',
+      translated: 'Übersetzung abgeschlossen',
+      shipped: 'Versendet',
+      delivered: 'Zugestellt',
+      cancelled: 'Bestellung storniert',
+    },
+    stepDesc: {
+      received: 'Ihre Anfrage und Dokumente haben unser System erreicht. Unser Expertenteam prüft sie und beginnt in Kürze.',
+      in_progress: 'Unser Fachübersetzer hat mit Ihrer Übersetzung begonnen.',
+      translated: 'Ihre Übersetzung ist fertig und die abschließenden Kontrollen wurden durchgeführt.',
+      shipped: 'Ihr Dokument wurde dem Kurier übergeben; Sie können es über die Schaltfläche unten verfolgen.',
+      delivered: 'Ihr Dokument wurde Ihnen per E-Mail zugesandt.',
+      cancelled: 'Diese Bestellung wurde storniert. Bei Fragen kontaktieren Sie uns bitte.',
+    },
+    cargoReady: 'Ihr Dokument wurde versendet. Verfolgen Sie es mit einem Fingertipp:',
+    cargoPending: 'Der Sendungsverfolgungscode erscheint hier, sobald Ihr Dokument versendet wurde.',
+    trackCargo: 'Meine Sendung verfolgen',
+    digitalPending: 'Sobald Ihre Übersetzung fertig ist, werden Ihre Dateien Ihnen per E-Mail zugesandt.',
+    digitalDelivered: 'Ihre Übersetzung wurde Ihnen per E-Mail zugesandt. Überprüfen Sie Ihren Posteingang (und den Spam-Ordner).',
+    detailsTitle: 'Bestelldetails',
+    fields: {
+      service: 'Leistung',
+      langs: 'Sprachen',
+      documentType: 'Dokumententyp',
+      words: 'Wörter',
+      delivery: 'Voraussichtliche Zeit',
+      total: 'Betrag',
+      note: 'Ihre Anmerkung',
+    },
+    myOrders: 'Meine Bestellungen',
+    backHome: 'Zurück zur Startseite',
+    whatsapp: 'Kontakt über WhatsApp',
+    loading: 'Bestellung wird geladen…',
+    loginRequired: {
+      title: 'Melden Sie sich an, um Ihre Bestellung anzuzeigen',
+      desc: 'Sie können auf Ihre Bestelldetails erst zugreifen, nachdem Sie sich mit Ihrem Konto angemeldet haben.',
+      login: 'Anmelden',
+    },
+    notFound: {
+      title: 'Bestellung nicht gefunden',
+      desc: 'Diese Bestellnummer gehört nicht zu Ihnen oder existiert nicht. Bitte überprüfen Sie den Link.',
+      home: 'Zurück zur Startseite',
+    },
+  },
+
+  faq: {
+    seo: {
+      title: 'Häufig gestellte Fragen',
+      description: 'Häufig gestellte Fragen zu beglaubigter Übersetzung, Lieferzeit, Preisgestaltung, notarieller Beglaubigung und Firmenkonditionen.',
+    },
+    hero: { title: 'Häufig gestellte Fragen', subtitle: 'Die Antwort, die Sie suchen, finden Sie hier.' },
+    categoriesTitle: 'Kategorien',
+    searchPlaceholder: 'Fragen oder Stichwörter suchen…',
+    empty: 'Keine Fragen entsprachen Ihrer Suche. Versuchen Sie ein anderes Wort oder kontaktieren Sie uns.',
+    categories: FAQ_CATEGORIES_DE,
+    items: FAQ_ITEMS_DE,
+    notFound: {
+      title: 'Haben Sie die Antwort auf Ihre Frage nicht gefunden?',
+      contact: 'Kontakt',
+      whatsapp: 'WhatsApp-Support',
+    },
+  },
+
+  contact: {
+    seo: {
+      title: 'Kontakt',
+      description: 'Nehmen Sie Kontakt mit TercümExpert auf: Telefon, E-Mail, WhatsApp und Kontaktformular.',
+    },
+    hero: { title: 'Kontakt', subtitle: 'Wie können wir Ihnen helfen?' },
+    infoTitle: 'Kontaktinformationen',
+    labels: {
+      phone: 'Telefon',
+      email: 'E-Mail',
+      whatsapp: 'WhatsApp',
+      address: 'Adresse',
+      hours: 'Öffnungszeiten',
+    },
+    form: {
+      title: 'Kontakt',
+      fields: {
+        name: 'Vollständiger Name',
+        email: 'E-Mail',
+        phone: 'Telefon',
+        subject: 'Betreff',
+        message: 'Nachricht',
+        consent: 'Ich habe die KVKK-Datenschutzerklärung gelesen und stimme ihr zu.',
+      },
+      submit: 'Nachricht senden',
+      success: 'Ihre Nachricht ist bei uns eingegangen. Wir melden uns in Kürze bei Ihnen.',
+    },
+    map: {
+      title: 'Unser Standort',
+      subtitle: 'Finden Sie uns auf der Karte',
+      placeholder: 'Kartenbereich',
+      note: 'Die Standortkarte wird hier in Kürze angezeigt.',
+    },
+  },
+
+  auth: {
+    seo: {
+      title: 'Anmelden / Registrieren',
+      description: 'Melden Sie sich bei Ihrem TercümExpert-Konto an oder erstellen Sie ein neues.',
+    },
+    tabs: { login: 'Anmelden', register: 'Registrieren' },
+    google: 'Mit Google fortfahren',
+    or: 'oder',
+    fields: {
+      firstName: 'Vorname',
+      lastName: 'Nachname',
+      email: 'E-Mail',
+      password: 'Passwort',
+      code: 'Bestätigungscode',
+    },
+    login: {
+      title: 'Melden Sie sich bei Ihrem Konto an',
+      submit: 'Anmelden',
+      noAccount: 'Sie haben noch kein Konto?',
+      switchToRegister: 'Registrieren',
+    },
+    register: {
+      title: 'Neues Konto erstellen',
+      submit: 'Registrieren',
+      haveAccount: 'Sie haben bereits ein Konto?',
+      switchToLogin: 'Anmelden',
+      consent: 'Mit der Erstellung eines Kontos akzeptiere ich die KVKK-Datenschutzerklärung und die Datenschutzrichtlinie.',
+    },
+    verify: {
+      title: 'Bestätigen Sie Ihre E-Mail-Adresse',
+      desc: '— geben Sie den 6-stelligen Code ein, den wir an diese Adresse gesendet haben.',
+      submit: 'Bestätigen und fortfahren',
+      spam: 'Der Code kann sich um einige Minuten verzögern; prüfen Sie auch Ihren Spam-/Junk-Ordner.',
+      resend: 'Code erneut senden',
+      resent: 'Ein neuer Code wurde gesendet.',
+      back: 'Zurück',
+    },
+    signedIn: {
+      title: 'Mein Konto',
+      greeting: 'Willkommen',
+      logout: 'Abmelden',
+    },
+    orders: {
+      title: 'Meine Bestellungen',
+      empty: 'Sie haben noch keine Bestellungen. Sie können Ihre erste Bestellung über „Preis berechnen“ erstellen.',
+      loading: 'Bestellungen werden geladen…',
+      error: 'Bestellungen konnten nicht geladen werden. Bitte aktualisieren Sie die Seite.',
+      status: {
+        received: 'Eingegangen',
+        in_progress: 'In Bearbeitung',
+        translated: 'Übersetzung abgeschlossen',
+        shipped: 'Versendet',
+        delivered: 'Zugestellt',
+        cancelled: 'Storniert',
+      },
+      track: 'Verfolgen',
+    },
+    errors: {
+      nameRequired: 'Vor- und Nachname sind erforderlich.',
+      emailInvalid: 'Geben Sie eine gültige E-Mail-Adresse ein.',
+      passwordShort: 'Das Passwort muss mindestens 6 Zeichen lang sein.',
+      codeInvalid: 'Bitte geben Sie den 6-stelligen Code ein.',
+      consentRequired: 'Zur Fortsetzung ist eine Zustimmung erforderlich.',
+    },
+  },
+
+  blog: {
+    seo: { title: 'Blog', description: 'Ratgeberinhalte zu Übersetzung, notarieller Beglaubigung, Apostille und Lokalisierung.' },
+    hero: { title: 'Blog', subtitle: 'Ratgeber aus der Welt der Übersetzung.' },
+    searchPlaceholder: 'Beiträge suchen…',
+    readingTime: 'Min. Lesezeit',
+    relatedTitle: 'Ähnliche Beiträge',
+    allCategories: 'Alle',
+    empty: 'Keine Beiträge entsprachen diesem Kriterium.',
+  },
+
+  legal: {
+    lastUpdatedLabel: 'Zuletzt aktualisiert',
+    draftNotice:
+      'Dieser Text ist ein Entwurf und sollte vor der Veröffentlichung von einem Rechtsexperten geprüft werden. Die Unternehmensangaben wurden noch nicht verifiziert.',
+    kvkk: {
+      seo: { title: 'KVKK-Datenschutzerklärung', description: 'Datenschutzerklärung zum Schutz personenbezogener Daten.' },
+      title: 'KVKK-Datenschutzerklärung',
+      sections: [
+        { heading: 'Verantwortlicher', body: 'Der Verantwortliche und die Kontaktinformationen werden vor dem Start ergänzt.' },
+        { heading: 'Verarbeitete personenbezogene Daten', body: 'Name, Kontaktinformationen und Dokumentendaten können im Rahmen von Kontakt- und Bestellprozessen verarbeitet werden.' },
+        { heading: 'Zwecke der Verarbeitung', body: 'Leistungserbringung, Angebote, Kommunikation und rechtliche Verpflichtungen.' },
+        { heading: 'Rechtsgrundlagen', body: 'Vertragserfüllung, ausdrückliche Einwilligung und berechtigtes Interesse.' },
+        { heading: 'Aufbewahrungsfristen', body: 'Daten werden für die in den einschlägigen Rechtsvorschriften vorgesehenen Zeiträume aufbewahrt.' },
+        { heading: 'Übermittlung', body: 'Übermittlung nur im für die Leistung erforderlichen Umfang und unter Einhaltung der Rechtsvorschriften.' },
+        { heading: 'Ihre Rechte', body: 'Sie können Ihre Rechte gemäß Artikel 11 des KVKK ausüben.' },
+        { heading: 'So stellen Sie einen Antrag', body: 'Sie können Ihre Anfragen über die angegebenen Kontaktkanäle einreichen.' },
+      ],
+    },
+    privacy: {
+      seo: { title: 'Datenschutzrichtlinie', description: 'Richtlinie zur Vertraulichkeit personenbezogener Daten und Dokumente.' },
+      title: 'Datenschutzrichtlinie',
+      sections: [
+        { heading: 'Erhobene Informationen', body: 'Kontaktinformationen und hochgeladene Dokumente.' },
+        { heading: 'Verwendung', body: 'Wird nur zur Leistungserbringung und Kommunikation verwendet.' },
+        { heading: 'Dokumentensicherheit', body: 'Dokumente werden mit verschlüsselter Übertragung und nach Vertraulichkeitsgrundsätzen verarbeitet.' },
+        { heading: 'Cookies', body: 'Einzelheiten finden Sie in der Cookie-Richtlinie.' },
+      ],
+    },
+    distanceSales: {
+      seo: { title: 'Fernabsatzvertrag', description: 'Fernabsatzvertrag für den Verkauf von Dienstleistungen.' },
+      title: 'Fernabsatzvertrag',
+      sections: [
+        { heading: 'Parteien', body: 'Angaben zu Verkäufer und Käufer werden vor dem Start ergänzt.' },
+        { heading: 'Leistungsumfang', body: 'Der Umfang der bestellten Übersetzungs-/Beglaubigungsleistungen.' },
+        { heading: 'Widerrufsrecht und Ausnahmen', body: 'Für speziell für eine Person/Bestellung erstellte Leistungen können Ausnahmen vom Widerrufsrecht gelten.' },
+        { heading: 'Rückgabe und Stornierung', body: 'Die Rückgabe- und Stornierungsbedingungen sind hier festgelegt.' },
+      ],
+    },
+    cookies: {
+      seo: { title: 'Cookie-Richtlinie', description: 'Auf der Website verwendete Cookie-Kategorien und Verwaltung der Präferenzen.' },
+      title: 'Cookie-Richtlinie',
+      sections: [
+        { heading: 'Was ist ein Cookie?', body: 'Cookies sind kleine Dateien, die in Ihrem Browser gespeichert werden.' },
+        { heading: 'Kategorien', body: 'Notwendige, Analyse-, Marketing- und Präferenz-Cookies.' },
+        { heading: 'Präferenzen verwalten', body: 'Sie können Ihre Cookie-Präferenzen jederzeit aktualisieren.' },
+      ],
+    },
+  },
+
+  footer: {
+    tagline: 'Ihr zuverlässiger Partner für professionelle Übersetzungsdienstleistungen.',
+    columns: {
+      quickLinks: 'Schnellzugriff',
+      services: 'Leistungen',
+      contact: 'Kontakt',
+    },
+    quickLinks: {
+      corporate: 'Unternehmen',
+      services: 'Unsere Leistungen',
+      quote: 'Preis berechnen',
+      blog: 'Blog',
+      faq: 'Häufig gestellte Fragen',
+      contact: 'Kontakt',
+    },
+    serviceLinks: {
+      sworn: 'Beglaubigte Übersetzung',
+      notarized: 'Notariell beglaubigte Übersetzung',
+      apostille: 'Apostille-Verfahren',
+      corporate: 'Lösungen für Unternehmen',
+      partnership: 'Partnerprogramm',
+    },
+    legal: {
+      kvkk: 'KVKK',
+      privacy: 'Datenschutzrichtlinie',
+      distanceSales: 'Fernabsatzvertrag',
+      cookies: 'Cookie-Richtlinie',
+    },
+    socialTitle: 'Folgen Sie uns',
+    whatsapp: 'WhatsApp-Support',
+    rights: 'Alle Rechte vorbehalten.',
+  },
+
+  cookie: {
+    title: 'Cookie-Einstellungen',
+    desc: 'Wir verwenden Cookies, um Ihr Erlebnis zu verbessern. Andere als notwendige Cookies werden nur mit Ihrer Einwilligung ausgeführt.',
+    accept: 'Akzeptieren',
+    reject: 'Ablehnen',
+    manage: 'Einstellungen verwalten',
+    save: 'Einstellungen speichern',
+    categories: {
+      necessary: { label: 'Notwendig', desc: 'Für die Funktion der Website erforderlich; kann nicht deaktiviert werden.' },
+      analytics: { label: 'Analyse', desc: 'Hilft uns, die Nutzung zu verstehen.' },
+      marketing: { label: 'Marketing', desc: 'Für relevante Inhalte und Werbung.' },
+      preferences: { label: 'Präferenzen', desc: 'Merkt sich Ihre Präferenzen.' },
+    },
+  },
+
+  chatbot: {
+    title: 'TercümExpert-Support',
+    open: 'Chat öffnen',
+    close: 'Chat schließen',
+    minimize: 'Minimieren',
+    clear: 'Konversation löschen',
+    inputPlaceholder: 'Geben Sie Ihre Nachricht ein…',
+    send: 'Senden',
+    typing: 'Schreibt…',
+    welcome:
+      'Hallo und herzlich willkommen bei TercümExpert. Ich kann Ihnen bei Übersetzung, Preisgestaltung, notarieller Beglaubigung, Apostille oder Firmenleistungen helfen.',
+    quickQuestions: [
+      'Wie wird der Preis berechnet?',
+      'Was ist eine beglaubigte Übersetzung?',
+      'Ich möchte ein Dokument hochladen',
+      'Ich möchte ein Firmenangebot',
+      'Ist eine notarielle Beglaubigung erforderlich?',
+      'Verbinden Sie mich mit einem Mitarbeiter',
+    ],
+    handoff: 'Mit einem Mitarbeiter verbinden',
+    toWhatsapp: 'An WhatsApp übergeben',
+    disclaimer: 'Diese Informationen sind allgemeiner Natur; bitte bestätigen Sie die genauen Anforderungen bei der zuständigen Institution.',
+    sensitiveWarning:
+      'Bitte teilen Sie keine sensiblen personenbezogenen Daten über diesen Chat mit. Ihre Dokumente können Sie über den sicheren Upload-Bereich senden.',
+  },
+
+  notFound: {
+    seo: { title: 'Seite nicht gefunden', description: 'Die von Ihnen gesuchte Seite konnte nicht gefunden werden.' },
+    title: 'Seite nicht gefunden',
+    desc: 'Die von Ihnen gesuchte Seite wurde möglicherweise verschoben oder hat nie existiert.',
+    home: 'Zurück zur Startseite',
+  },
+}
