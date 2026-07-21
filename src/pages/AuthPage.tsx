@@ -20,7 +20,7 @@ export default function AuthPage() {
   const { locale, dict } = useI18n()
   const a = dict.auth
   const navigate = useNavigate()
-  const { user, signInWithGoogle, signInWithPassword, signUp, resendCode, signOut } = useAuth()
+  const { user, signInWithGoogle, signInWithPassword, signUp, verifyEmailCode, resendCode, signOut } = useAuth()
 
   const [mode, setMode] = useState<Mode>('login')
   const [view, setView] = useState<View>('form')
@@ -29,6 +29,7 @@ export default function AuthPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [consent, setConsent] = useState(false)
+  const [code, setCode] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -109,6 +110,17 @@ export default function AuthPage() {
     else navigate(buildPath(locale, 'quote'))
   }
 
+  const onVerify = async (e: FormEvent) => {
+    e.preventDefault()
+    resetMessages()
+    if (code.trim().length < 6) return setError(a.errors.codeInvalid)
+    setBusy(true)
+    const { error } = await verifyEmailCode(email, code.trim())
+    setBusy(false)
+    if (error) return setError(error)
+    navigate(buildPath(locale, 'quote'))
+  }
+
   const onResend = async () => {
     resetMessages()
     setBusy(true)
@@ -118,7 +130,7 @@ export default function AuthPage() {
     setInfo(a.verify.resent)
   }
 
-  // ——— Doğrulama e-postası (bağlantı) ekranı ———
+  // ——— 6 haneli doğrulama kodu ekranı ———
   if (view === 'verify') {
     return (
       <>
@@ -132,15 +144,29 @@ export default function AuthPage() {
           </span>
           <h1 className="mt-4 text-2xl font-bold">{a.verify.title}</h1>
           <p className="mt-2 text-sm text-text-secondary">
-            <span className="font-medium text-text-primary">{email}</span> {a.verify.descA}
+            <span className="font-medium text-text-primary">{email}</span> {a.verify.desc}
           </p>
-          <p className="mt-2 text-sm text-text-secondary">{a.verify.descB}</p>
-          <p className="mt-3 text-xs text-text-muted">{a.verify.spam}</p>
-          {error && <div className="mt-4"><Alert kind="error">{error}</Alert></div>}
-          {info && <div className="mt-4"><Alert kind="info">{info}</Alert></div>}
-          <button type="button" onClick={() => void onResend()} disabled={busy} className="mt-5 text-sm text-text-secondary underline underline-offset-4 hover:text-text-primary">
-            {a.verify.resend}
-          </button>
+          <form className="mt-6 space-y-4" onSubmit={onVerify} noValidate>
+            <input
+              className={`${inputClass} text-center text-xl tracking-[0.5em]`}
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              maxLength={6}
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+              placeholder="______"
+              aria-label={a.fields.code}
+            />
+            {error && <Alert kind="error">{error}</Alert>}
+            {info && <Alert kind="info">{info}</Alert>}
+            <Button type="submit" intent="secondary" size="lg" block disabled={busy}>
+              {a.verify.submit}
+            </Button>
+            <button type="button" onClick={() => void onResend()} disabled={busy} className="mx-auto block text-sm text-text-secondary underline underline-offset-4 hover:text-text-primary">
+              {a.verify.resend}
+            </button>
+          </form>
+          <p className="mt-4 text-xs text-text-muted">{a.verify.spam}</p>
         </Shell>
       </>
     )

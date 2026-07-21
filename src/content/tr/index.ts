@@ -555,11 +555,11 @@ export const tr = {
     },
     verify: {
       title: 'E-postanızı doğrulayın',
-      descA: 'adresine bir doğrulama bağlantısı gönderdik.',
-      descB: 'Gelen e-postadaki bağlantıya tıklayarak hesabınızı doğrulayın. Doğruladıktan sonra otomatik olarak giriş yaparsınız.',
-      spam: 'E-posta birkaç dakika gecikebilir; spam / gereksiz klasörünü de kontrol edin.',
-      resend: 'E-postayı yeniden gönder',
-      resent: 'Doğrulama e-postası yeniden gönderildi.',
+      desc: 'adresine gönderdiğimiz 6 haneli kodu girin.',
+      submit: 'Doğrula ve Devam Et',
+      spam: 'Kod birkaç dakika gecikebilir; spam / gereksiz klasörünü de kontrol edin.',
+      resend: 'Kodu yeniden gönder',
+      resent: 'Yeni kod gönderildi.',
       back: 'Geri dön',
     },
     signedIn: {
