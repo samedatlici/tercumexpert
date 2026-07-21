@@ -1,8 +1,857 @@
 import type { PartialDictionary } from '@/types/i18n'
+import { FAQ_CATEGORIES_NL, FAQ_ITEMS_NL } from '@/content/faq-data.nl'
 
 /**
- * NEDERLANDS (Dutch) — placeholder. Şu an boş; tüm anahtarlar EN'e (fallback base)
- * düşer. Tam çeviri sonraki adımda yapılacak: bu dosya doldurulacak + faq-data.nl.ts
- * eklenip faq.categories/items burada set edilecek.
+ * NEDERLANDS — volledige vertaling, identieke structuur als en/index.ts.
+ * Alleen de tekstwaarden zijn vertaald; sleutels, iconen en technische
+ * tokens blijven ongewijzigd. Ontbrekende sleutels vallen terug op het
+ * Engels (§10). De FAQ-gegevens komen uit content/faq-data.nl.
  */
-export const nl: PartialDictionary = {}
+export const nl: PartialDictionary = {
+  common: {
+    tagline: "Uw betrouwbare partner voor professionele vertaaldiensten.",
+    nav: {
+      home: "Home",
+      services: "Diensten",
+      quote: "Offerte aanvragen",
+      corporate: "Zakelijk",
+      partnership: "Partnerschap",
+      blog: "Blog",
+      faq: "Veelgestelde vragen",
+      contact: "Contact",
+    },
+    actions: {
+      getQuote: "Offerte aanvragen",
+      calculatePrice: "Prijs berekenen",
+      uploadDocument: "Document uploaden",
+      whatsapp: "Chat via WhatsApp",
+      learnMore: "Meer informatie",
+      viewAll: "Alles bekijken",
+      showMore: "Meer tonen",
+      showLess: "Minder tonen",
+      send: "Verzenden",
+      apply: "Aanmelden",
+      order: "Bestelling plaatsen",
+      contactUs: "Neem contact op",
+      openMenu: "Menu openen",
+      closeMenu: "Menu sluiten",
+      selectLanguage: "Taal selecteren",
+      skipToContent: "Naar de inhoud",
+      login: "Inloggen",
+      logout: "Uitloggen",
+      account: "Mijn account",
+    },
+    states: {
+      loading: "Laden…",
+      error: "Er is iets misgegaan. Probeer het opnieuw.",
+      required: "Dit veld is verplicht.",
+      demoNotice: "Demo: formuliergegevens worden nog niet naar een server verzonden.",
+      unverified: "Nog te verifiëren",
+    },
+    topbar: {
+      phoneLabel: "Telefoon",
+      emailLabel: "E-mail",
+      hoursLabel: "Openingstijden",
+      afterHours: "Buiten kantooruren is spoedvertaalondersteuning beschikbaar.",
+      workingHours: "Werkdagen 09:00 - 18:00 | Service buiten kantooruren beschikbaar",
+    },
+  },
+
+  home: {
+    seo: {
+      title: "TercümExpert — Professionele vertaaldiensten",
+      description:
+        "Beëdigde vertaling, notariële bekrachtiging en zakelijke vertaaloplossingen. Upload uw document, ontvang direct een voorlopige offerte en professionele levering.",
+    },
+    hero: {
+      title: "Uw betrouwbare partner voor professionele",
+      titleAccent: "vertaaldiensten",
+      subtitle: "Upload uw document, bekijk de prijs en ontvang professionele levering.",
+      support: "Beëdigde vertaling • Notariële bekrachtiging • Zakelijke oplossingen",
+    },
+    trust: {
+      title: "Waarom vertrouwen zij ons?",
+      items: [
+        { key: 'languages', label: "50+ talen" },
+        { key: 'delivery', label: "Levering binnen 24 uur" },
+        { key: 'notary', label: "Notariële bekrachtiging" },
+        { key: 'quality', label: "Kwaliteitsgarantie" },
+      ],
+    },
+    stats: {
+      title: "TercümExpert in cijfers",
+      note: "De onderstaande cijfers worden niet als definitieve claims gepresenteerd zolang ze niet zijn geverifieerd.",
+      labels: {
+        satisfaction: "Klanttevredenheid",
+        completed: "Voltooide opdrachten",
+        languages: "Talenondersteuning",
+        corporate: "Zakelijke klanten",
+      },
+    },
+    howItWorks: {
+      title: "Hoe werkt het?",
+      subtitle: "Professionele vertaling in vijf stappen.",
+      steps: [
+        { key: 'upload', title: "Uploaden", desc: "Upload uw document veilig." },
+        { key: 'select', title: "Selecteren", desc: "Kies de taal en het type dienst." },
+        { key: 'confirm', title: "Bevestigen", desc: "Bevestig uw bestelling." },
+        { key: 'track', title: "Volgen", desc: "Volg het proces in realtime." },
+        { key: 'receive', title: "Ontvangen", desc: "Ontvang uw professionele levering." },
+      ],
+    },
+    services: {
+      title: "Onze diensten",
+      subtitle: "Deskundige vertaling voor elk documenttype.",
+    },
+    why: {
+      title: "Waarom TercümExpert?",
+      subtitle: "De kenmerken die ons onderscheiden van de concurrentie",
+      features: [
+        { key: 'autoQuote', title: "Automatische prijsberekening", desc: "Een voorlopige prijs in enkele seconden." },
+        { key: 'whatsapp', title: "Snelle offerte via WhatsApp", desc: "Contact met één tik." },
+        { key: 'terminology', title: "Terminologiebeheer", desc: "Consistente, zakelijke taal." },
+        { key: 'revision', title: "Recht op revisie", desc: "Een proces gericht op tevredenheid." },
+        { key: 'languages', title: "Ondersteuning voor 50+ talen", desc: "Brede dekking van talenparen." },
+        { key: 'terms', title: "Zakelijk betalingssysteem", desc: "Flexibele betaling voor bedrijven." },
+      ],
+    },
+    corporateCta: {
+      title: "Zakelijke oplossingen",
+      desc: "Professionele taaldiensten met terminologiebeheer, betalingsopties en een toegewijde accountmanager, afgestemd op uw bedrijf.",
+      action: "Zakelijke offerte aanvragen",
+    },
+    partnershipTeaser: {
+      title: "Partnerprogramma",
+      subtitle: "Verdien 20% commissie op elke klant die u naar ons doorverwijst.",
+      items: [
+        { key: 'commission', title: "Transparante commissie", desc: "20% commissie voor elke doorverwijzing (afhankelijk van overeenkomst). Transparante inkomsten met een realtime volgpaneel." },
+        { key: 'qr', title: "QR-codesysteem", desc: "Eenvoudige klantregistratie met integratie op uw visitekaartje. QR-codes voor web en WhatsApp." },
+      ],
+      cta: "Aanmelden als partner",
+    },
+    testimonials: {
+      title: "Klantbeoordelingen",
+      subtitle: "Echte klantbeoordelingen worden hier vóór de lancering toegevoegd.",
+      placeholderNote: "Tijdelijke tekst — echte beoordelingen worden geïntegreerd.",
+      items: [
+        { key: 't1', role: "Advocatenkantoor" },
+        { key: 't2', role: "Zorginstelling" },
+        { key: 't3', role: "Zakelijke klant" },
+        { key: 't4', role: "Particuliere klant" },
+      ],
+    },
+    blogTeaser: {
+      title: "Blog",
+      subtitle: "Actuele content uit de wereld van vertalen",
+      viewAll: "Alle blogberichten bekijken",
+    },
+    finalCta: {
+      title: "Begin nu",
+      desc: "Upload uw documenten, ontvang direct een offerte en profiteer van professionele vertaaldiensten.",
+      primary: "Offerte aanvragen",
+      secondary: "Neem contact op",
+    },
+  },
+
+  services: {
+    seo: {
+      title: "Vertaaldiensten",
+      description:
+        "Beëdigde, notarieel bekrachtigde, juridische, technische, medische en academische vertaling plus web-/mobiele lokalisatie. Documenttypen, proces, levering en talenparen.",
+    },
+    hero: {
+      title: "Vertaaldiensten",
+      subtitle: "Vertaling met de juiste terminologie voor elk vakgebied.",
+    },
+    process: {
+      title: "Hoe verloopt het proces?",
+      steps: [
+        { title: "Documentbeoordeling", desc: "Het type en doel van het document worden beoordeeld." },
+        { title: "Expertkoppeling", desc: "Een gespecialiseerde vertaler in het vakgebied wordt toegewezen." },
+        { title: "Vertaling & redactie", desc: "Vertaling en een onafhankelijke eindcontrole." },
+        { title: "Goedkeuring & levering", desc: "Indien nodig notariële bekrachtiging/apostille, daarna levering." },
+      ],
+    },
+    delivery: {
+      title: "Leveringsopties",
+      items: ["Digitale levering (PDF/DOCX)", "Fysieke levering van documenten", "Spoedlevering"],
+    },
+    notaryApostille: {
+      title: "Verband tussen notariële bekrachtiging en apostille",
+      desc: "Indien vereist wordt een beëdigde vertaling geldig gemaakt voor officiële instanties via notariële bekrachtiging en het apostilleproces. De precieze vereiste hangt af van de instantie waar het document wordt ingediend.",
+    },
+    fullService: {
+      title: "Kant-en-klaar, tot aan uw deur bezorgd",
+      note: "Stuur ons uw documenten en wij regelen het hele proces — vertaling, notariële bekrachtiging en apostille inbegrepen. Uw voltooide documenten worden per koerier bij u thuis bezorgd. Concentreer u op uw werk en laat de rest aan ons over.",
+    },
+    cta: {
+      title: "Weet u niet zeker welke dienst u nodig heeft?",
+      desc: "Upload uw document en wij tonen u de meest geschikte dienst en prijs.",
+    },
+    documentTypesTitle: "Geschikte documenttypen",
+  },
+
+  serviceItems: {
+    sworn: {
+      name: "Beëdigde vertaling",
+      short: "Officieel geldige vertaling met de handtekening en stempel van een beëdigd vertaler.",
+      benefits: ["Geldig bij officiële instanties", "Goedkeuring door beëdigd vertaler", "Snel proces"],
+    },
+    notarized: {
+      name: "Notarieel bekrachtigde vertaling",
+      short: "Notariële bekrachtiging van een beëdigde vertaling.",
+      benefits: ["Notariële bekrachtiging", "Geschikt voor officiële aanvragen", "Wij regelen het proces"],
+    },
+    apostille: {
+      name: "Ondersteuning bij apostilleproces",
+      short: "Begeleiding door het apostilleproces voor rechtsgeldigheid in het buitenland.",
+      benefits: ["Internationale rechtsgeldigheid", "Procesadvies", "Begeleiding bij instanties"],
+    },
+    legal: {
+      name: "Juridische vertaling",
+      short: "Vertaling met beheersing van terminologie voor contracten, rechtbank- en officiële documenten.",
+      benefits: ["Juridische terminologie", "Vertrouwelijkheidsgarantie", "Deskundige vertaler"],
+    },
+    technical: {
+      name: "Technische vertaling",
+      short: "Consistente vertaling voor handleidingen, specificaties en technische documenten.",
+      benefits: ["Terminologiebeheer", "Opmaak behouden", "Vakkennis"],
+    },
+    medical: {
+      name: "Medische vertaling",
+      short: "Nauwkeurige vertaling voor rapporten, bijsluiters en medische documenten.",
+      benefits: ["Medische terminologie", "Gericht op nauwkeurigheid", "Vertrouwelijkheid"],
+    },
+    academic: {
+      name: "Academische vertaling",
+      short: "Academische taal voor scripties, artikelen en diplomavertalingen.",
+      benefits: ["Academische stijl", "Consistentie met de bron", "Tijdige levering"],
+    },
+    localization: {
+      name: "Web- en mobiele lokalisatie",
+      short: "Cultureel passende lokalisatie van websites en applicaties.",
+      benefits: ["Culturele aanpassing", "Technische integratie", "SEO-compatibiliteit"],
+    },
+  },
+
+  corporate: {
+    statsLabels: {
+      corporate: "Zakelijke klanten",
+      discount: "Korting bij bulkbestellingen",
+      term: "Betalingstermijn",
+    },
+    seo: {
+      title: "Zakelijke oplossingen",
+      description:
+        "Professionele taaldiensten voor bedrijven met terminologiebeheer, betalingsopties, bulkbestellingen en een toegewijde accountmanager.",
+    },
+    hero: {
+      title: "Zakelijke oplossingen",
+      subtitle:
+        "Professionele taaldiensten met terminologiebeheer, betalingsopties en een toegewijde accountmanager, afgestemd op uw bedrijf.",
+      primaryCta: "Zakelijke offerte aanvragen",
+      secondaryCta: "E-mail versturen",
+    },
+    features: {
+      title: "Zakelijke kenmerken",
+      subtitle: "Oplossingen op maat van uw bedrijf",
+      items: [
+        {
+          key: 'custom',
+          icon: 'Target',
+          title: "Service op maat",
+          points: ["Vaste terminologie", "Behoud van de merktoon", "Toegewijde accountmanager", "Opstellen van een stijlgids"],
+        },
+        {
+          key: 'volume',
+          icon: 'BarChart3',
+          title: "Bulkverwerking en betalingstermijnen",
+          points: ["Maandelijkse vertaalplannen", "Kortingen bij bulkbestellingen", "Termijnen tot 30 dagen", "Facturatiesysteem"],
+        },
+        {
+          key: 'security',
+          icon: 'Lock',
+          title: "Privacy en beveiliging",
+          points: ["NDA-protocol", "Versleutelde bestandsoverdracht", "KVKK-conforme processen"],
+        },
+      ],
+    },
+    whyPackage: {
+      title: "Waarom een zakelijk pakket?",
+      items: [
+        {
+          key: 'terminology',
+          icon: 'Building2',
+          title: "Vast terminologiebeheer",
+          desc: "Wij bouwen een termenbank die specifiek is voor uw bedrijf. Uw merktaal blijft in alle vertalingen behouden en wij zorgen voor consistentie. Wij letten erop in elk project dezelfde termen te gebruiken.",
+        },
+        {
+          key: 'manager',
+          icon: 'Users',
+          title: "Toegewijde accountmanager",
+          desc: "Uw toegewijde accountmanager volgt al uw processen. Met een bereikbare supportlijn staan wij in spoedeisende situaties aan uw zijde.",
+        },
+        {
+          key: 'security',
+          icon: 'ShieldCheck',
+          title: "Privacy en beveiliging",
+          desc: "Wij werken onder een NDA-protocol. Uw gegevens zijn veilig dankzij een sterke beveiligingsinfrastructuur, versleutelde bestandsoverdracht en KVKK-conforme processen.",
+        },
+      ],
+    },
+    payment: {
+      title: "Betalingsopties",
+      subtitle: "Flexibele betalingsplannen die bij uw bedrijf passen",
+      recommendedLabel: "AANBEVOLEN",
+      options: [
+        {
+          key: 'standard',
+          label: "Directe betaling",
+          heading: "Standaard",
+          desc: "Betaling per creditcard of bankoverschrijving na elke bestelling",
+          points: ["Creditcardtermijnen", "Directe levering"],
+          recommended: false,
+        },
+        {
+          key: 'term',
+          label: "Maandelijkse termijn",
+          heading: "15-30 dagen",
+          desc: "Maandelijkse gebundelde facturatie en betalingstermijnoptie",
+          points: ["Termijn van 30 dagen", "Bulkkorting", "Maandelijks rapport"],
+          recommended: true,
+        },
+      ],
+    },
+    form: {
+      title: "Aanvraag zakelijk pakket",
+      desc: "Vul het formulier in en ons deskundige team neemt contact met u op",
+      fields: {
+        company: "Bedrijfsnaam",
+        contactName: "Volledige naam contactpersoon",
+        email: "E-mail",
+        phone: "Telefoon",
+        need: "Vertel ons over uw vertaalbehoeften",
+        consent: "Ik heb de KVKK-informatieverklaring gelezen en ga hiermee akkoord.",
+      },
+      submit: "Aanvraag indienen",
+      success: "Uw aanvraag is ontvangen. Wij nemen zo snel mogelijk contact met u op.",
+      note: "Wij nemen binnen 1 werkdag contact met u op.",
+    },
+  },
+
+  partnership: {
+    seo: {
+      title: "Partnerprogramma",
+      description:
+        "Verdien commissie op elke klant die u doorverwijst. Transparante rapportage, doorverwijzingen via QR-code en professionele ondersteuning.",
+    },
+    hero: {
+      title: "Partnerprogramma",
+      value: "Verdien 20% commissie op elke klant die u naar ons doorverwijst.",
+      subtitle: "Een transparant systeem, betrouwbare uitbetalingen, langdurige samenwerking.",
+      cta: "Nu aanmelden",
+    },
+    advantages: {
+      title: "Voordelen voor partners",
+      subtitle: "Waarom partner worden van TercümExpert?",
+      items: [
+        { key: 'commission', icon: 'Wallet', title: "20% commissiegarantie", desc: "Een transparant commissiesysteem voor elke klant die u doorverwijst." },
+        { key: 'qr', icon: 'QrCode', title: "Doorverwijzing via QR-code", desc: "Eenvoudige klantregistratie met integratie op uw visitekaartje." },
+        { key: 'reporting', icon: 'BarChart3', title: "Transparante rapportage", desc: "Realtime volgpaneel voor commissie en klanten." },
+        { key: 'support', icon: 'Users', title: "Professionele ondersteuning", desc: "Een toegewijde supportlijn voor partners en een accountmanager." },
+      ],
+    },
+    howItWorks: {
+      title: "Hoe werkt het?",
+      steps: [
+        { title: "Aanmelden", desc: "Vul het online aanmeldformulier in. Deel uw bedrijfsgegevens en contactgegevens. Uw aanvraag wordt binnen 1 werkdag beoordeeld." },
+        { title: "Partner worden", desc: "Zodra uw aanvraag is goedgekeurd, krijgt u toegang tot uw eigen partnerpaneel. Uw QR-codes en doorverwijslinks staan klaar." },
+        { title: "Klanten doorverwijzen", desc: "Verwijs uw klanten naar ons door via QR-code, een persoonlijke link of visitekaartje. Elke doorverwijzing wordt automatisch in het systeem geregistreerd." },
+        { title: "Commissie verdienen", desc: "U verdient 20% commissie telkens wanneer een door u doorverwezen klant een bestelling plaatst. U ontvangt elke 15 dagen automatisch een uitbetaling." },
+      ],
+    },
+    sectors: {
+      title: "Doelsectoren",
+      subtitle: "Voor welke sectoren is het ideaal?",
+      items: [
+        { key: 'law', icon: 'Scale', title: "Advocatenkantoren", desc: "Behoefte aan beëdigde vertaling van dossiers, contracten en juridische documenten." },
+        { key: 'visa', icon: 'Plane', title: "Visumadvies", desc: "Documenten die een beëdigde vertaling vereisen, zoals paspoorten, diploma's en aktes uit de burgerlijke stand." },
+        { key: 'education', icon: 'GraduationCap', title: "Onderwijsadvies", desc: "Beëdigde vertaling van studentendocumenten en apostilleprocessen." },
+        { key: 'health', icon: 'HeartPulse', title: "Gezondheidstoerisme", desc: "Vertaling van medische rapporten, patiëntendossiers en gezondheidsdocumenten." },
+        { key: 'patent', icon: 'Building2', title: "Octrooi-/merkenbureaus", desc: "Technische vertaling van octrooi-, merkregistratie- en juridische documenten." },
+        { key: 'realestate', icon: 'Home', title: "Makelaarskantoren", desc: "Vertaling van eigendomsakten, contracten en officiële documenten voor buitenlandse investeerders." },
+        { key: 'hr', icon: 'Briefcase', title: "HR-advies", desc: "Vertaling van cv's, diploma's en referentiebrieven voor plaatsing in het buitenland." },
+        { key: 'software', icon: 'Code', title: "Softwarebedrijven", desc: "Lokalisatie van web- en mobiele apps, vertaling van technische documenten." },
+      ],
+    },
+    commission: {
+      title: "Commissiestructuur",
+      stats: {
+        commissionLabel: "Standaardcommissie",
+        commissionSub: "Op elke bestelling",
+        periodUnit: "Dagen",
+        periodLabel: "Uitbetalingsperiode",
+        feeLabel: "Aansluitkosten",
+        feeSub: "Volledig gratis",
+      },
+      exampleTitle: "Voorbeeldberekening van inkomsten",
+      exampleOrderLabel: "Bestelling van de klant die u heeft doorverwezen",
+      exampleRateLabel: "Commissiepercentage",
+      exampleEarningLabel: "Uw inkomsten",
+      note: "Commissiepercentages en voorwaarden zijn afhankelijk van de partnerovereenkomst.",
+    },
+    form: {
+      title: "Aanmeldformulier voor partners",
+      subtitle: "Vul het formulier in en wij nemen binnen 1 werkdag contact met u op.",
+      fields: {
+        company: "Naam bedrijf/organisatie",
+        sector: "Sector",
+        contactName: "Volledige naam contactpersoon",
+        titleRole: "Functie",
+        email: "E-mail",
+        phone: "Telefoon",
+        potential: "Uw geschatte maandelijkse doorverwijspotentieel",
+        note: "Eventuele opmerkingen die u wilt toevoegen",
+        agreement: "Ik heb de voorwaarden van de partnerovereenkomst gelezen en ga hiermee akkoord.",
+      },
+      sectorPlaceholder: "Selecteren",
+      sectorOptions: ["Advocatenkantoor", "Visumadvies", "Onderwijsadvies", "Gezondheidstoerisme", "Octrooi-/merkenbureau", "Vastgoed", "HR-advies", "Software", "Overig"],
+      potentialOptions: ["1-5 klanten", "5-10 klanten", "10-20 klanten", "20+ klanten"],
+      submit: "Aanvraag indienen",
+      success: "Uw aanvraag is ontvangen. Wij nemen contact met u op.",
+      note: "Uw aanvraag wordt binnen 1 werkdag beoordeeld.",
+    },
+  },
+
+  quote: {
+    seo: {
+      title: "Directe prijsberekening",
+      description: "Upload uw document of voer de details in en ontvang direct uw voorlopige offerte.",
+    },
+    hero: {
+      title: "Directe prijsberekening",
+      subtitle: "Upload uw document of voer de details in en ontvang direct een voorlopige offerte.",
+    },
+    upload: {
+      heading: "Upload uw documenten",
+      privacy: "Uw gegevens worden vertrouwelijk behandeld",
+      tabFile: "Bestand uploaden",
+      tabText: "Tekst invoeren",
+      chooseFile: "Kies uw documenten",
+      formats: ".docx, .xlsx, .pdf, .pptx, .jpg, .png en 50+ formaten geaccepteerd · Max. 100MB per bestand",
+      dropHint: "U kunt een of meer bestanden naar dit gebied slepen.",
+      textPlaceholder: "Plak of typ uw tekst hier…",
+      totalWords: "Totaal aantal woorden",
+      extracting: "Woorden tellen…",
+      wordsUnit: "woorden",
+      remove: "Verwijderen",
+      unsupported:
+        "Automatisch woorden tellen was niet mogelijk voor dit bestandstype. Plak de tekst via \"Tekst invoeren\"; het aantal wordt bij de offerte door ons team geverifieerd.",
+      empty:
+        "Er is geen selecteerbare tekst in het bestand gevonden (het kan gescand zijn/een afbeelding). Gebruik \"Tekst invoeren\", of het aantal wordt tijdens de offerte geverifieerd.",
+      error: "Het bestand kon niet worden gelezen. Probeer het opnieuw of gebruik \"Tekst invoeren\".",
+      tooLarge: "Het bestand mag niet groter zijn dan 100MB.",
+      needInput: "Upload een bestand of voer tekst in om een prijs te ontvangen.",
+    },
+    fields: {
+      upload: "Document uploaden (optioneel)",
+      uploadHint: "PDF, DOC, DOCX of TXT — max. 10 MB",
+      sourceLang: "Brontaal",
+      targetLang: "Doeltaal",
+      serviceType: "Type dienst",
+      documentType: "Documenttype",
+      wordCount: "Geschat aantal woorden",
+      wordCountHint: "Gebruik de schuifregelaar of voer het aantal handmatig in.",
+      options: "Aanvullende opties",
+      calculate: "Prijs berekenen",
+    },
+    options: {
+      urgent: "Spoedlevering",
+      notarization: "Notariële bekrachtiging",
+      physicalDelivery: "Fysieke levering",
+    },
+    languages: {
+      tr: "Turks",
+      en: "Engels",
+      de: "Duits",
+      fr: "Frans",
+      es: "Spaans",
+      it: "Italiaans",
+      ru: "Russisch",
+      ar: "Arabisch",
+      nl: "Nederlands",
+    },
+    documentTypes: {
+      diploma: "Diploma",
+      passport: "Paspoort",
+      'civil-registry': "Uittreksel burgerlijke stand",
+      contract: "Contract",
+      'medical-report': "Medisch rapport",
+      'technical-doc': "Technisch document",
+      'court-doc': "Gerechtelijk document",
+      other: "Overig",
+    },
+    result: {
+      title: "Voorlopige offerte",
+      basePrice: "Basisservicekosten",
+      wordPrice: "Woordtarief",
+      addons: "Aanvullende diensten",
+      total: "Totaal",
+      vat: "btw",
+      delivery: "Geschatte levertijd",
+      deliveryUnit: "werkdagen",
+      disclaimer: "Dit is een voorlopige offerte; de definitieve prijs wordt bevestigd na beoordeling van het document.",
+      order: "Bestelling plaatsen",
+      whatsapp: "Contact via WhatsApp",
+      estimatedWords: "Geschat aantal woorden (automatisch — demo)",
+    },
+    orderConfirm: {
+      title: "Uw bestelling is ontvangen",
+      number: "Bestelnr.",
+      desc: "Uw aanvraag en documenten zijn opgeslagen. Ons deskundige team beoordeelt het document en neemt zo snel mogelijk contact met u op.",
+      viewOrders: "Mijn bestellingen",
+      submitting: "Bestelling aanmaken…",
+      error: "Er is een probleem opgetreden bij het aanmaken van uw bestelling. Probeer het opnieuw.",
+    },
+    gate: {
+      title: "Uw prijs is klaar",
+      subtitle: "Log in of verifieer uw gegevens om de prijs te zien en een bestelling te plaatsen.",
+      loginCta: "Inloggen / Registreren",
+      or: "of ga snel verder",
+      firstName: "Voornaam",
+      lastName: "Achternaam",
+      email: "E-mail",
+      sendCode: "Verificatiecode verzenden",
+      codeLabel: "Verificatiecode",
+      codeSentA: "heeft een verificatiecode ontvangen.",
+      verify: "Verifiëren en prijs bekijken",
+      resend: "Code opnieuw verzenden",
+      resent: "Er is een nieuwe code verzonden.",
+      back: "Gegevens wijzigen",
+      errNames: "Voor- en achternaam zijn verplicht.",
+      errEmail: "Voer een geldig e-mailadres in.",
+      errCode: "Voer de code volledig in.",
+      note: "Uw e-mailadres wordt alleen gebruikt voor de offerte en bestelling.",
+    },
+    note: {
+      label: "Opmerking bij uw bestelling (optioneel)",
+      placeholder: "U kunt hier uw wensen over levering, terminologie of speciale verzoeken noteren.",
+    },
+  },
+
+  order: {
+    seo: {
+      title: "Bestelling volgen",
+      description: "Volg de status van uw bestelling.",
+    },
+    numberLabel: "Bestelnr.",
+    placedOn: "Besteldatum",
+    estimatedLabel: "Geschatte levering van de vertaling",
+    cargoEstimatedLabel: "Geschatte verzenddatum",
+    timelineTitle: "Status bestelling",
+    steps: {
+      received: "Uw bestelling is ontvangen",
+      in_progress: "In behandeling",
+      translated: "Vertaling voltooid",
+      shipped: "Verzonden",
+      delivered: "Bezorgd",
+      cancelled: "Bestelling geannuleerd",
+    },
+    stepDesc: {
+      received: "Uw aanvraag en documenten zijn in ons systeem aangekomen. Ons deskundige team beoordeelt het en begint binnenkort.",
+      in_progress: "Onze deskundige vertaler is met uw vertaling begonnen.",
+      translated: "Uw vertaling is voltooid en de laatste controles zijn uitgevoerd.",
+      shipped: "Uw document is aan de koerier overhandigd; u kunt het volgen met de onderstaande knop.",
+      delivered: "Uw document is per e-mail naar u verzonden.",
+      cancelled: "Deze bestelling is geannuleerd. Neem bij vragen contact met ons op.",
+    },
+    cargoReady: "Uw document is verzonden. Volg het met één tik:",
+    cargoPending: "De trackingcode verschijnt hier zodra uw document is verzonden.",
+    trackCargo: "Mijn zending volgen",
+    digitalPending: "Zodra uw vertaling voltooid is, worden uw bestanden per e-mail naar u verzonden.",
+    digitalDelivered: "Uw vertaling is per e-mail naar u verzonden. Controleer uw inbox (en spammap).",
+    detailsTitle: "Bestelgegevens",
+    fields: {
+      service: "Dienst",
+      langs: "Talen",
+      documentType: "Documenttype",
+      words: "Woorden",
+      delivery: "Geschatte tijd",
+      total: "Bedrag",
+      note: "Uw opmerking",
+    },
+    myOrders: "Mijn bestellingen",
+    backHome: "Terug naar Home",
+    whatsapp: "Contact via WhatsApp",
+    loading: "Bestelling laden…",
+    loginRequired: {
+      title: "Log in om uw bestelling te bekijken",
+      desc: "U heeft alleen toegang tot uw bestelgegevens nadat u met uw account bent ingelogd.",
+      login: "Inloggen",
+    },
+    notFound: {
+      title: "Bestelling niet gevonden",
+      desc: "Dit bestelnummer hoort niet bij u of bestaat niet. Controleer de link.",
+      home: "Terug naar Home",
+    },
+  },
+
+  faq: {
+    seo: {
+      title: "Veelgestelde vragen",
+      description: "Veelgestelde vragen over beëdigde vertaling, levertijd, prijzen, notariële bekrachtiging en zakelijke betalingstermijnen.",
+    },
+    hero: { title: "Veelgestelde vragen", subtitle: "Het antwoord dat u zoekt, vindt u hier." },
+    categoriesTitle: "Categorieën",
+    searchPlaceholder: "Zoek op vragen of trefwoorden…",
+    empty: "Geen vragen kwamen overeen met uw zoekopdracht. Probeer een ander woord of neem contact met ons op.",
+    categories: FAQ_CATEGORIES_NL,
+    items: FAQ_ITEMS_NL,
+    notFound: {
+      title: "Heeft u het antwoord op uw vraag niet gevonden?",
+      contact: "Neem contact op",
+      whatsapp: "WhatsApp-ondersteuning",
+    },
+  },
+
+  contact: {
+    seo: {
+      title: "Contact",
+      description: "Neem contact op met TercümExpert: telefoon, e-mail, WhatsApp en contactformulier.",
+    },
+    hero: { title: "Contact", subtitle: "Hoe kunnen wij u helpen?" },
+    infoTitle: "Contactgegevens",
+    labels: {
+      phone: "Telefoon",
+      email: "E-mail",
+      whatsapp: "WhatsApp",
+      address: "Adres",
+      hours: "Openingstijden",
+    },
+    form: {
+      title: "Neem contact op",
+      fields: {
+        name: "Volledige naam",
+        email: "E-mail",
+        phone: "Telefoon",
+        subject: "Onderwerp",
+        message: "Bericht",
+        consent: "Ik heb de KVKK-informatieverklaring gelezen en ga hiermee akkoord.",
+      },
+      submit: "Bericht verzenden",
+      success: "Uw bericht is ontvangen. Wij nemen binnenkort contact met u op.",
+    },
+    map: {
+      title: "Onze locatie",
+      subtitle: "Vind ons op de kaart",
+      placeholder: "Kaartgebied",
+      note: "De locatiekaart wordt hier binnenkort weergegeven.",
+    },
+  },
+
+  auth: {
+    seo: {
+      title: "Inloggen / Registreren",
+      description: "Log in op uw TercümExpert-account of maak een nieuw account aan.",
+    },
+    tabs: { login: "Inloggen", register: "Registreren" },
+    google: "Doorgaan met Google",
+    or: "of",
+    fields: {
+      firstName: "Voornaam",
+      lastName: "Achternaam",
+      email: "E-mail",
+      password: "Wachtwoord",
+      code: "Verificatiecode",
+    },
+    login: {
+      title: "Log in op uw account",
+      submit: "Inloggen",
+      noAccount: "Heeft u nog geen account?",
+      switchToRegister: "Registreren",
+    },
+    register: {
+      title: "Een nieuw account aanmaken",
+      submit: "Registreren",
+      haveAccount: "Heeft u al een account?",
+      switchToLogin: "Inloggen",
+      consent: "Door een account aan te maken, ga ik akkoord met de KVKK-informatieverklaring en het privacybeleid.",
+    },
+    verify: {
+      title: "Verifieer uw e-mailadres",
+      desc: "— voer de 6-cijferige code in die wij naar dit adres hebben gestuurd.",
+      submit: "Verifiëren en doorgaan",
+      spam: "De code kan enkele minuten vertraging hebben; controleer ook uw spam-/ongewenste map.",
+      resend: "Code opnieuw verzenden",
+      resent: "Er is een nieuwe code verzonden.",
+      back: "Terug",
+    },
+    signedIn: {
+      title: "Mijn account",
+      greeting: "Welkom",
+      logout: "Uitloggen",
+    },
+    orders: {
+      title: "Mijn bestellingen",
+      empty: "U heeft nog geen bestellingen. U kunt uw eerste bestelling aanmaken via Prijs berekenen.",
+      loading: "Bestellingen laden…",
+      error: "Bestellingen konden niet worden geladen. Vernieuw de pagina.",
+      status: {
+        received: "Ontvangen",
+        in_progress: "In behandeling",
+        translated: "Vertaling voltooid",
+        shipped: "Verzonden",
+        delivered: "Bezorgd",
+        cancelled: "Geannuleerd",
+      },
+      track: "Volgen",
+    },
+    errors: {
+      nameRequired: "Voor- en achternaam zijn verplicht.",
+      emailInvalid: "Voer een geldig e-mailadres in.",
+      passwordShort: "Het wachtwoord moet minimaal 6 tekens bevatten.",
+      codeInvalid: "Voer de 6-cijferige code in.",
+      consentRequired: "Akkoord is vereist om door te gaan.",
+    },
+  },
+
+  blog: {
+    seo: { title: "Blog", description: "Gidsen over vertaling, notariële bekrachtiging, apostille en lokalisatie." },
+    hero: { title: "Blog", subtitle: "Gidsen uit de wereld van vertalen." },
+    searchPlaceholder: "Zoek berichten…",
+    readingTime: "min leestijd",
+    relatedTitle: "Gerelateerde berichten",
+    allCategories: "Alle",
+    empty: "Geen berichten kwamen overeen met dit criterium.",
+  },
+
+  legal: {
+    lastUpdatedLabel: "Laatst bijgewerkt",
+    draftNotice:
+      "Deze tekst is een concept en dient vóór publicatie door een juridisch expert te worden beoordeeld. De bedrijfsgegevens zijn nog niet geverifieerd.",
+    kvkk: {
+      seo: { title: "KVKK-informatieverklaring", description: "Informatieverklaring over de bescherming van persoonsgegevens." },
+      title: "KVKK-informatieverklaring",
+      sections: [
+        { heading: "Verwerkingsverantwoordelijke", body: "De verwerkingsverantwoordelijke en contactgegevens worden vóór de lancering toegevoegd." },
+        { heading: "Verwerkte persoonsgegevens", body: "Naam, contactgegevens en documentgegevens kunnen tijdens contact- en bestelprocessen worden verwerkt." },
+        { heading: "Doeleinden van de verwerking", body: "Dienstverlening, offertes, communicatie en wettelijke verplichtingen." },
+        { heading: "Rechtsgronden", body: "Uitvoering van een overeenkomst, uitdrukkelijke toestemming en gerechtvaardigd belang." },
+        { heading: "Bewaartermijnen", body: "Gegevens worden bewaard gedurende de in de relevante wetgeving vastgestelde termijnen." },
+        { heading: "Doorgifte", body: "Uitsluitend doorgegeven voor zover vereist voor de dienst en in overeenstemming met de wetgeving." },
+        { heading: "Uw rechten", body: "U kunt uw rechten uitoefenen op grond van artikel 11 van de KVKK." },
+        { heading: "Hoe aanvragen", body: "U kunt uw verzoeken indienen via de vermelde contactkanalen." },
+      ],
+    },
+    privacy: {
+      seo: { title: "Privacybeleid", description: "Beleid inzake de vertrouwelijkheid van persoonsgegevens en documenten." },
+      title: "Privacybeleid",
+      sections: [
+        { heading: "Verzamelde informatie", body: "Contactgegevens en geüploade documenten." },
+        { heading: "Gebruik", body: "Uitsluitend gebruikt voor dienstverlening en communicatie." },
+        { heading: "Documentbeveiliging", body: "Documenten worden verwerkt met versleutelde overdracht en vertrouwelijkheidsprincipes." },
+        { heading: "Cookies", body: "Details staan in het cookiebeleid." },
+      ],
+    },
+    distanceSales: {
+      seo: { title: "Overeenkomst op afstand", description: "Overeenkomst op afstand voor de verkoop van diensten." },
+      title: "Overeenkomst op afstand",
+      sections: [
+        { heading: "Partijen", body: "Gegevens van verkoper en koper worden vóór de lancering toegevoegd." },
+        { heading: "Omvang van de dienst", body: "De omvang van de bestelde vertaal-/bekrachtigingsdiensten." },
+        { heading: "Herroepingsrecht en uitzonderingen", body: "Uitzonderingen op herroeping kunnen gelden voor diensten die specifiek voor een persoon/bestelling zijn opgesteld." },
+        { heading: "Retourneren en annuleren", body: "De voorwaarden voor retourneren en annuleren zijn hier vastgelegd." },
+      ],
+    },
+    cookies: {
+      seo: { title: "Cookiebeleid", description: "Cookiecategorieën die op de site worden gebruikt en het beheer van voorkeuren." },
+      title: "Cookiebeleid",
+      sections: [
+        { heading: "Wat is een cookie?", body: "Cookies zijn kleine bestanden die in uw browser worden opgeslagen." },
+        { heading: "Categorieën", body: "Noodzakelijke, analytische, marketing- en voorkeurscookies." },
+        { heading: "Voorkeuren beheren", body: "U kunt uw cookievoorkeuren op elk moment bijwerken." },
+      ],
+    },
+  },
+
+  footer: {
+    tagline: "Uw betrouwbare partner voor professionele vertaaldiensten.",
+    columns: {
+      quickLinks: "Snelle links",
+      services: "Diensten",
+      contact: "Contact",
+    },
+    quickLinks: {
+      corporate: "Zakelijk",
+      services: "Onze diensten",
+      quote: "Prijs berekenen",
+      blog: "Blog",
+      faq: "Veelgestelde vragen",
+      contact: "Contact",
+    },
+    serviceLinks: {
+      sworn: "Beëdigde vertaling",
+      notarized: "Notarieel bekrachtigde vertaling",
+      apostille: "Apostilleproces",
+      corporate: "Zakelijke oplossingen",
+      partnership: "Partnerprogramma",
+    },
+    legal: {
+      kvkk: "KVKK",
+      privacy: "Privacybeleid",
+      distanceSales: "Overeenkomst op afstand",
+      cookies: "Cookiebeleid",
+    },
+    socialTitle: "Volg ons",
+    whatsapp: "WhatsApp-ondersteuning",
+    rights: "Alle rechten voorbehouden.",
+  },
+
+  cookie: {
+    title: "Cookievoorkeuren",
+    desc: "Wij gebruiken cookies om uw ervaring te verbeteren. Andere cookies dan de noodzakelijke worden alleen met uw toestemming ingezet.",
+    accept: "Accepteren",
+    reject: "Weigeren",
+    manage: "Voorkeuren beheren",
+    save: "Voorkeuren opslaan",
+    categories: {
+      necessary: { label: "Noodzakelijk", desc: "Vereist voor het functioneren van de site; kan niet worden uitgeschakeld." },
+      analytics: { label: "Analytisch", desc: "Helpt ons het gebruik te begrijpen." },
+      marketing: { label: "Marketing", desc: "Voor relevante content en advertenties." },
+      preferences: { label: "Voorkeuren", desc: "Onthoudt uw voorkeuren." },
+    },
+  },
+
+  chatbot: {
+    title: "TercümExpert-ondersteuning",
+    open: "Chat openen",
+    close: "Chat sluiten",
+    minimize: "Minimaliseren",
+    clear: "Gesprek wissen",
+    inputPlaceholder: "Typ uw bericht…",
+    send: "Verzenden",
+    typing: "Aan het typen…",
+    welcome:
+      "Hallo en welkom bij TercümExpert. Ik kan u helpen met vertaling, prijzen, notariële bekrachtiging, apostille of zakelijke diensten.",
+    quickQuestions: [
+      "Hoe wordt de prijs berekend?",
+      "Wat is een beëdigde vertaling?",
+      "Ik wil een document uploaden",
+      "Ik wil een zakelijke offerte",
+      "Is notariële bekrachtiging vereist?",
+      "Verbind mij met een medewerker",
+    ],
+    handoff: "Verbinden met een medewerker",
+    toWhatsapp: "Overzetten naar WhatsApp",
+    disclaimer: "Deze informatie is algemeen; bevestig de exacte vereisten bij de betreffende instantie.",
+    sensitiveWarning:
+      "Deel geen gevoelige persoonsgegevens via deze chat. U kunt uw documenten versturen via het beveiligde uploadgebied.",
+  },
+
+  notFound: {
+    seo: { title: "Pagina niet gevonden", description: "De pagina die u zoekt, kon niet worden gevonden." },
+    title: "Pagina niet gevonden",
+    desc: "De pagina die u zoekt, is mogelijk verplaatst of heeft misschien nooit bestaan.",
+    home: "Terug naar home",
+  },
+}
