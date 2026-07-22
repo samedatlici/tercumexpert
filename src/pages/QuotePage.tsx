@@ -22,6 +22,7 @@ import { AREAS, docsForArea, type AreaId } from '@/app/config/areas.config'
 import { whatsappLink } from '@/app/config/site.config'
 import { COUNTRIES, dialOf, defaultCountryForLocale } from '@/app/config/country-codes'
 import { PhoneInput } from '@/components/common/PhoneInput'
+import { CountryCitySelect, countryDisplayName } from '@/components/common/CountryCitySelect'
 
 const fieldClass =
   'h-11 w-full rounded-md border border-border bg-surface px-3 text-base focus-visible:outline-none'
@@ -533,7 +534,7 @@ function CheckoutModal({
   onClose: () => void
   onSubmit: (d: DeliveryInfo) => void
 }) {
-  const { dict } = useI18n()
+  const { dict, locale } = useI18n()
   const c = dict.quote.checkout
   const [firstName, setFirstName] = useState(initialFirstName)
   const [lastName, setLastName] = useState(initialLastName)
@@ -541,7 +542,7 @@ function CheckoutModal({
   const [address, setAddress] = useState('')
   const [city, setCity] = useState('')
   const [postalCode, setPostalCode] = useState('')
-  const [country, setCountry] = useState('')
+  const [country, setCountry] = useState(() => defaultCountryForLocale(locale))
   const [err, setErr] = useState<string | null>(null)
 
   const submit = (e: FormEvent) => {
@@ -557,7 +558,8 @@ function CheckoutModal({
       address: address.trim(),
       city: city.trim(),
       postalCode: postalCode.trim(),
-      country: country.trim(),
+      // İ ülke kodunu okunur ada çevirip sakla (kargo etiketinde okunabilir olsun).
+      country: countryDisplayName(country, locale, country),
     })
   }
 
@@ -606,16 +608,19 @@ function CheckoutModal({
               autoComplete="street-address"
             />
           </ModalField>
-          <div className="grid grid-cols-2 gap-3">
-            <ModalField label={c.city}>
-              <input className={fieldClass} value={city} onChange={(e) => setCity(e.target.value)} autoComplete="address-level2" />
-            </ModalField>
-            <ModalField label={c.postalCode}>
-              <input className={fieldClass} value={postalCode} onChange={(e) => setPostalCode(e.target.value)} autoComplete="postal-code" />
-            </ModalField>
-          </div>
-          <ModalField label={c.country}>
-            <input className={fieldClass} value={country} onChange={(e) => setCountry(e.target.value)} autoComplete="country-name" />
+          <CountryCitySelect
+            country={country}
+            city={city}
+            onCountry={setCountry}
+            onCity={setCity}
+            countryLabel={c.country}
+            cityLabel={c.city}
+            countryPlaceholder={c.selectCountry}
+            cityPlaceholder={c.selectCity}
+            cityDisabledPlaceholder={c.cityNeedsCountry}
+          />
+          <ModalField label={c.postalCode}>
+            <input className={fieldClass} value={postalCode} onChange={(e) => setPostalCode(e.target.value)} autoComplete="postal-code" />
           </ModalField>
           {(err || error) && <p className="text-sm text-danger">{err || error}</p>}
           <Button type="submit" intent="secondary" size="lg" block disabled={busy}>

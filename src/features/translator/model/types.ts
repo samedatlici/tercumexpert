@@ -13,6 +13,9 @@ export interface Translator {
   birth_date: string | null
   phone: string | null
   address: string | null
+  country: string | null
+  city: string | null
+  is_sworn: boolean
   iban: string | null
   iban_name: string | null
   iban_verified: boolean

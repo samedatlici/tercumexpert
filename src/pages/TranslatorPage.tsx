@@ -11,6 +11,8 @@ import { cn } from '@/lib/cn'
 import { useTranslator } from '@/features/translator/model/useTranslator'
 import { PANEL_LANGUAGES, languageName } from '@/features/translator/model/config'
 import { AREA_IDS } from '@/app/config/areas.config'
+import { defaultCountryForLocale } from '@/app/config/country-codes'
+import { CountryCitySelect, countryDisplayName } from '@/components/common/CountryCitySelect'
 import { translatorApi } from '@/features/translator/model/api'
 import type { LanguagePair, Translator } from '@/features/translator/model/types'
 
@@ -164,12 +166,12 @@ function PairPicker({
         <Button type="button" intent="outline" onClick={add} className="shrink-0">{t.form.addPair}</Button>
       </div>
       {pairs.length > 0 && (
-        <ul className="mt-3 flex flex-wrap gap-2">
+        <ul className="mt-3 flex flex-wrap gap-2.5">
           {pairs.map((p, i) => (
-            <li key={`${p.source}-${p.target}`} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-muted px-3 py-1 text-sm">
+            <li key={`${p.source}-${p.target}`} className="inline-flex items-center gap-2 rounded-lg border border-border-strong bg-surface-muted py-2 pe-2 ps-3.5 text-sm font-medium">
               {languageName(p.source, locale)} → {languageName(p.target, locale)}
-              <button type="button" onClick={() => setPairs(pairs.filter((_, j) => j !== i))} aria-label={t.form.removePair} className="rounded p-0.5 text-text-muted hover:bg-border/60">
-                <Icon name="X" className="size-3.5" />
+              <button type="button" onClick={() => setPairs(pairs.filter((_, j) => j !== i))} aria-label={t.form.removePair} className="inline-flex size-6 items-center justify-center rounded-md text-text-muted hover:bg-border/60 hover:text-danger">
+                <Icon name="X" className="size-4" />
               </button>
             </li>
           ))}
@@ -226,7 +228,10 @@ function ApplicationForm({
   const [fullName, setFullName] = useState('')
   const [birthDate, setBirthDate] = useState('')
   const [phone, setPhone] = useState('')
+  const [country, setCountry] = useState(() => defaultCountryForLocale(locale))
+  const [city, setCity] = useState('')
   const [address, setAddress] = useState('')
+  const [isSworn, setIsSworn] = useState(false)
   const [pairs, setPairs] = useState<LanguagePair[]>([])
   const [expertise, setExpertise] = useState<string[]>([])
   const [busy, setBusy] = useState(false)
@@ -246,7 +251,10 @@ function ApplicationForm({
       full_name: fullName.trim(),
       birth_date: birthDate || null,
       phone: phone.trim() || null,
+      country: country || null,
+      city: city || null,
       address: address.trim() || null,
+      is_sworn: isSworn,
       language_pairs: pairs,
       expertise,
     })
@@ -279,10 +287,28 @@ function ApplicationForm({
           <label className={labelClass}>{t.form.phone}</label>
           <PhoneInput onChange={setPhone} />
         </div>
+        <CountryCitySelect
+          country={country}
+          city={city}
+          onCountry={setCountry}
+          onCity={setCity}
+          countryLabel={t.form.country}
+          cityLabel={t.form.city}
+          countryPlaceholder={t.form.selectCountry}
+          cityPlaceholder={t.form.selectCity}
+          cityDisabledPlaceholder={t.form.cityNeedsCountry}
+        />
         <div>
           <label className={labelClass}>{t.form.address}</label>
           <textarea rows={2} className={cn(inputClass, 'py-2')} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" />
         </div>
+        <label className="flex items-start gap-2.5 rounded-md border border-border bg-surface-muted/40 p-3 text-sm">
+          <input type="checkbox" checked={isSworn} onChange={(e) => setIsSworn(e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-black" />
+          <span>
+            <span className="font-medium">{t.form.isSworn}</span>
+            <span className="mt-0.5 block text-xs text-text-muted">{t.form.isSwornHint}</span>
+          </span>
+        </label>
         <PairPicker t={t} locale={locale} pairs={pairs} setPairs={setPairs} />
         <ExpertisePicker t={t} selected={expertise} setSelected={setExpertise} />
         {err && <p className="text-sm text-danger">{err}</p>}
@@ -370,7 +396,10 @@ function ProfileEditor({
   const [fullName, setFullName] = useState(translator.full_name ?? '')
   const [birthDate, setBirthDate] = useState(translator.birth_date ?? '')
   const [phone, setPhone] = useState(translator.phone ?? '')
+  const [country, setCountry] = useState(translator.country ?? '')
+  const [city, setCity] = useState(translator.city ?? '')
   const [address, setAddress] = useState(translator.address ?? '')
+  const [isSworn, setIsSworn] = useState(!!translator.is_sworn)
   const [iban, setIban] = useState(translator.iban ?? '')
   const [ibanName, setIbanName] = useState(translator.iban_name ?? '')
   const [pairs, setPairs] = useState<LanguagePair[]>(translator.language_pairs ?? [])
@@ -388,7 +417,10 @@ function ProfileEditor({
         full_name: fullName.trim(),
         birth_date: birthDate || null,
         phone: phone.trim() || null,
+        country: country || null,
+        city: city || null,
         address: address.trim() || null,
+        is_sworn: isSworn,
         iban: iban.trim(),
         iban_name: ibanName.trim(),
         language_pairs: pairs,
@@ -432,10 +464,28 @@ function ProfileEditor({
         <PhoneInput onChange={setPhone} />
         {translator.phone && <p className="mt-1 text-xs text-text-muted">{t.profile.current}: <span dir="ltr">{translator.phone}</span></p>}
       </div>
+      <CountryCitySelect
+        country={country}
+        city={city}
+        onCountry={setCountry}
+        onCity={setCity}
+        countryLabel={t.form.country}
+        cityLabel={t.form.city}
+        countryPlaceholder={t.form.selectCountry}
+        cityPlaceholder={t.form.selectCity}
+        cityDisabledPlaceholder={t.form.cityNeedsCountry}
+      />
       <div>
         <label className={labelClass}>{t.form.address}</label>
         <textarea rows={2} className={cn(inputClass, 'py-2')} value={address} onChange={(e) => setAddress(e.target.value)} />
       </div>
+      <label className="flex items-start gap-2.5 rounded-md border border-border bg-surface-muted/40 p-3 text-sm">
+        <input type="checkbox" checked={isSworn} onChange={(e) => setIsSworn(e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-black" />
+        <span>
+          <span className="font-medium">{t.form.isSworn}</span>
+          <span className="mt-0.5 block text-xs text-text-muted">{t.form.isSwornHint}</span>
+        </span>
+      </label>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelClass}>{t.form.iban}</label>
@@ -517,9 +567,14 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
             <article key={r.id} className="rounded-lg border border-border bg-surface p-4">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <h3 className="font-semibold">{r.full_name || '—'}</h3>
                     <StatusBadge t={t} status={r.status} />
+                    {r.is_sworn && (
+                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                        {t.admin.swornBadge}
+                      </span>
+                    )}
                   </div>
                   <p className="mt-1 text-xs text-text-muted">{new Date(r.created_at).toLocaleDateString()}</p>
                 </div>
@@ -548,6 +603,9 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
                 </Detail>
                 <Detail label={t.form.phone}>{r.phone ? <span dir="ltr">{r.phone}</span> : '—'}</Detail>
                 <Detail label={t.form.birthDate}>{r.birth_date || '—'}</Detail>
+                <Detail label={t.admin.colLocation}>
+                  {[r.city, countryDisplayName(r.country ?? '', locale, r.country ?? '')].filter(Boolean).join(', ') || '—'}
+                </Detail>
                 {r.iban && <Detail label={t.form.iban}><span dir="ltr">{r.iban}</span></Detail>}
                 {r.iban_name && <Detail label={t.form.ibanName}>{r.iban_name}</Detail>}
                 <Detail label={t.form.address}>{r.address || '—'}</Detail>
