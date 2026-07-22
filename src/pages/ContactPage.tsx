@@ -1,9 +1,10 @@
 import { useState, type ReactNode } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
+import { PhoneInput } from '@/components/common/PhoneInput'
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
 import { PageHero } from '@/components/common/PageHero'
 import { Seo } from '@/components/seo/Seo'
@@ -34,6 +35,7 @@ export default function ContactPage() {
   const [sent, setSent] = useState(false)
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ContactForm>({ resolver: zodResolver(schema) })
@@ -90,7 +92,11 @@ export default function ContactPage() {
                     <input type="email" className={fieldClass} {...register('email')} aria-invalid={!!errors.email} />
                   </Field>
                   <Field label={c.form.fields.phone} error={errors.phone?.message}>
-                    <input type="tel" className={fieldClass} {...register('phone')} />
+                    <Controller
+                      name="phone"
+                      control={control}
+                      render={({ field }) => <PhoneInput onChange={field.onChange} />}
+                    />
                   </Field>
                 </div>
                 <Field label={c.form.fields.subject} error={errors.subject?.message}>

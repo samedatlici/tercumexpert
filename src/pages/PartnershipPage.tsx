@@ -1,9 +1,10 @@
 import { useState, type ReactNode } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/common/Button'
 import { Icon, type IconName } from '@/components/common/Icon'
+import { PhoneInput } from '@/components/common/PhoneInput'
 import { PageHero, SectionHeading } from '@/components/common/PageHero'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
@@ -36,6 +37,7 @@ export default function PartnershipPage() {
   const [sent, setSent] = useState(false)
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<PartnerForm>({ resolver: zodResolver(schema) })
@@ -192,7 +194,11 @@ export default function PartnershipPage() {
                   <input type="email" className={fieldClass} {...register('email')} aria-invalid={!!errors.email} />
                 </Field>
                 <Field label={p.form.fields.phone} required error={errors.phone?.message}>
-                  <input type="tel" className={fieldClass} {...register('phone')} aria-invalid={!!errors.phone} />
+                  <Controller
+                    name="phone"
+                    control={control}
+                    render={({ field }) => <PhoneInput onChange={field.onChange} />}
+                  />
                 </Field>
               </div>
               <div className="mt-4">

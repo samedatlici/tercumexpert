@@ -1,9 +1,10 @@
 import { useState, type ReactNode } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/common/Button'
 import { Icon, type IconName } from '@/components/common/Icon'
+import { PhoneInput } from '@/components/common/PhoneInput'
 import { PageHero, SectionHeading } from '@/components/common/PageHero'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
@@ -34,6 +35,7 @@ export default function CorporatePage() {
   const [sent, setSent] = useState(false)
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<CorporateForm>({ resolver: zodResolver(schema) })
@@ -173,7 +175,11 @@ export default function CorporatePage() {
                   <input type="email" className={fieldClass} {...register('email')} aria-invalid={!!errors.email} />
                 </Field>
                 <Field label={c.form.fields.phone} error={errors.phone?.message}>
-                  <input type="tel" className={fieldClass} {...register('phone')} />
+                  <Controller
+                    name="phone"
+                    control={control}
+                    render={({ field }) => <PhoneInput variant="dark" onChange={field.onChange} />}
+                  />
                 </Field>
               </div>
               <Field label={c.form.fields.need} error={errors.need?.message}>

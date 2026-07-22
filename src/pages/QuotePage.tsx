@@ -21,6 +21,7 @@ import { SERVICES, type ServiceId } from '@/app/config/services'
 import { DOCUMENT_TYPES, QUOTE_LANGUAGES, type DocumentTypeId } from '@/app/config/pricing.config'
 import { whatsappLink } from '@/app/config/site.config'
 import { COUNTRIES, dialOf, defaultCountryForLocale } from '@/app/config/country-codes'
+import { PhoneInput } from '@/components/common/PhoneInput'
 
 const fieldClass =
   'h-11 w-full rounded-md border border-border bg-surface px-3 text-base focus-visible:outline-none'
@@ -477,9 +478,8 @@ function CheckoutModal({
   onClose: () => void
   onSubmit: (d: DeliveryInfo) => void
 }) {
-  const { dict, locale } = useI18n()
+  const { dict } = useI18n()
   const c = dict.quote.checkout
-  const phonePlaceholder = `${dialOf(defaultCountryForLocale(locale))} xxx xxx xx xx`
   const [firstName, setFirstName] = useState(initialFirstName)
   const [lastName, setLastName] = useState(initialLastName)
   const [phone, setPhone] = useState('')
@@ -539,7 +539,7 @@ function CheckoutModal({
             </ModalField>
           </div>
           <ModalField label={c.phone}>
-            <input type="tel" dir="ltr" className={fieldClass} value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" placeholder={phonePlaceholder} />
+            <PhoneInput onChange={setPhone} placeholder="xxx xxx xx xx" />
           </ModalField>
           <ModalField label={c.address}>
             <textarea

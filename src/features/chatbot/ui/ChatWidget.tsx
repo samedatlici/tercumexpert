@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Icon } from '@/components/common/Icon'
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
+import { PhoneInput } from '@/components/common/PhoneInput'
 import { useI18n } from '@/hooks/useI18n'
 import { company, whatsappLink } from '@/app/config/site.config'
 import { cn } from '@/lib/cn'
@@ -319,7 +320,7 @@ export function ChatWidget() {
                 </div>
                 <input value={identName} onChange={(e) => setIdentName(e.target.value)} placeholder={cc.name} autoComplete="name" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
                 <input value={identEmail} onChange={(e) => setIdentEmail(e.target.value)} type="email" placeholder={cc.emailField} autoComplete="email" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
-                <input value={identPhone} onChange={(e) => setIdentPhone(e.target.value)} type="tel" dir="ltr" placeholder={cc.phoneField} autoComplete="tel" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
+                <PhoneInput onChange={setIdentPhone} placeholder={cc.phoneField} />
                 {identErr && <p className="text-xs text-danger">{cc.introError}</p>}
                 <button type="submit" disabled={identBusy} className="mt-auto min-h-[44px] rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground hover:bg-secondary-hover disabled:opacity-50">
                   {identBusy ? cc.submitting : cc.start}
@@ -334,7 +335,7 @@ export function ChatWidget() {
                 </div>
                 <input value={leadName} onChange={(e) => setLeadName(e.target.value)} placeholder={cc.name} autoComplete="name" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
                 <input value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} type="email" placeholder={cc.emailField} autoComplete="email" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
-                <input value={leadPhone} onChange={(e) => setLeadPhone(e.target.value)} type="tel" dir="ltr" placeholder={cc.phoneField} autoComplete="tel" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
+                <PhoneInput onChange={setLeadPhone} placeholder={cc.phoneField} />
                 <textarea value={leadMsg} onChange={(e) => setLeadMsg(e.target.value)} placeholder={cc.message} rows={3} className="rounded-md border border-border bg-surface px-3 py-2 text-base outline-none focus:border-border-strong" />
                 {leadErr && <p className="text-xs text-danger">{cc.errorRequired}</p>}
                 <div className="mt-auto flex gap-2">
