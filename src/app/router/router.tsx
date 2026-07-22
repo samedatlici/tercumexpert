@@ -1,7 +1,6 @@
 import {
   createBrowserRouter,
   isRouteErrorResponse,
-  Navigate,
   useLocation,
   useParams,
   useRouteError,
@@ -9,6 +8,7 @@ import {
 import { LocaleLayout } from '@/app/layouts/LocaleLayout'
 import { NotFound, pageForRoute } from '@/pages/registry'
 import { DEFAULT_LOCALE, isLocale } from '@/app/config/locales'
+import { RootLocaleRedirect } from './RootLocaleRedirect'
 import { resolveRouteId } from './routes'
 
 function HomeElement() {
@@ -52,7 +52,7 @@ function RouteError() {
 }
 
 export const router = createBrowserRouter([
-  { path: '/', element: <Navigate to={`/${DEFAULT_LOCALE}`} replace />, errorElement: <RouteError /> },
+  { path: '/', element: <RootLocaleRedirect />, errorElement: <RouteError /> },
   {
     path: '/:lang',
     element: <LocaleLayout />,

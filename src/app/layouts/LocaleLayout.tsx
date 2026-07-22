@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Navigate, Outlet, useParams } from 'react-router-dom'
 import { I18nProvider } from '@/app/providers/I18nProvider'
 import { Header } from '@/components/layout/Header'
@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/Footer'
 import { ChatWidget } from '@/features/chatbot/ui/ChatWidget'
 import { SkipLink } from '@/components/common/SkipLink'
 import { isLocale, DEFAULT_LOCALE } from '@/app/config/locales'
+import { saveLocale } from '@/lib/locale-detect'
 
 function PageFallback() {
   return (
@@ -21,6 +22,12 @@ function PageFallback() {
  */
 export function LocaleLayout() {
   const { lang } = useParams()
+
+  // Aktif dili kaydet: bir sonraki kök (/) ziyaretinde otomatik olarak
+  // bu dile yönlendirilir (manuel dil seçimi de böylece hatırlanır).
+  useEffect(() => {
+    if (isLocale(lang)) saveLocale(lang)
+  }, [lang])
 
   if (!isLocale(lang)) {
     return <Navigate to={`/${DEFAULT_LOCALE}`} replace />
