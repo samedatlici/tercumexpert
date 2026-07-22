@@ -17,14 +17,16 @@ interface AuthContextValue {
   signInWithGoogle: (redirectTo: string) => Promise<{ error: string | null }>
   /** E-posta + şifre ile giriş. */
   signInWithPassword: (email: string, password: string) => Promise<{ error: string | null }>
-  /** E-posta + şifre ile kayıt. Ardından e-postaya doğrulama bağlantısı gönderilir. */
-  signUp: (args: SignUpArgs, redirectTo: string) => Promise<{ error: string | null; needsVerification: boolean }>
+  /** E-posta + şifre ile kayıt. Ardından e-postaya doğrulama bağlantısı gönderilir.
+   *  `locale` = müşterinin sitedeki dili; doğrulama e-postası bu dilde gönderilir. */
+  signUp: (args: SignUpArgs, redirectTo: string, locale: string) => Promise<{ error: string | null; needsVerification: boolean }>
   /** E-postaya gelen 6 haneli doğrulama kodunu onaylar (SMTP + kod şablonu ile). */
   verifyEmailCode: (email: string, code: string) => Promise<{ error: string | null }>
   /** Doğrulama e-postasını yeniden gönderir. */
   resendCode: (email: string, redirectTo: string) => Promise<{ error: string | null }>
-  /** Misafir hızlı geçiş: şifresiz e-posta kodu gönderir (ad/soyad kaydedilir). */
-  sendGuestCode: (email: string, firstName: string, lastName: string, phone?: string) => Promise<{ error: string | null }>
+  /** Misafir hızlı geçiş: şifresiz e-posta kodu gönderir (ad/soyad kaydedilir).
+   *  `locale` = müşterinin sitedeki dili; doğrulama e-postası bu dilde gönderilir. */
+  sendGuestCode: (email: string, firstName: string, lastName: string, phone?: string, locale?: string) => Promise<{ error: string | null }>
   /** Misafir hızlı geçiş: e-posta koduyla oturum açar. */
   verifyGuestCode: (email: string, code: string) => Promise<{ error: string | null }>
   signOut: () => Promise<void>
@@ -84,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         return { error: error ? trError(error.message) : null }
       },
-      async signUp({ firstName, lastName, email, password }, redirectTo) {
+      async signUp({ firstName, lastName, email, password }, redirectTo, locale) {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -94,6 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               first_name: firstName,
               last_name: lastName,
               full_name: `${firstName} ${lastName}`.trim(),
+              locale,
             },
           },
         })
@@ -114,7 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         })
         return { error: error ? trError(error.message) : null }
       },
-      async sendGuestCode(email, firstName, lastName, phone) {
+      async sendGuestCode(email, firstName, lastName, phone, locale) {
         const { error } = await supabase.auth.signInWithOtp({
           email,
           options: {
@@ -124,6 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               last_name: lastName,
               full_name: `${firstName} ${lastName}`.trim(),
               phone: phone ?? null,
+              locale: locale ?? null,
             },
           },
         })
