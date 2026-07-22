@@ -12,11 +12,36 @@ const LANG_NAMES: Record<string, string> = {
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xtqymenxaozzwmqfssod.supabase.co'
 
-/** Sohbeti Supabase'e (service role ile) kaydeder. Hata olsa da yanıtı etkilemez. */
-async function logConversation(id: string, locale: string, messages: InMsg[]): Promise<void> {
+interface LogAttachment {
+  kind: 'image' | 'doc'
+  dataUrl?: string
+  name?: string
+  text?: string
+}
+interface LogMsg {
+  role: 'user' | 'assistant'
+  content: string
+  attachment?: LogAttachment
+}
+
+/**
+ * Yeni mesaj(lar)ı MEVCUT kayda EKLER (append) — tüm geçmiş ve ekler (görsel/belge)
+ * korunur, hiçbir mesaj kaybolmaz. Önce mevcut satırı okur, sonra birleştirip upsert eder.
+ * Service role ile; hata olsa da sohbet yanıtı verilmeye devam eder.
+ */
+async function logAppend(id: string, locale: string, add: LogMsg[]): Promise<void> {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!key || !id) return
+  if (!key || !id || add.length === 0) return
   try {
+    let existing: LogMsg[] = []
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/chat_conversations?id=eq.${encodeURIComponent(id)}&select=messages`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` } },
+    )
+    if (res.ok) {
+      const rows = (await res.json()) as Array<{ messages?: LogMsg[] | null }>
+      if (Array.isArray(rows[0]?.messages)) existing = rows[0]!.messages as LogMsg[]
+    }
     await fetch(`${SUPABASE_URL}/rest/v1/chat_conversations?on_conflict=id`, {
       method: 'POST',
       headers: {
@@ -25,7 +50,12 @@ async function logConversation(id: string, locale: string, messages: InMsg[]): P
         Authorization: `Bearer ${key}`,
         Prefer: 'resolution=merge-duplicates,return=minimal',
       },
-      body: JSON.stringify({ id, locale, messages, updated_at: new Date().toISOString() }),
+      body: JSON.stringify({
+        id,
+        locale,
+        messages: [...existing, ...add],
+        updated_at: new Date().toISOString(),
+      }),
     })
   } catch {
     /* kayıt başarısız olsa da sohbet yanıtı verilmeye devam eder */
@@ -195,17 +225,15 @@ ${knowledge}`
     const data = (await resp.json()) as { choices?: Array<{ message?: { content?: string } }> }
     const reply = data.choices?.[0]?.message?.content?.trim() || null
     if (reply) {
-      const logMsgs: InMsg[] = [...history]
+      // Yalnızca bu turun alışverişini (kullanıcı mesajı + yanıt) mevcut kayda EKLE.
+      const userMsg: LogMsg = { role: 'user', content: lastUser }
       if (attachment) {
-        const li = logMsgs.length - 1
-        if (logMsgs[li]?.role === 'user') {
-          const note =
-            attachment.kind === 'image' ? '[Görsel eki gönderildi]' : `[Belge eki: ${attachment.name}]`
-          const prev = logMsgs[li].content
-          logMsgs[li] = { role: 'user', content: prev ? `${prev}\n${note}` : note }
-        }
+        userMsg.attachment =
+          attachment.kind === 'image'
+            ? { kind: 'image', dataUrl: attachment.dataUrl }
+            : { kind: 'doc', name: attachment.name, text: attachment.text }
       }
-      await logConversation(conversationId, locale, [...logMsgs, { role: 'assistant', content: reply }])
+      await logAppend(conversationId, locale, [userMsg, { role: 'assistant', content: reply }])
     }
     return json({ reply }, 200)
   } catch (e) {
