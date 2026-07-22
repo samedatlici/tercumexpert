@@ -436,13 +436,13 @@ function ProfileEditor({
   return (
     <form onSubmit={save} className="space-y-4 rounded-lg border border-border bg-surface p-6">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1 rounded-full bg-success/15 px-2.5 py-1 text-xs font-medium text-success">
+        <Pill tone="success">
           <Icon name="CircleCheck" className="size-3.5" /> {t.profile.statusApproved}
-        </span>
-        <span className={cn('inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium', translator.iban_verified ? 'bg-success/15 text-success' : 'bg-surface-muted text-text-secondary')}>
+        </Pill>
+        <Pill tone={translator.iban_verified ? 'success' : 'neutral'}>
           <Icon name={translator.iban_verified ? 'ShieldCheck' : 'Lock'} className="size-3.5" />
           {translator.iban_verified ? t.profile.verifiedIban : t.profile.unverifiedIban}
-        </span>
+        </Pill>
       </div>
       {!iban.trim() && (
         <div className="flex items-start gap-2 rounded-md border border-secondary/30 bg-surface-muted p-3 text-sm">
@@ -572,11 +572,7 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className="font-semibold">{r.full_name || '—'}</h3>
                     <StatusBadge t={t} status={r.status} />
-                    {r.is_sworn && (
-                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
-                        {t.admin.swornBadge}
-                      </span>
-                    )}
+                    {r.is_sworn && <Pill tone="primary">{t.admin.swornBadge}</Pill>}
                   </div>
                   <p className="mt-1 text-xs text-text-muted">{new Date(r.created_at).toLocaleDateString()}</p>
                 </div>
@@ -614,10 +610,10 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
               </dl>
 
               <div className="mt-3 flex items-center justify-between gap-3 border-t border-border pt-3">
-                <span className={cn('inline-flex items-center gap-1 text-xs font-medium', r.iban_verified ? 'text-success' : 'text-text-secondary')}>
+                <Pill tone={r.iban_verified ? 'success' : 'neutral'}>
                   <Icon name={r.iban_verified ? 'ShieldCheck' : 'Lock'} className="size-3.5" />
                   {r.iban_verified ? t.admin.ibanVerified : t.admin.ibanNotVerified}
-                </span>
+                </Pill>
                 <Button type="button" intent="outline" size="sm" disabled={busyId === r.id} onClick={() => act(r.id, { iban_verified: !r.iban_verified })}>
                   {r.iban_verified ? t.admin.unverifyIban : t.admin.verifyIban}
                 </Button>
@@ -631,14 +627,10 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
 }
 
 function StatusBadge({ t, status }: { t: TDict; status: string }) {
-  const map: Record<string, string> = {
-    pending: 'bg-surface-muted text-text-secondary',
-    approved: 'bg-success/15 text-success',
-    rejected: 'bg-danger/10 text-danger',
-  }
+  const tone: PillTone = status === 'approved' ? 'success' : status === 'rejected' ? 'danger' : 'neutral'
   const label =
     status === 'approved' ? t.admin.statusApproved : status === 'rejected' ? t.admin.statusRejected : t.admin.statusPending
-  return <span className={cn('rounded-full px-2 py-0.5 text-[11px] font-medium', map[status] ?? map.pending)}>{label}</span>
+  return <Pill tone={tone}>{label}</Pill>
 }
 
 function Detail({ label, children }: { label: string; children: ReactNode }) {
@@ -747,10 +739,14 @@ function PoolTab({ t, locale }: { t: TDict; locale: string }) {
                 <h3 className="font-semibold">{t.pool.orderNo} #{o.order_no}</h3>
                 <div className="flex flex-wrap gap-1.5">
                   {o.urgent && <Pill tone="danger">{t.pool.urgent}</Pill>}
-                  {o.sworn && <Pill tone="info">{t.pool.sworn}</Pill>}
-                  {o.notarization && <Pill tone="info">{t.pool.notary}</Pill>}
-                  {o.apostille && <Pill tone="info">{t.pool.apostille}</Pill>}
-                  <Pill tone="muted">{o.physical_delivery ? t.pool.cargo : t.pool.digital}</Pill>
+                  {o.sworn && <Pill tone="primary">{t.pool.sworn}</Pill>}
+                  {o.notarization && <Pill tone="primary">{t.pool.notary}</Pill>}
+                  {o.apostille && <Pill tone="primary">{t.pool.apostille}</Pill>}
+                  {o.physical_delivery ? (
+                    <Pill tone="dark">{t.pool.cargo}</Pill>
+                  ) : (
+                    <Pill tone="outline">{t.pool.digital}</Pill>
+                  )}
                 </div>
               </div>
 
@@ -805,8 +801,10 @@ function PoolTab({ t, locale }: { t: TDict; locale: string }) {
 
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
                 <div>
-                  <p className="text-xs text-text-secondary">{t.pool.earning}</p>
-                  <p className="text-lg font-bold text-success">{formatCurrency(o.payout)}</p>
+                  <p className="mb-1 text-xs text-text-secondary">{t.pool.earning}</p>
+                  <span className="inline-flex items-center rounded-lg border-2 border-success bg-success/10 px-3 py-1.5 text-lg font-bold text-success">
+                    {formatCurrency(o.payout)}
+                  </span>
                 </div>
                 <Button type="button" intent="secondary" disabled={claimingId === o.id} onClick={() => claim(o.id)}>
                   {claimingId === o.id ? t.pool.claiming : t.pool.claim}
@@ -820,14 +818,23 @@ function PoolTab({ t, locale }: { t: TDict; locale: string }) {
   )
 }
 
-function Pill({ tone, children }: { tone: 'danger' | 'info' | 'muted'; children: ReactNode }) {
-  const cls =
-    tone === 'danger'
-      ? 'bg-danger/10 text-danger'
-      : tone === 'info'
-        ? 'bg-primary/10 text-primary'
-        : 'bg-surface-muted text-text-secondary'
-  return <span className={cn('rounded-full px-2 py-0.5 text-[11px] font-medium', cls)}>{children}</span>
+type PillTone = 'danger' | 'primary' | 'success' | 'dark' | 'outline' | 'neutral'
+const PILL_TONE: Record<PillTone, string> = {
+  danger: 'border border-danger bg-danger text-white',
+  primary: 'border border-primary bg-primary text-primary-foreground',
+  success: 'border border-success bg-success text-white',
+  dark: 'border border-secondary bg-secondary text-secondary-foreground',
+  outline: 'border-2 border-border-strong bg-surface text-text-primary',
+  neutral: 'border-2 border-border-strong bg-surface-muted text-text-secondary',
+}
+
+/** Dolgulu/çerçeveli, dikkat çeken rozet. */
+function Pill({ tone, children }: { tone: PillTone; children: ReactNode }) {
+  return (
+    <span className={cn('inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold', PILL_TONE[tone])}>
+      {children}
+    </span>
+  )
 }
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
