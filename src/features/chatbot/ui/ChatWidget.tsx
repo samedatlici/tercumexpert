@@ -22,6 +22,8 @@ export function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showNudge, setShowNudge] = useState(false)
+  const [nudgeDone, setNudgeDone] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -33,6 +35,17 @@ export function ChatWidget() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages, loading])
+
+  // 30 sn sonra dikkat çekmek için davet baloncuğu (yalnızca bir kez gösterilir).
+  useEffect(() => {
+    const t = setTimeout(() => setShowNudge(true), 30000)
+    return () => clearTimeout(t)
+  }, [])
+
+  const openChat = () => {
+    setOpen(true)
+    setNudgeDone(true)
+  }
 
   const sendToApi = async (userText: string) => {
     const text = userText.trim()
@@ -68,11 +81,34 @@ export function ChatWidget() {
 
   return (
     <>
+      {/* 30 sn sonra: dikkat çekici davet baloncuğu */}
+      {!open && showNudge && !nudgeDone && (
+        <div className="fixed bottom-24 end-5 z-40 w-[220px]">
+          <div className="relative rounded-2xl rounded-br-sm border border-border bg-surface px-4 py-3 shadow-lg">
+            <button
+              type="button"
+              onClick={openChat}
+              className="block w-full pe-4 text-start text-sm font-medium text-text-primary"
+            >
+              {c.nudge}
+            </button>
+            <button
+              type="button"
+              onClick={() => setNudgeDone(true)}
+              aria-label={c.close}
+              className="absolute end-1.5 top-1.5 rounded p-0.5 text-text-muted hover:bg-surface-muted"
+            >
+              <Icon name="X" className="size-3.5" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Balon (launcher) */}
       {!open && (
         <button
           type="button"
-          onClick={() => setOpen(true)}
+          onClick={openChat}
           aria-label={c.open}
           className="fixed bottom-5 end-5 z-40 flex size-14 items-center justify-center rounded-full bg-secondary text-secondary-foreground shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
         >

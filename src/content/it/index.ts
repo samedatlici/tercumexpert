@@ -866,6 +866,7 @@ export const it: PartialDictionary = {
   },
 
   chatbot: {
+    nudge: 'Come posso aiutarla?',
     title: "Assistenza TercümExpert",
     open: "Apri la chat",
     close: "Chiudi la chat",

@@ -865,6 +865,7 @@ export const tr = {
   },
 
   chatbot: {
+    nudge: 'Size nasıl yardımcı olabilirim?',
     title: 'TercümExpert Destek',
     open: 'Sohbeti aç',
     close: 'Sohbeti kapat',

@@ -860,6 +860,7 @@ export const pl: PartialDictionary = {
   },
 
   chatbot: {
+    nudge: 'W czym mogę pomóc?',
     title: 'Wsparcie TercümExpert',
     open: 'Otwórz czat',
     close: 'Zamknij czat',

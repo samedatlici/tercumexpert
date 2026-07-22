@@ -860,6 +860,7 @@ export const az: PartialDictionary = {
   },
 
   chatbot: {
+    nudge: 'Sizə necə kömək edə bilərəm?',
     title: 'TercümExpert Dəstəyi',
     open: 'Söhbəti aç',
     close: 'Söhbəti bağla',

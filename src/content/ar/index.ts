@@ -866,6 +866,7 @@ export const ar: PartialDictionary = {
   },
 
   chatbot: {
+    nudge: 'كيف يمكنني مساعدتك؟',
     title: "دعم TercümExpert",
     open: "فتح المحادثة",
     close: "إغلاق المحادثة",
