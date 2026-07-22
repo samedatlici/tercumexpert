@@ -66,7 +66,8 @@ async function signedUrl(bucket: string, path: string, expiresIn = 3600): Promis
 }
 
 const ORDER_COLS =
-  'id,order_no,service,source_lang,target_lang,document_type,word_count,urgent,sworn,notarization,apostille,physical_delivery,input_mode,source_text,note,delivery_days,created_at'
+  'id,order_no,service,source_lang,target_lang,document_type,word_count,urgent,sworn,notarization,apostille,physical_delivery,input_mode,source_text,note,delivery_days,created_at,' +
+  'contact_name,contact_email,contact_phone,delivery_address,delivery_city,delivery_postal_code,delivery_country'
 
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') return json({ error: 'method' }, 405)
