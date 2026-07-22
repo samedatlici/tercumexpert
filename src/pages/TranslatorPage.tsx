@@ -21,6 +21,7 @@ export default function TranslatorPage() {
   const t = dict.translator
   const { user, loading: authLoading } = useAuth()
   const { loading, isAdmin, translator, error, refetch } = useTranslator()
+  const [reapplying, setReapplying] = useState(false)
 
   useEffect(() => {
     const meta = document.createElement('meta')
@@ -63,16 +64,28 @@ export default function TranslatorPage() {
     if (translator?.status === 'pending') {
       return <Center icon="Clock" title={t.pendingTitle} desc={t.pendingDesc} />
     }
-    // Reddedilmiş.
-    if (translator?.status === 'rejected') {
+    // Reddedilmiş — "Tekrar dene" ile sıfırdan başvuru formunu açar.
+    if (translator?.status === 'rejected' && !reapplying) {
       return (
         <Center icon="X" title={t.rejectedTitle} desc={t.rejectedDesc}>
-          <Button intent="secondary" block onClick={refetch}>{t.reapply}</Button>
+          <Button intent="secondary" block onClick={() => setReapplying(true)}>{t.reapply}</Button>
         </Center>
       )
     }
-    // Normal üye, tercüman kaydı yok → başvuru formu (panel içeriği GÖSTERİLMEZ).
-    return <ApplicationForm t={t} locale={locale} userId={user.id} onDone={refetch} />
+    // Normal üye (kayıt yok) VEYA reddedilip yeniden başvuran → başvuru formu.
+    // Reddedilmişse mevcut satır GÜNCELLENİR (status → pending); yoksa yeni kayıt eklenir.
+    return (
+      <ApplicationForm
+        t={t}
+        locale={locale}
+        userId={user.id}
+        existingId={translator?.status === 'rejected' ? translator.id : undefined}
+        onDone={() => {
+          setReapplying(false)
+          refetch()
+        }}
+      />
+    )
   }
 
   return (
@@ -222,11 +235,14 @@ function ApplicationForm({
   t,
   locale,
   userId,
+  existingId,
   onDone,
 }: {
   t: TDict
   locale: string
   userId: string
+  /** Reddedilmiş kaydın id'si — verilirse INSERT yerine UPDATE (status → pending). */
+  existingId?: string
   onDone: () => void
 }) {
   const [fullName, setFullName] = useState('')
@@ -250,8 +266,7 @@ function ApplicationForm({
     setErr(null)
     setBusy(true)
     // IBAN başvuruda İSTENMEZ; tercüman onaylandıktan sonra profilinden girer.
-    const { error } = await supabase.from('translators').insert({
-      user_id: userId,
+    const payload = {
       full_name: fullName.trim(),
       birth_date: birthDate || null,
       phone: phone.trim() || null,
@@ -261,7 +276,11 @@ function ApplicationForm({
       is_sworn: isSworn,
       language_pairs: pairs,
       expertise,
-    })
+    }
+    // Reddedilmiş kaydı yeniden gönder (UPDATE, status→pending) veya yeni kayıt (INSERT).
+    const { error } = existingId
+      ? await supabase.from('translators').update({ ...payload, status: 'pending' }).eq('id', existingId)
+      : await supabase.from('translators').insert({ user_id: userId, ...payload })
     setBusy(false)
     if (error) {
       setErr(t.form.saveError)
