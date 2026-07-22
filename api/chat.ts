@@ -73,7 +73,7 @@ export default async function handler(req: Request): Promise<Response> {
   const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) return json({ reply: null, error: 'no_key' }, 200)
 
-  let body: { messages?: unknown; locale?: unknown; conversationId?: unknown }
+  let body: { messages?: unknown; locale?: unknown; conversationId?: unknown; attachment?: unknown }
   try {
     body = await req.json()
   } catch {
@@ -93,9 +93,29 @@ export default async function handler(req: Request): Promise<Response> {
 
   if (history.length === 0) return json({ error: 'no_messages' }, 400)
 
+  // Ek (dosya) doğrulama: görsel (data URL) veya belge metni.
+  const rawAtt = body.attachment
+  let attachment:
+    | { kind: 'image'; dataUrl: string }
+    | { kind: 'doc'; name: string; text: string }
+    | null = null
+  if (rawAtt && typeof rawAtt === 'object') {
+    const a = rawAtt as Record<string, unknown>
+    if (a.kind === 'image' && typeof a.dataUrl === 'string' && a.dataUrl.startsWith('data:image/')) {
+      attachment = { kind: 'image', dataUrl: a.dataUrl.slice(0, 8_000_000) }
+    } else if (a.kind === 'doc' && typeof a.text === 'string' && a.text.trim()) {
+      attachment = {
+        kind: 'doc',
+        name: typeof a.name === 'string' ? a.name.slice(0, 200) : 'document',
+        text: a.text.slice(0, 12000),
+      }
+    }
+  }
+
   const lastUser = [...history].reverse().find((m) => m.role === 'user')?.content ?? ''
   const langName = LANG_NAMES[locale] ?? 'Turkish'
-  const knowledge = buildKnowledge(lastUser)
+  const knowledgeQuery = lastUser || (attachment?.kind === 'doc' ? attachment.text.slice(0, 300) : '')
+  const knowledge = buildKnowledge(knowledgeQuery)
 
   const system = `You are the customer-support assistant for "TercümExpert", a professional translation company (sworn, notarized, apostille and corporate translation). Speak in the brand's warm, professional, corporate tone.
 
@@ -115,6 +135,12 @@ HOW TO RESPOND:
 LANGUAGE — VERY IMPORTANT:
 - Respond ONLY in ${langName}. The KNOWLEDGE is written in Turkish, so you MUST translate everything into ${langName}, INCLUDING page/button names — for example Turkish "Fiyat Hesapla" is the price/quote page, "Kurumsal" is the corporate page. Never leave Turkish words in a non-Turkish reply. The only terms kept as-is are the brand "TercümExpert" and "WhatsApp".
 
+ATTACHMENTS — VERY IMPORTANT:
+- The user may attach a document or an image (a photo/scan of a document, a PDF, a Word/Excel/PowerPoint file, etc.). When an attachment is present, analyze it TOGETHER with the user's message and be helpful: identify what kind of document it looks like, which translation service likely fits (sworn, notarized, apostille, corporate), and the sensible next step (usually the quote page for an exact price). If the user also wrote a message, address that too.
+- CRITICAL LANGUAGE RULE: The attachment's content may be written in a DIFFERENT language than the site. You MUST STILL reply ONLY in ${langName}. Never switch your reply into the language of the document/image. Detect and, if useful, mention what language the document appears to be in — but always phrased in ${langName}.
+- Do NOT transcribe or translate the whole document in the chat; give a concise, useful assessment and guide them to the secure quote page (named in ${langName}) for the actual translation and pricing. Never guarantee institutional acceptance.
+- Do not repeat sensitive personal data (ID numbers, etc.) from the document back into the chat.
+
 RULES:
 - Be concise (usually 2-5 sentences). No emojis.
 - Never guarantee that a document will be accepted by any institution. Keep the distinction between sworn / notarized / apostille. Do not claim certifications or 24/7 human support.
@@ -126,6 +152,31 @@ ${knowledge}`
 
   const model = process.env.OPENAI_MODEL || 'gpt-4o'
 
+  // Mesajları oluştur; ek varsa SON kullanıcı mesajına iliştir.
+  type OaiMsg = { role: 'system' | 'user' | 'assistant'; content: unknown }
+  const chatMessages: OaiMsg[] = [{ role: 'system', content: system }, ...history]
+  if (attachment) {
+    const idx = chatMessages.length - 1
+    const base = chatMessages[idx]
+    if (base && base.role === 'user') {
+      const userText = typeof base.content === 'string' ? base.content : ''
+      if (attachment.kind === 'image') {
+        chatMessages[idx] = {
+          role: 'user',
+          content: [
+            { type: 'text', text: userText || 'Ekteki görseli inceleyip bana yardımcı olur musun?' },
+            { type: 'image_url', image_url: { url: attachment.dataUrl } },
+          ],
+        }
+      } else {
+        chatMessages[idx] = {
+          role: 'user',
+          content: `${userText}\n\n[Kullanıcının eklediği belge: "${attachment.name}"]\n"""\n${attachment.text}\n"""`,
+        }
+      }
+    }
+  }
+
   try {
     const resp = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -134,7 +185,7 @@ ${knowledge}`
         model,
         temperature: 0.3,
         max_tokens: 600,
-        messages: [{ role: 'system', content: system }, ...history],
+        messages: chatMessages,
       }),
     })
     if (!resp.ok) {
@@ -143,7 +194,19 @@ ${knowledge}`
     }
     const data = (await resp.json()) as { choices?: Array<{ message?: { content?: string } }> }
     const reply = data.choices?.[0]?.message?.content?.trim() || null
-    if (reply) await logConversation(conversationId, locale, [...history, { role: 'assistant', content: reply }])
+    if (reply) {
+      const logMsgs: InMsg[] = [...history]
+      if (attachment) {
+        const li = logMsgs.length - 1
+        if (logMsgs[li]?.role === 'user') {
+          const note =
+            attachment.kind === 'image' ? '[Görsel eki gönderildi]' : `[Belge eki: ${attachment.name}]`
+          const prev = logMsgs[li].content
+          logMsgs[li] = { role: 'user', content: prev ? `${prev}\n${note}` : note }
+        }
+      }
+      await logConversation(conversationId, locale, [...logMsgs, { role: 'assistant', content: reply }])
+    }
     return json({ reply }, 200)
   } catch (e) {
     return json({ reply: null, error: 'exception', detail: String((e as Error)?.message ?? e).slice(0, 200) }, 200)
