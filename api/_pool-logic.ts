@@ -1,39 +1,29 @@
 // =====================================================================
 // Tercüman havuzu mantığı — Edge fonksiyonu için KENDİ KENDİNE YETEN kopya.
-// Vercel Edge derleyicisi, api/'nin src'ten derin import zincirini desteklemiyor;
-// bu yüzden fiyat sabitleri BURADA satır içi tutulur.
-// !!! SENKRON: değerler src/app/config/pricing.config.ts ile AYNI olmalı.
-//     Fiyat değişirse İKİ yeri de güncelle.
+// !!! SENKRON: değerler src/app/config/pricing.config.ts + areas.config.ts ile AYNI olmalı.
 // =====================================================================
 
 /** Tercüman kazanç oranı. Kullanıcıya "%30" denmez; yalnızca tutar gösterilir. */
 export const TRANSLATOR_PAYOUT_RATE = 0.3
 
-// ---- pricing.config.ts kopyası (payout için gerekli alt küme) ----
+// ---- Alan (Hizmet Türü) taban ücretleri (pricing.config.ts AREA_BASE_PRICE kopyası) ----
+const AREA_BASE_PRICE: Record<string, number> = {
+  academic: 160,
+  legal: 180,
+  official: 150,
+  medical: 180,
+  technical: 160,
+  commercial: 170,
+  localization: 200,
+  literary: 190,
+  general: 150,
+}
+const DEFAULT_BASE = 150
+
+// ---- Kelime ücreti (pricing.config.ts kopyası) ----
 const PER_WORD_RATE = 0.25
-// wordRateTiers şu an KAPALI (düz perWordRate). Açılırsa buraya ekle + pricing.config ile eşle.
 const WORD_RATE_TIERS: { upTo: number; rate: number }[] | null = null
 
-const SERVICE_BASE_PRICE: Record<string, number> = {
-  sworn: 150,
-  notarized: 200,
-  apostille: 250,
-  legal: 180,
-  technical: 160,
-  medical: 180,
-  academic: 160,
-  localization: 200,
-}
-const DOC_MULT: Record<string, number> = {
-  diploma: 1,
-  passport: 1,
-  'civil-registry': 1,
-  contract: 1.15,
-  'medical-report': 1.2,
-  'technical-doc': 1.15,
-  'court-doc': 1.25,
-  other: 1,
-}
 type Tier = 'common' | 'medium' | 'rare'
 const LANG_TIER_MULT: Record<Tier, number> = { common: 1, medium: 1.25, rare: 1.6 }
 const URGENCY_MULT = 1.5
@@ -44,38 +34,10 @@ const LANG_TIER: Record<string, Tier> = {
   ar: 'rare',
 }
 
-/* ----------------------------- Uzmanlık eşlemesi ----------------------------- */
-const SERVICE_SUBJECT: Record<string, string | undefined> = {
-  legal: 'legal',
-  technical: 'technical',
-  medical: 'medical',
-  academic: 'academic',
-  localization: 'localization',
-}
-const DOC_SUBJECT: Record<string, string> = {
-  diploma: 'academic',
-  passport: 'official',
-  'civil-registry': 'official',
-  contract: 'legal',
-  'medical-report': 'medical',
-  'technical-doc': 'technical',
-  'court-doc': 'legal',
-  other: 'general',
-}
-
-export function requiredExpertise(service: string, documentType: string): string[] {
-  const set = new Set<string>()
-  const s = SERVICE_SUBJECT[service]
-  if (s) set.add(s)
-  set.add(DOC_SUBJECT[documentType] ?? 'general')
-  return [...set]
-}
-
 export interface OrderLike {
-  service: string
+  service: string // alan (area) id
   source_lang: string
   target_lang: string
-  document_type: string
   word_count: number
   urgent: boolean
 }
@@ -84,9 +46,9 @@ export interface TranslatorLite {
   language_pairs: { source: string; target: string }[]
 }
 
-export function matchesExpertise(order: { service: string; document_type: string }, expertise: string[]): boolean {
-  const req = requiredExpertise(order.service, order.document_type)
-  return req.some((r) => expertise.includes(r))
+/** Uzmanlık eşleşmesi: sipariş alanı (service) tercümanın uzmanlıkları arasında mı? */
+export function matchesExpertise(order: { service: string }, expertise: string[]): boolean {
+  return (expertise ?? []).includes(order.service)
 }
 export function matchesLanguage(
   order: { source_lang: string; target_lang: string },
@@ -94,12 +56,13 @@ export function matchesLanguage(
 ): boolean {
   return (pairs ?? []).some((p) => p.source === order.source_lang && p.target === order.target_lang)
 }
+/** Tercüman bu siparişi görebilir/üstlenebilir mi? (alan VE dil çifti eşleşmeli) */
 export function matchesTranslator(order: OrderLike, tr: TranslatorLite): boolean {
   return matchesExpertise(order, tr.expertise ?? []) && matchesLanguage(order, tr.language_pairs ?? [])
 }
 
 /* ----------------------------- Kazanç (payout) ----------------------------- */
-// calculate.ts base + word + urgency ile birebir.
+// calculate.ts base + word + urgency ile birebir. Belge türü fiyata GİRMEZ.
 const TIER_RANK: Record<Tier, number> = { common: 0, medium: 1, rare: 2 }
 function tierFor(code: string): Tier {
   return LANG_TIER[code] ?? 'common'
@@ -127,11 +90,10 @@ function baseWordCost(words: number): number {
 /** Tercümanın bu işten hak edeceği tutar (TL). Sunucuda kilitlenir; istemciye güvenilmez. */
 export function computePayout(o: OrderLike): number {
   const words = Math.max(0, Math.floor(o.word_count || 0))
-  const base = SERVICE_BASE_PRICE[o.service] ?? 0
-  const docMult = DOC_MULT[o.document_type] ?? 1
+  const base = AREA_BASE_PRICE[o.service] ?? DEFAULT_BASE
   const langMult = LANG_TIER_MULT[pairTier(o.source_lang, o.target_lang)]
   const basePrice = Math.round(base)
-  const wordPrice = Math.round(baseWordCost(words) * langMult * docMult)
+  const wordPrice = Math.round(baseWordCost(words) * langMult)
   const translation = basePrice + wordPrice
   const urgency = o.urgent ? Math.round(translation * (URGENCY_MULT - 1)) : 0
   return Math.round(TRANSLATOR_PAYOUT_RATE * (basePrice + wordPrice + urgency))
