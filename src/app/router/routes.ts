@@ -19,6 +19,7 @@ export type RouteId =
   | 'auth'
   | 'order'
   | 'admin'
+  | 'translator'
   | 'legalKvkk'
   | 'legalPrivacy'
   | 'legalDistanceSales'
@@ -38,6 +39,7 @@ const ROUTE_SLUGS: Record<RouteId, Partial<Record<Locale, string>>> = {
   auth: { tr: 'giris', en: 'login', fr: 'connexion', de: 'anmelden', es: 'acceso', it: 'accedi', ru: 'vhod', ar: 'dukhul' },
   order: { tr: 'siparis', en: 'order', fr: 'commande', de: 'bestellung', es: 'pedido', it: 'ordine', ru: 'zakaz', ar: 'talab' },
   admin: { tr: 'yonetim', en: 'admin' },
+  translator: { tr: 'tercuman', en: 'translator' },
   legalKvkk: { tr: 'kvkk', en: 'data-protection' },
   legalPrivacy: { tr: 'gizlilik-politikasi', en: 'privacy-policy' },
   legalDistanceSales: { tr: 'mesafeli-satis-sozlesmesi', en: 'distance-sales-agreement' },
