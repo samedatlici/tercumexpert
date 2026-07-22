@@ -9,9 +9,16 @@ import { isAdminEmail } from '@/app/config/admin.config'
 import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/cn'
 
+interface ChatAttachment {
+  kind: 'image' | 'doc'
+  dataUrl?: string
+  name?: string
+  text?: string
+}
 interface ChatMsg {
   role: string
   content: string
+  attachment?: ChatAttachment
 }
 interface Conversation {
   id: string
@@ -136,7 +143,14 @@ export default function AdminPage() {
         <div className="grid gap-4 md:grid-cols-[340px_1fr]">
           <div className={cn('space-y-2 md:max-h-[70vh] md:overflow-y-auto md:pe-1', selected && 'hidden md:block')}>
             {list.map((r) => {
-              const firstUser = r.messages?.find((m) => m.role === 'user')?.content
+              const firstUserMsg = r.messages?.find((m) => m.role === 'user')
+              const firstUser =
+                firstUserMsg?.content ||
+                (firstUserMsg?.attachment
+                  ? firstUserMsg.attachment.kind === 'image'
+                    ? a.attachmentImage
+                    : firstUserMsg.attachment.name || a.attachmentFile
+                  : undefined)
               return (
                 <button
                   key={r.id}
@@ -197,11 +211,33 @@ export default function AdminPage() {
                     <div
                       key={i}
                       className={
-                        'max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2 text-sm ' +
+                        'flex max-w-[85%] flex-col rounded-2xl px-3.5 py-2 text-sm ' +
                         (m.role === 'user' ? 'ms-auto bg-secondary text-secondary-foreground' : 'me-auto border border-border bg-surface-muted text-text-primary')
                       }
                     >
-                      {m.content}
+                      {m.attachment?.kind === 'image' && m.attachment.dataUrl && (
+                        <a href={m.attachment.dataUrl} target="_blank" rel="noopener noreferrer" className="mb-1.5 block">
+                          <img
+                            src={m.attachment.dataUrl}
+                            alt={a.attachmentImage}
+                            className="max-h-56 w-auto rounded-lg border border-white/25"
+                          />
+                        </a>
+                      )}
+                      {m.attachment?.kind === 'doc' && (
+                        <div className="mb-1.5">
+                          <span className="mb-1 flex w-fit max-w-full items-center gap-1.5 rounded-lg bg-white/15 px-2 py-1 text-xs">
+                            <Icon name="FileText" className="size-3.5 shrink-0" />
+                            <span className="max-w-[220px] truncate">{m.attachment.name || a.attachmentFile}</span>
+                          </span>
+                          {m.attachment.text && (
+                            <pre className="max-h-40 overflow-auto whitespace-pre-wrap rounded-md bg-black/25 p-2 text-xs leading-relaxed">
+                              {m.attachment.text}
+                            </pre>
+                          )}
+                        </div>
+                      )}
+                      {m.content && <span className="whitespace-pre-wrap">{m.content}</span>}
                     </div>
                   ))}
                   {(!selected.messages || selected.messages.length === 0) && (

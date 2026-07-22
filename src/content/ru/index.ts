@@ -839,6 +839,8 @@ export const ru: PartialDictionary = {
   },
 
   admin: {
+    attachmentImage: 'Изображение',
+    attachmentFile: 'Документ',
     title: `Записи чатов`,
     summary: `{total} чатов · {leads} запросов на связь`,
     onlyLeads: `Только запросы на связь`,

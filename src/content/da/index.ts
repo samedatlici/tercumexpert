@@ -840,6 +840,8 @@ export const da: PartialDictionary = {
   },
 
   admin: {
+    attachmentImage: 'Billede',
+    attachmentFile: 'Dokument',
     title: `Chatlog`,
     summary: `{total} samtaler · {leads} kontaktanmodninger`,
     onlyLeads: `Kun kontaktanmodninger`,

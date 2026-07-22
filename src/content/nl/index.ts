@@ -840,6 +840,8 @@ export const nl: PartialDictionary = {
   },
 
   admin: {
+    attachmentImage: 'Afbeelding',
+    attachmentFile: 'Document',
     title: `Chatlogboeken`,
     summary: `{total} gesprekken · {leads} contactverzoeken`,
     onlyLeads: `Alleen contactverzoeken`,

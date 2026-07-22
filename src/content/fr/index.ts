@@ -840,6 +840,8 @@ export const fr: PartialDictionary = {
   },
 
   admin: {
+    attachmentImage: 'Image',
+    attachmentFile: 'Document',
     title: `Historique des conversations`,
     summary: `{total} conversations · {leads} demandes de contact`,
     onlyLeads: `Uniquement les demandes de contact`,

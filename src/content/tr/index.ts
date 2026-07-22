@@ -835,6 +835,8 @@ export const tr = {
   },
 
   admin: {
+    attachmentImage: 'Görsel',
+    attachmentFile: 'Belge',
     title: 'Sohbet Kayıtları',
     summary: '{total} sohbet · {leads} iletişim talebi',
     onlyLeads: 'Sadece iletişim talepleri',

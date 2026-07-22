@@ -834,6 +834,8 @@ export const pl: PartialDictionary = {
   },
 
   admin: {
+    attachmentImage: 'Obraz',
+    attachmentFile: 'Dokument',
     title: `Rejestr rozmów`,
     summary: `{total} rozmów · {leads} zapytań kontaktowych`,
     onlyLeads: `Tylko zapytania kontaktowe`,

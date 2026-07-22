@@ -834,6 +834,8 @@ export const az: PartialDictionary = {
   },
 
   admin: {
+    attachmentImage: 'Şəkil',
+    attachmentFile: 'Sənəd',
     title: `Söhbət Qeydləri`,
     summary: `{total} söhbət · {leads} əlaqə tələbi`,
     onlyLeads: `Yalnız əlaqə tələbləri`,

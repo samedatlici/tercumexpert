@@ -834,6 +834,8 @@ export const bg: PartialDictionary = {
   },
 
   admin: {
+    attachmentImage: 'Изображение',
+    attachmentFile: 'Документ',
     title: `Записи от чата`,
     summary: `{total} разговора · {leads} заявки за контакт`,
     onlyLeads: `Само заявки за контакт`,
