@@ -20,6 +20,7 @@ export default async function handler(req: Request): Promise<Response> {
     phone?: unknown
     message?: unknown
     locale?: unknown
+    wantsContact?: unknown
   }
   try {
     body = await req.json()
@@ -33,6 +34,8 @@ export default async function handler(req: Request): Promise<Response> {
   const phone = typeof body.phone === 'string' ? body.phone.slice(0, 60) : null
   const message = typeof body.message === 'string' ? body.message.slice(0, 2000) : null
   const locale = typeof body.locale === 'string' ? body.locale : 'tr'
+  // Onboarding kimlik kaydında false gelir; açık "iletişim talebi"nde true (varsayılan).
+  const wantsContact = body.wantsContact === false ? false : true
 
   if (!id || (!email && !phone)) return json({ ok: false, error: 'invalid' }, 400)
 
@@ -48,7 +51,7 @@ export default async function handler(req: Request): Promise<Response> {
       body: JSON.stringify({
         id,
         locale,
-        wants_contact: true,
+        wants_contact: wantsContact,
         lead_name: name,
         lead_email: email,
         lead_phone: phone,
