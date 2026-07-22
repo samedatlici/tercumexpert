@@ -477,8 +477,9 @@ function CheckoutModal({
   onClose: () => void
   onSubmit: (d: DeliveryInfo) => void
 }) {
-  const { dict } = useI18n()
+  const { dict, locale } = useI18n()
   const c = dict.quote.checkout
+  const phonePlaceholder = `${dialOf(defaultCountryForLocale(locale))} xxx xxx xx xx`
   const [firstName, setFirstName] = useState(initialFirstName)
   const [lastName, setLastName] = useState(initialLastName)
   const [phone, setPhone] = useState('')
@@ -538,7 +539,7 @@ function CheckoutModal({
             </ModalField>
           </div>
           <ModalField label={c.phone}>
-            <input type="tel" dir="ltr" className={fieldClass} value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" placeholder="+90 5xx xxx xx xx" />
+            <input type="tel" dir="ltr" className={fieldClass} value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" placeholder={phonePlaceholder} />
           </ModalField>
           <ModalField label={c.address}>
             <textarea
