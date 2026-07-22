@@ -28,9 +28,28 @@ const fieldClass =
 
 const MAX_SIZE = 100 * 1024 * 1024 // 100MB
 const ACCEPT =
-  '.txt,.doc,.docx,.odt,.rtf,.dot,.dotx,.pdf,.ppt,.pptx,.pps,.ppsx,.odp,.xls,.xlsx,.xlsm,.csv,.ods,' +
-  '.jpg,.jpeg,.png,.gif,.tif,.tiff,.bmp,.htm,.html,.xhtml,.xml,.json,.srt,.po,.strings,.md,' +
-  '.m4a,.mp3,.wav,.ogg,.wma,.aac,.mp4,.m4v,.mov,.avi,.wmv,.mpg'
+  // Ofis belge
+  '.doc,.docx,.odt,.rtf,.dot,.dotx,.docm,.dotm,.sxw,' +
+  // Masaüstü yayıncılık
+  '.inx,.idml,' +
+  // Web
+  '.htm,.html,.xhtml,.chm,' +
+  // Resim
+  '.jpg,.jpeg,.jpe,.png,.gif,.tif,.tiff,.bmp,' +
+  // Acrobat
+  '.pdf,' +
+  // Sunum
+  '.ppt,.pptx,.pps,.ppsx,.pot,.potx,.potm,.ppsm,.pptm,.odp,' +
+  // Excel
+  '.xls,.xlsx,.ods,.xlt,.xltx,.xlsm,.csv,' +
+  // Metin
+  '.txt,.po,.properties,.strings,.srt,.json,.md,.tsv,.vtt,' +
+  // Xml
+  '.resx,.xml,.xliff,.dfxp,' +
+  // Ses
+  '.m4a,.mp3,.ogg,.wav,.wma,.aif,.amr,.aac,' +
+  // Video
+  '.avi,.m4v,.mov,.mp4,.mpg,.swf,.wmv,.asf,.vob'
 
 type Mode = 'file' | 'text'
 
