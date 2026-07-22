@@ -317,9 +317,9 @@ export function ChatWidget() {
                   <h3 className="text-base font-bold">{cc.introTitle}</h3>
                   <p className="mt-1 text-sm text-text-secondary">{cc.introDesc}</p>
                 </div>
-                <input value={identName} onChange={(e) => setIdentName(e.target.value)} placeholder={cc.name} autoComplete="name" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
-                <input value={identEmail} onChange={(e) => setIdentEmail(e.target.value)} type="email" placeholder={cc.emailField} autoComplete="email" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
-                <input value={identPhone} onChange={(e) => setIdentPhone(e.target.value)} type="tel" dir="ltr" placeholder={cc.phoneField} autoComplete="tel" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
+                <input value={identName} onChange={(e) => setIdentName(e.target.value)} placeholder={cc.name} autoComplete="name" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
+                <input value={identEmail} onChange={(e) => setIdentEmail(e.target.value)} type="email" placeholder={cc.emailField} autoComplete="email" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
+                <input value={identPhone} onChange={(e) => setIdentPhone(e.target.value)} type="tel" dir="ltr" placeholder={cc.phoneField} autoComplete="tel" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
                 {identErr && <p className="text-xs text-danger">{cc.introError}</p>}
                 <button type="submit" disabled={identBusy} className="mt-auto min-h-[44px] rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground hover:bg-secondary-hover disabled:opacity-50">
                   {identBusy ? cc.submitting : cc.start}
@@ -332,10 +332,10 @@ export function ChatWidget() {
                   <h3 className="text-base font-bold">{cc.formTitle}</h3>
                   <p className="mt-1 text-sm text-text-secondary">{cc.formDesc}</p>
                 </div>
-                <input value={leadName} onChange={(e) => setLeadName(e.target.value)} placeholder={cc.name} autoComplete="name" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
-                <input value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} type="email" placeholder={cc.emailField} autoComplete="email" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
-                <input value={leadPhone} onChange={(e) => setLeadPhone(e.target.value)} type="tel" dir="ltr" placeholder={cc.phoneField} autoComplete="tel" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
-                <textarea value={leadMsg} onChange={(e) => setLeadMsg(e.target.value)} placeholder={cc.message} rows={3} className="rounded-md border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-border-strong" />
+                <input value={leadName} onChange={(e) => setLeadName(e.target.value)} placeholder={cc.name} autoComplete="name" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
+                <input value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} type="email" placeholder={cc.emailField} autoComplete="email" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
+                <input value={leadPhone} onChange={(e) => setLeadPhone(e.target.value)} type="tel" dir="ltr" placeholder={cc.phoneField} autoComplete="tel" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong" />
+                <textarea value={leadMsg} onChange={(e) => setLeadMsg(e.target.value)} placeholder={cc.message} rows={3} className="rounded-md border border-border bg-surface px-3 py-2 text-base outline-none focus:border-border-strong" />
                 {leadErr && <p className="text-xs text-danger">{cc.errorRequired}</p>}
                 <div className="mt-auto flex gap-2">
                   <button type="button" onClick={() => setLeadOpen(false)} className="min-h-[44px] flex-1 rounded-md border border-border-strong bg-surface px-4 text-sm font-medium text-text-primary hover:bg-surface-muted">
@@ -394,7 +394,7 @@ export function ChatWidget() {
                       placeholder={c.inputPlaceholder}
                       aria-label={c.inputPlaceholder}
                       disabled={loading}
-                      className="min-h-[42px] flex-1 rounded-full border border-border bg-surface px-4 text-sm outline-none focus:border-border-strong disabled:opacity-60"
+                      className="min-h-[42px] flex-1 rounded-full border border-border bg-surface px-4 text-base outline-none focus:border-border-strong disabled:opacity-60"
                     />
                     <button type="submit" aria-label={c.send} disabled={loading || !input.trim()} className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-opacity hover:opacity-90 disabled:opacity-40">
                       <Icon name="ArrowRight" className="size-5" />

@@ -30,14 +30,15 @@ const COLUMNS =
 
 function fmt(iso: string): string {
   try {
-    return new Date(iso).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' })
+    return new Date(iso).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })
   } catch {
     return iso
   }
 }
 
 export default function AdminPage() {
-  const { locale } = useI18n()
+  const { locale, dict } = useI18n()
+  const a = dict.admin
   const { user, loading: authLoading } = useAuth()
   const admin = isAdminEmail(user?.email)
 
@@ -47,16 +48,15 @@ export default function AdminPage() {
   const [onlyLeads, setOnlyLeads] = useState(false)
 
   useEffect(() => {
-    // Yönetici sayfası: arama motorlarına kapalı.
     const meta = document.createElement('meta')
     meta.name = 'robots'
     meta.content = 'noindex, nofollow'
     document.head.appendChild(meta)
-    document.title = 'Yönetim — Sohbet Kayıtları'
+    document.title = a.title
     return () => {
       document.head.removeChild(meta)
     }
-  }, [])
+  }, [a.title])
 
   useEffect(() => {
     if (!admin) return
@@ -81,18 +81,19 @@ export default function AdminPage() {
     }
   }, [admin])
 
+  const leadsCount = useMemo(() => rows.filter((r) => r.wants_contact).length, [rows])
   const list = useMemo(() => (onlyLeads ? rows.filter((r) => r.wants_contact) : rows), [rows, onlyLeads])
   const selected = useMemo(() => rows.find((r) => r.id === selectedId) ?? null, [rows, selectedId])
 
   if (authLoading) {
-    return <Shell><p className="py-16 text-center text-sm text-text-secondary">Yükleniyor…</p></Shell>
+    return <Shell><p className="py-16 text-center text-sm text-text-secondary">{a.loadingAuth}</p></Shell>
   }
 
   if (!user) {
     return (
       <Shell>
-        <Center icon="Lock" title="Giriş gerekli" desc="Bu sayfayı görüntülemek için yönetici hesabıyla giriş yapın.">
-          <Link to={buildPath(locale, 'auth')}><Button intent="secondary" block>Giriş Yap</Button></Link>
+        <Center icon="Lock" title={a.loginTitle} desc={a.loginDesc}>
+          <Link to={buildPath(locale, 'auth')}><Button intent="secondary" block>{a.login}</Button></Link>
         </Center>
       </Shell>
     )
@@ -101,40 +102,37 @@ export default function AdminPage() {
   if (!admin) {
     return (
       <Shell>
-        <Center icon="Lock" title="Erişim yetkiniz yok" desc="Bu sayfa yalnızca yöneticilere açıktır." />
+        <Center icon="Lock" title={a.noAccessTitle} desc={a.noAccessDesc} />
       </Shell>
     )
   }
+
+  const summary = a.summary.replace('{total}', String(rows.length)).replace('{leads}', String(leadsCount))
 
   return (
     <Shell wide>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold">Sohbet Kayıtları</h1>
-          <p className="mt-1 text-sm text-text-secondary">
-            Toplam {rows.length} sohbet · {rows.filter((r) => r.wants_contact).length} iletişim talebi
-          </p>
+          <h1 className="text-2xl font-bold">{a.title}</h1>
+          <p className="mt-1 text-sm text-text-secondary">{summary}</p>
         </div>
         <label className="inline-flex cursor-pointer items-center gap-2 text-sm">
           <input type="checkbox" checked={onlyLeads} onChange={(e) => setOnlyLeads(e.target.checked)} className="size-4" />
-          Sadece iletişim talepleri
+          {a.onlyLeads}
         </label>
       </div>
 
-      {state === 'loading' && <p className="py-10 text-center text-sm text-text-secondary">Kayıtlar yükleniyor…</p>}
+      {state === 'loading' && <p className="py-10 text-center text-sm text-text-secondary">{a.loading}</p>}
       {state === 'error' && (
-        <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">
-          Kayıtlar okunamadı. Supabase tablosu/izinleri (RLS) kurulu mu kontrol edin.
-        </p>
+        <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{a.error}</p>
       )}
 
       {state === 'idle' && list.length === 0 && (
-        <p className="py-10 text-center text-sm text-text-secondary">Henüz kayıt yok.</p>
+        <p className="py-10 text-center text-sm text-text-secondary">{a.empty}</p>
       )}
 
       {state === 'idle' && list.length > 0 && (
         <div className="grid gap-4 md:grid-cols-[340px_1fr]">
-          {/* Liste */}
           <div className="max-h-[70vh] space-y-2 overflow-y-auto pe-1">
             {list.map((r) => {
               const firstUser = r.messages?.find((m) => m.role === 'user')?.content
@@ -152,21 +150,18 @@ export default function AdminPage() {
                     <span className="text-xs font-medium text-text-muted">{fmt(r.updated_at)}</span>
                     <span className="flex items-center gap-1.5">
                       {r.locale && <span className="rounded bg-surface-muted px-1.5 py-0.5 text-[10px] uppercase text-text-secondary">{r.locale}</span>}
-                      {r.wants_contact && <span className="rounded bg-success/15 px-1.5 py-0.5 text-[10px] font-medium text-success">talep</span>}
+                      {r.wants_contact && <span className="rounded bg-success/15 px-1.5 py-0.5 text-[10px] font-medium text-success">{a.requestBadge}</span>}
                     </span>
                   </div>
-                  <p className="mt-1 truncate text-sm text-text-primary">
-                    {r.lead_name || firstUser || '—'}
-                  </p>
+                  <p className="mt-1 truncate text-sm text-text-primary">{r.lead_name || firstUser || '—'}</p>
                 </button>
               )
             })}
           </div>
 
-          {/* Detay */}
           <div className="rounded-md border border-border bg-surface p-4">
             {!selected ? (
-              <p className="py-16 text-center text-sm text-text-muted">Görüntülemek için soldan bir sohbet seçin.</p>
+              <p className="py-16 text-center text-sm text-text-muted">{a.selectHint}</p>
             ) : (
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted">
@@ -178,13 +173,13 @@ export default function AdminPage() {
                 {(selected.lead_name || selected.lead_email || selected.lead_phone) && (
                   <div className={'rounded-md border p-3 text-sm ' + (selected.wants_contact ? 'border-success/40 bg-success/10' : 'border-border bg-surface-muted')}>
                     <p className={'mb-1 font-semibold ' + (selected.wants_contact ? 'text-success' : 'text-text-primary')}>
-                      {selected.wants_contact ? 'İletişim talebi' : 'İletişim bilgileri'}
+                      {selected.wants_contact ? a.contactRequest : a.contactInfo}
                     </p>
                     <dl className="space-y-0.5 text-text-primary">
-                      {selected.lead_name && <div><span className="text-text-secondary">Ad: </span>{selected.lead_name}</div>}
-                      {selected.lead_email && <div><span className="text-text-secondary">E-posta: </span><a className="underline" href={`mailto:${selected.lead_email}`}>{selected.lead_email}</a></div>}
-                      {selected.lead_phone && <div><span className="text-text-secondary">Telefon: </span><a className="underline" href={`tel:${selected.lead_phone.replace(/[^\d+]/g, '')}`}>{selected.lead_phone}</a></div>}
-                      {selected.lead_message && <div><span className="text-text-secondary">Mesaj: </span>{selected.lead_message}</div>}
+                      {selected.lead_name && <div><span className="text-text-secondary">{a.fieldName}: </span>{selected.lead_name}</div>}
+                      {selected.lead_email && <div><span className="text-text-secondary">{a.fieldEmail}: </span><a className="underline" href={`mailto:${selected.lead_email}`}>{selected.lead_email}</a></div>}
+                      {selected.lead_phone && <div><span className="text-text-secondary">{a.fieldPhone}: </span><a className="underline" href={`tel:${selected.lead_phone.replace(/[^\d+]/g, '')}`}>{selected.lead_phone}</a></div>}
+                      {selected.lead_message && <div><span className="text-text-secondary">{a.fieldMessage}: </span>{selected.lead_message}</div>}
                     </dl>
                   </div>
                 )}
@@ -202,7 +197,7 @@ export default function AdminPage() {
                     </div>
                   ))}
                   {(!selected.messages || selected.messages.length === 0) && (
-                    <p className="text-sm text-text-muted">Bu kayıtta mesaj yok (yalnızca iletişim talebi).</p>
+                    <p className="text-sm text-text-muted">{a.noMessages}</p>
                   )}
                 </div>
               </div>
