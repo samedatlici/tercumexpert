@@ -906,6 +906,14 @@ export const tr = {
   },
 
   chatbot: {
+    attach: {
+      button: 'Dosya ekle',
+      tooLarge: 'Dosya çok büyük (en fazla 25 MB).',
+      unsupported: 'Ses ve video dosyalarını sohbet içinde inceleyemiyorum. Bunları fiyat hesaplama sayfasından yükleyebilirsiniz.',
+      cannotRead: 'Bu dosyayı okuyamadım. Fiyat hesaplama sayfasından yükleyebilir veya farklı bir biçim deneyebilirsiniz.',
+      reading: 'Dosya okunuyor…',
+      remove: 'Kaldır',
+    },
     nudge: 'Size nasıl yardımcı olabilirim?',
     title: 'TercümExpert Destek',
     open: 'Sohbeti aç',

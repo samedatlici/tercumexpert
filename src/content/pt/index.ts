@@ -910,6 +910,14 @@ export const pt: PartialDictionary = {
   },
 
   chatbot: {
+    attach: {
+      button: 'Anexar ficheiro',
+      tooLarge: 'O ficheiro é demasiado grande (máx. 25 MB).',
+      unsupported: 'Não consigo analisar ficheiros de áudio ou vídeo no chat. Pode carregá-los na página de orçamento.',
+      cannotRead: 'Não consegui ler este ficheiro. Pode carregá-lo na página de orçamento ou tentar outro formato.',
+      reading: 'A ler o ficheiro…',
+      remove: 'Remover',
+    },
     nudge: 'Como posso ajudá-lo?',
     title: 'Apoio TercümExpert',
     open: 'Abrir conversa',

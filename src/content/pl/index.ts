@@ -905,6 +905,14 @@ export const pl: PartialDictionary = {
   },
 
   chatbot: {
+    attach: {
+      button: 'Załącz plik',
+      tooLarge: 'Plik jest za duży (maks. 25 MB).',
+      unsupported: 'Nie mogę analizować plików audio ani wideo na czacie. Możesz je przesłać na stronie wyceny.',
+      cannotRead: 'Nie udało mi się odczytać tego pliku. Możesz przesłać go na stronie wyceny lub spróbować innego formatu.',
+      reading: 'Odczytywanie pliku…',
+      remove: 'Usuń',
+    },
     nudge: 'W czym mogę pomóc?',
     title: 'Wsparcie TercümExpert',
     open: 'Otwórz czat',

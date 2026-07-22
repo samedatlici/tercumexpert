@@ -5,11 +5,18 @@ import { PhoneInput } from '@/components/common/PhoneInput'
 import { useI18n } from '@/hooks/useI18n'
 import { company, whatsappLink } from '@/app/config/site.config'
 import { cn } from '@/lib/cn'
+import { prepareAttachment, type ChatAttachment } from '@/features/chatbot/model/attachment'
 
 interface Message {
   role: 'user' | 'assistant'
   text: string
+  attachmentName?: string
+  attachmentKind?: 'image' | 'doc'
 }
+
+const ATTACH_ACCEPT =
+  'image/*,.pdf,.doc,.docx,.odt,.rtf,.txt,.csv,.tsv,.json,.xml,.html,.htm,.xhtml,.md,.srt,' +
+  '.ppt,.pptx,.odp,.xls,.xlsx,.ods,.jpg,.jpeg,.png,.gif,.webp,.bmp'
 
 function makeId(): string {
   const c = globalThis.crypto as Crypto | undefined
@@ -69,7 +76,11 @@ export function ChatWidget() {
   const [identErr, setIdentErr] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [vp, setVp] = useState<{ top: number; height: number } | null>(null)
+  const [attachment, setAttachment] = useState<ChatAttachment | null>(null)
+  const [attachBusy, setAttachBusy] = useState(false)
+  const [attachErr, setAttachErr] = useState<string | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
 
   const emailHref = `mailto:${company.email.value}`
   const telHref = `tel:${company.phone.value.replace(/[^\d+]/g, '')}`
@@ -169,12 +180,34 @@ export function ChatWidget() {
     setLeadOpen(true)
   }
 
-  const sendToApi = async (userText: string) => {
+  // Dosya seçildiğinde: türü belirle, görseli küçült / belge metnini çıkar.
+  const onPickFile = async (file: File | undefined) => {
+    if (fileRef.current) fileRef.current.value = '' // aynı dosya tekrar seçilebilsin
+    if (!file) return
+    setAttachErr(null)
+    setAttachBusy(true)
+    try {
+      const res = await prepareAttachment(file)
+      if (res.ok) setAttachment(res.attachment)
+      else setAttachErr(c.attach[res.reason])
+    } catch {
+      setAttachErr(c.attach.cannotRead)
+    } finally {
+      setAttachBusy(false)
+    }
+  }
+
+  const send = async (userText: string, att: ChatAttachment | null) => {
     const text = userText.trim()
-    if (!text || loading) return
-    const next: Message[] = [...messages, { role: 'user', text }]
+    if ((!text && !att) || loading || attachBusy) return
+    const next: Message[] = [
+      ...messages,
+      { role: 'user', text, attachmentName: att?.name, attachmentKind: att?.kind },
+    ]
     setMessages(next)
     setInput('')
+    setAttachment(null)
+    setAttachErr(null)
     setLoading(true)
     try {
       const resp = await fetch('/api/chat', {
@@ -184,6 +217,11 @@ export function ChatWidget() {
           locale,
           conversationId: convId,
           messages: next.map((m) => ({ role: m.role, content: m.text })),
+          attachment: att
+            ? att.kind === 'image'
+              ? { kind: 'image', dataUrl: att.dataUrl }
+              : { kind: 'doc', name: att.name, text: att.text }
+            : undefined,
         }),
       })
       const data = (await resp.json().catch(() => ({}))) as { reply?: string | null }
@@ -232,6 +270,8 @@ export function ChatWidget() {
   const clear = () => {
     setLoading(false)
     setLeadOpen(false)
+    setAttachment(null)
+    setAttachErr(null)
     setMessages([{ role: 'assistant', text: c.welcome }])
   }
 
@@ -355,13 +395,31 @@ export function ChatWidget() {
                     <div
                       key={idx}
                       className={cn(
-                        'max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed',
+                        'flex max-w-[85%] flex-col rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed',
                         m.role === 'user'
                           ? 'ms-auto bg-secondary text-secondary-foreground'
                           : 'me-auto border border-border bg-surface text-text-primary',
                       )}
                     >
-                      {m.role === 'assistant' ? linkify(m.text) : m.text}
+                      {m.attachmentName && (
+                        <span
+                          className={cn(
+                            'mb-1.5 flex w-fit max-w-full items-center gap-1.5 rounded-lg px-2 py-1 text-xs',
+                            m.role === 'user' ? 'bg-white/15' : 'bg-surface-muted',
+                          )}
+                        >
+                          <Icon
+                            name={m.attachmentKind === 'image' ? 'Image' : 'FileText'}
+                            className="size-3.5 shrink-0"
+                          />
+                          <span className="max-w-[190px] truncate">{m.attachmentName}</span>
+                        </span>
+                      )}
+                      {m.text && (
+                        <span className="whitespace-pre-wrap">
+                          {m.role === 'assistant' ? linkify(m.text) : m.text}
+                        </span>
+                      )}
                     </div>
                   ))}
                   {loading && (
@@ -379,7 +437,7 @@ export function ChatWidget() {
                 {showStarters && (
                   <div className="flex gap-2 overflow-x-auto border-t border-border bg-surface px-3 py-2">
                     {c.quickQuestions.map((q, i) => (
-                      <button key={i} type="button" onClick={() => sendToApi(q)} className="shrink-0 whitespace-nowrap rounded-full border border-border-strong bg-surface px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-muted">
+                      <button key={i} type="button" onClick={() => send(q, null)} className="shrink-0 whitespace-nowrap rounded-full border border-border-strong bg-surface px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-muted">
                         {q}
                       </button>
                     ))}
@@ -388,7 +446,32 @@ export function ChatWidget() {
 
                 {/* Girdi */}
                 <div className="border-t border-border bg-surface px-3 py-2.5">
-                  <form className="flex items-center gap-2" onSubmit={(e) => { e.preventDefault(); sendToApi(input) }}>
+                  {/* Ek önizleme / durum */}
+                  {(attachment || attachBusy || attachErr) && (
+                    <div className="mb-2">
+                      {attachBusy ? (
+                        <span className="inline-flex items-center gap-1.5 text-xs text-text-secondary">
+                          <span className="size-3 animate-spin rounded-full border-2 border-border border-t-primary" />
+                          {c.attach.reading}
+                        </span>
+                      ) : attachErr ? (
+                        <span className="text-xs text-danger">{attachErr}</span>
+                      ) : attachment ? (
+                        <span className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-border bg-surface-muted px-2 py-1 text-xs">
+                          <Icon name={attachment.kind === 'image' ? 'Image' : 'FileText'} className="size-3.5 shrink-0 text-text-secondary" />
+                          <span className="max-w-[200px] truncate">{attachment.name}</span>
+                          <button type="button" onClick={() => setAttachment(null)} aria-label={c.attach.remove} className="ms-0.5 rounded p-0.5 text-text-muted hover:bg-border/60">
+                            <Icon name="X" className="size-3.5" />
+                          </button>
+                        </span>
+                      ) : null}
+                    </div>
+                  )}
+                  <form className="flex items-center gap-2" onSubmit={(e) => { e.preventDefault(); send(input, attachment) }}>
+                    <input ref={fileRef} type="file" accept={ATTACH_ACCEPT} className="hidden" onChange={(e) => onPickFile(e.target.files?.[0])} />
+                    <button type="button" onClick={() => fileRef.current?.click()} disabled={loading || attachBusy} aria-label={c.attach.button} title={c.attach.button} className="flex size-10 shrink-0 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:bg-surface-muted disabled:opacity-40">
+                      <Icon name="Paperclip" className="size-5" />
+                    </button>
                     <input
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
@@ -397,7 +480,7 @@ export function ChatWidget() {
                       disabled={loading}
                       className="min-h-[42px] flex-1 rounded-full border border-border bg-surface px-4 text-base outline-none focus:border-border-strong disabled:opacity-60"
                     />
-                    <button type="submit" aria-label={c.send} disabled={loading || !input.trim()} className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-opacity hover:opacity-90 disabled:opacity-40">
+                    <button type="submit" aria-label={c.send} disabled={loading || attachBusy || (!input.trim() && !attachment)} className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-opacity hover:opacity-90 disabled:opacity-40">
                       <Icon name="ArrowRight" className="size-5" />
                     </button>
                   </form>

@@ -223,34 +223,59 @@ const PPT_EXT = new Set(['pptx', 'ppsx', 'potx', 'pptm', 'ppsm'])
 const XLS_EXT = new Set(['xlsx', 'xlsm', 'xltx', 'xltm'])
 const ODF_EXT = new Set(['odt', 'ods', 'odp', 'ott', 'ots', 'otp', 'sxw', 'sxc', 'sxi'])
 
+/**
+ * Görsel HARİÇ desteklenen tüm türlerden ham metin çıkarır.
+ * Tür desteklenmiyorsa null; okuma hatası fırlatır (çağıran yakalar).
+ */
+async function extractRawDocText(file: File): Promise<string | null> {
+  const e = ext(file.name)
+  const type = file.type
+  if (e === 'pdf' || type === 'application/pdf') return extractPdfText(file)
+  if (WORD_EXT.has(e) || type.includes('officedocument.wordprocessingml')) return extractOoxmlWord(file)
+  if (PPT_EXT.has(e) || type.includes('officedocument.presentationml')) return extractOoxmlPptx(file)
+  if (XLS_EXT.has(e) || type.includes('officedocument.spreadsheetml')) return extractOoxmlXlsx(file)
+  if (ODF_EXT.has(e) || type.includes('opendocument')) return extractOdf(file)
+  if (e === 'idml') return extractIdml(file)
+  if (e === 'rtf' || type === 'application/rtf' || type === 'text/rtf') return stripRtf(await file.text())
+  if (MARKUP_EXT.has(e)) return stripMarkup(await file.text())
+  if (TEXT_EXT.has(e) || type.startsWith('text/')) return file.text()
+  return null
+}
+
 export async function extractWordCount(file: File): Promise<ExtractResult> {
   const e = ext(file.name)
   const type = file.type
   try {
     if (isImage(e, type)) return finalize(countWords(await extractImageText(file)))
-    if (e === 'pdf' || type === 'application/pdf') return finalize(countWords(await extractPdfText(file)))
-    if (WORD_EXT.has(e) || type.includes('officedocument.wordprocessingml')) {
-      return finalize(countWords(await extractOoxmlWord(file)))
-    }
-    if (PPT_EXT.has(e) || type.includes('officedocument.presentationml')) {
-      return finalize(countWords(await extractOoxmlPptx(file)))
-    }
-    if (XLS_EXT.has(e) || type.includes('officedocument.spreadsheetml')) {
-      return finalize(countWords(await extractOoxmlXlsx(file)))
-    }
-    if (ODF_EXT.has(e) || type.includes('opendocument')) {
-      return finalize(countWords(await extractOdf(file)))
-    }
-    if (e === 'idml') return finalize(countWords(await extractIdml(file)))
-    if (e === 'rtf' || type === 'application/rtf' || type === 'text/rtf') {
-      return finalize(countWords(stripRtf(await file.text())))
-    }
-    if (MARKUP_EXT.has(e)) return finalize(countWords(stripMarkup(await file.text())))
-    if (TEXT_EXT.has(e) || type.startsWith('text/')) return finalize(countWords(await file.text()))
+    const raw = await extractRawDocText(file)
     // Ses, video, eski ikili formatlar (doc/xls/ppt/chm…): otomatik sayım mümkün değil.
-    return { words: 0, status: 'unsupported' }
+    if (raw === null) return { words: 0, status: 'unsupported' }
+    return finalize(countWords(raw))
   } catch {
     return { words: 0, status: 'error' }
+  }
+}
+
+/**
+ * Chatbot eki için belge metnini döndürür. GÖRSEL DEĞİLDİR — görseller ayrı ele
+ * alınır (doğrudan görselli/vision modele gönderilir), burada 'unsupported' döner.
+ * Metin normalize edilip `maxChars` sınırına kırpılır (istek boyutu için).
+ */
+export async function extractDocumentText(
+  file: File,
+  maxChars = 16000,
+): Promise<{ text: string; status: ExtractStatus }> {
+  const e = ext(file.name)
+  const type = file.type
+  if (isImage(e, type)) return { text: '', status: 'unsupported' }
+  try {
+    const raw = await extractRawDocText(file)
+    if (raw === null) return { text: '', status: 'unsupported' }
+    const cleaned = raw.replace(/\s+/g, ' ').trim()
+    if (!cleaned) return { text: '', status: 'empty' }
+    return { text: cleaned.slice(0, maxChars), status: 'ok' }
+  } catch {
+    return { text: '', status: 'error' }
   }
 }
 

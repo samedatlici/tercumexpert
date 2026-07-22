@@ -911,6 +911,14 @@ export const da: PartialDictionary = {
   },
 
   chatbot: {
+    attach: {
+      button: 'Vedhæft fil',
+      tooLarge: 'Filen er for stor (maks. 25 MB).',
+      unsupported: 'Jeg kan ikke analysere lyd- eller videofiler i chatten. Du kan uploade dem på tilbudssiden.',
+      cannotRead: 'Jeg kunne ikke læse denne fil. Du kan uploade den på tilbudssiden eller prøve et andet format.',
+      reading: 'Læser filen…',
+      remove: 'Fjern',
+    },
     nudge: 'Hvordan kan jeg hjælpe dig?',
     title: "TercümExpert-support",
     open: "Åbn chat",

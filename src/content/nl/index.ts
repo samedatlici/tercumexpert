@@ -911,6 +911,14 @@ export const nl: PartialDictionary = {
   },
 
   chatbot: {
+    attach: {
+      button: 'Bestand bijvoegen',
+      tooLarge: 'Bestand is te groot (max. 25 MB).',
+      unsupported: 'Ik kan audio- of videobestanden niet in de chat analyseren. U kunt ze uploaden op de offertepagina.',
+      cannotRead: 'Ik kon dit bestand niet lezen. U kunt het uploaden op de offertepagina of een ander formaat proberen.',
+      reading: 'Bestand wordt gelezen…',
+      remove: 'Verwijderen',
+    },
     nudge: 'Hoe kan ik u helpen?',
     title: "TercümExpert-ondersteuning",
     open: "Chat openen",

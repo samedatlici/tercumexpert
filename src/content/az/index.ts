@@ -905,6 +905,14 @@ export const az: PartialDictionary = {
   },
 
   chatbot: {
+    attach: {
+      button: 'Fayl əlavə et',
+      tooLarge: 'Fayl çox böyükdür (maksimum 25 MB).',
+      unsupported: 'Söhbətdə audio və video fayllarını təhlil edə bilmirəm. Onları qiymət hesablama səhifəsindən yükləyə bilərsiniz.',
+      cannotRead: 'Bu faylı oxuya bilmədim. Onu qiymət hesablama səhifəsindən yükləyə bilər və ya başqa format sınaya bilərsiniz.',
+      reading: 'Fayl oxunur…',
+      remove: 'Sil',
+    },
     nudge: 'Sizə necə kömək edə bilərəm?',
     title: 'TercümExpert Dəstəyi',
     open: 'Söhbəti aç',
