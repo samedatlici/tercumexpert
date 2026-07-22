@@ -1,4 +1,4 @@
-import { matchesTranslator, computePayout, estimatePages } from '../src/features/translator/model/pool-logic'
+import { matchesTranslator, computePayout, estimatePages } from './_pool-logic'
 
 /**
  * Tercüman paneli SUNUCU uç noktası (Edge). GÜVENLİK: tercümanlara doğrudan yazma
