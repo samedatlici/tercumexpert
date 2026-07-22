@@ -60,6 +60,8 @@ export function ChatWidget() {
   const [leadMsg, setLeadMsg] = useState('')
   const [leadBusy, setLeadBusy] = useState(false)
   const [leadErr, setLeadErr] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [vp, setVp] = useState<{ top: number; height: number } | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const emailHref = `mailto:${company.email.value}`
@@ -80,6 +82,42 @@ export function ChatWidget() {
     const t = setTimeout(() => setShowNudge(true), 30000)
     return () => clearTimeout(t)
   }, [])
+
+  // Mobil algılama.
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)')
+    const on = () => setIsMobile(mq.matches)
+    on()
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
+
+  // Mobilde klavye açılınca paneli görünür alana (klavyenin üstüne) sığdır.
+  useEffect(() => {
+    const vv = window.visualViewport
+    if (!vv || !open) {
+      setVp(null)
+      return
+    }
+    const update = () => setVp({ top: vv.offsetTop, height: vv.height })
+    update()
+    vv.addEventListener('resize', update)
+    vv.addEventListener('scroll', update)
+    return () => {
+      vv.removeEventListener('resize', update)
+      vv.removeEventListener('scroll', update)
+    }
+  }, [open])
+
+  // Mobilde panel açıkken arka planın kaymasını engelle.
+  useEffect(() => {
+    if (!(open && isMobile)) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [open, isMobile])
 
   const openChat = () => {
     setOpen(true)
@@ -154,6 +192,12 @@ export function ChatWidget() {
 
   const showStarters = messages.length <= 1 && !loading && !leadOpen
 
+  const mobileStyle = isMobile
+    ? vp
+      ? { top: `${vp.top}px`, height: `${vp.height}px`, bottom: 'auto' }
+      : { height: '85dvh' }
+    : undefined
+
   return (
     <>
       {/* 30 sn sonra: dikkat çekici davet baloncuğu */}
@@ -184,8 +228,8 @@ export function ChatWidget() {
 
       {/* Panel */}
       {open && (
-        <div className="fixed inset-x-0 bottom-0 z-50 flex justify-center sm:inset-x-auto sm:bottom-5 sm:end-5 sm:justify-end">
-          <div className="flex h-[80vh] w-full flex-col overflow-hidden rounded-t-2xl border border-border bg-surface shadow-xl sm:h-[560px] sm:max-h-[80vh] sm:w-[380px] sm:rounded-2xl">
+        <div className="fixed inset-x-0 bottom-0 z-50 flex justify-center sm:inset-x-auto sm:bottom-5 sm:end-5 sm:justify-end" style={mobileStyle}>
+          <div className="flex h-full w-full flex-col overflow-hidden rounded-t-2xl border border-border bg-surface shadow-xl sm:h-[560px] sm:max-h-[80vh] sm:w-[380px] sm:rounded-2xl">
             {/* Başlık (siyah) */}
             <div className="flex items-center justify-between gap-2 bg-secondary px-4 py-3 text-secondary-foreground">
               <div className="flex items-center gap-2">
