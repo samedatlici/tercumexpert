@@ -9,6 +9,7 @@ import { PageHero } from '@/components/common/PageHero'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { company, whatsappLink } from '@/app/config/site.config'
+import { ConsentText } from '@/features/legal/ConsentText'
 
 const isPlaceholder = (v: string) => v.trim().startsWith('[')
 
@@ -102,7 +103,7 @@ export default function ContactPage() {
                 <input type="text" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" {...register('company_website')} />
                 <label className="flex items-start gap-3 text-sm">
                   <input type="checkbox" className="mt-1 size-4" {...register('consent')} aria-invalid={!!errors.consent} />
-                  <span>{c.form.fields.consent}</span>
+                  <ConsentText text={c.form.fields.consent} />
                 </label>
                 {errors.consent && <p className="text-sm text-danger">{errors.consent.message}</p>}
                 <Button type="submit" intent="primary" size="lg" block disabled={isSubmitting}>

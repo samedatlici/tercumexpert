@@ -8,6 +8,7 @@ import { useI18n } from '@/hooks/useI18n'
 import { useAuth } from '@/app/providers/AuthProvider'
 import { OrdersList } from '@/features/orders/ui/OrdersList'
 import { buildPath } from '@/app/router/routes'
+import { ConsentText } from '@/features/legal/ConsentText'
 
 type Mode = 'login' | 'register'
 type View = 'form' | 'verify'
@@ -222,7 +223,7 @@ export default function AuthPage() {
           {mode === 'register' && (
             <label className="flex items-start gap-3 text-sm">
               <input type="checkbox" className="mt-1 size-4 accent-black" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
-              <span>{a.register.consent}</span>
+              <ConsentText text={a.register.consent} />
             </label>
           )}
 

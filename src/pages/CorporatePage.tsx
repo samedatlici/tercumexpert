@@ -8,6 +8,7 @@ import { PageHero, SectionHeading } from '@/components/common/PageHero'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { cn } from '@/lib/cn'
+import { ConsentText } from '@/features/legal/ConsentText'
 import { company } from '@/app/config/site.config'
 
 const isPlaceholder = (v: string) => v.trim().startsWith('[')
@@ -182,7 +183,7 @@ export default function CorporatePage() {
               <input type="text" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" {...register('company_website')} />
               <label className="flex items-start gap-3 text-sm text-white/80">
                 <input type="checkbox" className="mt-1 size-4 accent-white" {...register('consent')} aria-invalid={!!errors.consent} />
-                <span>{c.form.fields.consent}</span>
+                <ConsentText text={c.form.fields.consent} />
               </label>
               {errors.consent && <p className="text-sm text-danger">{errors.consent.message}</p>}
               <Button
