@@ -13,6 +13,8 @@ export const config = { runtime: 'edge' }
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xtqymenxaozzwmqfssod.supabase.co'
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+const ADMIN_EMAIL = 'admin@tercumexpert.com'
+const nowIso = () => new Date().toISOString()
 
 function svcHeaders(extra?: Record<string, string>): Record<string, string> {
   return { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, ...(extra ?? {}) }
@@ -69,6 +71,63 @@ const ORDER_COLS =
   'id,order_no,service,source_lang,target_lang,document_type,word_count,urgent,sworn,notarization,apostille,physical_delivery,input_mode,source_text,note,delivery_days,created_at,' +
   'contact_name,contact_email,contact_phone,delivery_address,delivery_city,delivery_postal_code,delivery_country'
 
+// İş-akışı kolonları dahil (Aktif/Onay bekleyen/Onaylanan/Tamamlanan sayfaları).
+const JOB_COLS =
+  ORDER_COLS +
+  ',work_status,translator_id,translator_payout,claimed_at,submitted_at,approved_at,completed_at,shipped_at,rejection_reason,tracking_info,translation_files'
+
+/** Müşterinin yüklediği kaynak dosyalar (order-files) — imzalı URL'lerle. */
+async function getSourceFiles(orderId: string): Promise<Array<{ name: string; url: string | null }>> {
+  const r = await fetch(
+    `${SUPABASE_URL}/rest/v1/order_files?order_id=eq.${orderId}&select=file_name,storage_path`,
+    { headers: svcHeaders() },
+  )
+  if (!r.ok) return []
+  const rows = (await r.json()) as Array<{ file_name: string; storage_path: string }>
+  const out: Array<{ name: string; url: string | null }> = []
+  for (const f of rows) out.push({ name: f.file_name, url: await signedUrl('order-files', f.storage_path) })
+  return out
+}
+
+/** Tercümanın yüklediği çeviri dosyaları (translations) — imzalı URL'lerle. */
+async function signTranslationFiles(tf: unknown): Promise<Array<{ name: string; url: string | null }>> {
+  const arr = Array.isArray(tf) ? (tf as Array<{ name?: string; path?: string }>) : []
+  const out: Array<{ name: string; url: string | null }> = []
+  for (const f of arr) {
+    if (f?.path) out.push({ name: f.name || 'dosya', url: await signedUrl('translations', f.path) })
+  }
+  return out
+}
+
+async function getTranslatorInfo(id: string): Promise<{ name: string | null; is_sworn: boolean } | null> {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/translators?id=eq.${id}&select=full_name,is_sworn`, {
+    headers: svcHeaders(),
+  })
+  if (!r.ok) return null
+  const rows = (await r.json()) as Array<{ full_name: string | null; is_sworn: boolean }>
+  return rows[0] ? { name: rows[0].full_name, is_sworn: rows[0].is_sworn } : null
+}
+
+async function fetchOrder(orderId: string): Promise<Record<string, unknown> | null> {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}&select=${JOB_COLS}`, {
+    headers: svcHeaders(),
+  })
+  if (!r.ok) return null
+  return ((await r.json()) as Array<Record<string, unknown>>)[0] ?? null
+}
+
+/** Koşullu PATCH; güncellenen satır sayısını (>=1) döndürür. */
+async function patchOrder(orderId: string, cond: string, patch: Record<string, unknown>): Promise<boolean> {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}&${cond}`, {
+    method: 'PATCH',
+    headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=representation' }),
+    body: JSON.stringify(patch),
+  })
+  if (!res.ok) return false
+  const rows = (await res.json()) as unknown[]
+  return Array.isArray(rows) && rows.length > 0
+}
+
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') return json({ error: 'method' }, 405)
   if (!SERVICE_KEY) return json({ error: 'server_config' }, 500)
@@ -76,7 +135,13 @@ export default async function handler(req: Request): Promise<Response> {
   const token = (req.headers.get('authorization') || '').replace(/^Bearer\s+/i, '').trim()
   if (!token) return json({ error: 'no_auth' }, 401)
 
-  let body: { action?: string; orderId?: string }
+  let body: {
+    action?: string
+    orderId?: string
+    files?: Array<{ name?: string; path?: string }>
+    reason?: string
+    tracking?: string
+  }
   try {
     body = await req.json()
   } catch {
@@ -86,13 +151,15 @@ export default async function handler(req: Request): Promise<Response> {
   const user = await getUser(token)
   if (!user) return json({ error: 'invalid_token' }, 401)
 
+  const isAdmin = user.email === ADMIN_EMAIL
   const translator = await getApprovedTranslator(user.id)
-  if (!translator) return json({ error: 'not_translator' }, 403)
+  if (!isAdmin && !translator) return json({ error: 'not_translator' }, 403)
 
   const action = body.action
 
   // -------- Havuz: uyan available siparişler + dosya/metin + kazanç --------
   if (action === 'pool') {
+    if (!translator) return json({ error: 'not_translator' }, 403)
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/orders?work_status=eq.available&select=${ORDER_COLS}&order=created_at.desc`,
       { headers: svcHeaders() },
@@ -125,6 +192,7 @@ export default async function handler(req: Request): Promise<Response> {
 
   // -------- İşi üstlen (claim) --------
   if (action === 'claim') {
+    if (!translator) return json({ error: 'not_translator' }, 403)
     const orderId = body.orderId
     if (!orderId) return json({ error: 'no_order' }, 400)
     const oRes = await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}&select=${ORDER_COLS},work_status`, {
@@ -146,6 +214,7 @@ export default async function handler(req: Request): Promise<Response> {
         body: JSON.stringify({
           translator_id: translator.id,
           work_status: 'claimed',
+          status: 'in_progress', // müşteri görünümü: "İşleme alındı"
           translator_payout: payout,
           claimed_at: new Date().toISOString(),
         }),
@@ -154,6 +223,116 @@ export default async function handler(req: Request): Promise<Response> {
     const updated = (await uRes.json()) as unknown[]
     if (!Array.isArray(updated) || updated.length === 0) return json({ error: 'race' }, 409)
     return json({ ok: true, payout })
+  }
+
+  // -------- İşler: Aktif/Onay bekleyen/Onaylanan/Tamamlanan (admin=hepsi, tercüman=kendi) --------
+  if (action === 'jobs') {
+    const filter = isAdmin
+      ? 'work_status=in.(claimed,submitted,approved,completed)'
+      : `translator_id=eq.${translator!.id}&work_status=in.(claimed,submitted,approved,completed)`
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/orders?${filter}&select=${JOB_COLS}&order=claimed_at.desc`, {
+      headers: svcHeaders(),
+    })
+    if (!res.ok) return json({ error: 'load' }, 200)
+    const orders = (await res.json()) as Array<Record<string, unknown>>
+    const out = []
+    for (const o of orders) {
+      out.push({
+        ...o,
+        payout: (o.translator_payout as number) ?? computePayout(o as unknown as Parameters<typeof computePayout>[0]),
+        pages: estimatePages(Number(o.word_count) || 0),
+        sourceFiles: await getSourceFiles(o.id as string),
+        translationFiles: await signTranslationFiles(o.translation_files),
+        translatorInfo: isAdmin && o.translator_id ? await getTranslatorInfo(o.translator_id as string) : null,
+      })
+    }
+    return json({ jobs: out, isAdmin })
+  }
+
+  // -------- Çeviriyi onaya gönder (tercüman): claimed -> submitted --------
+  if (action === 'submit') {
+    if (!translator) return json({ error: 'not_translator' }, 403)
+    const orderId = body.orderId
+    if (!orderId) return json({ error: 'no_order' }, 400)
+    // Yalnızca KENDİ yüklediği (translations/<translatorId>/...) dosyalar kabul edilir.
+    const files = (Array.isArray(body.files) ? body.files : [])
+      .filter((f) => f?.path && f.path.startsWith(`${translator.id}/`))
+      .map((f) => ({ name: String(f.name || 'dosya').slice(0, 200), path: String(f.path) }))
+    if (files.length === 0) return json({ error: 'no_files' }, 400)
+    const ok = await patchOrder(orderId, `work_status=eq.claimed&translator_id=eq.${translator.id}`, {
+      work_status: 'submitted',
+      translation_files: files,
+      submitted_at: nowIso(),
+      rejection_reason: null,
+    })
+    if (!ok) return json({ error: 'bad_state' }, 409)
+    return json({ ok: true })
+  }
+
+  // -------- Teslim et / tamamla (tercüman): approved -> completed (+ cüzdana kilitli kazanç) --------
+  if (action === 'complete') {
+    if (!translator) return json({ error: 'not_translator' }, 403)
+    const orderId = body.orderId
+    if (!orderId) return json({ error: 'no_order' }, 400)
+    const order = await fetchOrder(orderId)
+    if (!order || order.translator_id !== translator.id) return json({ error: 'not_allowed' }, 403)
+    if (order.work_status !== 'approved') return json({ error: 'bad_state' }, 409)
+    const tracking = typeof body.tracking === 'string' ? body.tracking.trim() : ''
+    if (order.physical_delivery && !tracking) return json({ error: 'need_tracking' }, 400)
+    const patch: Record<string, unknown> = { work_status: 'completed', completed_at: nowIso() }
+    if (order.physical_delivery) {
+      patch.shipped_at = nowIso()
+      patch.tracking_info = tracking.slice(0, 500)
+      patch.tracking_url = tracking.slice(0, 500) // müşteri "Kargom nerede?" ekranı bunu okur
+      patch.status = 'shipped' // müşteri görünümü: "Kargoya verildi"
+    } else {
+      patch.status = 'delivered' // dijital teslim → müşteri görünümü: "Teslim edildi"
+    }
+    const ok = await patchOrder(orderId, `work_status=eq.approved&translator_id=eq.${translator.id}`, patch)
+    if (!ok) return json({ error: 'bad_state' }, 409)
+    // Kazanç cüzdana (kilitli). status='pending' = 7 gün çekilemez (Faz 5'te işlenir).
+    await fetch(`${SUPABASE_URL}/rest/v1/translator_ledger`, {
+      method: 'POST',
+      headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+      body: JSON.stringify({
+        translator_id: translator.id,
+        order_id: orderId,
+        amount: (order.translator_payout as number) ?? 0,
+        status: 'pending',
+      }),
+    })
+    return json({ ok: true })
+  }
+
+  // -------- Yönetim: çeviriyi onayla (submitted -> approved) --------
+  if (action === 'approveTranslation') {
+    if (!isAdmin) return json({ error: 'forbidden' }, 403)
+    const orderId = body.orderId
+    if (!orderId) return json({ error: 'no_order' }, 400)
+    const ok = await patchOrder(orderId, 'work_status=eq.submitted', {
+      work_status: 'approved',
+      status: 'translated', // müşteri görünümü: "Çeviri tamamlandı"
+      approved_at: nowIso(),
+    })
+    if (!ok) return json({ error: 'bad_state' }, 409)
+    return json({ ok: true })
+  }
+
+  // -------- Yönetim: çeviriyi reddet (submitted -> claimed, sebep notu) --------
+  if (action === 'rejectTranslation') {
+    if (!isAdmin) return json({ error: 'forbidden' }, 403)
+    const orderId = body.orderId
+    if (!orderId) return json({ error: 'no_order' }, 400)
+    const reason = (typeof body.reason === 'string' ? body.reason.trim() : '').slice(0, 1000)
+    const ok = await patchOrder(orderId, 'work_status=eq.submitted', {
+      work_status: 'claimed',
+      status: 'in_progress', // müşteri görünümü: hâlâ işlemde (revizyon)
+      rejection_reason: reason || '—',
+      submitted_at: null,
+      translation_files: [],
+    })
+    if (!ok) return json({ error: 'bad_state' }, 409)
+    return json({ ok: true })
   }
 
   return json({ error: 'unknown_action' }, 400)
