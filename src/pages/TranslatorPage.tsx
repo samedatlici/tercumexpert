@@ -109,8 +109,12 @@ function Center({
   )
 }
 
+// SABİT yükseklik (h-11): native <select> min-height'ı input gibi büyütmediğinden,
+// input ve select'lerin AYNI görünmesi için sabit yükseklik şart.
 const inputClass =
-  'min-h-[44px] w-full rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong'
+  'h-11 w-full rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong'
+const textareaClass =
+  'min-h-[80px] w-full rounded-md border border-border bg-surface px-3 py-2 text-base outline-none focus:border-border-strong'
 const labelClass = 'mb-1.5 block text-sm font-medium'
 
 /* ------------------------------------------------------------------ */
@@ -154,7 +158,7 @@ function PairPicker({
           }}
           aria-label={t.form.swap}
           title={t.form.swap}
-          className="inline-flex size-10 shrink-0 items-center justify-center rounded-md border border-border text-text-secondary hover:bg-surface-muted"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-border text-text-secondary hover:bg-surface-muted"
         >
           <Icon name="ArrowRightLeft" className="size-4" />
         </button>
@@ -301,7 +305,7 @@ function ApplicationForm({
         />
         <div>
           <label className={labelClass}>{t.form.address}</label>
-          <textarea rows={2} className={cn(inputClass, 'py-2')} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" />
+          <textarea rows={2} className={textareaClass} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" />
         </div>
         <label className="flex items-start gap-2.5 rounded-md border border-border bg-surface-muted/40 p-3 text-sm">
           <input type="checkbox" checked={isSworn} onChange={(e) => setIsSworn(e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-black" />
@@ -479,7 +483,7 @@ function ProfileEditor({
       />
       <div>
         <label className={labelClass}>{t.form.address}</label>
-        <textarea rows={2} className={cn(inputClass, 'py-2')} value={address} onChange={(e) => setAddress(e.target.value)} />
+        <textarea rows={2} className={textareaClass} value={address} onChange={(e) => setAddress(e.target.value)} />
       </div>
       <label className="flex items-start gap-2.5 rounded-md border border-border bg-surface-muted/40 p-3 text-sm">
         <input type="checkbox" checked={isSworn} onChange={(e) => setIsSworn(e.target.checked)} className="mt-0.5 size-4 shrink-0 accent-black" />
@@ -668,6 +672,13 @@ interface PoolOrder {
   note: string | null
   delivery_days: number
   created_at: string
+  contact_name: string | null
+  contact_email: string | null
+  contact_phone: string | null
+  delivery_address: string | null
+  delivery_city: string | null
+  delivery_postal_code: string | null
+  delivery_country: string | null
   payout: number
   pages: number
   files: PoolFile[]
@@ -771,6 +782,33 @@ function PoolTab({ t, locale }: { t: TDict; locale: string }) {
                 </p>
               )}
 
+              {/* Müşteri / teslimat bilgileri — tercüman işi bilerek üstlensin diye. */}
+              {(o.contact_name || o.contact_email || o.contact_phone || o.delivery_address) && (
+                <div className="mt-3 rounded-md border border-border bg-surface-muted/40 p-3">
+                  <p className="mb-1.5 text-sm font-semibold">
+                    {o.physical_delivery ? t.pool.deliveryInfo : t.pool.customerInfo}
+                  </p>
+                  <dl className="grid gap-x-4 gap-y-1.5 text-sm sm:grid-cols-2">
+                    {o.contact_name && <Row label={t.pool.customerName}>{o.contact_name}</Row>}
+                    {o.contact_email && (
+                      <Row label={t.pool.customerEmail}>
+                        <a href={`mailto:${o.contact_email}`} className="underline">{o.contact_email}</a>
+                      </Row>
+                    )}
+                    {o.contact_phone && (
+                      <Row label={t.pool.customerPhone}>
+                        <a href={`tel:${o.contact_phone.replace(/[^\d+]/g, '')}`} className="underline" dir="ltr">{o.contact_phone}</a>
+                      </Row>
+                    )}
+                    {o.physical_delivery && (o.delivery_address || o.delivery_city) && (
+                      <Row label={t.pool.deliveryAddress}>
+                        {[o.delivery_address, o.delivery_city, o.delivery_postal_code, o.delivery_country].filter(Boolean).join(', ')}
+                      </Row>
+                    )}
+                  </dl>
+                </div>
+              )}
+
               {o.input_mode === 'text' && o.source_text ? (
                 <div className="mt-3">
                   <p className="mb-1 text-sm font-medium">{t.pool.text}</p>
@@ -802,7 +840,7 @@ function PoolTab({ t, locale }: { t: TDict; locale: string }) {
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
                 <div>
                   <p className="mb-1 text-xs text-text-secondary">{t.pool.earning}</p>
-                  <span className="inline-flex items-center rounded-lg border-2 border-success bg-success/10 px-3 py-1.5 text-lg font-bold text-success">
+                  <span className="inline-flex items-center rounded-lg border border-success bg-success px-3 py-1.5 text-lg font-bold text-white">
                     {formatCurrency(o.payout)}
                   </span>
                 </div>

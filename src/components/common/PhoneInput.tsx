@@ -36,11 +36,11 @@ export function PhoneInput({
 
   const dark = variant === 'dark'
   const selectClass = dark
-    ? 'w-[5.5rem] shrink-0 rounded-md border border-white/20 bg-secondary px-2 text-base text-white outline-none focus:border-white/50'
-    : 'w-[5.5rem] shrink-0 rounded-md border border-border bg-surface px-2 text-base outline-none focus:border-border-strong'
+    ? 'h-11 w-[5.5rem] shrink-0 rounded-md border border-white/20 bg-secondary px-2 text-base text-white outline-none focus:border-white/50'
+    : 'h-11 w-[5.5rem] shrink-0 rounded-md border border-border bg-surface px-2 text-base outline-none focus:border-border-strong'
   const inputClass = dark
-    ? 'min-h-[42px] w-full flex-1 rounded-md border border-white/20 bg-white/5 px-3 text-base text-white placeholder:text-white/40 outline-none focus:border-white/50'
-    : 'min-h-[42px] w-full flex-1 rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong'
+    ? 'h-11 w-full flex-1 rounded-md border border-white/20 bg-white/5 px-3 text-base text-white placeholder:text-white/40 outline-none focus:border-white/50'
+    : 'h-11 w-full flex-1 rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong'
 
   return (
     <div className={cn('flex gap-2', className)}>
