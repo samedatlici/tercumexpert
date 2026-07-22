@@ -889,6 +889,15 @@ export const it: PartialDictionary = {
     disclaimer: "Queste informazioni sono di carattere generale; confermi i requisiti esatti presso l'istituzione competente.",
     sensitiveWarning:
       "La preghiamo di non condividere dati personali sensibili tramite questa chat. Può inviare i suoi documenti attraverso l'area di caricamento sicura.",
+    answers: [
+      `Il prezzo viene calcolato in base al numero di parole del Suo documento, alla combinazione linguistica, al tipo di servizio (traduzione giurata, asseverata o con apostille) e ai tempi di consegna. Per ottenere subito un preventivo indicativo, può caricare il Suo documento o inserire i dati necessari nella pagina Calcola Prezzo.`,
+      `La traduzione giurata è una traduzione ufficiale eseguita da un traduttore giurato e certificata con la sua firma e il suo timbro. Gli enti ufficiali richiedono nella maggior parte dei casi una traduzione giurata; se necessario, è possibile aggiungere anche l'asseverazione notarile.`,
+      `Può inviarci il Suo documento tramite l'area di caricamento sicura disponibile nella pagina Calcola Prezzo. Al termine del caricamento vedrà immediatamente il preventivo indicativo e potrà completare il Suo ordine.`,
+      `Per le Sue esigenze aziendali offriamo tariffe dedicate e consegna prioritaria in caso di traduzioni regolari e di grande volume. Per maggiori dettagli può consultare la nostra pagina Aziende oppure contattarci direttamente.`,
+      `La necessità dell'asseverazione notarile dipende dall'ente a cui presenterà il documento e dal tipo di pratica. Alcune procedure accettano soltanto la traduzione giurata, mentre altre richiedono anche l'asseverazione notarile. Se ha dei dubbi, saremo lieti di aiutarLa.`,
+      `La mettiamo subito in contatto con un nostro operatore. Può scriverci tramite WhatsApp utilizzando il pulsante qui sotto.`,
+    ],
+    fallback: `Per la Sua domanda, un nostro operatore potrà offrirLe l'assistenza più adeguata. Può scriverci tramite WhatsApp utilizzando il pulsante qui sotto; il Suo messaggio verrà inoltrato già pronto.`,
   },
 
   notFound: {

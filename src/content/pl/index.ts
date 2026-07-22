@@ -883,6 +883,15 @@ export const pl: PartialDictionary = {
     disclaimer: 'Te informacje mają charakter ogólny; proszę potwierdzić dokładne wymogi w odpowiedniej instytucji.',
     sensitiveWarning:
       'Prosimy nie udostępniać wrażliwych danych osobowych za pośrednictwem tego czatu. Swoje dokumenty można przesłać przez bezpieczny obszar przesyłania.',
+    answers: [
+      `Cena jest ustalana na podstawie liczby słów w dokumencie, pary językowej, rodzaju usługi (tłumaczenie przysięgłe, poświadczenie notarialne, apostille) oraz terminu realizacji. Aby natychmiast otrzymać orientacyjną wycenę, mogą Państwo przesłać dokument lub wprowadzić dane na stronie Oblicz Cenę.`,
+      `Tłumaczenie przysięgłe to tłumaczenie urzędowe wykonane przez tłumacza przysięgłego i poświadczone jego podpisem oraz pieczęcią. Instytucje urzędowe najczęściej wymagają tłumaczenia przysięgłego; w razie potrzeby można dodatkowo uzyskać poświadczenie notarialne.`,
+      `Dokument mogą Państwo przesłać za pośrednictwem bezpiecznego formularza przesyłania plików na stronie Oblicz Cenę. Po przesłaniu od razu zobaczą Państwo orientacyjną wycenę i będą mogli sfinalizować zamówienie.`,
+      `Na potrzeby firm oferujemy specjalne warunki cenowe oraz priorytetową realizację przy regularnych i obszernych zleceniach tłumaczeniowych. Szczegóły znajdą Państwo na naszej stronie dla Klientów Biznesowych lub mogą Państwo skontaktować się z nami bezpośrednio.`,
+      `Konieczność poświadczenia notarialnego zależy od instytucji, której przedłożą Państwo dokument, oraz od rodzaju sprawy. Niektóre procedury akceptują wyłącznie tłumaczenie przysięgłe, inne wymagają dodatkowo poświadczenia notarialnego. Jeśli nie mają Państwo pewności, chętnie pomożemy.`,
+      `Już łączymy Państwa z naszym konsultantem obsługi klienta. Korzystając z poniższego przycisku, mogą Państwo napisać do nas przez WhatsApp.`,
+    ],
+    fallback: `W Państwa sprawie najlepszej pomocy udzieli nasz konsultant obsługi klienta. Korzystając z poniższego przycisku, mogą Państwo napisać do nas przez WhatsApp; Państwa wiadomość zostanie przekazana w gotowej formie.`,
   },
 
   notFound: {

@@ -889,6 +889,15 @@ export const fr: PartialDictionary = {
     disclaimer: "Ces informations sont générales ; veuillez confirmer les exigences exactes auprès de l'institution concernée.",
     sensitiveWarning:
       "Veuillez ne pas partager de données personnelles sensibles via ce chat. Vous pouvez envoyer vos documents via la zone de téléversement sécurisée.",
+    answers: [
+      `Le tarif est calculé en fonction du nombre de mots de votre document, de la paire de langues, du type de prestation (traduction assermentée, certifiée par notaire, apostille) et du délai de livraison. Pour obtenir une estimation instantanée, vous pouvez déposer votre document ou renseigner les informations depuis la page Calculer le Tarif.`,
+      `Une traduction assermentée est une traduction officielle réalisée par un traducteur assermenté et validée par sa signature et son cachet. Les administrations exigent le plus souvent une traduction assermentée ; une certification notariale peut également y être ajoutée si nécessaire.`,
+      `Vous pouvez nous transmettre votre document via l'espace de dépôt sécurisé disponible sur la page Calculer le Tarif. Une fois le document déposé, vous obtenez immédiatement une estimation du tarif et pouvez finaliser votre commande.`,
+      `Pour vos besoins professionnels impliquant des traductions régulières et volumineuses, nous proposons une tarification dédiée et une livraison prioritaire. Pour en savoir plus, consultez notre page Entreprises ou contactez-nous directement.`,
+      `La nécessité d'une certification notariale dépend de l'organisme auquel vous destinez le document et de la nature de la démarche. Certaines procédures acceptent uniquement la traduction assermentée, tandis que d'autres exigent également une certification notariale. En cas de doute, nous sommes là pour vous aider.`,
+      `Nous vous mettons immédiatement en relation avec l'un de nos conseillers. Vous pouvez nous écrire via WhatsApp en cliquant sur le bouton ci-dessous.`,
+    ],
+    fallback: `Pour répondre au mieux à votre question, l'un de nos conseillers pourra vous apporter une assistance personnalisée. Vous pouvez nous écrire via WhatsApp en cliquant sur le bouton ci-dessous ; votre message sera transmis automatiquement.`,
   },
 
   notFound: {

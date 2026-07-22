@@ -888,6 +888,15 @@ export const pt: PartialDictionary = {
     disclaimer: 'Estas informações são gerais; confirme os requisitos exatos junto da instituição competente.',
     sensitiveWarning:
       'Não partilhe dados pessoais sensíveis através desta conversa. Pode enviar os seus documentos através da área de carregamento segura.',
+    answers: [
+      `O preço é calculado com base no número de palavras do seu documento, no par de idiomas, no tipo de serviço (tradução ajuramentada, reconhecimento notarial, apostila) e no prazo de entrega. Para obter uma estimativa imediata, pode carregar o seu documento ou introduzir os dados na página Calcular Preço.`,
+      `A tradução ajuramentada é uma tradução oficial realizada por um tradutor ajuramentado e validada com a sua assinatura e carimbo. As entidades oficiais exigem, na maioria dos casos, uma tradução ajuramentada; sempre que necessário, pode ainda acrescentar-se o reconhecimento notarial.`,
+      `Pode enviar o seu documento através da área de carregamento segura disponível na página Calcular Preço. Após o carregamento, verá de imediato uma estimativa de preço e poderá concluir a sua encomenda.`,
+      `Para as necessidades da sua empresa, oferecemos preços especiais e entrega prioritária em traduções regulares e de grande volume. Para mais informações, consulte a nossa página Empresas ou entre em contacto connosco.`,
+      `A necessidade de reconhecimento notarial depende da entidade a que o documento se destina e do tipo de procedimento. Alguns procedimentos aceitam apenas a tradução ajuramentada, enquanto outros exigem também o reconhecimento notarial. Se tiver dúvidas, teremos todo o gosto em ajudar.`,
+      `Vamos colocá-lo de imediato em contacto com um dos nossos representantes. Pode escrever-nos através do WhatsApp no botão abaixo.`,
+    ],
+    fallback: `Um dos nossos representantes poderá prestar-lhe o apoio mais adequado à sua questão. Pode escrever-nos através do WhatsApp no botão abaixo; a sua mensagem será enviada já preenchida.`,
   },
 
   notFound: {

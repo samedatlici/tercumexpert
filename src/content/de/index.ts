@@ -889,6 +889,15 @@ export const de: PartialDictionary = {
     disclaimer: 'Diese Informationen sind allgemeiner Natur; bitte bestätigen Sie die genauen Anforderungen bei der zuständigen Institution.',
     sensitiveWarning:
       'Bitte teilen Sie keine sensiblen personenbezogenen Daten über diesen Chat mit. Ihre Dokumente können Sie über den sicheren Upload-Bereich senden.',
+    answers: [
+      `Der Preis richtet sich nach der Wortzahl Ihres Dokuments, der Sprachkombination, der Art der Leistung (beglaubigt, notariell beglaubigt, Apostille) sowie der Lieferzeit. Für einen sofortigen Preisvorschlag können Sie Ihr Dokument auf der Seite Preis berechnen hochladen oder die entsprechenden Angaben eingeben.`,
+      `Eine beglaubigte Übersetzung ist eine offizielle Übersetzung, die von einem vereidigten Übersetzer angefertigt und mit dessen Unterschrift und Stempel bestätigt wird. Behörden verlangen in der Regel beglaubigte Übersetzungen; bei Bedarf kann zusätzlich eine notarielle Beglaubigung hinzugefügt werden.`,
+      `Sie können Ihr Dokument über den sicheren Upload-Bereich auf der Seite Preis berechnen an uns übermitteln. Direkt nach dem Hochladen sehen Sie den voraussichtlichen Preis und können Ihre Bestellung abschließen.`,
+      `Für Ihren geschäftlichen Bedarf bieten wir bei regelmäßigen und umfangreichen Übersetzungen individuelle Preise und eine bevorzugte Lieferung an. Weitere Einzelheiten finden Sie auf unserer Seite für Geschäftskunden, oder Sie nehmen einfach Kontakt mit uns auf.`,
+      `Ob eine notarielle Beglaubigung erforderlich ist, hängt von der Behörde, bei der Sie das Dokument einreichen, und von der Art des Vorgangs ab. Manche Stellen akzeptieren ausschließlich beglaubigte Übersetzungen, während andere zusätzlich eine notarielle Beglaubigung verlangen. Falls Sie sich nicht sicher sind, helfen wir Ihnen gerne weiter.`,
+      `Gerne verbinden wir Sie sofort mit einem unserer Kundenberater. Über die Schaltfläche unten können Sie uns per WhatsApp schreiben.`,
+    ],
+    fallback: `Bei Ihrer Frage kann Ihnen einer unserer Kundenberater am besten weiterhelfen. Über die Schaltfläche unten können Sie uns per WhatsApp schreiben; Ihre Nachricht wird dabei bereits vorbereitet übermittelt.`,
   },
 
   notFound: {

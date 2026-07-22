@@ -3,6 +3,7 @@ import { Navigate, Outlet, useParams } from 'react-router-dom'
 import { I18nProvider } from '@/app/providers/I18nProvider'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { ChatWidget } from '@/features/chatbot/ui/ChatWidget'
 import { SkipLink } from '@/components/common/SkipLink'
 import { isLocale, DEFAULT_LOCALE } from '@/app/config/locales'
 
@@ -36,6 +37,7 @@ export function LocaleLayout() {
           </Suspense>
         </main>
         <Footer />
+        <ChatWidget />
       </div>
     </I18nProvider>
   )

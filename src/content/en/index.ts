@@ -890,6 +890,15 @@ export const en: PartialDictionary = {
     disclaimer: 'This information is general; please confirm exact requirements with the relevant institution.',
     sensitiveWarning:
       'Please do not share sensitive personal data via this chat. You can send your documents through the secure upload area.',
+    answers: [
+      `The price is calculated based on your document's word count, language pair, service type (sworn, notarized, apostille), and delivery time. For an instant estimate, you can upload your document or enter the details on the Calculate Price page.`,
+      `A sworn translation is an official translation carried out by a sworn translator and certified with the translator's signature and stamp. Official institutions most often require sworn translations, and notary approval can be added when needed.`,
+      `You can submit your document through the secure upload area on the Calculate Price page. Once uploaded, you will see an instant estimate right away and can complete your order.`,
+      `For your corporate needs, we offer special pricing and priority delivery on regular, high-volume translations. For details, please visit our Corporate page or get in touch with us.`,
+      `Whether notary approval is needed depends on the institution the document is being submitted to and the type of transaction. Some processes accept only sworn translations, while others also require notary approval. If you are unsure, we would be glad to help.`,
+      `Let us connect you with one of our customer representatives right away. You can message us via WhatsApp using the button below.`,
+    ],
+    fallback: `One of our customer representatives can give you the most accurate assistance with your question. You can message us via WhatsApp using the button below, and your message will be forwarded ready to send.`,
   },
 
   notFound: {

@@ -883,6 +883,15 @@ export const az: PartialDictionary = {
     disclaimer: 'Bu məlumat ümumidir; dəqiq tələbləri müvafiq qurumla təsdiqləyin.',
     sensitiveWarning:
       'Zəhmət olmasa həssas şəxsi məlumatları bu söhbət vasitəsilə paylaşmayın. Sənədlərinizi təhlükəsiz yükləmə sahəsi vasitəsilə göndərə bilərsiniz.',
+    answers: [
+      `Qiymət; sənədinizin söz sayına, dil cütünə, xidmət növünə (andlı, notarial təsdiqli, apostil) və çatdırılma müddətinə əsasən hesablanır. Dərhal təxmini qiymət üçün Qiymət Hesabla səhifəsindən sənədinizi yükləyə və ya məlumatları daxil edə bilərsiniz.`,
+      `Andlı tərcümə, andlı tərcüməçi tərəfindən edilən və tərcüməçinin imzası və möhürü ilə təsdiqlənən rəsmi tərcümədir. Rəsmi qurumlar çox vaxt andlı tərcümə tələb edir; lazım gəldikdə notarial təsdiq də əlavə oluna bilər.`,
+      `Sənədinizi Qiymət Hesabla səhifəsindəki təhlükəsiz yükləmə sahəsindən göndərə bilərsiniz. Yüklədikdən sonra təxmini qiyməti dərhal görür və sifarişinizi tamamlaya bilərsiniz.`,
+      `Korporativ ehtiyaclarınız üçün müntəzəm və həcmli tərcümələrdə xüsusi qiymətləndirmə və prioritet çatdırılma təklif edirik. Ətraflı məlumat üçün Korporativ səhifəmizlə tanış ola və ya bizimlə əlaqə saxlaya bilərsiniz.`,
+      `Notarial təsdiq ehtiyacı, sənədi təqdim edəcəyiniz quruma və əməliyyatın növünə görə dəyişir. Bəzi əməliyyatlar yalnız andlı tərcüməni qəbul edir, bəziləri isə notarial təsdiq də tələb edir. Əmin deyilsinizsə, sizə kömək edək.`,
+      `Sizi dərhal müştəri təmsilçimizə qoşaq. Aşağıdakı düymə vasitəsilə WhatsApp üzərindən bizə yaza bilərsiniz.`,
+    ],
+    fallback: `Sualınızla bağlı sizə ən doğru köməyi müştəri təmsilçimiz göstərə bilər. Aşağıdakı düymə vasitəsilə WhatsApp üzərindən bizə yaza bilərsiniz; mesajınız hazır şəkildə göndəriləcək.`,
   },
 
   notFound: {

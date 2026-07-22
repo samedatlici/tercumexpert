@@ -889,6 +889,15 @@ export const da: PartialDictionary = {
     disclaimer: "Disse oplysninger er generelle; bekræft venligst de præcise krav med den relevante myndighed.",
     sensitiveWarning:
       "Del venligst ikke følsomme personoplysninger via denne chat. Du kan sende dine dokumenter via det sikre uploadområde.",
+    answers: [
+      `Prisen beregnes ud fra dokumentets antal ord, sprogkombinationen, typen af ydelse (autoriseret, notarbekræftet, apostille) og den ønskede leveringstid. For at få et øjeblikkeligt prisestimat kan De uploade Deres dokument eller indtaste oplysningerne på siden Beregn Pris.`,
+      `En autoriseret oversættelse er en officiel oversættelse udført af en autoriseret translatør og bekræftet med translatørens underskrift og stempel. Offentlige myndigheder kræver oftest en autoriseret oversættelse, og en notarbekræftelse kan tilføjes efter behov.`,
+      `De kan sende Deres dokument via det sikre uploadfelt på siden Beregn Pris. Efter uploaden ser De med det samme et prisestimat og kan færdiggøre Deres bestilling.`,
+      `Til Deres erhvervsmæssige behov tilbyder vi særlige priser og prioriteret levering ved regelmæssige og større oversættelsesopgaver. For nærmere oplysninger kan De læse mere på vores Erhvervsside eller kontakte os.`,
+      `Behovet for en notarbekræftelse afhænger af den myndighed, De skal indlevere dokumentet til, samt af sagens art. Nogle sager accepterer udelukkende en autoriseret oversættelse, mens andre også kræver en notarbekræftelse. Er De i tvivl, hjælper vi Dem gerne.`,
+      `Lad os straks sætte Dem i forbindelse med en af vores kunderådgivere. Via knappen nedenfor kan De skrive til os på WhatsApp.`,
+    ],
+    fallback: `En af vores kunderådgivere kan give Dem den mest præcise hjælp med Deres spørgsmål. Via knappen nedenfor kan De skrive til os på WhatsApp, og Deres besked videresendes klar til afsendelse.`,
   },
 
   notFound: {

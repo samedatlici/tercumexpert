@@ -888,6 +888,15 @@ export const tr = {
     disclaimer: 'Bu bilgi genel bilgilendirmedir; kesin gereklilik için ilgili kurumdan teyit alınız.',
     sensitiveWarning:
       'Lütfen bu sohbet üzerinden hassas kişisel veri paylaşmayın. Belgelerinizi güvenli yükleme alanından iletebilirsiniz.',
+    answers: [
+      `Fiyat; belgenizin kelime sayısı, dil çifti, hizmet türü (yeminli, noter onaylı, apostil) ve teslim süresine göre hesaplanır. Anında tahmini fiyat için Fiyat Hesapla sayfasından belgenizi yükleyebilir veya bilgileri girebilirsiniz.`,
+      `Yeminli tercüme, yeminli bir tercüman tarafından yapılan ve tercümanın imza ve kaşesiyle onaylanan resmî çeviridir. Resmî kurumlar çoğunlukla yeminli çeviri talep eder; gerektiğinde noter onayı da eklenebilir.`,
+      `Belgenizi Fiyat Hesapla sayfasındaki güvenli yükleme alanından iletebilirsiniz. Yükleme sonrası anında tahmini fiyatı görür ve siparişinizi tamamlayabilirsiniz.`,
+      `Kurumsal ihtiyaçlarınız için düzenli ve hacimli çevirilerde özel fiyatlandırma ve öncelikli teslim sunuyoruz. Ayrıntılar için Kurumsal sayfamızı inceleyebilir veya bizimle iletişime geçebilirsiniz.`,
+      `Noter onayı ihtiyacı, belgeyi sunacağınız kuruma ve işlemin türüne göre değişir. Bazı işlemler yalnızca yeminli çeviriyi kabul ederken bazıları noter onayı da ister. Emin değilseniz size yardımcı olalım.`,
+      `Sizi hemen bir müşteri temsilcimize bağlayalım. Aşağıdaki butondan WhatsApp üzerinden bize yazabilirsiniz.`,
+    ],
+    fallback: `Sorunuzda size en doğru yardımı bir müşteri temsilcimiz verebilir. Aşağıdaki butondan WhatsApp üzerinden bize yazabilirsiniz; mesajınız hazır olarak iletilecektir.`,
   },
 
   notFound: {

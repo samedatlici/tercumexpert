@@ -889,6 +889,15 @@ export const nl: PartialDictionary = {
     disclaimer: "Deze informatie is algemeen; bevestig de exacte vereisten bij de betreffende instantie.",
     sensitiveWarning:
       "Deel geen gevoelige persoonsgegevens via deze chat. U kunt uw documenten versturen via het beveiligde uploadgebied.",
+    answers: [
+      `De prijs wordt berekend op basis van het aantal woorden in uw document, de talencombinatie, het type dienst (beëdigd, notarieel gewaarmerkt, apostille) en de gewenste levertijd. Voor een directe prijsindicatie kunt u uw document uploaden of de gegevens invoeren op de pagina Prijs Berekenen.`,
+      `Een beëdigde vertaling is een officiële vertaling die door een beëdigd vertaler wordt gemaakt en met diens handtekening en stempel wordt gewaarmerkt. Officiële instanties vragen meestal om een beëdigde vertaling; indien nodig kan hier ook een notariële waarmerking aan worden toegevoegd.`,
+      `U kunt uw document veilig aanleveren via de beveiligde uploadfunctie op de pagina Prijs Berekenen. Direct na het uploaden ziet u de geschatte prijs en kunt u uw bestelling afronden.`,
+      `Voor uw zakelijke behoeften bieden wij bij regelmatige en grootschalige vertalingen speciale tarieven en levering met voorrang. Voor meer informatie kunt u onze pagina voor Zakelijke Klanten raadplegen of contact met ons opnemen.`,
+      `Of een notariële waarmerking nodig is, hangt af van de instantie waar u het document indient en van het type procedure. Sommige procedures accepteren uitsluitend een beëdigde vertaling, terwijl andere ook een notariële waarmerking vereisen. Weet u het niet zeker, dan helpen wij u graag verder.`,
+      `Wij verbinden u direct met een van onze medewerkers. Via de onderstaande knop kunt u ons een bericht sturen via WhatsApp.`,
+    ],
+    fallback: `Een van onze medewerkers kan u het beste van dienst zijn met uw vraag. Via de onderstaande knop kunt u ons een bericht sturen via WhatsApp; uw bericht wordt alvast voor u klaargezet.`,
   },
 
   notFound: {

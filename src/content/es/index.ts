@@ -889,6 +889,15 @@ export const es: PartialDictionary = {
     disclaimer: 'Esta información es general; confirme los requisitos exactos con la institución correspondiente.',
     sensitiveWarning:
       'No comparta datos personales sensibles a través de este chat. Puede enviar sus documentos mediante la zona de carga segura.',
+    answers: [
+      `El precio se calcula en función del número de palabras del documento, la combinación de idiomas, el tipo de servicio (traducción jurada, certificación notarial, apostilla) y el plazo de entrega. Para obtener un presupuesto estimado al instante, puede subir su documento o introducir los datos en la página Calcular Precio.`,
+      `La traducción jurada es una traducción oficial realizada por un traductor jurado y validada con su firma y sello. Las entidades oficiales suelen exigir traducciones juradas; cuando sea necesario, también puede añadirse la certificación notarial.`,
+      `Puede enviarnos su documento a través del área de carga segura de la página Calcular Precio. Una vez subido, verá el presupuesto estimado al instante y podrá completar su pedido.`,
+      `Para sus necesidades corporativas, ofrecemos precios especiales y entrega prioritaria en traducciones periódicas y de gran volumen. Para más detalles, puede consultar nuestra página Corporativa o ponerse en contacto con nosotros.`,
+      `La necesidad de certificación notarial depende de la entidad a la que vaya a presentar el documento y del tipo de trámite. Algunos trámites aceptan únicamente la traducción jurada, mientras que otros también requieren certificación notarial. Si tiene dudas, permítanos ayudarle.`,
+      `Le ponemos en contacto de inmediato con uno de nuestros representantes de atención al cliente. Puede escribirnos a través de WhatsApp mediante el botón que aparece a continuación.`,
+    ],
+    fallback: `Uno de nuestros representantes de atención al cliente podrá ofrecerle la ayuda más adecuada para su consulta. Puede escribirnos a través de WhatsApp mediante el botón que aparece a continuación; su mensaje se enviará ya redactado.`,
   },
 
   notFound: {
