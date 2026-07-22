@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react'
 import { Icon } from '@/components/common/Icon'
 import { useI18n } from '@/hooks/useI18n'
 
-type LegalKey = 'kvkk' | 'privacy'
+type LegalKey = 'kvkk' | 'privacy' | 'partnership'
 
 interface Part {
   type: 'text' | LegalKey
@@ -18,7 +18,7 @@ export function ConsentText({ text, className }: { text: string; className?: str
   const [openKey, setOpenKey] = useState<LegalKey | null>(null)
 
   const parts: Part[] = []
-  const re = /<(kvkk|privacy)>([\s\S]*?)<\/\1>/g
+  const re = /<(kvkk|privacy|partnership)>([\s\S]*?)<\/\1>/g
   let last = 0
   let m: RegExpExecArray | null
   while ((m = re.exec(text)) !== null) {

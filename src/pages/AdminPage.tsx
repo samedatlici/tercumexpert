@@ -7,6 +7,7 @@ import { useAuth } from '@/app/providers/AuthProvider'
 import { buildPath } from '@/app/router/routes'
 import { isAdminEmail } from '@/app/config/admin.config'
 import { supabase } from '@/lib/supabase'
+import { cn } from '@/lib/cn'
 
 interface ChatMsg {
   role: string
@@ -133,7 +134,7 @@ export default function AdminPage() {
 
       {state === 'idle' && list.length > 0 && (
         <div className="grid gap-4 md:grid-cols-[340px_1fr]">
-          <div className="max-h-[70vh] space-y-2 overflow-y-auto pe-1">
+          <div className={cn('space-y-2 md:max-h-[70vh] md:overflow-y-auto md:pe-1', selected && 'hidden md:block')}>
             {list.map((r) => {
               const firstUser = r.messages?.find((m) => m.role === 'user')?.content
               return (
@@ -159,11 +160,18 @@ export default function AdminPage() {
             })}
           </div>
 
-          <div className="rounded-md border border-border bg-surface p-4">
+          <div className={cn('rounded-md border border-border bg-surface p-4', !selected && 'hidden md:block')}>
             {!selected ? (
               <p className="py-16 text-center text-sm text-text-muted">{a.selectHint}</p>
             ) : (
               <div className="space-y-4">
+                <button
+                  type="button"
+                  onClick={() => setSelectedId(null)}
+                  className="-mt-1 mb-1 inline-flex items-center gap-1 text-sm font-medium text-text-secondary hover:text-text-primary md:hidden"
+                >
+                  <Icon name="ArrowRight" className="size-4 rotate-180" /> {dict.chatbot.contact.back}
+                </button>
                 <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted">
                   <span>{fmt(selected.created_at)}</span>
                   {selected.locale && <span className="rounded bg-surface-muted px-1.5 py-0.5 uppercase">{selected.locale}</span>}
@@ -212,7 +220,7 @@ export default function AdminPage() {
 function Shell({ children, wide }: { children: React.ReactNode; wide?: boolean }) {
   return (
     <section className="section">
-      <div className={'mx-auto w-full ' + (wide ? 'max-w-5xl' : 'max-w-2xl')}>{children}</div>
+      <div className={'mx-auto w-full px-4 sm:px-6 ' + (wide ? 'max-w-5xl' : 'max-w-2xl')}>{children}</div>
     </section>
   )
 }

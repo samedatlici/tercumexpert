@@ -46,7 +46,7 @@ export default function AuthPage() {
       <>
         <Seo title={a.seo.title} description={a.seo.description} routeId="auth" />
         <section className="section">
-          <div className="mx-auto w-full max-w-2xl">
+          <div className="mx-auto w-full max-w-2xl px-4 sm:px-6">
             <div className="rounded-lg border border-border bg-surface p-6 sm:p-8">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
@@ -252,7 +252,7 @@ export default function AuthPage() {
 function Shell({ children }: { children: ReactNode }) {
   return (
     <section className="section">
-      <div className="mx-auto w-full max-w-md rounded-lg border border-border bg-surface p-6 sm:p-8">
+      <div className="mx-auto w-full max-w-md rounded-lg border border-border bg-surface p-6 sm:p-8 max-sm:mx-4 max-sm:w-auto">
         {children}
       </div>
     </section>

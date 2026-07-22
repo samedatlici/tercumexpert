@@ -8,6 +8,7 @@ import { PageHero, SectionHeading } from '@/components/common/PageHero'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { PARTNERSHIP, partnerEarning } from '@/app/config/partnership'
+import { ConsentText } from '@/features/legal/ConsentText'
 
 const schema = z.object({
   company: z.string().min(2, 'Şirket/kurum adı zorunludur.'),
@@ -212,7 +213,7 @@ export default function PartnershipPage() {
               <input type="text" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" {...register('company_website')} />
               <label className="mt-5 flex items-start gap-3 text-sm">
                 <input type="checkbox" className="mt-1 size-4 accent-black" {...register('agreement')} aria-invalid={!!errors.agreement} />
-                <span>{p.form.fields.agreement} <span className="text-danger">*</span></span>
+                <span><ConsentText text={p.form.fields.agreement} /> <span className="text-danger">*</span></span>
               </label>
               {errors.agreement && <p className="mt-1 text-sm text-danger">{errors.agreement.message}</p>}
               <Button type="submit" intent="secondary" size="lg" block disabled={isSubmitting} className="mt-6">
