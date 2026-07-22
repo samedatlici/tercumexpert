@@ -16,6 +16,8 @@
     scroll-behavior: smooth;
     /* Sticky header için anchor scroll offset */
     scroll-padding-top: 6rem;
+    /* iOS'ta yatay kaymayı html seviyesinde de engelle (clip: sticky'yi bozmaz) */
+    overflow-x: clip;
   }
 
   body {
@@ -28,7 +30,8 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     /* 320px'de yatay taşmayı garantiye al */
-    overflow-x: hidden;
+    overflow-x: clip;
+    width: 100%;
   }
 
   h1,
