@@ -1,14 +1,20 @@
-import type { ServiceId } from '@/app/config/services'
-import type { DocumentTypeId } from '@/app/config/pricing.config'
+import type { AreaId } from '@/app/config/areas.config'
 
 export interface QuoteInput {
-  service: ServiceId
-  documentType: DocumentTypeId
+  /** Çeviri alanı (Hizmet Türü) — orders.service kolonunda saklanır. */
+  service: AreaId
+  /** Belge türü (alan alt başlığı) — yalnızca açıklama; fiyatı etkilemez. */
+  documentType: string
   sourceLang: string
   targetLang: string
   wordCount: number
   urgent: boolean
+  /** Ek: Yeminli tercüme (noter ile aynı anda seçilemez). */
+  sworn: boolean
+  /** Ek: Noter onayı (yeminli ile aynı anda seçilemez). */
   notarization: boolean
+  /** Ek: Apostil süreci desteği. */
+  apostille: boolean
   physicalDelivery: boolean
 }
 

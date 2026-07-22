@@ -1,5 +1,6 @@
 import {
   PRICING,
+  AREA_BASE_PRICE,
   QUOTE_LANGUAGES,
   type LanguageTier,
   type PricingConfig,
@@ -53,18 +54,20 @@ export function baseWordCost(words: number, config: PricingConfig): number {
 export function calculateQuote(input: QuoteInput, config: PricingConfig = PRICING): QuoteBreakdown {
   const words = Math.max(0, Math.floor(input.wordCount))
 
-  const base = config.serviceBasePrice[input.service]
-  const docMult = config.documentTypeMultiplier[input.documentType]
+  // Alan (Hizmet Türü) taban ücreti. Belge türü fiyatı ETKİLEMEZ (yalnız açıklama).
+  const base = AREA_BASE_PRICE[input.service] ?? config.serviceBasePrice.sworn
   const langMult = config.languageTierMultiplier[pairTier(input.sourceLang, input.targetLang)]
 
   const basePrice = round(base)
-  const wordPrice = round(baseWordCost(words, config) * langMult * docMult)
+  const wordPrice = round(baseWordCost(words, config) * langMult)
 
   const translation = basePrice + wordPrice
   const urgencySurcharge = input.urgent ? round(translation * (config.urgencyMultiplier - 1)) : 0
+  const swornFee = input.sworn ? config.swornFee : 0
   const notaryFee = input.notarization ? config.notarizationFee : 0
+  const apostilleFee = input.apostille ? config.apostilleFee : 0
   const physicalFee = input.physicalDelivery ? config.physicalDeliveryFee : 0
-  const addonsPrice = urgencySurcharge + notaryFee + physicalFee
+  const addonsPrice = urgencySurcharge + swornFee + notaryFee + apostilleFee + physicalFee
 
   const preMin = basePrice + wordPrice + addonsPrice
   const subtotal = Math.max(preMin, config.minimumOrderAmount)

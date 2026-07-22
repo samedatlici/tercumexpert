@@ -14,7 +14,9 @@ export interface CreateOrderInput {
   documentType: string
   wordCount: number
   urgent: boolean
+  sworn: boolean
   notarization: boolean
+  apostille: boolean
   physicalDelivery: boolean
   breakdown: QuoteBreakdown
   inputMode: 'file' | 'text'
@@ -67,7 +69,9 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
       document_type: input.documentType,
       word_count: input.wordCount,
       urgent: input.urgent,
+      sworn: input.sworn,
       notarization: input.notarization,
+      apostille: input.apostille,
       physical_delivery: input.physicalDelivery,
       base_price: b.basePrice,
       word_price: b.wordPrice,

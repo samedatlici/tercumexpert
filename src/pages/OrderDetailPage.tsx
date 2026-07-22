@@ -136,9 +136,12 @@ export default function OrderDetailPage() {
       QUOTE_LANGUAGES.find((l) => l.code === code)?.labelTr ??
       (code ? code.toUpperCase() : '—')
     const docLabel =
-      (dict.quote.documentTypes as Record<string, string>)[order.document_type ?? ''] ??
-      DOCUMENT_TYPES.find((d) => d.id === order.document_type)?.labelTr
-    const svcName = order.service ? dict.serviceItems[order.service as keyof typeof dict.serviceItems]?.name : undefined
+      (dict.quote.docTypes as Record<string, string>)[order.document_type ?? ''] ??
+      (dict.quote.documentTypes as Record<string, string>)[order.document_type ?? '']
+    const svcName = order.service
+      ? (dict.quote.areas as Record<string, string>)[order.service] ??
+        dict.serviceItems[order.service as keyof typeof dict.serviceItems]?.name
+      : undefined
 
     const estIso = addDays(order.created_at, order.delivery_days ?? 0)
     const cargoIso = addDays(estIso, 2)

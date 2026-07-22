@@ -17,8 +17,8 @@ import {
   extractWordCount,
   type ExtractStatus,
 } from '@/features/file-upload/model/extract-word-count'
-import { SERVICES, type ServiceId } from '@/app/config/services'
-import { DOCUMENT_TYPES, QUOTE_LANGUAGES, type DocumentTypeId } from '@/app/config/pricing.config'
+import { QUOTE_LANGUAGES } from '@/app/config/pricing.config'
+import { AREAS, docsForArea, type AreaId } from '@/app/config/areas.config'
 import { whatsappLink } from '@/app/config/site.config'
 import { COUNTRIES, dialOf, defaultCountryForLocale } from '@/app/config/country-codes'
 import { PhoneInput } from '@/components/common/PhoneInput'
@@ -87,12 +87,14 @@ export default function QuotePage() {
   const [sizeError, setSizeError] = useState(false)
   const [text, setText] = useState('')
 
-  const [service, setService] = useState<ServiceId>('sworn')
+  const [service, setService] = useState<AreaId>(AREAS[0].id)
   const [sourceLang, setSourceLang] = useState('tr')
   const [targetLang, setTargetLang] = useState('en')
-  const [documentType, setDocumentType] = useState<DocumentTypeId>('diploma')
+  const [documentType, setDocumentType] = useState<string>(docsForArea(AREAS[0].id)[0])
   const [urgent, setUrgent] = useState(false)
+  const [sworn, setSworn] = useState(false)
   const [notarization, setNotarization] = useState(false)
+  const [apostille, setApostille] = useState(false)
   const [physicalDelivery, setPhysicalDelivery] = useState(false)
   const [result, setResult] = useState<QuoteBreakdown | null>(null)
   const [gateOpen, setGateOpen] = useState(false)
@@ -161,7 +163,9 @@ export default function QuotePage() {
       targetLang,
       wordCount,
       urgent,
+      sworn,
       notarization,
+      apostille,
       physicalDelivery,
     })
     if (user) {
@@ -199,7 +203,9 @@ export default function QuotePage() {
       documentType,
       wordCount,
       urgent,
+      sworn,
       notarization,
+      apostille,
       physicalDelivery,
       breakdown: result,
       inputMode: mode,
@@ -384,17 +390,27 @@ export default function QuotePage() {
             </div>
 
             <Field label={q.fields.serviceType} htmlFor={`${ids}-svc`}>
-              <select id={`${ids}-svc`} className={fieldClass} value={service} onChange={(e) => setService(e.target.value as ServiceId)}>
-                {[...SERVICES].map((s) => (
-                  <option key={s.id} value={s.id}>{dict.serviceItems[s.id].name}</option>
+              <select
+                id={`${ids}-svc`}
+                className={fieldClass}
+                value={service}
+                onChange={(e) => {
+                  const area = e.target.value as AreaId
+                  setService(area)
+                  setDocumentType(docsForArea(area)[0])
+                  setResult(null)
+                }}
+              >
+                {AREAS.map((a) => (
+                  <option key={a.id} value={a.id}>{(q.areas as Record<string, string>)[a.id] ?? a.id}</option>
                 ))}
               </select>
             </Field>
 
             <Field label={q.fields.documentType} htmlFor={`${ids}-doc`}>
-              <select id={`${ids}-doc`} className={fieldClass} value={documentType} onChange={(e) => setDocumentType(e.target.value as DocumentTypeId)}>
-                {DOCUMENT_TYPES.map((d) => (
-                  <option key={d.id} value={d.id}>{(q.documentTypes as Record<string, string>)[d.id] ?? d.labelTr}</option>
+              <select id={`${ids}-doc`} className={fieldClass} value={documentType} onChange={(e) => setDocumentType(e.target.value)}>
+                {docsForArea(service).map((d) => (
+                  <option key={d} value={d}>{(q.docTypes as Record<string, string>)[d] ?? d}</option>
                 ))}
               </select>
             </Field>
@@ -402,8 +418,28 @@ export default function QuotePage() {
             <fieldset className="space-y-2">
               <legend className="mb-1 text-sm font-medium">{q.fields.options}</legend>
               <Checkbox label={q.options.urgent} checked={urgent} onChange={setUrgent} />
-              <Checkbox label={q.options.notarization} checked={notarization} onChange={setNotarization} />
+              {/* Yeminli ve Noter aynı anda seçilemez (noter zaten yeminlidir). */}
+              <Checkbox
+                label={q.options.sworn}
+                checked={sworn}
+                onChange={(v) => {
+                  setSworn(v)
+                  if (v) setNotarization(false)
+                  setResult(null)
+                }}
+              />
+              <Checkbox
+                label={q.options.notarization}
+                checked={notarization}
+                onChange={(v) => {
+                  setNotarization(v)
+                  if (v) setSworn(false)
+                  setResult(null)
+                }}
+              />
+              <Checkbox label={q.options.apostille} checked={apostille} onChange={(v) => { setApostille(v); setResult(null) }} />
               <Checkbox label={q.options.physicalDelivery} checked={physicalDelivery} onChange={setPhysicalDelivery} />
+              <p className="pt-1 text-xs text-text-muted">{q.options.swornNotaryHint}</p>
             </fieldset>
 
             {needInput && wordCount <= 0 && <p className="text-sm text-danger">{u.needInput}</p>}

@@ -1,4 +1,5 @@
 import type { ServiceId } from './services'
+import type { AreaId } from './areas.config'
 
 /**
  * FİYATLANDIRMA PARAMETRELERİ (§13). Hard-code yasak -> tümü buradan yönetilir.
@@ -47,6 +48,10 @@ export interface PricingConfig {
   languageTierMultiplier: Record<LanguageTier, number>
   urgencyMultiplier: number
   notarizationFee: number
+  /** Yeminli tercüme onayı ek ücreti (add-on). */
+  swornFee: number
+  /** Apostil süreci desteği ek ücreti (add-on). */
+  apostilleFee: number
   physicalDeliveryFee: number
   /** KDV oranı (%). Vergi gösterimi gerekiyorsa kullanılır. */
   taxRatePercent: number
@@ -88,8 +93,27 @@ export const PRICING: PricingConfig = {
   },
   urgencyMultiplier: 1.5,
   notarizationFee: 250,
+  swornFee: 150,
+  apostilleFee: 300,
   physicalDeliveryFee: 120,
   taxRatePercent: 20,
+}
+
+/**
+ * Alan (Hizmet Türü) taban ücretleri. PLACEHOLDER — pazar araştırması sonrası
+ * (ödeme entegrasyonundan önce) güncellenecek. Kelime ücreti buna eklenir.
+ * !!! api/_pool-logic.ts içindeki kopya ile SENKRON tutulmalı (payout hesabı).
+ */
+export const AREA_BASE_PRICE: Record<AreaId, number> = {
+  academic: 160,
+  legal: 180,
+  official: 150,
+  medical: 180,
+  technical: 160,
+  commercial: 170,
+  localization: 200,
+  literary: 190,
+  general: 150,
 }
 
 /** Kelime sayısı sınırları (§13: 100–10.000 başlangıç aralığı). */

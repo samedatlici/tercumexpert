@@ -9,7 +9,8 @@ import { buildPath } from '@/app/router/routes'
 import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/cn'
 import { useTranslator } from '@/features/translator/model/useTranslator'
-import { EXPERTISE_KEYS, PANEL_LANGUAGES, languageName } from '@/features/translator/model/config'
+import { PANEL_LANGUAGES, languageName } from '@/features/translator/model/config'
+import { AREA_IDS } from '@/app/config/areas.config'
 import { translatorApi } from '@/features/translator/model/api'
 import type { LanguagePair, Translator } from '@/features/translator/model/types'
 
@@ -187,6 +188,8 @@ function ExpertisePicker({
   selected: string[]
   setSelected: (s: string[]) => void
 }) {
+  const { dict } = useI18n()
+  const areaLabel = (id: string) => (dict.quote.areas as Record<string, string>)[id] ?? id
   const toggle = (k: string) => {
     setSelected(selected.includes(k) ? selected.filter((x) => x !== k) : [...selected, k])
   }
@@ -194,10 +197,10 @@ function ExpertisePicker({
     <div>
       <label className={labelClass}>{t.form.expertise}</label>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {EXPERTISE_KEYS.map((k) => (
+        {AREA_IDS.map((k) => (
           <label key={k} className={cn('flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm', selected.includes(k) ? 'border-secondary bg-surface-muted' : 'border-border bg-surface hover:bg-surface-muted')}>
             <input type="checkbox" checked={selected.includes(k)} onChange={() => toggle(k)} className="size-4 accent-black" />
-            {t.expertiseLabels[k]}
+            {areaLabel(k)}
           </label>
         ))}
       </div>
@@ -459,6 +462,8 @@ function ProfileEditor({
 /* ------------------------------------------------------------------ */
 
 function AdminSection({ t, locale }: { t: TDict; locale: string }) {
+  const { dict } = useI18n()
+  const areaLabel = (id: string) => (dict.quote.areas as Record<string, string>)[id] ?? id
   const [rows, setRows] = useState<Translator[]>([])
   const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
   const [busyId, setBusyId] = useState<string | null>(null)
@@ -539,7 +544,7 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
                     : r.language_pairs.map((p) => `${languageName(p.source, locale)}→${languageName(p.target, locale)}`).join(', ')}
                 </Detail>
                 <Detail label={t.admin.colExpertise}>
-                  {(r.expertise ?? []).length === 0 ? '—' : r.expertise.map((k) => t.expertiseLabels[k as keyof TDict['expertiseLabels']] ?? k).join(', ')}
+                  {(r.expertise ?? []).length === 0 ? '—' : r.expertise.map((k) => areaLabel(k)).join(', ')}
                 </Detail>
                 <Detail label={t.form.phone}>{r.phone ? <span dir="ltr">{r.phone}</span> : '—'}</Detail>
                 <Detail label={t.form.birthDate}>{r.birth_date || '—'}</Detail>
@@ -602,7 +607,9 @@ interface PoolOrder {
   document_type: string
   word_count: number
   urgent: boolean
+  sworn: boolean
   notarization: boolean
+  apostille: boolean
   physical_delivery: boolean
   input_mode: string
   source_text: string | null
@@ -649,8 +656,8 @@ function PoolTab({ t, locale }: { t: TDict; locale: string }) {
     }
   }
 
-  const serviceName = (s: string) => (dict.serviceItems as Record<string, { name: string }>)[s]?.name ?? s
-  const docName = (d: string) => (dict.quote.documentTypes as Record<string, string>)[d] ?? d
+  const serviceName = (s: string) => (dict.quote.areas as Record<string, string>)[s] ?? s
+  const docName = (d: string) => (dict.quote.docTypes as Record<string, string>)[d] ?? d
   const deadline = (o: PoolOrder) => {
     try {
       const d = new Date(o.created_at)
@@ -680,7 +687,9 @@ function PoolTab({ t, locale }: { t: TDict; locale: string }) {
                 <h3 className="font-semibold">{t.pool.orderNo} #{o.order_no}</h3>
                 <div className="flex flex-wrap gap-1.5">
                   {o.urgent && <Pill tone="danger">{t.pool.urgent}</Pill>}
+                  {o.sworn && <Pill tone="info">{t.pool.sworn}</Pill>}
                   {o.notarization && <Pill tone="info">{t.pool.notary}</Pill>}
+                  {o.apostille && <Pill tone="info">{t.pool.apostille}</Pill>}
                   <Pill tone="muted">{o.physical_delivery ? t.pool.cargo : t.pool.digital}</Pill>
                 </div>
               </div>
