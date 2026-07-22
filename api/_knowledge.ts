@@ -60,15 +60,55 @@ export interface QA {
  */
 export const CUSTOM_QA: QA[] = [
   {
-    q: 'Çalışma saatleriniz nedir? Ne zaman ulaşabilirim?',
-    a: '[Çalışma saatlerinizi buraya yazın. Örn: Hafta içi 09:00–18:00. WhatsApp üzerinden mesaj bırakabilirsiniz, en kısa sürede dönüş yapılır.]',
+    q: `Çalışma saatleriniz nedir? Size ne zaman ulaşabilirim?`,
+    a: `Çalışma saatlerimiz Türkiye saatiyle hafta içi 09.00–18.00 arasıdır. Ayrıca acil işler için mesai dışında da hizmet sunuyoruz. Bize her zaman WhatsApp üzerinden mesaj bırakabilirsiniz; en kısa sürede dönüş yapılır.`,
   },
   {
-    q: 'Ödeme yöntemleriniz neler?',
-    a: 'Ödeme, sipariş adımında sunulan yöntemlerle güvenli şekilde yapılır. [Ödeme sağlayıcı/kart-taksit seçenekleri eklenince burası güncellenecek.]',
+    q: `Hangi ödeme yöntemlerini kabul ediyorsunuz? Taksit var mı?`,
+    a: `Ödemeler kartla peşin veya taksitli olarak alınabilir. Havale/EFT ile ödemek isterseniz WhatsApp destek hattımızdan bize ulaşabilirsiniz.`,
   },
   {
-    q: 'Acil / aynı gün çeviri yapıyor musunuz?',
-    a: 'Teslim süresi belge yoğunluğuna ve hizmet türüne göre değişir; sipariş sırasında tahmini süre gösterilir. Acil talepler için WhatsApp üzerinden bize yazabilirsiniz. [Varsa acil hizmet koşullarınızı buraya ekleyin.]',
+    q: `Fatura kesiyor musunuz?`,
+    a: `Evet, siparişleriniz için fatura düzenliyoruz (hem bireysel hem kurumsal).`,
+  },
+  {
+    q: `Acil / aynı gün çeviri yapıyor musunuz? Ek ücreti var mı?`,
+    a: `Evet, acil çeviri hizmetimiz vardır. Ancak teslim süresi çevrilecek dosyanın hacmine göre değişir; aynı gün içinde tamamlanacağı garanti edilmez. Acil çeviri için tahmini teslim süresini "Fiyat Hesapla" (fiyat alma) sayfasında görebilirsiniz. Acil hizmet için ek ücret uygulanır.`,
+  },
+  {
+    q: `Fiziki teslimat / kargo yapıyor musunuz? Yurt dışına gönderim var mı?`,
+    a: `Noter onaylı ve yeminli tercümelerde fiziki teslimat / kargo yapıyoruz. Kargo ücreti ve süresi gibi ayrıntıları sipariş verme ekranında görebilirsiniz. Yurt dışına da gönderim yapabiliyoruz.`,
+  },
+  {
+    q: `Kurumsal veya toplu işler için özel fiyat / indirim var mı?`,
+    a: `Evet. Kurumsal sayfamızdaki formu doldurmanız yeterli; 1 iş günü içinde size dönüş sağlayıp ihtiyacınıza özel teklif sunuyoruz.`,
+  },
+  {
+    q: `Hangi dillerde / dil çiftlerinde çeviri yapıyorsunuz?`,
+    a: `Çince ve Japonca dahil olmak üzere 50'den fazla dil çifti arasında çeviri yapabiliyoruz.`,
+  },
+  {
+    q: `Yeminli tercüme, noter onayı ve apostil sürecini siz mi hallediyorsunuz?`,
+    a: `Evet. Resmî sürecin tamamını (yeminli tercüme, noter onayı ve apostil) baştan sona biz yönetir, hazır evrakları size teslim ederiz. Siz de bu evrakları teslim etmeniz gereken kuruma iletirsiniz.`,
+  },
+  {
+    q: `Çeviriden memnun kalmazsam düzeltme / revize hakkım var mı?`,
+    a: `Evet, revize hakkınız vardır. Kaynak metinde bir değişiklik yapılmadığı sürece, çeviriyle ilgili düzeltme talepleriniz ücretsiz olarak karşılanır.`,
+  },
+  {
+    q: `Siparişi iptal edebilir miyim? İade koşulları nedir?`,
+    a: `Çevirmen çeviriyi işleme almadan önce iptal ederseniz ödemeniz iade edilir. Çevirmen işe başladıysa, o ana kadar çevrilen miktar kadar bir ücret kesintisi yapılır ve kalan tutar iade edilir.`,
+  },
+  {
+    q: `Belgelerimin gizliliği nasıl korunuyor? Gizlilik sözleşmesi (NDA) imzalıyor musunuz?`,
+    a: `Belgeleriniz gizli tutulur ve yalnızca işi yürüten yetkili çevirmen ve personel tarafından, işin gerektirdiği süre boyunca görülür. Talebe bağlı olarak TercümExpert, müşterileriyle bir gizlilik sözleşmesi (NDA) imzalayabilir.`,
+  },
+  {
+    q: `Fiziki ofisiniz var mı? Yüz yüze görüşebilir miyim?`,
+    a: `Ana merkezimiz Konya, Türkiye'de bulunmaktadır. Görüşmek veya ayrıntılı bilgi almak için WhatsApp destek hattımızdan bize ulaşabilirsiniz.`,
+  },
+  {
+    q: `Çeviri, sunduğum kurumda kabul edilmezse ne oluyor?`,
+    a: `Böyle bir durumda size en doğru şekilde yardımcı olabilmemiz için lütfen WhatsApp destek hattımızdan veya info@tercumexpert.com adresinden bizimle iletişime geçin; durumu birlikte değerlendirip gerekli desteği sağlayalım.`,
   },
 ]
