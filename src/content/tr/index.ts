@@ -998,6 +998,7 @@ export const tr = {
       target: 'Hedef dil',
       addPair: 'Ekle',
       removePair: 'Kaldır',
+      swap: 'Yön değiştir',
       expertise: 'Uzmanlık alanları',
       submit: 'Başvuruyu gönder',
       submitting: 'Gönderiliyor…',

@@ -1000,6 +1000,7 @@ export const en: PartialDictionary = {
       target: 'Target language',
       addPair: 'Add',
       removePair: 'Remove',
+      swap: 'Swap direction',
       expertise: 'Areas of expertise',
       submit: 'Submit application',
       submitting: 'Submitting…',

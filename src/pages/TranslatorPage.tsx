@@ -143,7 +143,18 @@ function PairPicker({
             <option key={c} value={c}>{languageName(c, locale)}</option>
           ))}
         </select>
-        <span className="pb-2.5 text-text-muted">→</span>
+        <button
+          type="button"
+          onClick={() => {
+            setSource(target)
+            setTarget(source)
+          }}
+          aria-label={t.form.swap}
+          title={t.form.swap}
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-md border border-border text-text-secondary hover:bg-surface-muted"
+        >
+          <Icon name="ArrowRightLeft" className="size-4" />
+        </button>
         <select value={target} onChange={(e) => setTarget(e.target.value)} aria-label={t.form.target} className={cn(inputClass, 'w-auto flex-1')}>
           {PANEL_LANGUAGES.map((c) => (
             <option key={c} value={c}>{languageName(c, locale)}</option>
@@ -532,8 +543,8 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
                 </Detail>
                 <Detail label={t.form.phone}>{r.phone ? <span dir="ltr">{r.phone}</span> : '—'}</Detail>
                 <Detail label={t.form.birthDate}>{r.birth_date || '—'}</Detail>
-                <Detail label={t.form.iban}><span dir="ltr">{r.iban || '—'}</span></Detail>
-                <Detail label={t.form.ibanName}>{r.iban_name || '—'}</Detail>
+                {r.iban && <Detail label={t.form.iban}><span dir="ltr">{r.iban}</span></Detail>}
+                {r.iban_name && <Detail label={t.form.ibanName}>{r.iban_name}</Detail>}
                 <Detail label={t.form.address}>{r.address || '—'}</Detail>
               </dl>
 
