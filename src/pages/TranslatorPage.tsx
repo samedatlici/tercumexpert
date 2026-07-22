@@ -212,8 +212,6 @@ function ApplicationForm({
   const [birthDate, setBirthDate] = useState('')
   const [phone, setPhone] = useState('')
   const [address, setAddress] = useState('')
-  const [iban, setIban] = useState('')
-  const [ibanName, setIbanName] = useState('')
   const [pairs, setPairs] = useState<LanguagePair[]>([])
   const [expertise, setExpertise] = useState<string[]>([])
   const [busy, setBusy] = useState(false)
@@ -221,20 +219,19 @@ function ApplicationForm({
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!fullName.trim() || !iban.trim() || !ibanName.trim() || pairs.length === 0) {
+    if (!fullName.trim() || pairs.length === 0) {
       setErr(pairs.length === 0 ? t.form.atLeastOnePair : t.form.required)
       return
     }
     setErr(null)
     setBusy(true)
+    // IBAN başvuruda İSTENMEZ; tercüman onaylandıktan sonra profilinden girer.
     const { error } = await supabase.from('translators').insert({
       user_id: userId,
       full_name: fullName.trim(),
       birth_date: birthDate || null,
       phone: phone.trim() || null,
       address: address.trim() || null,
-      iban: iban.trim(),
-      iban_name: ibanName.trim(),
       language_pairs: pairs,
       expertise,
     })
@@ -270,16 +267,6 @@ function ApplicationForm({
         <div>
           <label className={labelClass}>{t.form.address}</label>
           <textarea rows={2} className={cn(inputClass, 'py-2')} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" />
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className={labelClass}>{t.form.iban} <span className="text-danger">*</span></label>
-            <input className={inputClass} value={iban} onChange={(e) => setIban(e.target.value)} placeholder="TR.." dir="ltr" />
-          </div>
-          <div>
-            <label className={labelClass}>{t.form.ibanName} <span className="text-danger">*</span></label>
-            <input className={inputClass} value={ibanName} onChange={(e) => setIbanName(e.target.value)} autoComplete="name" />
-          </div>
         </div>
         <PairPicker t={t} locale={locale} pairs={pairs} setPairs={setPairs} />
         <ExpertisePicker t={t} selected={expertise} setSelected={setExpertise} />
@@ -407,6 +394,12 @@ function ProfileEditor({
           {translator.iban_verified ? t.profile.verifiedIban : t.profile.unverifiedIban}
         </span>
       </div>
+      {!iban.trim() && (
+        <div className="flex items-start gap-2 rounded-md border border-secondary/30 bg-surface-muted p-3 text-sm">
+          <Icon name="Wallet" className="mt-0.5 size-4 shrink-0 text-text-secondary" />
+          <p>{t.profile.ibanReminder}</p>
+        </div>
+      )}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelClass}>{t.form.fullName}</label>

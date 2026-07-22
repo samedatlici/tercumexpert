@@ -1039,6 +1039,7 @@ export const tr = {
       unverifiedIban: 'IBAN doğrulanmadı',
       current: 'Kayıtlı',
       edit: 'Bilgileri kaydet',
+      ibanReminder: 'Ödemelerinizi alabilmek için lütfen IBAN bilgilerinizi girip kaydedin. Yönetim doğruladıktan sonra ödemeler bu hesaba yapılır.',
     },
     admin: {
       title: 'Tercüman Yönetimi',

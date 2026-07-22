@@ -1041,6 +1041,7 @@ export const en: PartialDictionary = {
       unverifiedIban: 'IBAN not verified',
       current: 'Saved',
       edit: 'Save details',
+      ibanReminder: 'To receive your payments, please enter and save your IBAN details. Once verified by admin, payments will be made to this account.',
     },
     admin: {
       title: 'Translator Management',
