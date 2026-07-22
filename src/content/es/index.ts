@@ -899,6 +899,23 @@ export const es: PartialDictionary = {
       `Le ponemos en contacto de inmediato con uno de nuestros representantes de atención al cliente. Puede escribirnos a través de WhatsApp mediante el botón que aparece a continuación.`,
     ],
     fallback: `Uno de nuestros representantes de atención al cliente podrá ofrecerle la ayuda más adecuada para su consulta. Puede escribirnos a través de WhatsApp mediante el botón que aparece a continuación; su mensaje se enviará ya redactado.`,
+    contact: {
+      whatsapp: `WhatsApp`,
+      email: `Correo electrónico`,
+      phone: `Teléfono`,
+      leaveInfo: `Dejar mis datos de contacto`,
+      formTitle: `Póngase en contacto con nosotros`,
+      formDesc: `Deje sus datos y nuestro equipo se pondrá en contacto con usted lo antes posible.`,
+      name: `Su nombre`,
+      emailField: `Correo electrónico`,
+      phoneField: `Teléfono`,
+      message: `Su mensaje (opcional)`,
+      submit: `Enviar`,
+      submitting: `Enviando…`,
+      thanks: `Gracias, nuestro equipo se pondrá en contacto con usted lo antes posible.`,
+      errorRequired: `Introduzca un correo electrónico o un teléfono.`,
+      back: `Atrás`,
+    },
   },
 
   notFound: {

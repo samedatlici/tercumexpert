@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Icon } from '@/components/common/Icon'
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon'
 import { useI18n } from '@/hooks/useI18n'
-import { whatsappLink } from '@/app/config/site.config'
+import { company, whatsappLink } from '@/app/config/site.config'
 import { cn } from '@/lib/cn'
 
 interface Message {
@@ -10,21 +10,60 @@ interface Message {
   text: string
 }
 
+function makeId(): string {
+  const c = globalThis.crypto as Crypto | undefined
+  if (c?.randomUUID) return c.randomUUID()
+  return `c-${Date.now()}-${Math.random().toString(36).slice(2)}`
+}
+
+/** Bot mesajındaki e-posta ve telefonları tıklanabilir bağlantıya çevirir. */
+function linkify(text: string): ReactNode[] {
+  const out: ReactNode[] = []
+  const re = /([\w.+-]+@[\w-]+\.[\w.-]+)|(\+?\d[\d\s().-]{7,}\d)/g
+  let last = 0
+  let m: RegExpExecArray | null
+  let i = 0
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) out.push(text.slice(last, m.index))
+    const token = m[0]
+    if (m[1]) {
+      out.push(<a key={i++} href={`mailto:${token}`} className="font-medium underline">{token}</a>)
+    } else {
+      const tel = token.replace(/[^\d+]/g, '')
+      out.push(<a key={i++} href={`tel:${tel}`} className="font-medium underline">{token}</a>)
+    }
+    last = m.index + token.length
+  }
+  if (last < text.length) out.push(text.slice(last))
+  return out
+}
+
 /**
- * Sağ altta sabit AI sohbet balonu (§ marka: siyah/beyaz). Gerçek AI motoru:
- * `/api/chat` Edge fonksiyonu SSS + özel bilgiyle beslenir, kullanıcının dilinde
- * yanıtlar. Bilmediğini uydurmaz; WhatsApp'a yönlendirir.
+ * Sağ altta sabit AI sohbet balonu (§ marka: siyah/beyaz). Gerçek AI (`/api/chat`),
+ * tıklanabilir iletişim, "iletişim bırak" formu (`/api/lead`) ve sohbet kaydı.
  */
 export function ChatWidget() {
   const { locale, dict } = useI18n()
   const c = dict.chatbot
+  const cc = c.contact
+  const [convId] = useState(makeId)
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [showNudge, setShowNudge] = useState(false)
   const [nudgeDone, setNudgeDone] = useState(false)
+  const [leadOpen, setLeadOpen] = useState(false)
+  const [leadName, setLeadName] = useState('')
+  const [leadEmail, setLeadEmail] = useState('')
+  const [leadPhone, setLeadPhone] = useState('')
+  const [leadMsg, setLeadMsg] = useState('')
+  const [leadBusy, setLeadBusy] = useState(false)
+  const [leadErr, setLeadErr] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  const emailHref = `mailto:${company.email.value}`
+  const telHref = `tel:${company.phone.value.replace(/[^\d+]/g, '')}`
 
   useEffect(() => {
     if (open && messages.length === 0) {
@@ -36,7 +75,7 @@ export function ChatWidget() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages, loading])
 
-  // 30 sn sonra dikkat çekmek için davet baloncuğu (yalnızca bir kez gösterilir).
+  // 30 sn sonra dikkat çekmek için davet baloncuğu (yalnızca bir kez).
   useEffect(() => {
     const t = setTimeout(() => setShowNudge(true), 30000)
     return () => clearTimeout(t)
@@ -60,6 +99,7 @@ export function ChatWidget() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           locale,
+          conversationId: convId,
           messages: next.map((m) => ({ role: m.role, content: m.text })),
         }),
       })
@@ -72,12 +112,47 @@ export function ChatWidget() {
     }
   }
 
+  const submitLead = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!leadEmail.trim() && !leadPhone.trim()) {
+      setLeadErr(true)
+      return
+    }
+    setLeadErr(false)
+    setLeadBusy(true)
+    try {
+      await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversationId: convId,
+          locale,
+          name: leadName.trim(),
+          email: leadEmail.trim(),
+          phone: leadPhone.trim(),
+          message: leadMsg.trim(),
+        }),
+      })
+    } catch {
+      /* yine de teşekkür göster; kayıt en iyi çabayla */
+    } finally {
+      setLeadBusy(false)
+      setLeadOpen(false)
+      setLeadName('')
+      setLeadEmail('')
+      setLeadPhone('')
+      setLeadMsg('')
+      setMessages((m) => [...m, { role: 'assistant', text: cc.thanks }])
+    }
+  }
+
   const clear = () => {
     setLoading(false)
+    setLeadOpen(false)
     setMessages([{ role: 'assistant', text: c.welcome }])
   }
 
-  const showStarters = messages.length <= 1 && !loading
+  const showStarters = messages.length <= 1 && !loading && !leadOpen
 
   return (
     <>
@@ -85,19 +160,10 @@ export function ChatWidget() {
       {!open && showNudge && !nudgeDone && (
         <div className="fixed bottom-24 end-5 z-40 w-[220px]">
           <div className="relative rounded-2xl rounded-br-sm border border-border bg-surface px-4 py-3 shadow-lg">
-            <button
-              type="button"
-              onClick={openChat}
-              className="block w-full pe-4 text-start text-sm font-medium text-text-primary"
-            >
+            <button type="button" onClick={openChat} className="block w-full pe-4 text-start text-sm font-medium text-text-primary">
               {c.nudge}
             </button>
-            <button
-              type="button"
-              onClick={() => setNudgeDone(true)}
-              aria-label={c.close}
-              className="absolute end-1.5 top-1.5 rounded p-0.5 text-text-muted hover:bg-surface-muted"
-            >
+            <button type="button" onClick={() => setNudgeDone(true)} aria-label={c.close} className="absolute end-1.5 top-1.5 rounded p-0.5 text-text-muted hover:bg-surface-muted">
               <Icon name="X" className="size-3.5" />
             </button>
           </div>
@@ -129,106 +195,110 @@ export function ChatWidget() {
                 <span className="text-sm font-semibold">{c.title}</span>
               </div>
               <div className="flex items-center gap-1">
-                <a
-                  href={whatsappLink()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={c.handoff}
-                  title={c.handoff}
-                  className="rounded-md p-1.5 text-secondary-foreground/80 hover:bg-white/10 hover:text-secondary-foreground"
-                >
-                  <WhatsAppIcon className="size-4" />
-                </a>
-                <button
-                  type="button"
-                  onClick={clear}
-                  aria-label={c.clear}
-                  title={c.clear}
-                  className="rounded-md p-1.5 text-secondary-foreground/80 hover:bg-white/10 hover:text-secondary-foreground"
-                >
+                <button type="button" onClick={clear} aria-label={c.clear} title={c.clear} className="rounded-md p-1.5 text-secondary-foreground/80 hover:bg-white/10 hover:text-secondary-foreground">
                   <Icon name="Settings" className="size-4" />
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  aria-label={c.close}
-                  className="rounded-md p-1.5 text-secondary-foreground/80 hover:bg-white/10 hover:text-secondary-foreground"
-                >
+                <button type="button" onClick={() => setOpen(false)} aria-label={c.close} className="rounded-md p-1.5 text-secondary-foreground/80 hover:bg-white/10 hover:text-secondary-foreground">
                   <Icon name="X" className="size-5" />
                 </button>
               </div>
             </div>
 
-            {/* Mesajlar */}
-            <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-surface-muted/40 px-3 py-4">
-              {messages.map((m, idx) => (
-                <div
-                  key={idx}
-                  className={cn(
-                    'max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed',
-                    m.role === 'user'
-                      ? 'ms-auto bg-secondary text-secondary-foreground'
-                      : 'me-auto border border-border bg-surface text-text-primary',
-                  )}
-                >
-                  {m.text}
-                </div>
-              ))}
-              {loading && (
-                <div className="me-auto max-w-[85%]">
-                  <div className="inline-flex items-center gap-1 rounded-2xl border border-border bg-surface px-3.5 py-3">
-                    <span className="size-1.5 animate-bounce rounded-full bg-text-muted [animation-delay:-0.2s]" />
-                    <span className="size-1.5 animate-bounce rounded-full bg-text-muted [animation-delay:-0.1s]" />
-                    <span className="size-1.5 animate-bounce rounded-full bg-text-muted" />
-                  </div>
-                </div>
-              )}
+            {/* Hızlı iletişim çubuğu (tıklanabilir) */}
+            <div className="flex items-center gap-1.5 border-b border-border bg-surface px-2 py-1.5">
+              <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-full bg-[#25D366]/10 px-2.5 py-1 text-xs font-medium text-[#128C7E] hover:bg-[#25D366]/20">
+                <WhatsAppIcon className="size-3.5" /> {cc.whatsapp}
+              </a>
+              <a href={emailHref} className="inline-flex items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-text-secondary hover:bg-surface-muted">
+                <Icon name="Mail" className="size-3.5" /> {cc.email}
+              </a>
+              <a href={telHref} className="inline-flex items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-text-secondary hover:bg-surface-muted">
+                <Icon name="Phone" className="size-3.5" /> {cc.phone}
+              </a>
             </div>
 
-            {/* Başlangıç soruları (yalnızca konuşma başında) */}
-            {showStarters && (
-              <div className="flex gap-2 overflow-x-auto border-t border-border bg-surface px-3 py-2">
-                {c.quickQuestions.map((q, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => sendToApi(q)}
-                    className="shrink-0 whitespace-nowrap rounded-full border border-border-strong bg-surface px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-muted"
-                  >
-                    {q}
+            {leadOpen ? (
+              /* İletişim bırak formu */
+              <form onSubmit={submitLead} className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
+                <div>
+                  <h3 className="text-base font-bold">{cc.formTitle}</h3>
+                  <p className="mt-1 text-sm text-text-secondary">{cc.formDesc}</p>
+                </div>
+                <input value={leadName} onChange={(e) => setLeadName(e.target.value)} placeholder={cc.name} autoComplete="name" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
+                <input value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} type="email" placeholder={cc.emailField} autoComplete="email" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
+                <input value={leadPhone} onChange={(e) => setLeadPhone(e.target.value)} type="tel" dir="ltr" placeholder={cc.phoneField} autoComplete="tel" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
+                <textarea value={leadMsg} onChange={(e) => setLeadMsg(e.target.value)} placeholder={cc.message} rows={3} className="rounded-md border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-border-strong" />
+                {leadErr && <p className="text-xs text-danger">{cc.errorRequired}</p>}
+                <div className="mt-auto flex gap-2">
+                  <button type="button" onClick={() => setLeadOpen(false)} className="min-h-[44px] flex-1 rounded-md border border-border-strong bg-surface px-4 text-sm font-medium text-text-primary hover:bg-surface-muted">
+                    {cc.back}
                   </button>
-                ))}
-              </div>
-            )}
-
-            {/* Girdi */}
-            <div className="border-t border-border bg-surface px-3 py-2.5">
-              <form
-                className="flex items-center gap-2"
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  sendToApi(input)
-                }}
-              >
-                <input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder={c.inputPlaceholder}
-                  aria-label={c.inputPlaceholder}
-                  disabled={loading}
-                  className="min-h-[42px] flex-1 rounded-full border border-border bg-surface px-4 text-sm outline-none focus:border-border-strong disabled:opacity-60"
-                />
-                <button
-                  type="submit"
-                  aria-label={c.send}
-                  disabled={loading || !input.trim()}
-                  className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
-                >
-                  <Icon name="ArrowRight" className="size-5" />
-                </button>
+                  <button type="submit" disabled={leadBusy} className="min-h-[44px] flex-[2] rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground hover:bg-secondary-hover disabled:opacity-50">
+                    {leadBusy ? cc.submitting : cc.submit}
+                  </button>
+                </div>
               </form>
-              <p className="mt-1.5 px-1 text-[11px] leading-snug text-text-muted">{c.sensitiveWarning}</p>
-            </div>
+            ) : (
+              <>
+                {/* Mesajlar */}
+                <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-surface-muted/40 px-3 py-4">
+                  {messages.map((m, idx) => (
+                    <div
+                      key={idx}
+                      className={cn(
+                        'max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed',
+                        m.role === 'user'
+                          ? 'ms-auto bg-secondary text-secondary-foreground'
+                          : 'me-auto border border-border bg-surface text-text-primary',
+                      )}
+                    >
+                      {m.role === 'assistant' ? linkify(m.text) : m.text}
+                    </div>
+                  ))}
+                  {loading && (
+                    <div className="me-auto max-w-[85%]">
+                      <div className="inline-flex items-center gap-1 rounded-2xl border border-border bg-surface px-3.5 py-3">
+                        <span className="size-1.5 animate-bounce rounded-full bg-text-muted [animation-delay:-0.2s]" />
+                        <span className="size-1.5 animate-bounce rounded-full bg-text-muted [animation-delay:-0.1s]" />
+                        <span className="size-1.5 animate-bounce rounded-full bg-text-muted" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Başlangıç: hızlı sorular + iletişim bırak */}
+                {showStarters && (
+                  <div className="flex gap-2 overflow-x-auto border-t border-border bg-surface px-3 py-2">
+                    <button type="button" onClick={() => setLeadOpen(true)} className="shrink-0 whitespace-nowrap rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground hover:bg-secondary-hover">
+                      {cc.leaveInfo}
+                    </button>
+                    {c.quickQuestions.map((q, i) => (
+                      <button key={i} type="button" onClick={() => sendToApi(q)} className="shrink-0 whitespace-nowrap rounded-full border border-border-strong bg-surface px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-muted">
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Girdi */}
+                <div className="border-t border-border bg-surface px-3 py-2.5">
+                  <form className="flex items-center gap-2" onSubmit={(e) => { e.preventDefault(); sendToApi(input) }}>
+                    <input
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      placeholder={c.inputPlaceholder}
+                      aria-label={c.inputPlaceholder}
+                      disabled={loading}
+                      className="min-h-[42px] flex-1 rounded-full border border-border bg-surface px-4 text-sm outline-none focus:border-border-strong disabled:opacity-60"
+                    />
+                    <button type="submit" aria-label={c.send} disabled={loading || !input.trim()} className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-opacity hover:opacity-90 disabled:opacity-40">
+                      <Icon name="ArrowRight" className="size-5" />
+                    </button>
+                  </form>
+                  <p className="mt-1.5 px-1 text-[11px] leading-snug text-text-muted">{c.sensitiveWarning}</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

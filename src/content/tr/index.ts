@@ -898,6 +898,23 @@ export const tr = {
       `Sizi hemen bir müşteri temsilcimize bağlayalım. Aşağıdaki butondan WhatsApp üzerinden bize yazabilirsiniz.`,
     ],
     fallback: `Sorunuzda size en doğru yardımı bir müşteri temsilcimiz verebilir. Aşağıdaki butondan WhatsApp üzerinden bize yazabilirsiniz; mesajınız hazır olarak iletilecektir.`,
+    contact: {
+      whatsapp: 'WhatsApp',
+      email: 'E-posta',
+      phone: 'Telefon',
+      leaveInfo: 'İletişim bilgilerimi bırak',
+      formTitle: 'Sizinle iletişime geçelim',
+      formDesc: 'Bilgilerinizi bırakın, ekibimiz en kısa sürede size ulaşsın.',
+      name: 'Adınız',
+      emailField: 'E-posta',
+      phoneField: 'Telefon',
+      message: 'Mesajınız (opsiyonel)',
+      submit: 'Gönder',
+      submitting: 'Gönderiliyor…',
+      thanks: 'Teşekkürler, ekibimiz en kısa sürede sizinle iletişime geçecek.',
+      errorRequired: 'Lütfen e-posta veya telefon girin.',
+      back: 'Geri',
+    },
   },
 
   notFound: {

@@ -900,6 +900,23 @@ export const en: PartialDictionary = {
       `Let us connect you with one of our customer representatives right away. You can message us via WhatsApp using the button below.`,
     ],
     fallback: `One of our customer representatives can give you the most accurate assistance with your question. You can message us via WhatsApp using the button below, and your message will be forwarded ready to send.`,
+    contact: {
+      whatsapp: `WhatsApp`,
+      email: `Email`,
+      phone: `Phone`,
+      leaveInfo: `Leave my contact details`,
+      formTitle: `Let us contact you`,
+      formDesc: `Leave your details and our team will reach out to you as soon as possible.`,
+      name: `Your name`,
+      emailField: `Email`,
+      phoneField: `Phone`,
+      message: `Your message (optional)`,
+      submit: `Send`,
+      submitting: `Sending…`,
+      thanks: `Thank you, our team will contact you as soon as possible.`,
+      errorRequired: `Please enter an email or phone number.`,
+      back: `Back`,
+    },
   },
 
   notFound: {

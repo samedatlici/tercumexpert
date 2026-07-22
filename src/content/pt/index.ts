@@ -898,6 +898,23 @@ export const pt: PartialDictionary = {
       `Vamos colocá-lo de imediato em contacto com um dos nossos representantes. Pode escrever-nos através do WhatsApp no botão abaixo.`,
     ],
     fallback: `Um dos nossos representantes poderá prestar-lhe o apoio mais adequado à sua questão. Pode escrever-nos através do WhatsApp no botão abaixo; a sua mensagem será enviada já preenchida.`,
+    contact: {
+      whatsapp: `WhatsApp`,
+      email: `E-mail`,
+      phone: `Telefone`,
+      leaveInfo: `Deixar os meus dados de contacto`,
+      formTitle: `Entremos em contacto consigo`,
+      formDesc: `Deixe os seus dados e a nossa equipa entrará em contacto o mais brevemente possível.`,
+      name: `O seu nome`,
+      emailField: `E-mail`,
+      phoneField: `Telefone`,
+      message: `A sua mensagem (opcional)`,
+      submit: `Enviar`,
+      submitting: `A enviar…`,
+      thanks: `Obrigado, a nossa equipa entrará em contacto consigo o mais brevemente possível.`,
+      errorRequired: `Por favor, introduza um e-mail ou telefone.`,
+      back: `Voltar`,
+    },
   },
 
   notFound: {

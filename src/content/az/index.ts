@@ -893,6 +893,23 @@ export const az: PartialDictionary = {
       `Sizi dərhal müştəri təmsilçimizə qoşaq. Aşağıdakı düymə vasitəsilə WhatsApp üzərindən bizə yaza bilərsiniz.`,
     ],
     fallback: `Sualınızla bağlı sizə ən doğru köməyi müştəri təmsilçimiz göstərə bilər. Aşağıdakı düymə vasitəsilə WhatsApp üzərindən bizə yaza bilərsiniz; mesajınız hazır şəkildə göndəriləcək.`,
+    contact: {
+      whatsapp: `WhatsApp`,
+      email: `E-poçt`,
+      phone: `Telefon`,
+      leaveInfo: `Əlaqə məlumatlarımı qoy`,
+      formTitle: `Sizinlə əlaqə saxlayaq`,
+      formDesc: `Məlumatlarınızı qoyun, komandamız ən qısa zamanda sizinlə əlaqə saxlasın.`,
+      name: `Adınız`,
+      emailField: `E-poçt`,
+      phoneField: `Telefon`,
+      message: `Mesajınız (opsional)`,
+      submit: `Göndər`,
+      submitting: `Göndərilir…`,
+      thanks: `Təşəkkür edirik, komandamız ən qısa zamanda sizinlə əlaqə saxlayacaq.`,
+      errorRequired: `Zəhmət olmasa e-poçt və ya telefon daxil edin.`,
+      back: `Geri`,
+    },
   },
 
   notFound: {

@@ -899,6 +899,23 @@ export const da: PartialDictionary = {
       `Lad os straks sætte Dem i forbindelse med en af vores kunderådgivere. Via knappen nedenfor kan De skrive til os på WhatsApp.`,
     ],
     fallback: `En af vores kunderådgivere kan give Dem den mest præcise hjælp med Deres spørgsmål. Via knappen nedenfor kan De skrive til os på WhatsApp, og Deres besked videresendes klar til afsendelse.`,
+    contact: {
+      whatsapp: `WhatsApp`,
+      email: `E-mail`,
+      phone: `Telefon`,
+      leaveInfo: `Efterlad mine kontaktoplysninger`,
+      formTitle: `Lad os kontakte Dem`,
+      formDesc: `Efterlad Deres oplysninger, så kontakter vores team Dem hurtigst muligt.`,
+      name: `Deres navn`,
+      emailField: `E-mail`,
+      phoneField: `Telefon`,
+      message: `Deres besked (valgfrit)`,
+      submit: `Send`,
+      submitting: `Sender…`,
+      thanks: `Tak, vores team kontakter Dem hurtigst muligt.`,
+      errorRequired: `Indtast venligst en e-mail eller et telefonnummer.`,
+      back: `Tilbage`,
+    },
   },
 
   notFound: {

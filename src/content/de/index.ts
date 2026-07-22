@@ -899,6 +899,23 @@ export const de: PartialDictionary = {
       `Gerne verbinden wir Sie sofort mit einem unserer Kundenberater. Über die Schaltfläche unten können Sie uns per WhatsApp schreiben.`,
     ],
     fallback: `Bei Ihrer Frage kann Ihnen einer unserer Kundenberater am besten weiterhelfen. Über die Schaltfläche unten können Sie uns per WhatsApp schreiben; Ihre Nachricht wird dabei bereits vorbereitet übermittelt.`,
+    contact: {
+      whatsapp: `WhatsApp`,
+      email: `E-Mail`,
+      phone: `Telefon`,
+      leaveInfo: `Meine Kontaktdaten hinterlassen`,
+      formTitle: `Lassen Sie uns Sie kontaktieren`,
+      formDesc: `Hinterlassen Sie Ihre Daten, unser Team meldet sich schnellstmöglich bei Ihnen.`,
+      name: `Ihr Name`,
+      emailField: `E-Mail`,
+      phoneField: `Telefon`,
+      message: `Ihre Nachricht (optional)`,
+      submit: `Senden`,
+      submitting: `Wird gesendet…`,
+      thanks: `Vielen Dank, unser Team wird sich in Kürze mit Ihnen in Verbindung setzen.`,
+      errorRequired: `Bitte geben Sie eine E-Mail-Adresse oder Telefonnummer ein.`,
+      back: `Zurück`,
+    },
   },
 
   notFound: {

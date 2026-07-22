@@ -899,6 +899,23 @@ export const nl: PartialDictionary = {
       `Wij verbinden u direct met een van onze medewerkers. Via de onderstaande knop kunt u ons een bericht sturen via WhatsApp.`,
     ],
     fallback: `Een van onze medewerkers kan u het beste van dienst zijn met uw vraag. Via de onderstaande knop kunt u ons een bericht sturen via WhatsApp; uw bericht wordt alvast voor u klaargezet.`,
+    contact: {
+      whatsapp: `WhatsApp`,
+      email: `E-mail`,
+      phone: `Telefoon`,
+      leaveInfo: `Laat mijn contactgegevens achter`,
+      formTitle: `Laat ons contact met u opnemen`,
+      formDesc: `Laat uw gegevens achter, dan neemt ons team zo spoedig mogelijk contact met u op.`,
+      name: `Uw naam`,
+      emailField: `E-mail`,
+      phoneField: `Telefoon`,
+      message: `Uw bericht (optioneel)`,
+      submit: `Verzenden`,
+      submitting: `Bezig met verzenden…`,
+      thanks: `Bedankt, ons team neemt zo spoedig mogelijk contact met u op.`,
+      errorRequired: `Voer een e-mailadres of telefoonnummer in.`,
+      back: `Terug`,
+    },
   },
 
   notFound: {

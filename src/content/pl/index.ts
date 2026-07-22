@@ -893,6 +893,23 @@ export const pl: PartialDictionary = {
       `Już łączymy Państwa z naszym konsultantem obsługi klienta. Korzystając z poniższego przycisku, mogą Państwo napisać do nas przez WhatsApp.`,
     ],
     fallback: `W Państwa sprawie najlepszej pomocy udzieli nasz konsultant obsługi klienta. Korzystając z poniższego przycisku, mogą Państwo napisać do nas przez WhatsApp; Państwa wiadomość zostanie przekazana w gotowej formie.`,
+    contact: {
+      whatsapp: `WhatsApp`,
+      email: `E-mail`,
+      phone: `Telefon`,
+      leaveInfo: `Zostaw moje dane kontaktowe`,
+      formTitle: `Skontaktujemy się z Państwem`,
+      formDesc: `Prosimy o pozostawienie swoich danych, a nasz zespół skontaktuje się z Państwem w najkrótszym możliwym terminie.`,
+      name: `Imię i nazwisko`,
+      emailField: `E-mail`,
+      phoneField: `Telefon`,
+      message: `Wiadomość (opcjonalnie)`,
+      submit: `Wyślij`,
+      submitting: `Wysyłanie…`,
+      thanks: `Dziękujemy, nasz zespół skontaktuje się z Państwem w najkrótszym możliwym terminie.`,
+      errorRequired: `Prosimy podać adres e-mail lub numer telefonu.`,
+      back: `Wstecz`,
+    },
   },
 
   notFound: {

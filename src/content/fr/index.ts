@@ -899,6 +899,23 @@ export const fr: PartialDictionary = {
       `Nous vous mettons immédiatement en relation avec l'un de nos conseillers. Vous pouvez nous écrire via WhatsApp en cliquant sur le bouton ci-dessous.`,
     ],
     fallback: `Pour répondre au mieux à votre question, l'un de nos conseillers pourra vous apporter une assistance personnalisée. Vous pouvez nous écrire via WhatsApp en cliquant sur le bouton ci-dessous ; votre message sera transmis automatiquement.`,
+    contact: {
+      whatsapp: `WhatsApp`,
+      email: `E-mail`,
+      phone: `Téléphone`,
+      leaveInfo: `Laisser mes coordonnées`,
+      formTitle: `Prenons contact avec vous`,
+      formDesc: `Laissez vos coordonnées, notre équipe vous contactera dans les plus brefs délais.`,
+      name: `Votre nom`,
+      emailField: `E-mail`,
+      phoneField: `Téléphone`,
+      message: `Votre message (facultatif)`,
+      submit: `Envoyer`,
+      submitting: `Envoi en cours…`,
+      thanks: `Merci, notre équipe vous contactera dans les plus brefs délais.`,
+      errorRequired: `Veuillez saisir un e-mail ou un numéro de téléphone.`,
+      back: `Retour`,
+    },
   },
 
   notFound: {
