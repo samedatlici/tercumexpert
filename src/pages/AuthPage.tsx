@@ -105,7 +105,7 @@ export default function AuthPage() {
       setBusy(false)
       return setError(a.errors.consentRequired)
     }
-    const { error, needsVerification } = await signUp({ firstName, lastName, email, password }, verifyRedirect)
+    const { error, needsVerification } = await signUp({ firstName, lastName, email, password }, verifyRedirect, locale)
     setBusy(false)
     if (error) return setError(error)
     if (needsVerification) setView('verify')
