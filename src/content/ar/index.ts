@@ -641,6 +641,10 @@ export const ar: PartialDictionary = {
   },
 
   contact: {
+      introTitle: `مرحبًا بك`,
+      introDesc: `قبل أن نبدأ، هل يمكنني الحصول على اسمك وبريدك الإلكتروني حتى أتمكن من مساعدتك على نحو أفضل؟`,
+      start: `ابدأ المحادثة`,
+      introError: `يرجى إدخال اسمك وبريدك الإلكتروني.`,
     seo: {
       title: "تواصل معنا",
       description: "تواصل مع TercümExpert: الهاتف والبريد الإلكتروني و WhatsApp ونموذج التواصل.",

@@ -635,6 +635,10 @@ export const pl: PartialDictionary = {
   },
 
   contact: {
+      introTitle: `Witamy`,
+      introDesc: `Zanim rozpoczniemy, czy mogę prosić o podanie Państwa imienia oraz adresu e-mail, abym mógł lepiej Państwu pomóc?`,
+      start: `Rozpocznij rozmowę`,
+      introError: `Prosimy o podanie Państwa imienia oraz adresu e-mail.`,
     seo: {
       title: 'Kontakt',
       description: 'Skontaktuj się z TercümExpert: telefon, e-mail, WhatsApp i formularz kontaktowy.',

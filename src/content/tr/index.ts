@@ -914,6 +914,10 @@ export const tr = {
       thanks: 'Teşekkürler, ekibimiz en kısa sürede sizinle iletişime geçecek.',
       errorRequired: 'Lütfen e-posta veya telefon girin.',
       back: 'Geri',
+      introTitle: 'Hoş geldiniz',
+      introDesc: 'Size daha iyi yardımcı olabilmem için önce adınızı ve e-posta adresinizi alabilir miyim?',
+      start: 'Sohbete başla',
+      introError: 'Lütfen adınızı ve e-posta adresinizi girin.',
     },
   },
 

@@ -60,6 +60,12 @@ export function ChatWidget() {
   const [leadMsg, setLeadMsg] = useState('')
   const [leadBusy, setLeadBusy] = useState(false)
   const [leadErr, setLeadErr] = useState(false)
+  const [started, setStarted] = useState(false)
+  const [identName, setIdentName] = useState('')
+  const [identEmail, setIdentEmail] = useState('')
+  const [identPhone, setIdentPhone] = useState('')
+  const [identBusy, setIdentBusy] = useState(false)
+  const [identErr, setIdentErr] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [vp, setVp] = useState<{ top: number; height: number } | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -68,10 +74,10 @@ export function ChatWidget() {
   const telHref = `tel:${company.phone.value.replace(/[^\d+]/g, '')}`
 
   useEffect(() => {
-    if (open && messages.length === 0) {
+    if (open && started && messages.length === 0) {
       setMessages([{ role: 'assistant', text: c.welcome }])
     }
-  }, [open, messages.length, c.welcome])
+  }, [open, started, messages.length, c.welcome])
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
@@ -122,6 +128,44 @@ export function ChatWidget() {
   const openChat = () => {
     setOpen(true)
     setNudgeDone(true)
+  }
+
+  // Karşılama: ziyaretçinin adını + e-postasını alır (panelde kimliklenir).
+  const submitIdentity = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!identName.trim() || !identEmail.trim()) {
+      setIdentErr(true)
+      return
+    }
+    setIdentErr(false)
+    setIdentBusy(true)
+    try {
+      await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversationId: convId,
+          locale,
+          name: identName.trim(),
+          email: identEmail.trim(),
+          phone: identPhone.trim(),
+          wantsContact: false,
+        }),
+      })
+    } catch {
+      /* kimlik kaydı en iyi çabayla */
+    } finally {
+      setIdentBusy(false)
+      setStarted(true)
+      setMessages([{ role: 'assistant', text: c.welcome }])
+    }
+  }
+
+  const openLead = () => {
+    setLeadName(identName)
+    setLeadEmail(identEmail)
+    setLeadPhone(identPhone)
+    setLeadOpen(true)
   }
 
   const sendToApi = async (userText: string) => {
@@ -249,19 +293,39 @@ export function ChatWidget() {
             </div>
 
             {/* Hızlı iletişim çubuğu (tıklanabilir) */}
-            <div className="flex items-center gap-1.5 border-b border-border bg-surface px-2 py-1.5">
-              <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-full bg-[#25D366]/10 px-2.5 py-1 text-xs font-medium text-[#128C7E] hover:bg-[#25D366]/20">
+            <div className="flex items-center gap-1.5 overflow-x-auto border-b border-border bg-surface px-2 py-1.5">
+              <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#25D366]/10 px-2.5 py-1 text-xs font-medium text-[#128C7E] hover:bg-[#25D366]/20">
                 <WhatsAppIcon className="size-3.5" /> {cc.whatsapp}
               </a>
-              <a href={emailHref} className="inline-flex items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-text-secondary hover:bg-surface-muted">
+              <a href={emailHref} className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-text-secondary hover:bg-surface-muted">
                 <Icon name="Mail" className="size-3.5" /> {cc.email}
               </a>
-              <a href={telHref} className="inline-flex items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-text-secondary hover:bg-surface-muted">
+              <a href={telHref} className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-text-secondary hover:bg-surface-muted">
                 <Icon name="Phone" className="size-3.5" /> {cc.phone}
               </a>
+              {started && (
+                <button type="button" onClick={openLead} className="inline-flex shrink-0 items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground hover:bg-secondary-hover">
+                  <Icon name="Users" className="size-3.5" /> {cc.leaveInfo}
+                </button>
+              )}
             </div>
 
-            {leadOpen ? (
+            {!started ? (
+              /* Karşılama: isim + e-posta (kayıt panelde kimliklenir) */
+              <form onSubmit={submitIdentity} className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
+                <div>
+                  <h3 className="text-base font-bold">{cc.introTitle}</h3>
+                  <p className="mt-1 text-sm text-text-secondary">{cc.introDesc}</p>
+                </div>
+                <input value={identName} onChange={(e) => setIdentName(e.target.value)} placeholder={cc.name} autoComplete="name" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
+                <input value={identEmail} onChange={(e) => setIdentEmail(e.target.value)} type="email" placeholder={cc.emailField} autoComplete="email" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
+                <input value={identPhone} onChange={(e) => setIdentPhone(e.target.value)} type="tel" dir="ltr" placeholder={cc.phoneField} autoComplete="tel" className="min-h-[42px] rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
+                {identErr && <p className="text-xs text-danger">{cc.introError}</p>}
+                <button type="submit" disabled={identBusy} className="mt-auto min-h-[44px] rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground hover:bg-secondary-hover disabled:opacity-50">
+                  {identBusy ? cc.submitting : cc.start}
+                </button>
+              </form>
+            ) : leadOpen ? (
               /* İletişim bırak formu */
               <form onSubmit={submitLead} className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
                 <div>
@@ -313,9 +377,6 @@ export function ChatWidget() {
                 {/* Başlangıç: hızlı sorular + iletişim bırak */}
                 {showStarters && (
                   <div className="flex gap-2 overflow-x-auto border-t border-border bg-surface px-3 py-2">
-                    <button type="button" onClick={() => setLeadOpen(true)} className="shrink-0 whitespace-nowrap rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground hover:bg-secondary-hover">
-                      {cc.leaveInfo}
-                    </button>
                     {c.quickQuestions.map((q, i) => (
                       <button key={i} type="button" onClick={() => sendToApi(q)} className="shrink-0 whitespace-nowrap rounded-full border border-border-strong bg-surface px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-muted">
                         {q}

@@ -642,6 +642,10 @@ export const en: PartialDictionary = {
   },
 
   contact: {
+      introTitle: `Welcome`,
+      introDesc: `Before we begin, may I kindly have your name and email address so that I can assist you more effectively?`,
+      start: `Start Chat`,
+      introError: `Please enter your name and email address.`,
     seo: {
       title: 'Contact',
       description: 'Get in touch with TercümExpert: phone, email, WhatsApp and contact form.',

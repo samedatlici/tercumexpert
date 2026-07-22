@@ -635,6 +635,10 @@ export const az: PartialDictionary = {
   },
 
   contact: {
+      introTitle: `Xoş gəlmisiniz`,
+      introDesc: `Sizə daha yaxşı kömək edə bilməyim üçün əvvəlcə adınızı və e-poçt ünvanınızı ala bilərəmmi?`,
+      start: `Söhbətə başlayın`,
+      introError: `Zəhmət olmasa, adınızı və e-poçt ünvanınızı daxil edin.`,
     seo: {
       title: 'Əlaqə',
       description: 'TercümExpert ilə əlaqə saxlayın: telefon, e-poçt, WhatsApp və əlaqə forması.',

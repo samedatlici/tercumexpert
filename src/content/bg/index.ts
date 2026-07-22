@@ -635,6 +635,10 @@ export const bg: PartialDictionary = {
   },
 
   contact: {
+      introTitle: `Добре дошли`,
+      introDesc: `Преди да започнем, бихте ли ми казали Вашето име и имейл адрес, за да мога да Ви съдействам по-добре?`,
+      start: `Започнете разговор`,
+      introError: `Моля, въведете Вашето име и имейл адрес.`,
     seo: {
       title: "Контакти",
       description: "Свържете се с TercümExpert: телефон, имейл, WhatsApp и форма за контакт.",

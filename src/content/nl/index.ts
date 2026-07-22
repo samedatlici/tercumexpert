@@ -641,6 +641,10 @@ export const nl: PartialDictionary = {
   },
 
   contact: {
+      introTitle: `Welkom`,
+      introDesc: `Mag ik eerst uw naam en e-mailadres, zodat ik u beter van dienst kan zijn?`,
+      start: `Chat starten`,
+      introError: `Voer uw naam en e-mailadres in.`,
     seo: {
       title: "Contact",
       description: "Neem contact op met TercümExpert: telefoon, e-mail, WhatsApp en contactformulier.",

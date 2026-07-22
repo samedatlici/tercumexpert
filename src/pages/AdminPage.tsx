@@ -175,9 +175,11 @@ export default function AdminPage() {
                   <span className="text-text-muted/70">#{selected.id.slice(0, 8)}</span>
                 </div>
 
-                {selected.wants_contact && (
-                  <div className="rounded-md border border-success/40 bg-success/10 p-3 text-sm">
-                    <p className="mb-1 font-semibold text-success">İletişim talebi</p>
+                {(selected.lead_name || selected.lead_email || selected.lead_phone) && (
+                  <div className={'rounded-md border p-3 text-sm ' + (selected.wants_contact ? 'border-success/40 bg-success/10' : 'border-border bg-surface-muted')}>
+                    <p className={'mb-1 font-semibold ' + (selected.wants_contact ? 'text-success' : 'text-text-primary')}>
+                      {selected.wants_contact ? 'İletişim talebi' : 'İletişim bilgileri'}
+                    </p>
                     <dl className="space-y-0.5 text-text-primary">
                       {selected.lead_name && <div><span className="text-text-secondary">Ad: </span>{selected.lead_name}</div>}
                       {selected.lead_email && <div><span className="text-text-secondary">E-posta: </span><a className="underline" href={`mailto:${selected.lead_email}`}>{selected.lead_email}</a></div>}

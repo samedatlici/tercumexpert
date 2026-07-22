@@ -641,6 +641,10 @@ export const da: PartialDictionary = {
   },
 
   contact: {
+      introTitle: `Velkommen`,
+      introDesc: `Før vi begynder, må jeg da bede om Deres navn og e-mailadresse, så jeg bedre kan hjælpe Dem?`,
+      start: `Start chat`,
+      introError: `Indtast venligst Deres navn og e-mailadresse.`,
     seo: {
       title: "Kontakt",
       description: "Kom i kontakt med TercümExpert: telefon, e-mail, WhatsApp og kontaktformular.",
