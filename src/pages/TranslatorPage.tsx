@@ -10,6 +10,7 @@ import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/cn'
 import { useTranslator } from '@/features/translator/model/useTranslator'
 import { EXPERTISE_KEYS, PANEL_LANGUAGES, languageName } from '@/features/translator/model/config'
+import { translatorApi } from '@/features/translator/model/api'
 import type { LanguagePair, Translator } from '@/features/translator/model/types'
 
 export default function TranslatorPage() {
@@ -330,6 +331,8 @@ function TranslatorPanel({
 
       {tab === 'profile' ? (
         <ProfileEditor t={t} locale={locale} translator={translator} onSaved={onSaved} />
+      ) : tab === 'pool' ? (
+        <PoolTab t={t} locale={locale} />
       ) : (
         <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
           <p className="text-sm text-text-secondary">{t.soon}</p>
@@ -567,6 +570,191 @@ function Detail({ label, children }: { label: string; children: ReactNode }) {
     <div>
       <dt className="text-text-secondary">{label}</dt>
       <dd className="text-text-primary">{children}</dd>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Tercüme Havuzu (Faz 3): uyan available siparişler + üstlen (claim)   */
+/* ------------------------------------------------------------------ */
+
+interface PoolFile {
+  name: string
+  url: string | null
+}
+interface PoolOrder {
+  id: string
+  order_no: number
+  service: string
+  source_lang: string
+  target_lang: string
+  document_type: string
+  word_count: number
+  urgent: boolean
+  notarization: boolean
+  physical_delivery: boolean
+  input_mode: string
+  source_text: string | null
+  note: string | null
+  delivery_days: number
+  created_at: string
+  payout: number
+  pages: number
+  files: PoolFile[]
+}
+
+function PoolTab({ t, locale }: { t: TDict; locale: string }) {
+  const { dict, formatCurrency } = useI18n()
+  const [orders, setOrders] = useState<PoolOrder[]>([])
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const [claimingId, setClaimingId] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
+
+  const load = () => {
+    setState('loading')
+    translatorApi<{ orders?: PoolOrder[]; error?: string }>('pool')
+      .then((r) => {
+        if (r.error) {
+          setState('error')
+          return
+        }
+        setOrders(r.orders ?? [])
+        setState('idle')
+      })
+      .catch(() => setState('error'))
+  }
+  useEffect(load, [])
+
+  const claim = async (id: string) => {
+    setClaimingId(id)
+    setNotice(null)
+    const r = await translatorApi<{ ok?: boolean; error?: string }>('claim', { orderId: id })
+    setClaimingId(null)
+    if (r.ok) {
+      setOrders((prev) => prev.filter((o) => o.id !== id))
+      setNotice(t.pool.claimed)
+    } else {
+      setNotice(t.pool.claimError)
+    }
+  }
+
+  const serviceName = (s: string) => (dict.serviceItems as Record<string, { name: string }>)[s]?.name ?? s
+  const docName = (d: string) => (dict.quote.documentTypes as Record<string, string>)[d] ?? d
+  const deadline = (o: PoolOrder) => {
+    try {
+      const d = new Date(o.created_at)
+      d.setDate(d.getDate() + (o.delivery_days || 1))
+      return d.toLocaleDateString(locale)
+    } catch {
+      return '—'
+    }
+  }
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{t.pool.loading}</p>
+  if (state === 'error')
+    return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{t.pool.error}</p>
+
+  return (
+    <div>
+      {notice && <p className="mb-3 rounded-md border border-success/40 bg-success/10 p-3 text-sm text-success">{notice}</p>}
+      {orders.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
+          <p className="text-sm text-text-secondary">{t.pool.empty}</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {orders.map((o) => (
+            <article key={o.id} className="rounded-lg border border-border bg-surface p-4 sm:p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="font-semibold">{t.pool.orderNo} #{o.order_no}</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {o.urgent && <Pill tone="danger">{t.pool.urgent}</Pill>}
+                  {o.notarization && <Pill tone="info">{t.pool.notary}</Pill>}
+                  <Pill tone="muted">{o.physical_delivery ? t.pool.cargo : t.pool.digital}</Pill>
+                </div>
+              </div>
+
+              <dl className="mt-3 grid gap-x-4 gap-y-2 text-sm sm:grid-cols-2">
+                <Row label={t.pool.service}>{serviceName(o.service)}</Row>
+                <Row label={t.pool.documentType}>{docName(o.document_type)}</Row>
+                <Row label={t.pool.langPair}>
+                  {languageName(o.source_lang, locale)} → {languageName(o.target_lang, locale)}
+                </Row>
+                <Row label={t.pool.words}>
+                  {o.word_count} · ~{o.pages} {t.pool.pagesUnit}
+                </Row>
+                <Row label={t.pool.deadline}>
+                  {deadline(o)} ({o.delivery_days} {t.pool.daysUnit})
+                </Row>
+              </dl>
+
+              {o.note && (
+                <p className="mt-3 rounded-md bg-surface-muted p-2.5 text-sm text-text-secondary">
+                  <span className="font-medium">{t.pool.note}: </span>
+                  {o.note}
+                </p>
+              )}
+
+              {o.input_mode === 'text' && o.source_text ? (
+                <div className="mt-3">
+                  <p className="mb-1 text-sm font-medium">{t.pool.text}</p>
+                  <pre className="max-h-40 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-surface-muted/60 p-2.5 text-xs leading-relaxed">
+                    {o.source_text}
+                  </pre>
+                </div>
+              ) : o.files.length > 0 ? (
+                <div className="mt-3">
+                  <p className="mb-1 text-sm font-medium">{t.pool.files}</p>
+                  <ul className="flex flex-wrap gap-2">
+                    {o.files.map((f, i) => (
+                      <li key={i}>
+                        {f.url ? (
+                          <a href={f.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-xs hover:bg-surface-muted">
+                            <Icon name="FileText" className="size-3.5" /> <span className="max-w-[220px] truncate">{f.name}</span>
+                          </a>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs text-text-muted">
+                            <Icon name="FileText" className="size-3.5" /> {f.name}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
+                <div>
+                  <p className="text-xs text-text-secondary">{t.pool.earning}</p>
+                  <p className="text-lg font-bold text-success">{formatCurrency(o.payout)}</p>
+                </div>
+                <Button type="button" intent="secondary" disabled={claimingId === o.id} onClick={() => claim(o.id)}>
+                  {claimingId === o.id ? t.pool.claiming : t.pool.claim}
+                </Button>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function Pill({ tone, children }: { tone: 'danger' | 'info' | 'muted'; children: ReactNode }) {
+  const cls =
+    tone === 'danger'
+      ? 'bg-danger/10 text-danger'
+      : tone === 'info'
+        ? 'bg-primary/10 text-primary'
+        : 'bg-surface-muted text-text-secondary'
+  return <span className={cn('rounded-full px-2 py-0.5 text-[11px] font-medium', cls)}>{children}</span>
+}
+
+function Row({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="flex justify-between gap-3 sm:block">
+      <dt className="text-text-secondary">{label}</dt>
+      <dd className="font-medium sm:mt-0.5">{children}</dd>
     </div>
   )
 }
