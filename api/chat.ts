@@ -10,6 +10,28 @@ const LANG_NAMES: Record<string, string> = {
   bg: 'Bulgarian', pt: 'Portuguese', da: 'Danish', ar: 'Arabic',
 }
 
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xtqymenxaozzwmqfssod.supabase.co'
+
+/** Sohbeti Supabase'e (service role ile) kaydeder. Hata olsa da yanıtı etkilemez. */
+async function logConversation(id: string, locale: string, messages: InMsg[]): Promise<void> {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!key || !id) return
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/chat_conversations?on_conflict=id`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        Prefer: 'resolution=merge-duplicates,return=minimal',
+      },
+      body: JSON.stringify({ id, locale, messages, updated_at: new Date().toISOString() }),
+    })
+  } catch {
+    /* kayıt başarısız olsa da sohbet yanıtı verilmeye devam eder */
+  }
+}
+
 function norm(s: string): string {
   return s.toLowerCase()
 }
@@ -51,7 +73,7 @@ export default async function handler(req: Request): Promise<Response> {
   const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) return json({ reply: null, error: 'no_key' }, 200)
 
-  let body: { messages?: unknown; locale?: unknown }
+  let body: { messages?: unknown; locale?: unknown; conversationId?: unknown }
   try {
     body = await req.json()
   } catch {
@@ -59,6 +81,7 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   const locale = typeof body.locale === 'string' ? body.locale : 'tr'
+  const conversationId = typeof body.conversationId === 'string' ? body.conversationId : ''
   const incoming = Array.isArray(body.messages) ? body.messages : []
   const history: InMsg[] = incoming
     .filter(
@@ -83,6 +106,8 @@ RULES:
 - Tone: professional, warm, concise (usually 2-5 sentences). No emojis.
 - Never guarantee that a document will be accepted by any institution. Keep the distinction between sworn / notarized / apostille. Do not claim certifications or 24/7 human support.
 - Never ask for sensitive personal data or documents in the chat; if needed, direct the user to upload documents on the secure quote ("Fiyat Hesapla") page.
+- If the user asks how to reach us, give the contact details from the KNOWLEDGE (email, phone, WhatsApp) clearly.
+- If the user wants US to contact THEM (e.g. "call me", "have someone reach out"), tell them to use the "leave your contact details" button in the chat window so our team can get back to them.
 - When helpful, guide the user to the next step: get a price on the quote page, the corporate page, or WhatsApp for a human.
 
 KNOWLEDGE:
@@ -107,6 +132,7 @@ ${knowledge}`
     }
     const data = (await resp.json()) as { choices?: Array<{ message?: { content?: string } }> }
     const reply = data.choices?.[0]?.message?.content?.trim() || null
+    if (reply) await logConversation(conversationId, locale, [...history, { role: 'assistant', content: reply }])
     return json({ reply }, 200)
   } catch (e) {
     return json({ reply: null, error: 'exception', detail: String((e as Error)?.message ?? e).slice(0, 200) }, 200)
