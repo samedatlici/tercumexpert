@@ -218,11 +218,18 @@ export default function OrderDetailPage() {
               order.tracking_url ? (
                 <>
                   <p className="mb-3 text-sm font-medium">{o.cargoReady}</p>
-                  <a href={order.tracking_url} target="_blank" rel="noopener noreferrer">
-                    <Button intent="secondary" block>
-                      <Icon name="Truck" className="size-5" /> {o.trackCargo}
-                    </Button>
-                  </a>
+                  {/^https?:\/\//i.test(order.tracking_url) ? (
+                    <a href={order.tracking_url} target="_blank" rel="noopener noreferrer">
+                      <Button intent="secondary" block>
+                        <Icon name="Truck" className="size-5" /> {o.trackCargo}
+                      </Button>
+                    </a>
+                  ) : (
+                    <div className="rounded-md border border-border bg-surface px-4 py-3 text-center">
+                      <p className="text-xs text-text-muted">{o.trackingCodeLabel}</p>
+                      <p className="mt-0.5 select-all font-mono text-base font-bold" dir="ltr">{order.tracking_url}</p>
+                    </div>
+                  )}
                 </>
               ) : (
                 <p className="flex items-start gap-2 text-sm text-text-secondary">

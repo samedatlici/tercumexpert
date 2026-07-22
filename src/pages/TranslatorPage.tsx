@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon, type IconName } from '@/components/common/Icon'
@@ -14,6 +14,7 @@ import { AREA_IDS } from '@/app/config/areas.config'
 import { defaultCountryForLocale } from '@/app/config/country-codes'
 import { CountryCitySelect, countryDisplayName } from '@/components/common/CountryCitySelect'
 import { translatorApi } from '@/features/translator/model/api'
+import { uploadTranslationFiles } from '@/features/translator/model/upload-translation'
 import type { LanguagePair, Translator } from '@/features/translator/model/types'
 
 export default function TranslatorPage() {
@@ -349,15 +350,24 @@ function ApplicationForm({
 /* Onaylı tercüman paneli (Faz 2: Profilim; diğer sekmeler yakında)    */
 /* ------------------------------------------------------------------ */
 
-type Tab = 'profile' | 'pool' | 'pending' | 'approved' | 'completed' | 'wallet'
+type Tab = 'profile' | 'pool' | 'active' | 'pending' | 'approved' | 'completed' | 'wallet'
 const TABS: { key: Tab; icon: IconName }[] = [
   { key: 'profile', icon: 'Users' },
   { key: 'pool', icon: 'Languages' },
+  { key: 'active', icon: 'Cog' },
   { key: 'pending', icon: 'Clock' },
   { key: 'approved', icon: 'Check' },
   { key: 'completed', icon: 'PackageCheck' },
   { key: 'wallet', icon: 'Wallet' },
 ]
+
+/** Sekme anahtarı → work_status. */
+const TAB_STATUS: Record<string, 'claimed' | 'submitted' | 'approved' | 'completed'> = {
+  active: 'claimed',
+  pending: 'submitted',
+  approved: 'approved',
+  completed: 'completed',
+}
 
 function TranslatorPanel({
   t,
@@ -397,6 +407,8 @@ function TranslatorPanel({
         <ProfileEditor t={t} locale={locale} translator={translator} onSaved={onSaved} />
       ) : tab === 'pool' ? (
         <PoolTab t={t} locale={locale} />
+      ) : TAB_STATUS[tab] ? (
+        <WorkflowSection t={t} locale={locale} status={TAB_STATUS[tab]} isAdmin={false} translatorId={translator.id} />
       ) : (
         <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
           <p className="text-sm text-text-secondary">{t.soon}</p>
@@ -536,7 +548,51 @@ function ProfileEditor({
 /* Admin bölümü: başvuru/onay yönetimi (tercümandan üstün yetki)       */
 /* ------------------------------------------------------------------ */
 
+/** Admin: sekmeli yönetim — Tercümanlar (başvuru/onay) + iş akışı sekmeleri (tüm tercümanlar). */
+type AdminTab = 'applications' | 'active' | 'pending' | 'approved' | 'completed'
+const ADMIN_TABS: { key: AdminTab; icon: IconName }[] = [
+  { key: 'applications', icon: 'Users' },
+  { key: 'active', icon: 'Cog' },
+  { key: 'pending', icon: 'Clock' },
+  { key: 'approved', icon: 'Check' },
+  { key: 'completed', icon: 'PackageCheck' },
+]
+
 function AdminSection({ t, locale }: { t: TDict; locale: string }) {
+  const [tab, setTab] = useState<AdminTab>('applications')
+  const adminLabel = (k: AdminTab) => (k === 'applications' ? t.admin.applicationsTab : t.tabs[k])
+
+  return (
+    <div>
+      <h1 className="mb-1 text-2xl font-bold">{t.admin.title}</h1>
+      <p className="mb-5 text-sm text-text-secondary">{t.admin.panelHint}</p>
+
+      <div className="mb-6 flex flex-wrap gap-2">
+        {ADMIN_TABS.map((x) => (
+          <button
+            key={x.key}
+            type="button"
+            onClick={() => setTab(x.key)}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors',
+              tab === x.key ? 'border-secondary bg-secondary text-secondary-foreground' : 'border-border bg-surface text-text-secondary hover:bg-surface-muted',
+            )}
+          >
+            <Icon name={x.icon} className="size-4" /> {adminLabel(x.key)}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'applications' ? (
+        <AdminApplications t={t} locale={locale} />
+      ) : (
+        <WorkflowSection t={t} locale={locale} status={TAB_STATUS[tab]} isAdmin />
+      )}
+    </div>
+  )
+}
+
+function AdminApplications({ t, locale }: { t: TDict; locale: string }) {
   const { dict } = useI18n()
   const areaLabel = (id: string) => (dict.quote.areas as Record<string, string>)[id] ?? id
   const [rows, setRows] = useState<Translator[]>([])
@@ -575,12 +631,9 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
 
   return (
     <div>
-      <div className="mb-5">
-        <h1 className="text-2xl font-bold">{t.admin.title}</h1>
-        <p className="mt-1 text-sm text-text-secondary">
-          {t.admin.summary.replace('{total}', String(rows.length)).replace('{pending}', String(pendingCount))}
-        </p>
-      </div>
+      <p className="mb-5 text-sm text-text-secondary">
+        {t.admin.summary.replace('{total}', String(rows.length)).replace('{pending}', String(pendingCount))}
+      </p>
 
       {state === 'loading' && <p className="py-10 text-center text-sm text-text-secondary">{t.loading}</p>}
       {state === 'error' && <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{t.admin.loadError}</p>}
@@ -900,6 +953,351 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
       <dt className="text-text-secondary">{label}</dt>
       <dd className="font-medium sm:mt-0.5">{children}</dd>
     </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Faz 4: İş akışı sekmeleri (Aktif/Onay Bekleyen/Onaylanan/Tamamlanan) */
+/* Paylaşımlı: admin=tüm tercümanlar (takip+onay/red), tercüman=kendi işleri.*/
+/* ------------------------------------------------------------------ */
+
+type WStatus = 'claimed' | 'submitted' | 'approved' | 'completed'
+interface JobFile {
+  name: string
+  url: string | null
+}
+interface Job {
+  id: string
+  order_no: number
+  service: string
+  source_lang: string
+  target_lang: string
+  document_type: string
+  word_count: number
+  urgent: boolean
+  sworn: boolean
+  notarization: boolean
+  apostille: boolean
+  physical_delivery: boolean
+  input_mode: string
+  source_text: string | null
+  note: string | null
+  delivery_days: number
+  created_at: string
+  contact_name: string | null
+  contact_email: string | null
+  contact_phone: string | null
+  delivery_address: string | null
+  delivery_city: string | null
+  delivery_postal_code: string | null
+  delivery_country: string | null
+  work_status: string
+  rejection_reason: string | null
+  tracking_info: string | null
+  payout: number
+  pages: number
+  sourceFiles: JobFile[]
+  translationFiles: JobFile[]
+  translatorInfo: { name: string | null; is_sworn: boolean } | null
+}
+
+function WorkflowSection({
+  t,
+  locale,
+  status,
+  isAdmin,
+  translatorId,
+}: {
+  t: TDict
+  locale: string
+  status: WStatus
+  isAdmin: boolean
+  translatorId?: string
+}) {
+  const [jobs, setJobs] = useState<Job[]>([])
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const [notice, setNotice] = useState<string | null>(null)
+
+  const load = () => {
+    setState('loading')
+    translatorApi<{ jobs?: Job[]; error?: string }>('jobs')
+      .then((r) => {
+        if (r.error) {
+          setState('error')
+          return
+        }
+        setJobs((r.jobs ?? []).filter((j) => j.work_status === status))
+        setState('idle')
+      })
+      .catch(() => setState('error'))
+  }
+  useEffect(load, [status])
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{t.pool.loading}</p>
+  if (state === 'error')
+    return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{t.pool.error}</p>
+
+  return (
+    <div>
+      {notice && <p className="mb-3 rounded-md border border-success/40 bg-success/10 p-3 text-sm text-success">{notice}</p>}
+      {jobs.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
+          <p className="text-sm text-text-secondary">{t.jobs.empty}</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {jobs.map((j) => (
+            <JobCard
+              key={j.id}
+              t={t}
+              locale={locale}
+              job={j}
+              status={status}
+              isAdmin={isAdmin}
+              translatorId={translatorId}
+              onChanged={(msg) => {
+                setNotice(msg ?? null)
+                load()
+              }}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function JobCard({
+  t,
+  locale,
+  job,
+  status,
+  isAdmin,
+  translatorId,
+  onChanged,
+}: {
+  t: TDict
+  locale: string
+  job: Job
+  status: WStatus
+  isAdmin: boolean
+  translatorId?: string
+  onChanged: (msg?: string) => void
+}) {
+  const { dict, formatCurrency } = useI18n()
+  const [files, setFiles] = useState<File[]>([])
+  const [tracking, setTracking] = useState('')
+  const [reason, setReason] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const serviceName = (s: string) => (dict.quote.areas as Record<string, string>)[s] ?? s
+  const docName = (d: string) => (dict.quote.docTypes as Record<string, string>)[d] ?? d
+
+  const submit = async () => {
+    if (files.length === 0) {
+      setErr(t.jobs.needFiles)
+      return
+    }
+    setBusy(true)
+    setErr(null)
+    const up = await uploadTranslationFiles(translatorId ?? '', job.id, files)
+    if (!up.ok) {
+      setBusy(false)
+      setErr(t.jobs.uploadError)
+      return
+    }
+    const r = await translatorApi<{ ok?: boolean; error?: string }>('submit', { orderId: job.id, files: up.files })
+    setBusy(false)
+    if (r.ok) onChanged(t.jobs.submittedMsg)
+    else setErr(t.jobs.actionError)
+  }
+
+  const complete = async () => {
+    if (job.physical_delivery && !tracking.trim()) {
+      setErr(t.jobs.needTracking)
+      return
+    }
+    setBusy(true)
+    setErr(null)
+    const r = await translatorApi<{ ok?: boolean; error?: string }>('complete', { orderId: job.id, tracking: tracking.trim() })
+    setBusy(false)
+    if (r.ok) onChanged(t.jobs.completedMsg)
+    else setErr(t.jobs.actionError)
+  }
+
+  const adminAct = async (action: 'approveTranslation' | 'rejectTranslation') => {
+    if (action === 'rejectTranslation' && !reason.trim()) {
+      setErr(t.jobs.needReason)
+      return
+    }
+    setBusy(true)
+    setErr(null)
+    const r = await translatorApi<{ ok?: boolean; error?: string }>(action, { orderId: job.id, reason: reason.trim() })
+    setBusy(false)
+    if (r.ok) onChanged(action === 'approveTranslation' ? t.jobs.approvedMsg : t.jobs.rejectedMsg)
+    else setErr(t.jobs.actionError)
+  }
+
+  const FileLinks = ({ list, label }: { list: JobFile[]; label: string }) =>
+    list.length > 0 ? (
+      <div className="mt-3">
+        <p className="mb-1 text-sm font-medium">{label}</p>
+        <ul className="flex flex-wrap gap-2">
+          {list.map((f, i) => (
+            <li key={i}>
+              {f.url ? (
+                <a href={f.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-xs hover:bg-surface-muted">
+                  <Icon name="FileText" className="size-3.5" /> <span className="max-w-[220px] truncate">{f.name}</span>
+                </a>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs text-text-muted">
+                  <Icon name="FileText" className="size-3.5" /> {f.name}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : null
+
+  return (
+    <article className="rounded-lg border border-border bg-surface p-4 sm:p-5">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="font-semibold">{t.pool.orderNo} #{job.order_no}</h3>
+        <div className="flex flex-wrap gap-1.5">
+          {job.urgent && <Pill tone="danger">{t.pool.urgent}</Pill>}
+          {job.sworn && <Pill tone="primary">{t.pool.sworn}</Pill>}
+          {job.notarization && <Pill tone="primary">{t.pool.notary}</Pill>}
+          {job.apostille && <Pill tone="primary">{t.pool.apostille}</Pill>}
+          {job.physical_delivery ? <Pill tone="dark">{t.pool.cargo}</Pill> : <Pill tone="outline">{t.pool.digital}</Pill>}
+        </div>
+      </div>
+
+      {isAdmin && job.translatorInfo && (
+        <p className="mt-1 text-sm">
+          <span className="text-text-secondary">{t.jobs.translator}: </span>
+          <span className="font-medium">{job.translatorInfo.name || '—'}</span>
+          {job.translatorInfo.is_sworn && <span className="ms-2"><Pill tone="primary">{t.admin.swornBadge}</Pill></span>}
+        </p>
+      )}
+
+      <dl className="mt-3 grid gap-x-4 gap-y-2 text-sm sm:grid-cols-2">
+        <Row label={t.pool.service}>{serviceName(job.service)}</Row>
+        <Row label={t.pool.documentType}>{docName(job.document_type)}</Row>
+        <Row label={t.pool.langPair}>{languageName(job.source_lang, locale)} → {languageName(job.target_lang, locale)}</Row>
+        <Row label={t.pool.words}>{job.word_count} · ~{job.pages} {t.pool.pagesUnit}</Row>
+        <Row label={t.pool.earning}>{formatCurrency(job.payout)}</Row>
+      </dl>
+
+      {status === 'claimed' && job.rejection_reason && (
+        <div className="mt-3 rounded-md border border-danger/40 bg-danger/10 p-3 text-sm text-danger">
+          <span className="font-semibold">{t.jobs.rejectionReason}: </span>
+          {job.rejection_reason}
+        </div>
+      )}
+
+      {(job.contact_name || job.contact_email || job.delivery_address) && (
+        <div className="mt-3 rounded-md border border-border bg-surface-muted/40 p-3">
+          <p className="mb-1.5 text-sm font-semibold">{job.physical_delivery ? t.pool.deliveryInfo : t.pool.customerInfo}</p>
+          <dl className="grid gap-x-4 gap-y-1.5 text-sm sm:grid-cols-2">
+            {job.contact_name && <Row label={t.pool.customerName}>{job.contact_name}</Row>}
+            {job.contact_email && (
+              <Row label={t.pool.customerEmail}><a href={`mailto:${job.contact_email}`} className="underline">{job.contact_email}</a></Row>
+            )}
+            {job.contact_phone && (
+              <Row label={t.pool.customerPhone}><a href={`tel:${job.contact_phone.replace(/[^\d+]/g, '')}`} className="underline" dir="ltr">{job.contact_phone}</a></Row>
+            )}
+            {job.physical_delivery && (job.delivery_address || job.delivery_city) && (
+              <Row label={t.pool.deliveryAddress}>{[job.delivery_address, job.delivery_city, job.delivery_postal_code, job.delivery_country].filter(Boolean).join(', ')}</Row>
+            )}
+          </dl>
+        </div>
+      )}
+
+      {job.input_mode === 'text' && job.source_text ? (
+        <div className="mt-3">
+          <p className="mb-1 text-sm font-medium">{t.pool.text}</p>
+          <pre className="max-h-40 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-surface-muted/60 p-2.5 text-xs leading-relaxed">{job.source_text}</pre>
+        </div>
+      ) : (
+        <FileLinks list={job.sourceFiles} label={t.jobs.sourceFiles} />
+      )}
+
+      <FileLinks list={job.translationFiles} label={t.jobs.translationFiles} />
+
+      {job.tracking_info && (
+        <p className="mt-3 text-sm"><span className="text-text-secondary">{t.jobs.tracking}: </span><span className="font-medium" dir="ltr">{job.tracking_info}</span></p>
+      )}
+
+      {/* ---- Eylem alanı ---- */}
+      <div className="mt-4 border-t border-border pt-3">
+        {err && <p className="mb-2 text-sm text-danger">{err}</p>}
+
+        {/* Tercüman: Aktif İşler -> çeviri yükle + onaya gönder */}
+        {!isAdmin && status === 'claimed' && (
+          <div className="space-y-2">
+            <input ref={fileRef} type="file" multiple className="hidden" onChange={(e) => setFiles(Array.from(e.target.files ?? []))} />
+            <div className="flex flex-wrap items-center gap-2">
+              <Button type="button" intent="outline" size="sm" onClick={() => fileRef.current?.click()} disabled={busy}>
+                <Icon name="Upload" className="size-4" /> {t.jobs.chooseFiles}
+              </Button>
+              {files.length > 0 && <span className="text-xs text-text-secondary">{files.length} {t.jobs.filesSelected}</span>}
+            </div>
+            <p className="text-xs text-text-muted">{t.jobs.uploadHint}</p>
+            <Button type="button" intent="secondary" disabled={busy} onClick={submit}>
+              {busy ? t.jobs.sending : t.jobs.submit}
+            </Button>
+          </div>
+        )}
+
+        {/* Tercüman: Onay Bekleyen -> bilgi */}
+        {!isAdmin && status === 'submitted' && (
+          <p className="text-sm text-text-secondary">{t.jobs.waitingApproval}</p>
+        )}
+
+        {/* Tercüman: Onaylanan -> teslim/tamamla */}
+        {!isAdmin && status === 'approved' && (
+          <div className="space-y-2">
+            {job.physical_delivery && (
+              <input
+                value={tracking}
+                onChange={(e) => setTracking(e.target.value)}
+                placeholder={t.jobs.trackingPlaceholder}
+                dir="ltr"
+                className="h-11 w-full rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong"
+              />
+            )}
+            <Button type="button" intent="secondary" disabled={busy} onClick={complete}>
+              {busy ? t.jobs.sending : job.physical_delivery ? t.jobs.markShipped : t.jobs.markDelivered}
+            </Button>
+          </div>
+        )}
+
+        {/* Admin: Onay Bekleyen -> onayla / reddet */}
+        {isAdmin && status === 'submitted' && (
+          <div className="space-y-2">
+            <textarea
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder={t.jobs.reasonPlaceholder}
+              rows={2}
+              className="min-h-[64px] w-full rounded-md border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-border-strong"
+            />
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" intent="secondary" size="sm" disabled={busy} onClick={() => adminAct('approveTranslation')}>{t.jobs.approve}</Button>
+              <Button type="button" intent="outline" size="sm" disabled={busy} onClick={() => adminAct('rejectTranslation')}>{t.jobs.reject}</Button>
+            </div>
+          </div>
+        )}
+
+        {/* Diğer durumlar salt-okunur (admin takip / tamamlanan) */}
+        {((isAdmin && status !== 'submitted') || status === 'completed') && (
+          <p className="text-xs text-text-muted">{t.jobs.statusLabel}: {t.jobs[('status_' + job.work_status) as keyof TDict['jobs']] ?? job.work_status}</p>
+        )}
+      </div>
+    </article>
   )
 }
 
