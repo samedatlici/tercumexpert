@@ -419,13 +419,16 @@ export default function QuotePage() {
             <fieldset className="space-y-2">
               <legend className="mb-1 text-sm font-medium">{q.fields.options}</legend>
               <Checkbox label={q.options.urgent} checked={urgent} onChange={setUrgent} />
-              {/* Yeminli ve Noter aynı anda seçilemez (noter zaten yeminlidir). */}
+              {/* Yeminli ve Noter aynı anda seçilemez; ikisi de fiziksel teslimatı zorunlu kılar. */}
               <Checkbox
                 label={q.options.sworn}
                 checked={sworn}
                 onChange={(v) => {
                   setSworn(v)
-                  if (v) setNotarization(false)
+                  if (v) {
+                    setNotarization(false)
+                    setPhysicalDelivery(true)
+                  }
                   setResult(null)
                 }}
               />
@@ -434,13 +437,24 @@ export default function QuotePage() {
                 checked={notarization}
                 onChange={(v) => {
                   setNotarization(v)
-                  if (v) setSworn(false)
+                  if (v) {
+                    setSworn(false)
+                    setPhysicalDelivery(true)
+                  }
                   setResult(null)
                 }}
               />
               <Checkbox label={q.options.apostille} checked={apostille} onChange={(v) => { setApostille(v); setResult(null) }} />
-              <Checkbox label={q.options.physicalDelivery} checked={physicalDelivery} onChange={setPhysicalDelivery} />
+              <Checkbox
+                label={q.options.physicalDelivery}
+                checked={physicalDelivery || sworn || notarization}
+                disabled={sworn || notarization}
+                onChange={setPhysicalDelivery}
+              />
               <p className="pt-1 text-xs text-text-muted">{q.options.swornNotaryHint}</p>
+              {(sworn || notarization) && (
+                <p className="text-xs text-text-muted">{q.options.physicalRequiredHint}</p>
+              )}
             </fieldset>
 
             {needInput && wordCount <= 0 && <p className="text-sm text-danger">{u.needInput}</p>}
@@ -618,6 +632,7 @@ function CheckoutModal({
             countryPlaceholder={c.selectCountry}
             cityPlaceholder={c.selectCity}
             cityDisabledPlaceholder={c.cityNeedsCountry}
+            selectClassName={fieldClass}
           />
           <ModalField label={c.postalCode}>
             <input className={fieldClass} value={postalCode} onChange={(e) => setPostalCode(e.target.value)} autoComplete="postal-code" />
@@ -807,10 +822,10 @@ function Field({ label, htmlFor, children }: { label: string; htmlFor: string; c
   )
 }
 
-function Checkbox({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
+function Checkbox({ label, checked, onChange, disabled }: { label: string; checked: boolean; onChange: (v: boolean) => void; disabled?: boolean }) {
   return (
-    <label className="flex min-h-[44px] cursor-pointer items-center gap-3 rounded-md border border-border px-3">
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="size-4 accent-black" />
+    <label className={cn('flex min-h-[44px] items-center gap-3 rounded-md border border-border px-3', disabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer')}>
+      <input type="checkbox" checked={checked} disabled={disabled} onChange={(e) => onChange(e.target.checked)} className="size-4 accent-black" />
       <span className="text-sm">{label}</span>
     </label>
   )

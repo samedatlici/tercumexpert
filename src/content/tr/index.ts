@@ -471,7 +471,8 @@ export const tr = {
       notarization: 'Noter Onayı',
       apostille: 'Apostil Süreci Desteği',
       physicalDelivery: 'Fiziksel Teslimat',
-      swornNotaryHint: 'Yeminli Tercüme ile Noter Onayı aynı anda seçilemez; noter onaylı çeviri zaten yeminlidir.',
+      swornNotaryHint: 'Noter onayı, yeminli tercümeyi kapsar; ihtiyacınıza uygun olan tek seçeneği işaretlemeniz yeterlidir.',
+      physicalRequiredHint: 'Yeminli ve noter onaylı çeviriler imzalı/kaşeli asıl nüsha olarak teslim edildiğinden fiziksel teslimat otomatik eklenir.',
     },
     areas: {
       academic: 'Akademik Çeviri',

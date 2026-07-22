@@ -297,6 +297,7 @@ function ApplicationForm({
           countryPlaceholder={t.form.selectCountry}
           cityPlaceholder={t.form.selectCity}
           cityDisabledPlaceholder={t.form.cityNeedsCountry}
+          selectClassName={inputClass}
         />
         <div>
           <label className={labelClass}>{t.form.address}</label>
@@ -474,6 +475,7 @@ function ProfileEditor({
         countryPlaceholder={t.form.selectCountry}
         cityPlaceholder={t.form.selectCity}
         cityDisabledPlaceholder={t.form.cityNeedsCountry}
+        selectClassName={inputClass}
       />
       <div>
         <label className={labelClass}>{t.form.address}</label>

@@ -473,7 +473,8 @@ export const en: PartialDictionary = {
       notarization: 'Notary Approval',
       apostille: 'Apostille Process Support',
       physicalDelivery: 'Physical Delivery',
-      swornNotaryHint: 'Sworn Translation and Notary Approval cannot be selected together; a notarized translation is already sworn.',
+      swornNotaryHint: 'Notary approval already covers sworn translation; you only need to select the single option that suits your need.',
+      physicalRequiredHint: 'Sworn and notarized translations are delivered as signed/stamped originals, so physical delivery is added automatically.',
     },
     areas: {
       academic: 'Academic Translation',

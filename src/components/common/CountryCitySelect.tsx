@@ -13,8 +13,8 @@ export function countryDisplayName(iso: string, locale: string, fallback = ''): 
   }
 }
 
-const SELECT_CLASS =
-  'min-h-[44px] w-full rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong'
+const DEFAULT_SELECT_CLASS =
+  'h-11 w-full rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong'
 
 /**
  * Ülke + Şehir/Eyalet seçici (EMOJİSİZ). Ülke seçilmeden şehir kutusu KAPALIDIR;
@@ -33,6 +33,7 @@ export function CountryCitySelect({
   cityDisabledPlaceholder,
   required,
   className,
+  selectClassName,
 }: {
   country: string
   city: string
@@ -45,9 +46,12 @@ export function CountryCitySelect({
   cityDisabledPlaceholder: string
   required?: boolean
   className?: string
+  /** Komşu kutularla birebir aynı görünmesi için form alan sınıfı (yoksa varsayılan). */
+  selectClassName?: string
 }) {
   const { locale } = useI18n()
   const cities = regionsFor(country)
+  const selectClass = selectClassName ?? DEFAULT_SELECT_CLASS
 
   return (
     <div className={cn('grid gap-4 sm:grid-cols-2', className)}>
@@ -61,7 +65,7 @@ export function CountryCitySelect({
             onCountry(e.target.value)
             onCity('')
           }}
-          className={SELECT_CLASS}
+          className={selectClass}
           aria-label={countryLabel}
         >
           <option value="">{countryPlaceholder}</option>
@@ -80,7 +84,7 @@ export function CountryCitySelect({
           value={city}
           onChange={(e) => onCity(e.target.value)}
           disabled={!country}
-          className={cn(SELECT_CLASS, !country && 'cursor-not-allowed opacity-60')}
+          className={cn(selectClass, !country && 'cursor-not-allowed opacity-60')}
           aria-label={cityLabel}
         >
           <option value="">{country ? cityPlaceholder : cityDisabledPlaceholder}</option>
