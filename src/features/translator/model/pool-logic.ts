@@ -2,8 +2,10 @@
 // kullanılıyor; bu dosya belge amaçlı tutulur. SADECE göreli import ('@' alias yok).
 import { PRICING, AREA_BASE_PRICE, QUOTE_LANGUAGES, type LanguageTier } from '../../../app/config/pricing.config'
 
-/** Tercüman kazanç oranı — TEK KAYNAK. Kullanıcıya "%30" denmez; yalnızca tutar gösterilir. */
-export const TRANSLATOR_PAYOUT_RATE = 0.3
+/** Tercüman kazanç oranları — SABİT. Fiyatlar (TL) ileride değişse de bu YÜZDELER DEĞİŞMEZ. */
+export const TRANSLATOR_PAYOUT_RATE = 0.3 // çeviri (taban+kelime+acil), KDV/noter/kargo HARİÇ
+export const SWORN_PAYOUT_RATE = 0.4 // yeminli ek ücreti: %40 tercüman / %60 admin
+export const APOSTILLE_PAYOUT_RATE = 0.3 // apostil ek ücreti: %30 tercüman / %70 admin
 
 export interface OrderLike {
   service: string // alan (area) id
@@ -11,6 +13,8 @@ export interface OrderLike {
   target_lang: string
   word_count: number
   urgent: boolean
+  sworn?: boolean
+  apostille?: boolean
 }
 export interface TranslatorLite {
   expertise: string[]
@@ -65,7 +69,10 @@ export function computePayout(o: OrderLike): number {
   const wordPrice = Math.round(baseWordCost(words) * langMult)
   const translation = basePrice + wordPrice
   const urgency = o.urgent ? Math.round(translation * (PRICING.urgencyMultiplier - 1)) : 0
-  return Math.round(TRANSLATOR_PAYOUT_RATE * (basePrice + wordPrice + urgency))
+  const translationShare = Math.round(TRANSLATOR_PAYOUT_RATE * (basePrice + wordPrice + urgency))
+  const swornShare = o.sworn ? Math.round(SWORN_PAYOUT_RATE * PRICING.swornFee) : 0
+  const apostilleShare = o.apostille ? Math.round(APOSTILLE_PAYOUT_RATE * PRICING.apostilleFee) : 0
+  return translationShare + swornShare + apostilleShare
 }
 
 export function estimatePages(words: number): number {
