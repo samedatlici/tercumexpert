@@ -18,31 +18,36 @@ export interface PartnerState {
 /**
  * Giriş yapan kullanıcının partner rolünü/kaydını çözer. Erişim kararları buna dayanır:
  * admin (isAdmin) veya onaylı partner (partner.status === 'approved') panele girebilir.
- * useTranslator ile birebir aynı desen.
+ *
+ * NOT: Bağımlılık `user.id`'dir (user NESNESİ değil). Supabase sekmeye dönüşte token'ı
+ * tazeleyip onAuthStateChange tetikler ve her seferinde YENİ bir user nesnesi üretir;
+ * id'ye bağlanmak bu durumda gereksiz yeniden-çekimi (ve panelin "yükleniyor"a düşüp
+ * e-posta doğrulama alanını sıfırlamasını) önler. Ayrıca ilk yüklemeden sonra `loaded`
+ * kalıcıdır: arka plan yenilemeleri ekranı boşaltmaz.
  */
 export function usePartner(): PartnerState {
   const { user, loading: authLoading } = useAuth()
+  const userId = user?.id ?? null
   const isAdmin = isAdminEmail(user?.email)
   const [partner, setPartner] = useState<Partner | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState<PartnerError>('none')
   const [tick, setTick] = useState(0)
   const refetch = useCallback(() => setTick((t) => t + 1), [])
 
   useEffect(() => {
     if (authLoading) return
-    if (!user) {
+    if (!userId) {
       setPartner(null)
       setError('none')
-      setLoading(false)
+      setLoaded(true)
       return
     }
     let active = true
-    setLoading(true)
     supabase
       .from('partners')
       .select('*')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .maybeSingle()
       .then(({ data, error: err }) => {
         if (!active) return
@@ -53,12 +58,12 @@ export function usePartner(): PartnerState {
           setError('none')
           setPartner((data as Partner) ?? null)
         }
-        setLoading(false)
+        setLoaded(true)
       })
     return () => {
       active = false
     }
-  }, [user, authLoading, tick])
+  }, [userId, authLoading, tick])
 
-  return { loading: authLoading || loading, isAdmin, partner, error, refetch }
+  return { loading: authLoading || !loaded, isAdmin, partner, error, refetch }
 }
