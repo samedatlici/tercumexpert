@@ -16,6 +16,7 @@ const BlogPage = lazy(() => import('./BlogPage'))
 const LegalPage = lazy(() => import('./LegalPage'))
 const AdminPage = lazy(() => import('./AdminPage'))
 const TranslatorPage = lazy(() => import('./TranslatorPage'))
+const PartnerPanelPage = lazy(() => import('./PartnerPanelPage'))
 const NotFoundPage = lazy(() => import('./NotFoundPage'))
 
 export const NotFound = NotFoundPage
@@ -33,6 +34,7 @@ const MAP: Partial<Record<RouteId, LazyExoticComponent<ComponentType>>> = {
   order: OrderDetailPage,
   admin: AdminPage,
   translator: TranslatorPage,
+  partnerPanel: PartnerPanelPage,
   blog: BlogPage,
   legalKvkk: LegalPage,
   legalPrivacy: LegalPage,
