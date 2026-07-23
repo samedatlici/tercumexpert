@@ -22,6 +22,7 @@ export interface Translator {
   language_pairs: LanguagePair[]
   expertise: string[]
   status: TranslatorStatus
+  was_approved: boolean
   created_at: string
   updated_at: string
 }

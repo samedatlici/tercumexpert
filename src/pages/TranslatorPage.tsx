@@ -428,7 +428,7 @@ function TranslatorPanel({
       {tab === 'profile' ? (
         <ProfileEditor t={t} locale={locale} translator={translator} onSaved={onSaved} />
       ) : tab === 'pool' ? (
-        <PoolTab t={t} locale={locale} />
+        <PoolTab t={t} locale={locale} ibanVerified={!!translator.iban_verified} />
       ) : TAB_STATUS[tab] ? (
         <WorkflowSection t={t} locale={locale} status={TAB_STATUS[tab]} isAdmin={false} translatorId={translator.id} />
       ) : tab === 'wallet' ? (
@@ -464,11 +464,23 @@ function ProfileEditor({
   const [ibanName, setIbanName] = useState(translator.iban_name ?? '')
   const [pairs, setPairs] = useState<LanguagePair[]>(translator.language_pairs ?? [])
   const [expertise, setExpertise] = useState<string[]>(translator.expertise ?? [])
+  const [consent, setConsent] = useState(false)
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<'ok' | 'err' | null>(null)
 
+  // Onaydan sonra Ad Soyad + Doğum tarihi kilitli (sunucu da zorlar).
+  const locked = !!translator.was_approved
+  // Onay-düşüren değişiklik: dil çifti / IBAN / yeminli / uzmanlık değişirse onay düşer.
+  const willRevoke =
+    translator.status === 'approved' &&
+    (JSON.stringify(pairs) !== JSON.stringify(translator.language_pairs ?? []) ||
+      JSON.stringify(expertise) !== JSON.stringify(translator.expertise ?? []) ||
+      iban.trim() !== (translator.iban ?? '') ||
+      isSworn !== !!translator.is_sworn)
+
   const save = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (willRevoke && !consent) return
     setBusy(true)
     setMsg(null)
     const { error } = await supabase
@@ -512,11 +524,24 @@ function ProfileEditor({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelClass}>{t.form.fullName}</label>
-          <input className={inputClass} value={fullName} onChange={(e) => setFullName(e.target.value)} />
+          <input
+            className={cn(inputClass, locked && 'cursor-not-allowed bg-surface-muted text-text-muted')}
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            disabled={locked}
+          />
+          {locked && <p className="mt-1 text-xs text-text-muted"><Icon name="Lock" className="me-1 inline size-3" />{t.profile.lockedHint}</p>}
         </div>
         <div>
           <label className={labelClass}>{t.form.birthDate}</label>
-          <input type="date" className={inputClass} value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
+          <input
+            type="date"
+            className={cn(inputClass, locked && 'cursor-not-allowed bg-surface-muted text-text-muted')}
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            disabled={locked}
+          />
+          {locked && <p className="mt-1 text-xs text-text-muted"><Icon name="Lock" className="me-1 inline size-3" />{t.profile.lockedHint}</p>}
         </div>
       </div>
       <div>
@@ -559,9 +584,21 @@ function ProfileEditor({
       </div>
       <PairPicker t={t} locale={locale} pairs={pairs} setPairs={setPairs} />
       <ExpertisePicker t={t} selected={expertise} setSelected={setExpertise} />
+      {willRevoke && (
+        <div className="rounded-md border border-danger/40 bg-danger/5 p-3.5 text-sm">
+          <p className="flex items-start gap-2 font-semibold text-danger">
+            <Icon name="Lock" className="mt-0.5 size-4 shrink-0" /> {t.profile.revokeTitle}
+          </p>
+          <p className="mt-1.5 text-text-secondary">{t.profile.revokeWarning}</p>
+          <label className="mt-3 flex items-center gap-2 font-medium">
+            <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="size-4 accent-black" />
+            {t.profile.consent}
+          </label>
+        </div>
+      )}
       {msg === 'ok' && <p className="text-sm text-success">{t.form.saved}</p>}
       {msg === 'err' && <p className="text-sm text-danger">{t.form.saveError}</p>}
-      <Button type="submit" intent="secondary" size="lg" disabled={busy}>
+      <Button type="submit" intent="secondary" size="lg" disabled={busy || (willRevoke && !consent)}>
         {busy ? t.form.submitting : t.profile.edit}
       </Button>
     </form>
@@ -843,6 +880,7 @@ function AdminApplications({ t, locale }: { t: TDict; locale: string }) {
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className="font-semibold">{r.full_name || '—'}</h3>
                     <StatusBadge t={t} status={r.status} />
+                    {r.was_approved && <Pill tone="dark">{t.admin.returningBadge}</Pill>}
                     {r.is_sworn && <Pill tone="primary">{t.admin.swornBadge}</Pill>}
                   </div>
                   <p className="mt-1 text-xs text-text-muted">{new Date(r.created_at).toLocaleDateString()}</p>
@@ -951,7 +989,7 @@ interface PoolOrder {
   files: PoolFile[]
 }
 
-function PoolTab({ t, locale }: { t: TDict; locale: string }) {
+function PoolTab({ t, locale, ibanVerified }: { t: TDict; locale: string; ibanVerified: boolean }) {
   const { dict, formatCurrency } = useI18n()
   const [orders, setOrders] = useState<PoolOrder[]>([])
   const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
@@ -982,7 +1020,7 @@ function PoolTab({ t, locale }: { t: TDict; locale: string }) {
       setOrders((prev) => prev.filter((o) => o.id !== id))
       setNotice(t.pool.claimed)
     } else {
-      setNotice(t.pool.claimError)
+      setNotice(r.error === 'iban_required' ? t.pool.ibanRequired : t.pool.claimError)
     }
   }
 
@@ -1004,6 +1042,12 @@ function PoolTab({ t, locale }: { t: TDict; locale: string }) {
 
   return (
     <div>
+      {!ibanVerified && (
+        <div className="mb-4 flex items-start gap-2 rounded-md border border-danger/40 bg-danger/5 p-3.5 text-sm">
+          <Icon name="Lock" className="mt-0.5 size-4 shrink-0 text-danger" />
+          <p className="text-text-secondary">{t.pool.ibanRequired}</p>
+        </div>
+      )}
       {notice && <p className="mb-3 rounded-md border border-success/40 bg-success/10 p-3 text-sm text-success">{notice}</p>}
       {orders.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
@@ -1111,7 +1155,7 @@ function PoolTab({ t, locale }: { t: TDict; locale: string }) {
                     {formatCurrency(o.payout)}
                   </span>
                 </div>
-                <Button type="button" intent="secondary" disabled={claimingId === o.id} onClick={() => claim(o.id)}>
+                <Button type="button" intent="secondary" disabled={claimingId === o.id || !ibanVerified} onClick={() => claim(o.id)}>
                   {claimingId === o.id ? t.pool.claiming : t.pool.claim}
                 </Button>
               </div>

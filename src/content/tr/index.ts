@@ -1196,6 +1196,7 @@ export const tr = {
       claiming: 'Üstleniliyor…',
       claimed: 'İşi başarıyla üstlendiniz.',
       claimError: 'İş üstlenilemedi. Sipariş başkası tarafından alınmış olabilir; listeyi yenileyin.',
+      ibanRequired: 'İş üstlenebilmek için önce IBAN bilgilerinizin yönetim tarafından onaylanması gerekir. Profilinizden IBAN girin; yönetim doğruladıktan sonra havuzdan iş alabilirsiniz.',
     },
     profile: {
       statusApproved: 'Onaylı tercüman',
@@ -1204,6 +1205,10 @@ export const tr = {
       current: 'Kayıtlı',
       edit: 'Bilgileri kaydet',
       ibanReminder: 'Ödemelerinizi alabilmek için lütfen IBAN bilgilerinizi girip kaydedin. Yönetim doğruladıktan sonra ödemeler bu hesaba yapılır.',
+      lockedHint: 'Onaydan sonra değiştirilemez',
+      revokeTitle: 'Bu değişiklik onayınızı düşürür',
+      revokeWarning: 'Dil çifti, IBAN, yeminlilik veya uzmanlık alanlarını değiştirirseniz hesabınız yeniden yönetim onayına düşer (beklemeye alınır). İşleriniz, kayıtlarınız ve cüzdanınız KORUNUR; yönetim onayladığında kaldığınız yerden devam edersiniz.',
+      consent: 'Okudum, onaylıyorum',
     },
     admin: {
       title: 'Yönetim Paneli',
@@ -1268,6 +1273,7 @@ export const tr = {
       colExpertise: 'Uzmanlık',
       colLocation: 'Şehir / Ülke',
       swornBadge: 'Yeminli',
+      returningBadge: 'Eski tercüman',
       ibanVerified: 'IBAN doğrulandı',
       ibanNotVerified: 'IBAN doğrulanmadı',
       verifyIban: 'IBAN doğrula',

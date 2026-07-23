@@ -1198,6 +1198,7 @@ export const en: PartialDictionary = {
       claiming: 'Taking…',
       claimed: 'You have successfully taken the job.',
       claimError: 'Could not take the job. It may have been taken by someone else; refresh the list.',
+      ibanRequired: 'Before you can take jobs, your IBAN details must be verified by management. Enter your IBAN in your profile; once verified you can take jobs from the pool.',
     },
     profile: {
       statusApproved: 'Approved translator',
@@ -1206,6 +1207,10 @@ export const en: PartialDictionary = {
       current: 'Saved',
       edit: 'Save details',
       ibanReminder: 'To receive your payments, please enter and save your IBAN details. Once verified by admin, payments will be made to this account.',
+      lockedHint: 'Cannot be changed after approval',
+      revokeTitle: 'This change will revoke your approval',
+      revokeWarning: 'If you change your language pairs, IBAN, sworn status, or areas of expertise, your account returns to management review (set to pending). Your jobs, records, and wallet are PRESERVED; once re-approved you continue where you left off.',
+      consent: 'I have read and I accept',
     },
     admin: {
       title: 'Management Panel',
@@ -1270,6 +1275,7 @@ export const en: PartialDictionary = {
       colExpertise: 'Expertise',
       colLocation: 'City / Country',
       swornBadge: 'Sworn',
+      returningBadge: 'Returning translator',
       ibanVerified: 'IBAN verified',
       ibanNotVerified: 'IBAN not verified',
       verifyIban: 'Verify IBAN',

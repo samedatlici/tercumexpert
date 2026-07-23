@@ -85,10 +85,11 @@ interface TranslatorRow {
   id: string
   expertise: string[]
   language_pairs: { source: string; target: string }[]
+  iban_verified: boolean
 }
 async function getApprovedTranslator(userId: string): Promise<TranslatorRow | null> {
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/translators?user_id=eq.${userId}&status=eq.approved&select=id,expertise,language_pairs`,
+    `${SUPABASE_URL}/rest/v1/translators?user_id=eq.${userId}&status=eq.approved&select=id,expertise,language_pairs,iban_verified`,
     { headers: svcHeaders() },
   )
   if (!res.ok) return null
@@ -238,6 +239,8 @@ export default async function handler(req: Request): Promise<Response> {
   // -------- İşi üstlen (claim) --------
   if (action === 'claim') {
     if (!translator) return json({ error: 'not_translator' }, 403)
+    // IBAN doğrulanmadan iş ÜSTLENİLEMEZ (ödeme güvenliği).
+    if (!translator.iban_verified) return json({ error: 'iban_required' }, 403)
     const orderId = body.orderId
     if (!orderId) return json({ error: 'no_order' }, 400)
     const oRes = await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}&select=${ORDER_COLS},work_status`, {
