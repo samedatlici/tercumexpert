@@ -6,6 +6,7 @@ import { usePartner } from '@/features/partner/model/usePartner'
 import { partnerApi } from '@/features/partner/model/api'
 import type { Partner } from '@/features/partner/model/types'
 import { supabase } from '@/lib/supabase'
+import { cn } from '@/lib/cn'
 import { buildPath } from '@/app/router/routes'
 import { Button } from '@/components/common/Button'
 import { Icon, type IconName } from '@/components/common/Icon'
@@ -55,7 +56,7 @@ export default function PartnerPanelPage() {
       return <Center icon="Lock" title={pp.setupTitle} desc={pp.setupDesc} />
     }
     if (partner?.status === 'approved') {
-      return <ApprovedPanel partner={partner} onSaved={refetch} />
+      return <PartnerPanel partner={partner} onSaved={refetch} />
     }
     if (partner?.status === 'pending') {
       return (
@@ -124,66 +125,284 @@ function Center({
 }
 
 /* ------------------------------------------------------------------ */
-/* Onaylı partner — Faz 1b: davet linki + e-posta doğrulama (tam panel Faz 2) */
-function ApprovedPanel({ partner, onSaved }: { partner: Partner; onSaved: () => void }) {
+/* Onaylı partner — Faz 2a: sekmeli panel (Profilim tam; diğerleri yakında) */
+type PTab = 'profile' | 'customers' | 'ordersNew' | 'ordersActive' | 'ordersDelivery' | 'ordersDone' | 'wallet'
+const P_TABS: { key: PTab; icon: IconName }[] = [
+  { key: 'profile', icon: 'QrCode' },
+  { key: 'customers', icon: 'Users' },
+  { key: 'ordersNew', icon: 'FileText' },
+  { key: 'ordersActive', icon: 'Cog' },
+  { key: 'ordersDelivery', icon: 'Clock' },
+  { key: 'ordersDone', icon: 'PackageCheck' },
+  { key: 'wallet', icon: 'Wallet' },
+]
+
+function PartnerPanel({ partner, onSaved }: { partner: Partner; onSaved: () => void }) {
+  const { dict } = useI18n()
+  const pp = dict.partnerPanel
+  const [tab, setTab] = useState<PTab>('profile')
+  const tabLabel: Record<PTab, string> = {
+    profile: pp.tabProfile,
+    customers: pp.tabCustomers,
+    ordersNew: pp.tabOrdersNew,
+    ordersActive: pp.tabOrdersActive,
+    ordersDelivery: pp.tabOrdersDelivery,
+    ordersDone: pp.tabOrdersDone,
+    wallet: pp.tabWallet,
+  }
+
+  return (
+    <div>
+      <h1 className="mb-1 text-2xl font-bold">{pp.panelTitle}</h1>
+      <p className="mb-5 text-sm text-text-secondary">{partner.company || partner.contact_name}</p>
+
+      <div className="mb-6 flex flex-wrap gap-2">
+        {P_TABS.map((x) => (
+          <button
+            key={x.key}
+            type="button"
+            onClick={() => setTab(x.key)}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors',
+              tab === x.key ? 'border-secondary bg-secondary text-secondary-foreground' : 'border-border bg-surface text-text-secondary hover:bg-surface-muted',
+            )}
+          >
+            <Icon name={x.icon} className="size-4" /> {tabLabel[x.key]}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'profile' ? (
+        <ProfileTab partner={partner} onSaved={onSaved} />
+      ) : (
+        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
+          <p className="text-sm text-text-secondary">{pp.soon}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* Davet kodu + bağlantı — kopyalanabilir, düzenlenemez (kaybolmasın). */
+function InviteBox({ partner }: { partner: Partner }) {
   const { locale, dict } = useI18n()
   const pp = dict.partnerPanel
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState<'code' | 'link' | null>(null)
 
   const origin = typeof window !== 'undefined' ? window.location.origin : ''
   const homePath = buildPath(locale, 'home')
   const link = `${origin}${homePath}${homePath.endsWith('/') ? '' : '/'}?ref=${partner.ref_code}`.replace(/\/\?/, '?')
 
-  const copy = async () => {
+  const copy = async (what: 'code' | 'link', value: string) => {
     try {
-      await navigator.clipboard.writeText(link)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      await navigator.clipboard.writeText(value)
+      setCopied(what)
+      setTimeout(() => setCopied(null), 2000)
     } catch {
       /* pano yoksa yok say */
     }
   }
 
   return (
-    <div className="mx-auto max-w-xl space-y-5">
-      <div className="rounded-lg border border-border bg-surface p-6 text-center sm:p-8">
-        <span className="mx-auto inline-flex size-14 items-center justify-center rounded-full bg-success/10 text-success">
-          <Icon name="CircleCheck" className="size-7" />
-        </span>
-        <h1 className="mt-4 text-xl font-bold">{pp.approvedTitle}</h1>
-        <p className="mx-auto mt-2 max-w-md text-sm text-text-secondary">{pp.approvedDesc}</p>
-        {partner.email_verified && (
-          <span className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-3 py-1 text-xs font-medium text-success">
-            <Icon name="CircleCheck" className="size-3.5" />
-            {pp.verifiedLabel}
-          </span>
-        )}
+    <div className="rounded-lg border border-border bg-surface p-6">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <p className="text-sm font-semibold">{pp.refCodeLabel}</p>
+          <div className="mt-2 flex items-center gap-2">
+            <span className="rounded-md border border-border bg-surface-muted px-3 py-2 font-mono text-lg font-bold tracking-[0.15em]">
+              {partner.ref_code}
+            </span>
+            <Button type="button" intent="outline" size="sm" onClick={() => copy('code', partner.ref_code)} className="shrink-0">
+              {copied === 'code' ? pp.refCopied : pp.refCopy}
+            </Button>
+          </div>
+        </div>
+        <div>
+          <p className="text-sm font-semibold">{pp.refTitle}</p>
+          <p className="mt-0.5 text-xs text-text-secondary">{pp.refDesc}</p>
+        </div>
       </div>
+      <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+        <input
+          readOnly
+          value={link}
+          onFocus={(e) => e.currentTarget.select()}
+          className={`${inputClass} font-mono text-sm`}
+          aria-label={pp.refTitle}
+        />
+        <Button type="button" intent="secondary" onClick={() => copy('link', link)} className="shrink-0">
+          {copied === 'link' ? pp.refCopied : pp.refCopy}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+/* Profilim — davet kodu/link en üstte + zorunlu alanlar + IBAN + e-posta doğrulama. */
+function ProfileTab({ partner, onSaved }: { partner: Partner; onSaved: () => void }) {
+  const { locale, dict } = useI18n()
+  const pp = dict.partnerPanel
+  const pf = dict.partnership.form
+  const tf = dict.translator.form
+  const sectors = dict.partnership.sectors.items
+  const otherLabel = pf.sectorOptions[pf.sectorOptions.length - 1]
+
+  const [company, setCompany] = useState(partner.company ?? '')
+  const [sector, setSector] = useState(partner.sector ?? '')
+  const [sectorOther, setSectorOther] = useState(partner.sector_other ?? '')
+  const [contactName, setContactName] = useState(partner.contact_name ?? '')
+  const [titleRole, setTitleRole] = useState(partner.title_role ?? '')
+  const [phone, setPhone] = useState(partner.phone ?? '')
+  const [country, setCountry] = useState(partner.country ?? '')
+  const [city, setCity] = useState(partner.city ?? '')
+  const [address, setAddress] = useState(partner.address ?? '')
+  const [iban, setIban] = useState(partner.iban ?? '')
+  const [ibanName, setIbanName] = useState(partner.iban_name ?? '')
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState<'ok' | 'err' | null>(null)
+
+  const save = async (e: FormEvent) => {
+    e.preventDefault()
+    setBusy(true)
+    setMsg(null)
+    const { error } = await supabase
+      .from('partners')
+      .update({
+        company: company.trim() || null,
+        sector: sector || null,
+        sector_other: sector === 'other' ? sectorOther.trim() : null,
+        contact_name: contactName.trim() || null,
+        title_role: titleRole.trim() || null,
+        phone: phone.trim() || null,
+        country: country || null,
+        city: city || null,
+        address: address.trim() || null,
+        iban: iban.trim() || null,
+        iban_name: ibanName.trim() || null,
+      })
+      .eq('id', partner.id)
+    setBusy(false)
+    setMsg(error ? 'err' : 'ok')
+    if (!error) onSaved()
+  }
+
+  return (
+    <div className="space-y-5">
+      <InviteBox partner={partner} />
 
       {!partner.email_verified && <EmailVerify partner={partner} onVerified={onSaved} />}
 
-      {/* Davet linki */}
-      <div className="rounded-lg border border-border bg-surface p-6">
-        <h2 className="text-base font-semibold">{pp.refTitle}</h2>
-        <p className="mt-1 text-sm text-text-secondary">{pp.refDesc}</p>
-        <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-          <input
-            readOnly
-            value={link}
-            onFocus={(e) => e.currentTarget.select()}
-            className={`${inputClass} font-mono text-sm`}
-            aria-label={pp.refTitle}
-          />
-          <Button type="button" intent="secondary" onClick={copy} className="shrink-0">
-            {copied ? pp.refCopied : pp.refCopy}
-          </Button>
+      <form onSubmit={save} className="space-y-4 rounded-lg border border-border bg-surface p-6">
+        <div className="flex flex-wrap items-center gap-2">
+          <Pill tone="success">
+            <Icon name="CircleCheck" className="size-3.5" /> {pp.statusApproved}
+          </Pill>
+          {partner.email_verified && (
+            <Pill tone="success">
+              <Icon name="CircleCheck" className="size-3.5" /> {pp.verifiedLabel}
+            </Pill>
+          )}
+          <Pill tone={partner.iban_verified ? 'success' : 'neutral'}>
+            <Icon name={partner.iban_verified ? 'ShieldCheck' : 'Lock'} className="size-3.5" />
+            {partner.iban_verified ? pp.ibanVerified : pp.ibanNotVerified}
+          </Pill>
         </div>
-      </div>
 
-      <p className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-4 text-center text-sm text-text-secondary">
-        {pp.panelSoon}
-      </p>
+        {!iban.trim() && (
+          <div className="flex items-start gap-2 rounded-md border border-secondary/30 bg-surface-muted p-3 text-sm">
+            <Icon name="Wallet" className="mt-0.5 size-4 shrink-0 text-text-secondary" />
+            <p>{pp.ibanReminder}</p>
+          </div>
+        )}
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelClass}>{pf.fields.company}</label>
+            <input className={inputClass} value={company} onChange={(e) => setCompany(e.target.value)} autoComplete="organization" />
+          </div>
+          <div>
+            <label className={labelClass}>{pf.fields.sector}</label>
+            <select className={inputClass} value={sector} onChange={(e) => setSector(e.target.value)}>
+              <option value="" disabled>{pf.sectorPlaceholder}</option>
+              {sectors.map((s) => (
+                <option key={s.key} value={s.key}>{s.title}</option>
+              ))}
+              <option value="other">{otherLabel}</option>
+            </select>
+          </div>
+        </div>
+        {sector === 'other' && (
+          <div>
+            <label className={labelClass}>{pf.fields.sector}</label>
+            <input className={inputClass} value={sectorOther} onChange={(e) => setSectorOther(e.target.value)} placeholder={pp.sectorOther} />
+          </div>
+        )}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelClass}>{pf.fields.contactName}</label>
+            <input className={inputClass} value={contactName} onChange={(e) => setContactName(e.target.value)} autoComplete="name" />
+          </div>
+          <div>
+            <label className={labelClass}>{pf.fields.titleRole}</label>
+            <input className={inputClass} value={titleRole} onChange={(e) => setTitleRole(e.target.value)} />
+          </div>
+        </div>
+        <div>
+          <label className={labelClass}>{pf.fields.email}</label>
+          <input className={`${inputClass} cursor-not-allowed bg-surface-muted text-text-muted`} value={partner.email ?? ''} disabled dir="ltr" />
+        </div>
+        <div>
+          <label className={labelClass}>{pf.fields.phone}</label>
+          <PhoneInput onChange={setPhone} />
+          {partner.phone && <p className="mt-1 text-xs text-text-muted" dir="ltr">{partner.phone}</p>}
+        </div>
+        <CountryCitySelect
+          country={country}
+          city={city}
+          onCountry={setCountry}
+          onCity={setCity}
+          countryLabel={tf.country}
+          cityLabel={tf.city}
+          countryPlaceholder={tf.selectCountry}
+          cityPlaceholder={tf.selectCity}
+          cityDisabledPlaceholder={tf.cityNeedsCountry}
+          selectClassName={inputClass}
+        />
+        <div>
+          <label className={labelClass}>{tf.address}</label>
+          <textarea rows={2} className={textareaClass} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelClass}>{tf.iban}</label>
+            <input className={inputClass} value={iban} onChange={(e) => setIban(e.target.value)} dir="ltr" />
+          </div>
+          <div>
+            <label className={labelClass}>{tf.ibanName}</label>
+            <input className={inputClass} value={ibanName} onChange={(e) => setIbanName(e.target.value)} />
+          </div>
+        </div>
+        {msg === 'ok' && <p className="text-sm text-success">{pp.saved}</p>}
+        {msg === 'err' && <p className="text-sm text-danger">{pp.saveError}</p>}
+        <Button type="submit" intent="secondary" size="lg" disabled={busy}>
+          {busy ? pp.submitting : pp.save}
+        </Button>
+      </form>
     </div>
+  )
+}
+
+/* Dolgulu rozet (translator paneliyle aynı). */
+type PillTone = 'success' | 'neutral'
+const PILL_TONE: Record<PillTone, string> = {
+  success: 'border border-success bg-success text-white',
+  neutral: 'border-2 border-border-strong bg-surface-muted text-text-secondary',
+}
+function Pill({ tone, children }: { tone: PillTone; children: ReactNode }) {
+  return (
+    <span className={cn('inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold', PILL_TONE[tone])}>
+      {children}
+    </span>
   )
 }
 
