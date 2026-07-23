@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon, type IconName } from '@/components/common/Icon'
@@ -23,6 +23,22 @@ export default function TranslatorPage() {
   const { user, loading: authLoading } = useAuth()
   const { loading, isAdmin, translator, error, refetch } = useTranslator()
   const [reapplying, setReapplying] = useState(false)
+  const [canceling, setCanceling] = useState(false)
+
+  // Başvuran kişi bekleyen/reddedilmiş başvurusunu iptal edebilir (kaydı siler → sıfırdan başvurabilir).
+  const cancelApplication = async () => {
+    if (!translator) return
+    if (!window.confirm(t.cancelConfirm)) return
+    setCanceling(true)
+    const { error: delErr } = await supabase.from('translators').delete().eq('id', translator.id)
+    setCanceling(false)
+    if (delErr) {
+      alert(t.form.saveError)
+      return
+    }
+    setReapplying(false)
+    refetch()
+  }
 
   useEffect(() => {
     const meta = document.createElement('meta')
@@ -61,9 +77,15 @@ export default function TranslatorPage() {
     if (translator?.status === 'approved') {
       return <TranslatorPanel t={t} locale={locale} translator={translator} onSaved={refetch} />
     }
-    // Başvuru beklemede.
+    // Başvuru beklemede — başvuran iptal edebilir.
     if (translator?.status === 'pending') {
-      return <Center icon="Clock" title={t.pendingTitle} desc={t.pendingDesc} />
+      return (
+        <Center icon="Clock" title={t.pendingTitle} desc={t.pendingDesc}>
+          <Button intent="outline" block onClick={cancelApplication} disabled={canceling}>
+            {canceling ? t.form.submitting : t.cancelApplication}
+          </Button>
+        </Center>
+      )
     }
     // Reddedilmiş — "Tekrar dene" ile sıfırdan başvuru formunu açar.
     if (translator?.status === 'rejected' && !reapplying) {
@@ -607,13 +629,15 @@ function TranslatorFilters({
   t: TDict
   locale: string
   filters: TFilters
-  setFilters: (f: TFilters) => void
+  setFilters: Dispatch<SetStateAction<TFilters>>
   count: number
 }) {
   const { dict } = useI18n()
   const areaLabel = (id: string) => (dict.quote.areas as Record<string, string>)[id] ?? id
   const fl = t.admin.filters
-  const set = (patch: Partial<TFilters>) => setFilters({ ...filters, ...patch })
+  // Fonksiyonel güncelleme ŞART: CountryCitySelect ülke değişince onCountry+onCity('')'i
+  // aynı render'da çağırır; eski state kapanışı kullanılırsa şehir sıfırlaması ülkeyi ezer.
+  const set = (patch: Partial<TFilters>) => setFilters((f) => ({ ...f, ...patch }))
   const toggleExp = (k: string) =>
     set({ expertise: filters.expertise.includes(k) ? filters.expertise.filter((x) => x !== k) : [...filters.expertise, k] })
   const active =

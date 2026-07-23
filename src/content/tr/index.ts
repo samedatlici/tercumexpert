@@ -1112,6 +1112,8 @@ export const tr = {
     rejectedTitle: 'Başvuru onaylanmadı',
     rejectedDesc: 'Başvurunuz şu an için onaylanmadı. Bilgilerinizi güncelleyip tekrar deneyebilirsiniz.',
     reapply: 'Tekrar dene',
+    cancelApplication: 'Başvuruyu iptal et',
+    cancelConfirm: 'Başvurunuzu iptal etmek istediğinize emin misiniz? Kaydınız silinecek; dilerseniz daha sonra yeniden başvurabilirsiniz.',
     panelTitle: 'Tercüman Paneli',
     tabs: {
       profile: 'Profilim',

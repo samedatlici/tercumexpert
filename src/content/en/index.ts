@@ -1114,6 +1114,8 @@ export const en: PartialDictionary = {
     rejectedTitle: 'Application not approved',
     rejectedDesc: 'Your application was not approved at this time. You can update your details and try again.',
     reapply: 'Try again',
+    cancelApplication: 'Cancel application',
+    cancelConfirm: 'Are you sure you want to cancel your application? Your record will be deleted; you can re-apply later if you wish.',
     panelTitle: 'Translator Panel',
     tabs: {
       profile: 'My Profile',
