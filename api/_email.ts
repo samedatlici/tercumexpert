@@ -542,6 +542,8 @@ interface BuildParams {
   reviewUrl?: string
   invoiceNote?: boolean // 'received' mailine "faturanız ektedir" satırı ekler
   details?: Array<{ label: string; value: string }> // 'admin_new_order' için detay tablosu
+  ctaUrl?: string // verilirse ana buton bu adrese gider (ör. admin → tercüme havuzu)
+  ctaLabel?: string // ctaUrl ile birlikte kullanılır
 }
 
 /** Markalı HTML mail gövdesi (inline stiller — mail istemcileri için). Arapça'da RTL. */
@@ -637,6 +639,9 @@ export function buildEmail(p: BuildParams): { subject: string; html: string } {
     }
   }
 
+  // Buton override (ör. admin maili → müşteri sipariş sayfası yerine tercüme havuzu).
+  if (p.ctaUrl && p.ctaLabel) cta = button(p.ctaLabel, p.ctaUrl, BRAND_BLUE)
+
   // 'received' → fatura eki bilgisi. 'admin_new_order' → detay tablosu.
   const invNoteHtml =
     p.invoiceNote && (p.event === 'received' || p.event === 'admin_new_order')
@@ -720,6 +725,13 @@ export async function sendOrderEmail(event: EmailEvent, order: OrderLikeEmail): 
 export function orderUrl(locale: string, orderNo: number | string): string {
   const l = normalizeLocale(locale)
   return `${SITE_URL}/${l}/${orderSlug(l)}/${orderNo}`
+}
+
+/** Tercüman paneli (havuz) URL'i — admin maili butonu buraya gider. */
+export function panelUrl(locale: string): string {
+  const l = normalizeLocale(locale)
+  const slug = l === 'tr' ? 'tercuman' : 'translator'
+  return `${SITE_URL}/${l}/${slug}`
 }
 
 export { GOOGLE_REVIEW_URL, SITE_URL }

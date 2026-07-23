@@ -81,6 +81,7 @@ export interface InvoiceOrder {
   target_lang?: string | null
   total?: number | null
   tax?: number | null
+  physical_delivery?: boolean | null
   contact_name?: string | null
   contact_email?: string | null
   contact_phone?: string | null
@@ -88,6 +89,14 @@ export interface InvoiceOrder {
   delivery_city?: string | null
   delivery_postal_code?: string | null
   delivery_country?: string | null
+}
+
+// Teslimat adresi etiketi (14 dil) — yalnızca fiziksel/kargo teslimde gösterilir.
+const SHIP_LABEL: Record<string, string> = {
+  tr: 'Teslimat Adresi', en: 'Shipping Address', fr: 'Adresse de livraison', de: 'Lieferadresse',
+  nl: 'Verzendadres', es: 'Dirección de envío', ar: 'عنوان الشحن', ru: 'Адрес доставки',
+  az: 'Çatdırılma ünvanı', pl: 'Adres dostawy', bg: 'Адрес за доставка', pt: 'Endereço de entrega',
+  da: 'Leveringsadresse', it: 'Indirizzo di spedizione',
 }
 
 /** Fatura numarası: TE-YIL-000NN (order_no'dan türetilir; benzersiz ve okunaklı). */
@@ -123,15 +132,23 @@ export function buildInvoiceHtml(opts: {
   const subtotal = Math.max(0, total - tax)
   const langs = `${(o.source_lang || '').toUpperCase()} → ${(o.target_lang || '').toUpperCase()}`
   const seller = DEMO_SELLER
-  const custLines = [
-    o.contact_name,
-    o.contact_email,
-    o.contact_phone,
-    [o.delivery_address, o.delivery_postal_code, o.delivery_city, o.delivery_country].filter(Boolean).join(', ') || null,
-  ]
+  // Alıcı bloğu: ad/e-posta/telefon (adres AYRI teslimat bloğunda gösterilir).
+  const custLines = [o.contact_name, o.contact_email, o.contact_phone]
     .filter(Boolean)
     .map((x) => esc(x))
     .join('<br>')
+  // Teslimat bloğu: YALNIZCA fiziksel/kargo teslimde + adres varsa (dijitalde adres yok).
+  const shipAddr = [o.delivery_address, o.delivery_postal_code, o.delivery_city, o.delivery_country]
+    .filter(Boolean)
+    .join(', ')
+  const showShip = !!o.physical_delivery && !!shipAddr
+  const shipLabel = SHIP_LABEL[locale] ?? SHIP_LABEL.en
+  const shipHtml = showShip
+    ? `<div class="party">
+      <div class="plabel">${esc(shipLabel)}</div>
+      <div class="pbody"><strong>${esc(o.contact_name || '')}</strong><br>${esc(shipAddr)}</div>
+    </div>`
+    : ''
   const sellerLines = [seller.legal, seller.address, `${seller.taxOffice} · ${seller.taxNo}`, seller.email, seller.phone]
     .map((x) => esc(x))
     .join('<br>')
@@ -193,6 +210,7 @@ td { padding: 12px; border-bottom: 1px solid #e5e7eb; font-size: 12px; }
       <div class="plabel">${esc(s.invBillTo)}</div>
       <div class="pbody">${custLines || '—'}</div>
     </div>
+    ${shipHtml}
   </div>
 
   <table>

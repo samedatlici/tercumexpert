@@ -26,22 +26,31 @@ export interface OrderDetail {
   delivery_country: string | null
 }
 
-const COLUMNS =
-  'id, order_no, created_at, status, service, source_lang, target_lang, document_type, word_count, urgent, notarization, physical_delivery, total, delivery_days, input_mode, note, tracking_url, carrier, contact_phone, delivery_address, delivery_city, delivery_postal_code, delivery_country'
-
 /**
- * Sipariş numarasına göre tek siparişi getirir. RLS gereği yalnızca
- * siparişin sahibi (auth.uid() = user_id) sonucu görebilir; başkası boş alır.
+ * Sipariş numarasına göre tek siparişi getirir. GÜVENLİK: sunucu uç noktası (service role)
+ * siparişin YALNIZCA sahibine (giriş yapan müşteri) ait olduğunu doğrular; başka müşteri
+ * sipariş kodu deneyerek erişemez — boş döner (sayfa "bulunamadı" gösterir).
  */
 export async function getOrderByNo(
   orderNo: number,
 ): Promise<{ order?: OrderDetail; error?: string }> {
-  const { data, error } = await supabase
-    .from('orders')
-    .select(COLUMNS)
-    .eq('order_no', orderNo)
-    .maybeSingle()
-  if (error) return { error: error.message }
-  if (!data) return {}
-  return { order: data as OrderDetail }
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  const token = session?.access_token
+  if (!token) return {} // giriş yok → bulunamadı
+  try {
+    const res = await fetch('/api/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ orderNo }),
+    })
+    if (!res.ok) return { error: 'load' }
+    const data = (await res.json()) as { order?: OrderDetail; error?: string }
+    if (data.error) return { error: data.error }
+    if (!data.order) return {}
+    return { order: data.order }
+  } catch {
+    return { error: 'load' }
+  }
 }

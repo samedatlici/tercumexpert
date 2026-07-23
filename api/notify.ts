@@ -1,4 +1,4 @@
-import { sendEmail, buildEmail, emailExtra, orderUrl, type EmailAttachment } from './_email'
+import { sendEmail, buildEmail, emailExtra, orderUrl, panelUrl, type EmailAttachment } from './_email'
 import { buildInvoiceHtml, invoiceNumber, type InvoiceOrder } from './_invoice'
 
 /**
@@ -77,7 +77,7 @@ export default async function handler(req: Request): Promise<Response> {
   if (!user) return json({ ok: false, error: 'invalid_token' }, 200)
 
   const cols =
-    'order_no,created_at,locale,source_lang,target_lang,total,tax,contact_name,contact_email,contact_phone,' +
+    'order_no,created_at,locale,source_lang,target_lang,total,tax,physical_delivery,contact_name,contact_email,contact_phone,' +
     'delivery_address,delivery_city,delivery_postal_code,delivery_country,user_id'
   const r = await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}&select=${cols}`, {
     headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
@@ -120,6 +120,9 @@ export default async function handler(req: Request): Promise<Response> {
       name: '',
       orderNo: ord.order_no,
       orderUrl: orderUrl(ADMIN_LOCALE, ord.order_no),
+      // Admin butonu müşteri sipariş sayfasına DEĞİL, tercüme havuzuna gitsin.
+      ctaUrl: panelUrl(ADMIN_LOCALE),
+      ctaLabel: 'Tercüme Havuzuna Git',
       invoiceNote: !!att,
       details: [
         { label: ex.lblCustomer, value: ord.contact_name || '—' },
