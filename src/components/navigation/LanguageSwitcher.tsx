@@ -35,10 +35,13 @@ export function LanguageSwitcher({ onNavigate, dropUp }: { onNavigate?: () => vo
   const splat = location.pathname.replace(new RegExp(`^/${activeLang}/?`), '')
   const resolved = resolveRouteId(activeLang, splat)
 
-  const targetFor = (code: Locale): string =>
-    resolved
-      ? buildPath(code, resolved.routeId, resolved.params)
-      : buildPath(code, 'home')
+  const targetFor = (code: Locale): string => {
+    if (resolved) return buildPath(code, resolved.routeId, resolved.params)
+    // Bilinmeyen yol (404): dil değişince ana sayfaya ATMA — aynı yolu yeni dil önekiyle
+    // koru ki kullanıcı o dilin 404 ekranını görsün.
+    const rest = splat.replace(/^\/+/, '')
+    return rest ? `/${code}/${rest}${location.search}${location.hash}` : buildPath(code, 'home')
+  }
 
   return (
     <div ref={ref} className="relative">
