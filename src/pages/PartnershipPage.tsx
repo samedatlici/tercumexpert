@@ -51,7 +51,7 @@ export default function PartnershipPage() {
 
   return (
     <>
-      <Seo title={p.seo.title} description={p.seo.description} routeId="partnership" />
+      <Seo title={p.seo.title} description={p.seo.description} routeId="partnership" noindex />
       <PageHero title={p.hero.title} subtitle={p.hero.value}>
         <p className="mb-4 text-text-secondary">{p.hero.subtitle}</p>
         <a href="#partner-basvuru">

@@ -12,6 +12,8 @@ interface SeoProps {
   params?: { slug?: string }
   /** Yapılandırılmış veri (JSON-LD). Yalnız gerçek/gösterilen veriler eklenir (§21). */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+  /** Gizli sayfa: arama motorlarına kapat (noindex,nofollow). Menüde bağlantısı olmayan sayfalar için. */
+  noindex?: boolean
 }
 
 const MANAGED = 'data-seo-managed'
@@ -45,7 +47,7 @@ function upsertLink(rel: string, href: string, hreflang?: string) {
  * canonical, Open Graph, Twitter, hreflang ve robots yönetilir. react-helmet YOK —
  * hafif, native DOM upsert. Sahte review/rating/certificate schema EKLENMEZ.
  */
-export function Seo({ title, description, routeId, params, jsonLd }: SeoProps) {
+export function Seo({ title, description, routeId, params, jsonLd, noindex }: SeoProps) {
   const { locale } = useI18n()
 
   useEffect(() => {
@@ -58,7 +60,7 @@ export function Seo({ title, description, routeId, params, jsonLd }: SeoProps) {
 
     upsertMeta('name', 'description', description)
     upsertLink('canonical', canonical)
-    upsertMeta('name', 'robots', env.VITE_APP_ENV === 'production' ? 'index,follow' : 'noindex,nofollow')
+    upsertMeta('name', 'robots', noindex || env.VITE_APP_ENV !== 'production' ? 'noindex,nofollow' : 'index,follow')
 
     upsertMeta('property', 'og:title', fullTitle)
     upsertMeta('property', 'og:description', description)
@@ -91,7 +93,7 @@ export function Seo({ title, description, routeId, params, jsonLd }: SeoProps) {
     } else if (script) {
       script.remove()
     }
-  }, [title, description, routeId, params, jsonLd, locale])
+  }, [title, description, routeId, params, jsonLd, locale, noindex])
 
   return null
 }

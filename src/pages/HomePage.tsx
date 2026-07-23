@@ -24,7 +24,6 @@ const WHY_ICONS: Record<string, IconName> = {
   languages: 'Globe',
   terms: 'Building2',
 }
-const TEASER_ICONS: Record<string, IconName> = { commission: 'Wallet', qr: 'QrCode' }
 
 export default function HomePage() {
   const { locale, dict } = useI18n()
@@ -185,26 +184,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ============ İŞ ORTAKLIĞI TEASER ============ */}
-      <section className="section bg-surface-muted">
-        <div className="container-base">
-          <SectionHead title={home.partnershipTeaser.title} subtitle={home.partnershipTeaser.subtitle} />
-          <div className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-2">
-            {home.partnershipTeaser.items.map((i) => (
-              <article key={i.key} className="rounded-lg border border-border bg-surface p-6">
-                <Icon name={TEASER_ICONS[i.key] ?? 'Wallet'} className="size-12 text-primary" />
-                <h3 className="mt-4 text-lg font-bold">{i.title}</h3>
-                <p className="mt-2 text-sm text-text-secondary">{i.desc}</p>
-              </article>
-            ))}
-          </div>
-          <div className="mt-8 text-center">
-            <Link to={buildPath(locale, 'partnership')}>
-              <Button intent="secondary" size="lg">{home.partnershipTeaser.cta}</Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* İş Ortaklığı tanıtım bölümü kaldırıldı — sayfa gizli, yalnız doğrudan bağlantıyla erişilir. */}
 
       {/* ============ FINAL CTA (siyah bant) ============ */}
       <section className="bg-secondary py-16 text-text-inverse lg:py-20">

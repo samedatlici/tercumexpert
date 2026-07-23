@@ -28,7 +28,7 @@ export function Footer() {
     { label: dict.footer.serviceLinks.notarized, routeId: 'services' },
     { label: dict.footer.serviceLinks.apostille, routeId: 'services' },
     { label: dict.footer.serviceLinks.corporate, routeId: 'corporate' },
-    { label: dict.footer.serviceLinks.partnership, routeId: 'partnership' },
+    // 'partnership' (İş Ortaklığı Programı) footer'dan kaldırıldı — sayfa gizli, yalnız doğrudan bağlantıyla.
   ]
   const legalLinks: { label: string; routeId: RouteId }[] = [
     { label: dict.footer.legal.kvkk, routeId: 'legalKvkk' },
