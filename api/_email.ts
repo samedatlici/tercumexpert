@@ -21,7 +21,7 @@ const BRAND_BLUE = '#1d4ed8'
 const BRAND_GREEN = '#16a34a'
 const INK = '#0f172a'
 
-export type EmailEvent = 'received' | 'in_progress' | 'translated' | 'shipped' | 'delivered' | 'review' | 'admin_new_order' | 'payment'
+export type EmailEvent = 'received' | 'in_progress' | 'translated' | 'shipped' | 'delivered' | 'review' | 'admin_new_order' | 'payment' | 'password_reset'
 
 // Ödeme maili metinleri (tr+en; diğer diller tr'ye düşer — çoğu tercüman TR).
 const PAYMENT: Record<string, { subject: string; heading: string; body: string }> = {
@@ -38,6 +38,27 @@ const PAYMENT: Record<string, { subject: string; heading: string; body: string }
 }
 function paymentStrings(locale: string): { subject: string; heading: string; body: string } {
   return PAYMENT[normalizeLocale(locale)] ?? PAYMENT.tr
+}
+
+// Şifre sıfırlama maili metinleri (14 dil).
+const PWRESET: Record<string, { subject: string; heading: string; body: string; button: string }> = {
+  tr: { subject: "Şifrenizi sıfırlayın", heading: "Şifre sıfırlama talebi", body: "TercümExpert hesabınızın şifresini sıfırlamak için bir talep aldık. Yeni bir şifre belirlemek için aşağıdaki butona tıklayın. Bu bağlantı tek kullanımlıktır ve kısa süre içinde geçerliliğini yitirecektir. Bu talebi siz oluşturmadıysanız bu e-postayı güvenle yok sayabilirsiniz; şifreniz değişmeden kalacaktır.", button: "Şifremi sıfırla" },
+  en: { subject: "Reset your password", heading: "Password reset request", body: "We received a request to reset the password for your TercümExpert account. Click the button below to set a new password. This link can be used once and will expire soon. If you did not request this, you can safely ignore this email — your password will remain unchanged.", button: "Reset my password" },
+  fr: { subject: "Réinitialisez votre mot de passe", heading: "Demande de réinitialisation du mot de passe", body: "Nous avons reçu une demande de réinitialisation du mot de passe de votre compte TercümExpert. Cliquez sur le bouton ci-dessous pour définir un nouveau mot de passe. Ce lien est utilisable une seule fois et expirera prochainement. Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail en toute sécurité — votre mot de passe restera inchangé.", button: "Réinitialiser mon mot de passe" },
+  de: { subject: "Setzen Sie Ihr Passwort zurück", heading: "Anfrage zum Zurücksetzen des Passworts", body: "Wir haben eine Anfrage zum Zurücksetzen des Passworts für Ihr TercümExpert-Konto erhalten. Klicken Sie auf die Schaltfläche unten, um ein neues Passwort festzulegen. Dieser Link kann einmal verwendet werden und läuft in Kürze ab. Falls Sie diese Anfrage nicht gestellt haben, können Sie diese E-Mail bedenkenlos ignorieren — Ihr Passwort bleibt unverändert.", button: "Mein Passwort zurücksetzen" },
+  nl: { subject: "Stel uw wachtwoord opnieuw in", heading: "Verzoek om wachtwoord opnieuw in te stellen", body: "Wij hebben een verzoek ontvangen om het wachtwoord van uw TercümExpert-account opnieuw in te stellen. Klik op de onderstaande knop om een nieuw wachtwoord in te stellen. Deze link kan eenmaal worden gebruikt en verloopt binnenkort. Als u dit verzoek niet heeft ingediend, kunt u deze e-mail veilig negeren — uw wachtwoord blijft ongewijzigd.", button: "Mijn wachtwoord opnieuw instellen" },
+  es: { subject: "Restablezca su contraseña", heading: "Solicitud de restablecimiento de contraseña", body: "Hemos recibido una solicitud para restablecer la contraseña de su cuenta de TercümExpert. Haga clic en el botón que aparece a continuación para establecer una nueva contraseña. Este enlace puede utilizarse una sola vez y caducará en breve. Si no ha realizado esta solicitud, puede ignorar este mensaje con total tranquilidad; su contraseña permanecerá sin cambios.", button: "Restablecer mi contraseña" },
+  ar: { subject: "إعادة تعيين كلمة المرور الخاصة بك", heading: "طلب إعادة تعيين كلمة المرور", body: "تلقّينا طلبًا لإعادة تعيين كلمة المرور الخاصة بحسابك لدى TercümExpert. يرجى النقر على الزر أدناه لتعيين كلمة مرور جديدة. يمكن استخدام هذا الرابط مرة واحدة وستنتهي صلاحيته قريبًا. إذا لم تكن أنت من قدّم هذا الطلب، فيمكنك تجاهل هذا البريد الإلكتروني بأمان، وستبقى كلمة المرور الخاصة بك دون تغيير.", button: "إعادة تعيين كلمة المرور" },
+  ru: { subject: "Сброс пароля", heading: "Запрос на сброс пароля", body: "Мы получили запрос на сброс пароля для Вашей учётной записи TercümExpert. Нажмите кнопку ниже, чтобы задать новый пароль. Эта ссылка действительна для однократного использования, и срок её действия скоро истечёт. Если Вы не отправляли данный запрос, Вы можете спокойно проигнорировать это письмо — Ваш пароль останется без изменений.", button: "Сбросить пароль" },
+  az: { subject: "Şifrənizi sıfırlayın", heading: "Şifrənin sıfırlanması sorğusu", body: "TercümExpert hesabınızın şifrəsinin sıfırlanması üçün sorğu aldıq. Yeni şifrə təyin etmək üçün aşağıdakı düyməyə klikləyin. Bu keçid yalnız bir dəfə istifadə oluna bilər və tezliklə vaxtı bitəcək. Əgər bu sorğunu siz göndərməmisinizsə, bu e-poçtu təhlükəsiz şəkildə nəzərə almaya bilərsiniz — şifrəniz dəyişməz qalacaq.", button: "Şifrəmi sıfırla" },
+  pl: { subject: "Zresetuj swoje hasło", heading: "Prośba o zresetowanie hasła", body: "Otrzymaliśmy prośbę o zresetowanie hasła do Pana/Pani konta TercümExpert. Prosimy kliknąć poniższy przycisk, aby ustawić nowe hasło. Link ten może zostać wykorzystany jednorazowo i wkrótce wygaśnie. Jeśli to nie Pan/Pani wysłał(a) tę prośbę, może Pan/Pani bezpiecznie zignorować tę wiadomość — hasło pozostanie niezmienione.", button: "Zresetuj moje hasło" },
+  bg: { subject: "Възстановяване на паролата ви", heading: "Заявка за възстановяване на парола", body: "Получихме заявка за възстановяване на паролата за вашия акаунт в TercümExpert. Кликнете върху бутона по-долу, за да зададете нова парола. Тази връзка може да бъде използвана еднократно и скоро ще изтече. Ако не сте отправяли тази заявка, можете спокойно да пренебрегнете този имейл — вашата парола ще остане непроменена.", button: "Възстановяване на паролата ми" },
+  pt: { subject: "Reponha a sua palavra-passe", heading: "Pedido de reposição de palavra-passe", body: "Recebemos um pedido de reposição da palavra-passe da sua conta TercümExpert. Clique no botão abaixo para definir uma nova palavra-passe. Esta ligação pode ser utilizada uma única vez e expirará em breve. Se não efetuou este pedido, pode ignorar este email com segurança — a sua palavra-passe permanecerá inalterada.", button: "Repor a minha palavra-passe" },
+  da: { subject: "Nulstil din adgangskode", heading: "Anmodning om nulstilling af adgangskode", body: "Vi har modtaget en anmodning om at nulstille adgangskoden til din TercümExpert-konto. Klik på knappen nedenfor for at oprette en ny adgangskode. Dette link kan bruges én gang og udløber snart. Hvis du ikke har anmodet om dette, kan du roligt se bort fra denne e-mail — din adgangskode forbliver uændret.", button: "Nulstil min adgangskode" },
+  it: { subject: "Reimposti la Sua password", heading: "Richiesta di reimpostazione della password", body: "Abbiamo ricevuto una richiesta di reimpostazione della password per il Suo account TercümExpert. Faccia clic sul pulsante qui sotto per impostare una nuova password. Questo link può essere utilizzato una sola volta e scadrà a breve. Se non ha effettuato Lei questa richiesta, può ignorare questa email in tutta tranquillità: la Sua password rimarrà invariata.", button: "Reimposta la mia password" },
+}
+function pwResetStrings(locale: string): { subject: string; heading: string; body: string; button: string } {
+  return PWRESET[normalizeLocale(locale)] ?? PWRESET.tr
 }
 
 // Sipariş route slug'ı (src/app/router/routes.ts ile aynı; eksik dillerde EN'e düşer).
@@ -660,6 +681,12 @@ export function buildEmail(p: BuildParams): { subject: string; html: string } {
       cta = ''
       break
     }
+    case 'password_reset': {
+      const pw = pwResetStrings(p.locale)
+      subject = pw.subject; heading = pw.heading; bodyText = pw.body
+      cta = button(pw.button, p.ctaUrl || p.orderUrl, BRAND_BLUE)
+      break
+    }
   }
 
   // Buton override (ör. admin maili → müşteri sipariş sayfası yerine tercüme havuzu).
@@ -681,7 +708,7 @@ export function buildEmail(p: BuildParams): { subject: string; html: string } {
       : ''
 
   const signature = `<p style="margin:22px 0 0;font-size:14px;line-height:1.5;color:#475569;text-align:${align};">${esc(s.regards)}<br><strong style="color:${INK};">${esc(s.brandSignature)}</strong></p>`
-  const showChip = p.event !== 'review' && p.event !== 'payment'
+  const showChip = p.event !== 'review' && p.event !== 'payment' && p.event !== 'password_reset'
   const bodyHtml = greetHtml + (showChip ? orderChip : '') + para(bodyText) + detailsHtml + invNoteHtml + cta + signature
   const finalSubject = subject.replace('{no}', no)
   return { subject: finalSubject, html: shell(p.locale, heading, bodyHtml) }

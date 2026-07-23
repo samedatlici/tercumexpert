@@ -1267,7 +1267,16 @@ export const it: PartialDictionary = {
     "resetSubmit": "Aggiorna password",
     "resetSuccess": "La sua password è stata aggiornata. Ora può accedere con la sua nuova password.",
     "resetInvalid": "Il link non è valido o è scaduto. La preghiamo di richiedere un nuovo link di reimpostazione.",
-    "goLogin": "Accedi"
+    "goLogin": "Accedi",
+    err: {
+      "invalidCredentials": "Email o password non corretti. La preghiamo di verificare i dati inseriti e riprovare.",
+      "emailNotConfirmed": "Il Suo indirizzo email non è ancora stato verificato. Faccia clic sul link di verifica presente nella Sua casella di posta.",
+      "alreadyRegistered": "Questo indirizzo email è già registrato. Provi ad accedere oppure a reimpostare la password.",
+      "weakPassword": "La password deve contenere almeno 6 caratteri.",
+      "otpInvalid": "Il codice di verifica è errato o è scaduto. Ne richieda uno nuovo.",
+      "rateLimited": "Troppi tentativi. La preghiamo di attendere qualche istante e riprovare.",
+      "generic": "Si è verificato un errore. La preghiamo di riprovare più tardi."
+    }
   },
   notFound: {
     seo: { title: "Pagina non trovata", description: "La pagina che sta cercando non è stata trovata." },

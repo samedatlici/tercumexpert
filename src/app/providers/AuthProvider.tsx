@@ -38,19 +38,37 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-/** Supabase hata mesajlarını kullanıcı dostu Türkçeye çevirir. */
-function trError(message: string | undefined): string {
-  if (!message) return 'Bir hata oluştu. Lütfen tekrar deneyin.'
+/**
+ * Supabase hata mesajını STABİL bir koda çevirir; metin çevirisi UI'da (dict.authx.err)
+ * kullanıcının diline göre yapılır. Böylece "For security purposes… after 22 seconds"
+ * gibi tüm sistem uyarıları da 14 dile uyarlanmış olur.
+ */
+export type AuthErrorCode =
+  | 'invalidCredentials'
+  | 'emailNotConfirmed'
+  | 'alreadyRegistered'
+  | 'weakPassword'
+  | 'otpInvalid'
+  | 'rateLimited'
+  | 'generic'
+
+function authErrorCode(message: string | undefined): AuthErrorCode {
+  if (!message) return 'generic'
   const m = message.toLowerCase()
-  if (m.includes('invalid login credentials')) return 'E-posta veya şifre hatalı.'
-  if (m.includes('email not confirmed')) return 'E-postanız henüz doğrulanmadı. Lütfen kodu girin.'
-  if (m.includes('user already registered') || m.includes('already been registered'))
-    return 'Bu e-posta ile zaten bir hesap var. Giriş yapmayı deneyin.'
-  if (m.includes('password should be at least')) return 'Şifre en az 6 karakter olmalıdır.'
-  if (m.includes('token has expired') || m.includes('invalid') && m.includes('otp'))
-    return 'Kod hatalı veya süresi dolmuş. Yeni kod isteyin.'
-  if (m.includes('rate limit') || m.includes('too many')) return 'Çok fazla deneme. Lütfen biraz bekleyin.'
-  return message
+  if (m.includes('invalid login credentials')) return 'invalidCredentials'
+  if (m.includes('email not confirmed')) return 'emailNotConfirmed'
+  if (m.includes('already registered') || m.includes('already been registered')) return 'alreadyRegistered'
+  if (m.includes('password should be at least') || m.includes('weak password')) return 'weakPassword'
+  if (m.includes('token has expired') || (m.includes('otp') && m.includes('invalid')) || m.includes('otp_expired'))
+    return 'otpInvalid'
+  if (
+    m.includes('rate limit') ||
+    m.includes('too many') ||
+    m.includes('security purposes') ||
+    (m.includes('after') && m.includes('second'))
+  )
+    return 'rateLimited'
+  return 'generic'
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -84,11 +102,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           provider: 'google',
           options: { redirectTo },
         })
-        return { error: error ? trError(error.message) : null }
+        return { error: error ? authErrorCode(error.message) : null }
       },
       async signInWithPassword(email, password) {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
-        return { error: error ? trError(error.message) : null }
+        return { error: error ? authErrorCode(error.message) : null }
       },
       async signUp({ firstName, lastName, email, password }, redirectTo, locale) {
         const { data, error } = await supabase.auth.signUp({
@@ -104,14 +122,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             },
           },
         })
-        if (error) return { error: trError(error.message), needsVerification: false }
+        if (error) return { error: authErrorCode(error.message), needsVerification: false }
         // Oturum yoksa e-posta doğrulaması gerekiyordur.
         const needsVerification = !data.session
         return { error: null, needsVerification }
       },
       async verifyEmailCode(email, code) {
         const { error } = await supabase.auth.verifyOtp({ email, token: code, type: 'signup' })
-        return { error: error ? trError(error.message) : null }
+        return { error: error ? authErrorCode(error.message) : null }
       },
       async resendCode(email, redirectTo) {
         const { error } = await supabase.auth.resend({
@@ -119,7 +137,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email,
           options: { emailRedirectTo: redirectTo },
         })
-        return { error: error ? trError(error.message) : null }
+        return { error: error ? authErrorCode(error.message) : null }
       },
       async sendGuestCode(email, firstName, lastName, phone, locale) {
         const { error } = await supabase.auth.signInWithOtp({
@@ -135,19 +153,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             },
           },
         })
-        return { error: error ? trError(error.message) : null }
+        return { error: error ? authErrorCode(error.message) : null }
       },
       async verifyGuestCode(email, code) {
         const { error } = await supabase.auth.verifyOtp({ email, token: code, type: 'email' })
-        return { error: error ? trError(error.message) : null }
+        return { error: error ? authErrorCode(error.message) : null }
       },
       async resetPassword(email, redirectTo) {
         const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo })
-        return { error: error ? trError(error.message) : null }
+        return { error: error ? authErrorCode(error.message) : null }
       },
       async updatePassword(newPassword) {
         const { error } = await supabase.auth.updateUser({ password: newPassword })
-        return { error: error ? trError(error.message) : null }
+        return { error: error ? authErrorCode(error.message) : null }
       },
       async signOut() {
         await supabase.auth.signOut()

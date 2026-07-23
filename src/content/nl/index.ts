@@ -1267,7 +1267,16 @@ export const nl: PartialDictionary = {
     "resetSubmit": "Wachtwoord bijwerken",
     "resetSuccess": "Uw wachtwoord is bijgewerkt. U kunt nu inloggen met uw nieuwe wachtwoord.",
     "resetInvalid": "De link is ongeldig of verlopen. Vraag een nieuwe herstellink aan.",
-    "goLogin": "Inloggen"
+    "goLogin": "Inloggen",
+    err: {
+      "invalidCredentials": "Onjuist e-mailadres of wachtwoord. Controleer uw gegevens en probeer het opnieuw.",
+      "emailNotConfirmed": "Uw e-mailadres is nog niet geverifieerd. Klik op de verificatielink in uw inbox.",
+      "alreadyRegistered": "Dit e-mailadres is al geregistreerd. Probeer in te loggen of uw wachtwoord opnieuw in te stellen.",
+      "weakPassword": "Het wachtwoord moet minimaal 6 tekens bevatten.",
+      "otpInvalid": "De verificatiecode is onjuist of verlopen. Vraag een nieuwe code aan.",
+      "rateLimited": "Te veel pogingen. Wacht een moment en probeer het opnieuw.",
+      "generic": "Er is iets misgegaan. Probeer het later opnieuw."
+    }
   },
   notFound: {
     seo: { title: "Pagina niet gevonden", description: "De pagina die u zoekt, kon niet worden gevonden." },

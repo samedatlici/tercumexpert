@@ -1356,6 +1356,15 @@ export const en: PartialDictionary = {
     resetSuccess: 'Your password has been updated. You can now log in with your new password.',
     resetInvalid: 'The link is invalid or has expired. Please request a new reset link.',
     goLogin: 'Log in',
+    err: {
+      invalidCredentials: 'Incorrect email or password. Please check your details and try again.',
+      emailNotConfirmed: 'Your email address has not been verified yet. Click the verification link in your inbox.',
+      alreadyRegistered: 'This email address is already registered. Try logging in or resetting your password.',
+      weakPassword: 'The password must be at least 6 characters.',
+      otpInvalid: 'The verification code is incorrect or has expired. Request a new code.',
+      rateLimited: 'Too many attempts. Please wait a moment and try again.',
+      generic: 'Something went wrong. Please try again later.',
+    },
   },
 
   notFound: {

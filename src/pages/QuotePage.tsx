@@ -693,6 +693,11 @@ function PriceGate() {
   const { locale, dict } = useI18n()
   const g = dict.quote.gate
   const { sendGuestCode, verifyGuestCode } = useAuth()
+  const errText = (code: string | null): string | null => {
+    if (!code) return null
+    const e = dict.authx.err as Record<string, string>
+    return e[code] ?? e.generic
+  }
   const [step, setStep] = useState<'info' | 'code'>('info')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -717,7 +722,7 @@ function PriceGate() {
     setBusy(true)
     const res = await sendGuestCode(email, firstName, lastName, fullPhone, locale)
     setBusy(false)
-    if (res.error) return setError(res.error)
+    if (res.error) return setError(errText(res.error))
     setStep('code')
   }
 
@@ -728,7 +733,7 @@ function PriceGate() {
     setBusy(true)
     const res = await verifyGuestCode(email, code.trim())
     setBusy(false)
-    if (res.error) return setError(res.error)
+    if (res.error) return setError(errText(res.error))
     // Başarılı → oturum açılır; üst bileşendeki effect fiyatı gösterir.
   }
 
@@ -738,7 +743,7 @@ function PriceGate() {
     setBusy(true)
     const res = await sendGuestCode(email, firstName, lastName, fullPhone, locale)
     setBusy(false)
-    if (res.error) return setError(res.error)
+    if (res.error) return setError(errText(res.error))
     setInfo(g.resent)
   }
 

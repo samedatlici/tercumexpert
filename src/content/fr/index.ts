@@ -1267,7 +1267,16 @@ export const fr: PartialDictionary = {
     "resetSubmit": "Mettre à jour le mot de passe",
     "resetSuccess": "Votre mot de passe a été mis à jour. Vous pouvez désormais vous connecter avec votre nouveau mot de passe.",
     "resetInvalid": "Le lien est invalide ou a expiré. Veuillez demander un nouveau lien de réinitialisation.",
-    "goLogin": "Se connecter"
+    "goLogin": "Se connecter",
+    err: {
+      "invalidCredentials": "Adresse e-mail ou mot de passe incorrect. Veuillez vérifier vos informations et réessayer.",
+      "emailNotConfirmed": "Votre adresse e-mail n'a pas encore été vérifiée. Cliquez sur le lien de vérification figurant dans votre boîte de réception.",
+      "alreadyRegistered": "Cette adresse e-mail est déjà enregistrée. Essayez de vous connecter ou de réinitialiser votre mot de passe.",
+      "weakPassword": "Le mot de passe doit comporter au moins 6 caractères.",
+      "otpInvalid": "Le code de vérification est incorrect ou a expiré. Demandez un nouveau code.",
+      "rateLimited": "Trop de tentatives. Veuillez patienter un instant et réessayer.",
+      "generic": "Une erreur est survenue. Veuillez réessayer ultérieurement."
+    }
   },
   notFound: {
     seo: { title: "Page introuvable", description: "La page que vous recherchez est introuvable." },

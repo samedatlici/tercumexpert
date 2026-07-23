@@ -1261,7 +1261,16 @@ export const az: PartialDictionary = {
     "resetSubmit": "Parolu yenilə",
     "resetSuccess": "Parolunuz yeniləndi. İndi yeni parolunuzla daxil ola bilərsiniz.",
     "resetInvalid": "Keçid etibarsızdır və ya vaxtı bitib. Zəhmət olmasa, yeni bərpa keçidi tələb edin.",
-    "goLogin": "Daxil ol"
+    "goLogin": "Daxil ol",
+    err: {
+      "invalidCredentials": "E-poçt və ya şifrə yanlışdır. Zəhmət olmasa məlumatlarınızı yoxlayıb yenidən cəhd edin.",
+      "emailNotConfirmed": "E-poçt ünvanınız hələ təsdiqlənməyib. Gələnlər qutunuzdakı təsdiq keçidinə klikləyin.",
+      "alreadyRegistered": "Bu e-poçt ünvanı artıq qeydiyyatdan keçib. Daxil olmağa cəhd edin və ya şifrənizi sıfırlayın.",
+      "weakPassword": "Şifrə ən azı 6 simvoldan ibarət olmalıdır.",
+      "otpInvalid": "Təsdiq kodu yanlışdır və ya vaxtı bitib. Yeni kod tələb edin.",
+      "rateLimited": "Çox sayda cəhd edildi. Zəhmət olmasa bir qədər gözləyib yenidən cəhd edin.",
+      "generic": "Xəta baş verdi. Zəhmət olmasa daha sonra yenidən cəhd edin."
+    }
   },
   notFound: {
     seo: { title: 'Səhifə tapılmadı', description: 'Axtardığınız səhifə tapılmadı.' },

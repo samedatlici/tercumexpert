@@ -1267,7 +1267,16 @@ export const da: PartialDictionary = {
     "resetSubmit": "Opdater adgangskode",
     "resetSuccess": "Din adgangskode er blevet opdateret. Du kan nu logge ind med din nye adgangskode.",
     "resetInvalid": "Linket er ugyldigt eller udløbet. Anmod venligst om et nyt nulstillingslink.",
-    "goLogin": "Log ind"
+    "goLogin": "Log ind",
+    err: {
+      "invalidCredentials": "Forkert e-mailadresse eller adgangskode. Kontrollér venligst dine oplysninger, og prøv igen.",
+      "emailNotConfirmed": "Din e-mailadresse er endnu ikke bekræftet. Klik på bekræftelseslinket i din indbakke.",
+      "alreadyRegistered": "Denne e-mailadresse er allerede registreret. Prøv at logge ind eller nulstille din adgangskode.",
+      "weakPassword": "Adgangskoden skal være på mindst 6 tegn.",
+      "otpInvalid": "Bekræftelseskoden er forkert eller udløbet. Anmod om en ny kode.",
+      "rateLimited": "For mange forsøg. Vent venligst et øjeblik, og prøv igen.",
+      "generic": "Der opstod en fejl. Prøv venligst igen senere."
+    }
   },
   notFound: {
     seo: { title: "Siden blev ikke fundet", description: "Den side, du leder efter, kunne ikke findes." },

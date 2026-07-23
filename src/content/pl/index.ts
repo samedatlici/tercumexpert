@@ -1261,7 +1261,16 @@ export const pl: PartialDictionary = {
     "resetSubmit": "Zaktualizuj hasło",
     "resetSuccess": "Twoje hasło zostało zaktualizowane. Możesz teraz zalogować się przy użyciu nowego hasła.",
     "resetInvalid": "Link jest nieprawidłowy lub wygasł. Poproś o nowy link resetujący.",
-    "goLogin": "Zaloguj się"
+    "goLogin": "Zaloguj się",
+    err: {
+      "invalidCredentials": "Nieprawidłowy adres e-mail lub hasło. Prosimy sprawdzić wprowadzone dane i spróbować ponownie.",
+      "emailNotConfirmed": "Pana/Pani adres e-mail nie został jeszcze zweryfikowany. Prosimy kliknąć link weryfikacyjny w otrzymanej wiadomości.",
+      "alreadyRegistered": "Ten adres e-mail jest już zarejestrowany. Prosimy spróbować się zalogować lub zresetować hasło.",
+      "weakPassword": "Hasło musi zawierać co najmniej 6 znaków.",
+      "otpInvalid": "Kod weryfikacyjny jest nieprawidłowy lub wygasł. Prosimy poprosić o nowy kod.",
+      "rateLimited": "Zbyt wiele prób. Prosimy chwilę odczekać i spróbować ponownie.",
+      "generic": "Wystąpił błąd. Prosimy spróbować ponownie później."
+    }
   },
   notFound: {
     seo: { title: 'Nie znaleziono strony', description: 'Nie udało się znaleźć szukanej strony.' },

@@ -1266,7 +1266,16 @@ export const pt: PartialDictionary = {
     "resetSubmit": "Atualizar palavra-passe",
     "resetSuccess": "A sua palavra-passe foi atualizada. Pode agora iniciar sessão com a sua nova palavra-passe.",
     "resetInvalid": "A ligação é inválida ou expirou. Solicite uma nova ligação de reposição.",
-    "goLogin": "Iniciar sessão"
+    "goLogin": "Iniciar sessão",
+    err: {
+      "invalidCredentials": "Email ou palavra-passe incorretos. Verifique os seus dados e tente novamente.",
+      "emailNotConfirmed": "O seu endereço de email ainda não foi verificado. Clique na ligação de verificação na sua caixa de entrada.",
+      "alreadyRegistered": "Este endereço de email já se encontra registado. Tente iniciar sessão ou repor a sua palavra-passe.",
+      "weakPassword": "A palavra-passe deve ter, no mínimo, 6 caracteres.",
+      "otpInvalid": "O código de verificação está incorreto ou expirou. Solicite um novo código.",
+      "rateLimited": "Demasiadas tentativas. Aguarde um momento e tente novamente.",
+      "generic": "Ocorreu um erro. Tente novamente mais tarde."
+    }
   },
   notFound: {
     seo: { title: 'Página não encontrada', description: 'Não foi possível encontrar a página que procura.' },

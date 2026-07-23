@@ -1354,6 +1354,15 @@ export const tr = {
     resetSuccess: 'Şifreniz güncellendi. Artık yeni şifrenizle giriş yapabilirsiniz.',
     resetInvalid: 'Bağlantı geçersiz veya süresi dolmuş. Lütfen yeniden sıfırlama bağlantısı isteyin.',
     goLogin: 'Giriş yap',
+    err: {
+      invalidCredentials: 'E-posta veya şifre hatalı. Lütfen bilgilerinizi kontrol edip tekrar deneyin.',
+      emailNotConfirmed: 'E-posta adresiniz henüz doğrulanmamış. Gelen kutunuzdaki doğrulama bağlantısına tıklayın.',
+      alreadyRegistered: 'Bu e-posta adresi zaten kayıtlı. Giriş yapmayı veya şifrenizi sıfırlamayı deneyin.',
+      weakPassword: 'Şifre en az 6 karakter olmalıdır.',
+      otpInvalid: 'Doğrulama kodu hatalı veya süresi dolmuş. Yeni bir kod isteyin.',
+      rateLimited: 'Çok fazla deneme yaptınız. Lütfen bir süre bekleyip tekrar deneyin.',
+      generic: 'Bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin.',
+    },
   },
 
   notFound: {

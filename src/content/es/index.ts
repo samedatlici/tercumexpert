@@ -1267,7 +1267,16 @@ export const es: PartialDictionary = {
     "resetSubmit": "Actualizar contraseña",
     "resetSuccess": "Su contraseña se ha actualizado. Ahora puede iniciar sesión con su nueva contraseña.",
     "resetInvalid": "El enlace no es válido o ha caducado. Solicite un nuevo enlace de restablecimiento.",
-    "goLogin": "Iniciar sesión"
+    "goLogin": "Iniciar sesión",
+    err: {
+      "invalidCredentials": "Correo electrónico o contraseña incorrectos. Verifique sus datos e inténtelo de nuevo.",
+      "emailNotConfirmed": "Su dirección de correo electrónico aún no ha sido verificada. Haga clic en el enlace de verificación que encontrará en su bandeja de entrada.",
+      "alreadyRegistered": "Esta dirección de correo electrónico ya está registrada. Intente iniciar sesión o restablecer su contraseña.",
+      "weakPassword": "La contraseña debe tener al menos 6 caracteres.",
+      "otpInvalid": "El código de verificación es incorrecto o ha caducado. Solicite un nuevo código.",
+      "rateLimited": "Demasiados intentos. Espere un momento e inténtelo de nuevo.",
+      "generic": "Se ha producido un error. Inténtelo de nuevo más tarde."
+    }
   },
   notFound: {
     seo: { title: 'Página no encontrada', description: 'No se pudo encontrar la página que busca.' },

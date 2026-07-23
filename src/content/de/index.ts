@@ -1267,7 +1267,16 @@ export const de: PartialDictionary = {
     "resetSubmit": "Passwort aktualisieren",
     "resetSuccess": "Ihr Passwort wurde aktualisiert. Sie können sich jetzt mit Ihrem neuen Passwort anmelden.",
     "resetInvalid": "Der Link ist ungültig oder abgelaufen. Bitte fordern Sie einen neuen Link zum Zurücksetzen an.",
-    "goLogin": "Anmelden"
+    "goLogin": "Anmelden",
+    err: {
+      "invalidCredentials": "E-Mail-Adresse oder Passwort ist falsch. Bitte überprüfen Sie Ihre Angaben und versuchen Sie es erneut.",
+      "emailNotConfirmed": "Ihre E-Mail-Adresse wurde noch nicht bestätigt. Klicken Sie auf den Bestätigungslink in Ihrem Posteingang.",
+      "alreadyRegistered": "Diese E-Mail-Adresse ist bereits registriert. Bitte melden Sie sich an oder setzen Sie Ihr Passwort zurück.",
+      "weakPassword": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+      "otpInvalid": "Der Bestätigungscode ist falsch oder abgelaufen. Bitte fordern Sie einen neuen Code an.",
+      "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+      "generic": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut."
+    }
   },
   notFound: {
     seo: { title: 'Seite nicht gefunden', description: 'Die von Ihnen gesuchte Seite konnte nicht gefunden werden.' },

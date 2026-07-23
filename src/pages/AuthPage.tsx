@@ -25,7 +25,7 @@ export default function AuthPage() {
   const a = dict.auth
   const navigate = useNavigate()
   const [params] = useSearchParams()
-  const { user, signInWithGoogle, signInWithPassword, signUp, verifyEmailCode, resendCode, resetPassword, signOut } = useAuth()
+  const { user, signInWithGoogle, signInWithPassword, signUp, verifyEmailCode, resendCode, signOut } = useAuth()
 
   const [mode, setMode] = useState<Mode>('login')
   const [view, setView] = useState<View>('form')
@@ -46,6 +46,12 @@ export default function AuthPage() {
   const target = nextParam && nextParam.startsWith('/') && !nextParam.startsWith('//') ? nextParam : homePath
   const verifyRedirect = `${window.location.origin}${target}`
   const x = dict.authx
+  // Supabase'ten dönen stabil hata kodunu kullanıcının dilindeki mesaja çevirir.
+  const errText = (code: string | null): string | null => {
+    if (!code) return null
+    const e = x.err as Record<string, string>
+    return e[code] ?? e.generic
+  }
 
   // Zaten giriş yapılmışsa hesap kartı göster.
   if (user) {
@@ -86,7 +92,7 @@ export default function AuthPage() {
     setBusy(true)
     const { error } = await signInWithGoogle(`${window.location.origin}${target}`)
     if (error) {
-      setError(error)
+      setError(errText(error))
       setBusy(false)
     }
     // Başarılıysa tarayıcı Google'a yönlenir.
@@ -103,7 +109,7 @@ export default function AuthPage() {
     if (mode === 'login') {
       const { error } = await signInWithPassword(email, password)
       setBusy(false)
-      if (error) return setError(error)
+      if (error) return setError(errText(error))
       navigate(target)
       return
     }
@@ -118,7 +124,7 @@ export default function AuthPage() {
     }
     const { error, needsVerification } = await signUp({ firstName, lastName, email, password }, verifyRedirect, locale)
     setBusy(false)
-    if (error) return setError(error)
+    if (error) return setError(errText(error))
     if (needsVerification) setView('verify')
     else navigate(target)
   }
@@ -129,9 +135,19 @@ export default function AuthPage() {
     if (!emailOk(email)) return setError(a.errors.emailInvalid)
     setBusy(true)
     const resetRedirect = `${window.location.origin}${buildPath(locale, 'resetPassword')}`
-    const { error } = await resetPassword(email, resetRedirect)
+    // Markalı TercümExpert e-postası (14 dil) — /api/reset üzerinden gönderilir.
+    // Güvenlik: e-postanın kayıtlı olup olmadığını sızdırmamak için her durumda
+    // "gönderildi" mesajı gösterilir (sunucu da her zaman ok döner).
+    try {
+      await fetch('/api/reset', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email, locale, redirectTo: resetRedirect }),
+      })
+    } catch {
+      /* güvenlik gereği yut */
+    }
     setBusy(false)
-    if (error) return setError(error)
     setInfo(x.forgotSent)
   }
 
@@ -143,7 +159,7 @@ export default function AuthPage() {
     const { error } = await verifyEmailCode(email, code.trim())
     if (error) {
       setBusy(false)
-      return setError(error)
+      return setError(errText(error))
     }
     // Doğrulama başarılı — oturumu garantiye almak için şifreyle giriş yap.
     setRemember(remember)
@@ -157,7 +173,7 @@ export default function AuthPage() {
     setBusy(true)
     const { error } = await resendCode(email, verifyRedirect)
     setBusy(false)
-    if (error) return setError(error)
+    if (error) return setError(errText(error))
     setInfo(a.verify.resent)
   }
 
