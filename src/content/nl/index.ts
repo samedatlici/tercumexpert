@@ -8,6 +8,38 @@ import { FAQ_CATEGORIES_NL, FAQ_ITEMS_NL } from '@/content/faq-data.nl'
  * Engels (§10). De FAQ-gegevens komen uit content/faq-data.nl.
  */
 export const nl: PartialDictionary = {
+  adminHub: {
+    "tabChats": "Gesprekken",
+    "tabCustomers": "Klanten",
+    "tabUploads": "Geüploade bestanden",
+    "loading": "Laden…",
+    "loadError": "Laden mislukt. Probeer het opnieuw.",
+    "back": "Terug",
+    "custHint": "Alle in het systeem geregistreerde klanten (vertalers uitgezonderd).",
+    "custSearch": "Zoek op naam, e-mail of telefoon…",
+    "custName": "Volledige naam",
+    "custEmail": "E-mail",
+    "custPhone": "Telefoon",
+    "custOrders": "Bestellingen",
+    "custTotal": "Totaalbedrag",
+    "custJoined": "Aangemeld",
+    "custNone": "Nog geen klantgegevens.",
+    "custOrderList": "Bestellingen",
+    "custNoOrders": "Deze klant heeft geen bestellingen.",
+    "orderNo": "Bestelnr.",
+    "orderDate": "Datum",
+    "orderStatus": "Status",
+    "upHint": "Alle bestanden die op de offertepagina zijn geüpload (ook opgeslagen zonder bestelling).",
+    "upFile": "Bestand",
+    "upUploader": "Geüpload door",
+    "upWhen": "Datum",
+    "upWords": "Woorden",
+    "upSize": "Grootte",
+    "upDownload": "Downloaden",
+    "upNone": "Nog geen geüploade bestanden.",
+    "upGuest": "Gast"
+  },
+
   smsVerify: {
     "sendCode": "Code verzenden",
     "resend": "Code opnieuw verzenden",

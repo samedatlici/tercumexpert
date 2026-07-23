@@ -8,6 +8,38 @@ import { FAQ_CATEGORIES_AR, FAQ_ITEMS_AR } from '@/content/faq-data.ar'
  * FAQ data comes from content/faq-data.ar.
  */
 export const ar: PartialDictionary = {
+  adminHub: {
+    "tabChats": "المحادثات",
+    "tabCustomers": "العملاء",
+    "tabUploads": "الملفات المرفوعة",
+    "loading": "جارٍ التحميل…",
+    "loadError": "تعذّر التحميل. يُرجى المحاولة مرة أخرى.",
+    "back": "رجوع",
+    "custHint": "جميع العملاء المسجّلين في النظام (باستثناء المترجمين).",
+    "custSearch": "ابحث بالاسم أو البريد الإلكتروني أو الهاتف…",
+    "custName": "الاسم الكامل",
+    "custEmail": "البريد الإلكتروني",
+    "custPhone": "الهاتف",
+    "custOrders": "الطلبات",
+    "custTotal": "المبلغ الإجمالي",
+    "custJoined": "تاريخ الانضمام",
+    "custNone": "لا توجد سجلات عملاء بعد.",
+    "custOrderList": "الطلبات",
+    "custNoOrders": "لا توجد طلبات لهذا العميل.",
+    "orderNo": "رقم الطلب",
+    "orderDate": "التاريخ",
+    "orderStatus": "الحالة",
+    "upHint": "جميع الملفات المرفوعة في صفحة عرض السعر (تُحفظ حتى في حال عدم تقديم طلب).",
+    "upFile": "الملف",
+    "upUploader": "رفعه",
+    "upWhen": "التاريخ",
+    "upWords": "الكلمات",
+    "upSize": "الحجم",
+    "upDownload": "تنزيل",
+    "upNone": "لا توجد ملفات مرفوعة بعد.",
+    "upGuest": "زائر"
+  },
+
   smsVerify: {
     "sendCode": "إرسال الرمز",
     "resend": "إعادة إرسال الرمز",

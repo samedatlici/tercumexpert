@@ -8,6 +8,38 @@ import { FAQ_CATEGORIES_DE, FAQ_ITEMS_DE } from '@/content/faq-data.de'
  * eigenen, sprachspezifischen Datensatz (content/faq-data.de).
  */
 export const de: PartialDictionary = {
+  adminHub: {
+    "tabChats": "Konversationen",
+    "tabCustomers": "Kunden",
+    "tabUploads": "Hochgeladene Dateien",
+    "loading": "Wird geladen…",
+    "loadError": "Laden fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "back": "Zurück",
+    "custHint": "Alle im System registrierten Kunden (Übersetzer ausgenommen).",
+    "custSearch": "Name, E-Mail oder Telefon suchen…",
+    "custName": "Vollständiger Name",
+    "custEmail": "E-Mail",
+    "custPhone": "Telefon",
+    "custOrders": "Bestellungen",
+    "custTotal": "Gesamtbetrag",
+    "custJoined": "Beigetreten",
+    "custNone": "Noch keine Kundendatensätze vorhanden.",
+    "custOrderList": "Bestellungen",
+    "custNoOrders": "Dieser Kunde hat keine Bestellungen.",
+    "orderNo": "Bestellnr.",
+    "orderDate": "Datum",
+    "orderStatus": "Status",
+    "upHint": "Alle auf der Angebotsseite hochgeladenen Dateien (auch ohne Bestellung gespeichert).",
+    "upFile": "Datei",
+    "upUploader": "Hochgeladen von",
+    "upWhen": "Datum",
+    "upWords": "Wörter",
+    "upSize": "Größe",
+    "upDownload": "Herunterladen",
+    "upNone": "Noch keine hochgeladenen Dateien vorhanden.",
+    "upGuest": "Gast"
+  },
+
   smsVerify: {
     "sendCode": "Code senden",
     "resend": "Code erneut senden",

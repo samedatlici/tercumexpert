@@ -2,6 +2,38 @@ import type { PartialDictionary } from '@/types/i18n'
 import { FAQ_CATEGORIES_PL, FAQ_ITEMS_PL } from '@/content/faq-data.pl'
 
 export const pl: PartialDictionary = {
+  adminHub: {
+    "tabChats": "Rozmowy",
+    "tabCustomers": "Klienci",
+    "tabUploads": "Przesłane pliki",
+    "loading": "Ładowanie…",
+    "loadError": "Nie udało się załadować. Spróbuj ponownie.",
+    "back": "Wstecz",
+    "custHint": "Wszyscy klienci zarejestrowani w systemie (z wyłączeniem tłumaczy).",
+    "custSearch": "Szukaj po nazwisku, adresie e-mail lub telefonie…",
+    "custName": "Imię i nazwisko",
+    "custEmail": "E-mail",
+    "custPhone": "Telefon",
+    "custOrders": "Zamówienia",
+    "custTotal": "Kwota łączna",
+    "custJoined": "Data rejestracji",
+    "custNone": "Brak rekordów klientów.",
+    "custOrderList": "Zamówienia",
+    "custNoOrders": "Ten klient nie ma zamówień.",
+    "orderNo": "Numer zamówienia",
+    "orderDate": "Data",
+    "orderStatus": "Status",
+    "upHint": "Wszystkie pliki przesłane na stronie wyceny (zapisywane nawet bez złożenia zamówienia).",
+    "upFile": "Plik",
+    "upUploader": "Przesłane przez",
+    "upWhen": "Data",
+    "upWords": "Słowa",
+    "upSize": "Rozmiar",
+    "upDownload": "Pobierz",
+    "upNone": "Brak przesłanych plików.",
+    "upGuest": "Gość"
+  },
+
   smsVerify: {
     "sendCode": "Wyślij kod",
     "resend": "Wyślij kod ponownie",

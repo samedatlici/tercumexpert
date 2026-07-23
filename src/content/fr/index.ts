@@ -8,6 +8,38 @@ import { FAQ_CATEGORIES_FR, FAQ_ITEMS_FR } from '@/content/faq-data.fr'
  * fallback anglais (§10). Les données FAQ proviennent de content/faq-data.fr.
  */
 export const fr: PartialDictionary = {
+  adminHub: {
+    "tabChats": "Conversations",
+    "tabCustomers": "Clients",
+    "tabUploads": "Fichiers importés",
+    "loading": "Chargement…",
+    "loadError": "Chargement impossible. Veuillez réessayer.",
+    "back": "Retour",
+    "custHint": "Tous les clients enregistrés dans le système (traducteurs exclus).",
+    "custSearch": "Rechercher un nom, un e-mail ou un téléphone…",
+    "custName": "Nom complet",
+    "custEmail": "E-mail",
+    "custPhone": "Téléphone",
+    "custOrders": "Commandes",
+    "custTotal": "Montant total",
+    "custJoined": "Inscrit le",
+    "custNone": "Aucun client enregistré pour le moment.",
+    "custOrderList": "Commandes",
+    "custNoOrders": "Ce client n'a aucune commande.",
+    "orderNo": "N° de commande",
+    "orderDate": "Date",
+    "orderStatus": "Statut",
+    "upHint": "Tous les fichiers importés sur la page de devis (enregistrés même sans commande).",
+    "upFile": "Fichier",
+    "upUploader": "Importé par",
+    "upWhen": "Date",
+    "upWords": "Mots",
+    "upSize": "Taille",
+    "upDownload": "Télécharger",
+    "upNone": "Aucun fichier importé pour le moment.",
+    "upGuest": "Invité"
+  },
+
   smsVerify: {
     "sendCode": "Envoyer le code",
     "resend": "Renvoyer le code",

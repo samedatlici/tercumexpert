@@ -2,6 +2,38 @@ import type { PartialDictionary } from '@/types/i18n'
 import { FAQ_CATEGORIES_AZ, FAQ_ITEMS_AZ } from '@/content/faq-data.az'
 
 export const az: PartialDictionary = {
+  adminHub: {
+    "tabChats": "Söhbətlər",
+    "tabCustomers": "Müştərilər",
+    "tabUploads": "Yüklənmiş fayllar",
+    "loading": "Yüklənir…",
+    "loadError": "Yüklənə bilmədi. Zəhmət olmasa, yenidən cəhd edin.",
+    "back": "Geri",
+    "custHint": "Sistemdə qeydiyyatdan keçmiş bütün müştərilər (tərcüməçilər istisna olmaqla).",
+    "custSearch": "Ad, e-poçt və ya telefon üzrə axtarış…",
+    "custName": "Tam ad",
+    "custEmail": "E-poçt",
+    "custPhone": "Telefon",
+    "custOrders": "Sifarişlər",
+    "custTotal": "Ümumi məbləğ",
+    "custJoined": "Qoşulma tarixi",
+    "custNone": "Hələ müştəri qeydi yoxdur.",
+    "custOrderList": "Sifarişlər",
+    "custNoOrders": "Bu müştərinin sifarişi yoxdur.",
+    "orderNo": "Sifariş nömrəsi",
+    "orderDate": "Tarix",
+    "orderStatus": "Status",
+    "upHint": "Qiymət təklifi səhifəsində yüklənmiş bütün fayllar (sifariş verilməsə belə saxlanılır).",
+    "upFile": "Fayl",
+    "upUploader": "Yükləyən",
+    "upWhen": "Tarix",
+    "upWords": "Sözlər",
+    "upSize": "Ölçü",
+    "upDownload": "Yüklə",
+    "upNone": "Hələ yüklənmiş fayl yoxdur.",
+    "upGuest": "Qonaq"
+  },
+
   smsVerify: {
     "sendCode": "Kodu göndər",
     "resend": "Kodu yenidən göndər",

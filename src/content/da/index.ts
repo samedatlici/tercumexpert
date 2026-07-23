@@ -8,6 +8,38 @@ import { FAQ_CATEGORIES_DA, FAQ_ITEMS_DA } from '@/content/faq-data.da'
  * FAQ-data hentes fra content/faq-data.da.
  */
 export const da: PartialDictionary = {
+  adminHub: {
+    "tabChats": "Samtaler",
+    "tabCustomers": "Kunder",
+    "tabUploads": "Uploadede filer",
+    "loading": "Indlæser…",
+    "loadError": "Kunne ikke indlæses. Prøv venligst igen.",
+    "back": "Tilbage",
+    "custHint": "Alle kunder registreret i systemet (oversættere er ikke medregnet).",
+    "custSearch": "Søg efter navn, e-mail eller telefon…",
+    "custName": "Fulde navn",
+    "custEmail": "E-mail",
+    "custPhone": "Telefon",
+    "custOrders": "Ordrer",
+    "custTotal": "Samlet beløb",
+    "custJoined": "Tilmeldt",
+    "custNone": "Ingen kundeposter endnu.",
+    "custOrderList": "Ordrer",
+    "custNoOrders": "Denne kunde har ingen ordrer.",
+    "orderNo": "Ordrenr.",
+    "orderDate": "Dato",
+    "orderStatus": "Status",
+    "upHint": "Alle filer uploadet på tilbudssiden (gemmes, selv hvis der ikke afgives en ordre).",
+    "upFile": "Fil",
+    "upUploader": "Uploadet af",
+    "upWhen": "Dato",
+    "upWords": "Ord",
+    "upSize": "Størrelse",
+    "upDownload": "Download",
+    "upNone": "Ingen uploadede filer endnu.",
+    "upGuest": "Gæst"
+  },
+
   smsVerify: {
     "sendCode": "Send kode",
     "resend": "Send kode igen",

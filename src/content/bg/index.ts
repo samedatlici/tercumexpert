@@ -2,6 +2,38 @@ import type { PartialDictionary } from '@/types/i18n'
 import { FAQ_CATEGORIES_BG, FAQ_ITEMS_BG } from '@/content/faq-data.bg'
 
 export const bg: PartialDictionary = {
+  adminHub: {
+    "tabChats": "Разговори",
+    "tabCustomers": "Клиенти",
+    "tabUploads": "Качени файлове",
+    "loading": "Зареждане…",
+    "loadError": "Зареждането е неуспешно. Моля, опитайте отново.",
+    "back": "Назад",
+    "custHint": "Всички клиенти, регистрирани в системата (без преводачите).",
+    "custSearch": "Търсене по име, имейл или телефон…",
+    "custName": "Пълно име",
+    "custEmail": "Имейл",
+    "custPhone": "Телефон",
+    "custOrders": "Поръчки",
+    "custTotal": "Обща сума",
+    "custJoined": "Дата на регистрация",
+    "custNone": "Все още няма записи за клиенти.",
+    "custOrderList": "Поръчки",
+    "custNoOrders": "Този клиент няма поръчки.",
+    "orderNo": "Номер на поръчка",
+    "orderDate": "Дата",
+    "orderStatus": "Статус",
+    "upHint": "Всички файлове, качени на страницата за оферта (запазват се дори без направена поръчка).",
+    "upFile": "Файл",
+    "upUploader": "Качен от",
+    "upWhen": "Дата",
+    "upWords": "Думи",
+    "upSize": "Размер",
+    "upDownload": "Изтегляне",
+    "upNone": "Все още няма качени файлове.",
+    "upGuest": "Гост"
+  },
+
   smsVerify: {
     "sendCode": "Изпращане на код",
     "resend": "Повторно изпращане на код",

@@ -8,6 +8,38 @@ import { FAQ_CATEGORIES_IT, FAQ_ITEMS_IT } from '@/content/faq-data.it'
  * fallback inglese (§10). I dati della FAQ provengono da content/faq-data.it.
  */
 export const it: PartialDictionary = {
+  adminHub: {
+    "tabChats": "Conversazioni",
+    "tabCustomers": "Clienti",
+    "tabUploads": "File caricati",
+    "loading": "Caricamento…",
+    "loadError": "Caricamento non riuscito. Riprovare.",
+    "back": "Indietro",
+    "custHint": "Tutti i clienti registrati nel sistema (traduttori esclusi).",
+    "custSearch": "Cerca nome, email o telefono…",
+    "custName": "Nome completo",
+    "custEmail": "Email",
+    "custPhone": "Telefono",
+    "custOrders": "Ordini",
+    "custTotal": "Importo totale",
+    "custJoined": "Iscritto",
+    "custNone": "Nessun cliente registrato al momento.",
+    "custOrderList": "Ordini",
+    "custNoOrders": "Questo cliente non ha ordini.",
+    "orderNo": "N. ordine",
+    "orderDate": "Data",
+    "orderStatus": "Stato",
+    "upHint": "Tutti i file caricati nella pagina del preventivo (salvati anche senza ordine).",
+    "upFile": "File",
+    "upUploader": "Caricato da",
+    "upWhen": "Data",
+    "upWords": "Parole",
+    "upSize": "Dimensione",
+    "upDownload": "Scarica",
+    "upNone": "Nessun file caricato al momento.",
+    "upGuest": "Ospite"
+  },
+
   smsVerify: {
     "sendCode": "Invia codice",
     "resend": "Invia di nuovo il codice",

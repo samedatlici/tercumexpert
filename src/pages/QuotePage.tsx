@@ -9,6 +9,7 @@ import { useI18n } from '@/hooks/useI18n'
 import { useAuth } from '@/app/providers/AuthProvider'
 import { buildPath } from '@/app/router/routes'
 import { createOrder } from '@/features/orders/model/create-order'
+import { supabase } from '@/lib/supabase'
 import { saveQuoteFiles, loadQuoteFiles, clearQuoteFiles, type StoredFileEntry } from '@/lib/quote-file-store'
 import { cn } from '@/lib/cn'
 import { calculateQuote } from '@/features/quote-calculator/model/calculate'
@@ -57,6 +58,20 @@ type Mode = 'file' | 'text'
 
 /** Fiyat formu taslağı (giriş için sayfadan ayrılınca seçimler kaybolmasın). */
 const QUOTE_DRAFT_KEY = 'te-quote-draft'
+
+/** Depolama yolu için güvenli dosya adı (Türkçe karakter/boşluk temizlenir). */
+function archiveSafeName(name: string): string {
+  const dot = name.lastIndexOf('.')
+  const ext = dot > -1 ? name.slice(dot) : ''
+  const base = (dot > -1 ? name.slice(0, dot) : name)
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-zA-Z0-9-_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 60)
+  return `${base || 'dosya'}${ext.toLowerCase()}`
+}
 
 interface FileEntry {
   key: string
@@ -198,6 +213,30 @@ export default function QuotePage() {
   const anyExtracting = files.some((f) => f.status === 'pending')
   const wordCount = mode === 'file' ? fileWords : textWords
 
+  // Yüklenen HER dosyayı arşive kaydeder (siparişe dönmese/silinse de). Best-effort;
+  // hata sipariş/fiyat akışını etkilemez. Anonim yüklemelerde user_id null (misafir).
+  const archiveUpload = async (file: File, words: number) => {
+    try {
+      const uid = user?.id ?? null
+      const path = `${uid ?? 'anon'}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${archiveSafeName(file.name)}`
+      const { error: upErr } = await supabase.storage
+        .from('quote-uploads')
+        .upload(path, file, { upsert: false, contentType: file.type || undefined })
+      if (upErr) return
+      await supabase.from('quote_uploads').insert({
+        user_id: uid,
+        file_name: file.name,
+        storage_path: path,
+        size: file.size,
+        mime: file.type || null,
+        word_count: words,
+        locale,
+      })
+    } catch {
+      /* arşiv best-effort */
+    }
+  }
+
   const processFiles = (list: FileList | File[]) => {
     setResult(null)
     setSizeError(false)
@@ -210,16 +249,18 @@ export default function QuotePage() {
       const key = `f${keyCounter.current}`
       setFiles((prev) => [...prev, { key, file: f, name: f.name, words: 0, status: 'pending' }])
       extractWordCount(f)
-        .then((res) =>
+        .then((res) => {
           setFiles((prev) =>
             prev.map((e) =>
               e.key === key ? { ...e, words: res.status === 'ok' ? res.words : 0, status: res.status } : e,
             ),
-          ),
-        )
-        .catch(() =>
-          setFiles((prev) => prev.map((e) => (e.key === key ? { ...e, status: 'error' as const } : e))),
-        )
+          )
+          void archiveUpload(f, res.status === 'ok' ? res.words : 0)
+        })
+        .catch(() => {
+          setFiles((prev) => prev.map((e) => (e.key === key ? { ...e, status: 'error' as const } : e)))
+          void archiveUpload(f, 0)
+        })
     }
     if (fileInputRef.current) fileInputRef.current.value = ''
   }

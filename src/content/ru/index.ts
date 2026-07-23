@@ -7,6 +7,38 @@ import { FAQ_CATEGORIES_RU, FAQ_ITEMS_RU } from '@/content/faq-data.ru'
  * переведены на русский; ключи, иконки и технические токены сохранены как есть.
  */
 export const ru: PartialDictionary = {
+  adminHub: {
+    "tabChats": "Переписки",
+    "tabCustomers": "Клиенты",
+    "tabUploads": "Загруженные файлы",
+    "loading": "Загрузка…",
+    "loadError": "Не удалось загрузить. Пожалуйста, попробуйте снова.",
+    "back": "Назад",
+    "custHint": "Все клиенты, зарегистрированные в системе (переводчики исключены).",
+    "custSearch": "Поиск по имени, эл. почте или телефону…",
+    "custName": "Полное имя",
+    "custEmail": "Эл. почта",
+    "custPhone": "Телефон",
+    "custOrders": "Заказы",
+    "custTotal": "Общая сумма",
+    "custJoined": "Дата регистрации",
+    "custNone": "Записей о клиентах пока нет.",
+    "custOrderList": "Заказы",
+    "custNoOrders": "У этого клиента нет заказов.",
+    "orderNo": "Номер заказа",
+    "orderDate": "Дата",
+    "orderStatus": "Статус",
+    "upHint": "Все файлы, загруженные на странице запроса цены (сохраняются, даже если заказ не оформлен).",
+    "upFile": "Файл",
+    "upUploader": "Загрузил",
+    "upWhen": "Дата",
+    "upWords": "Слов",
+    "upSize": "Размер",
+    "upDownload": "Скачать",
+    "upNone": "Загруженных файлов пока нет.",
+    "upGuest": "Гость"
+  },
+
   smsVerify: {
     "sendCode": "Отправить код",
     "resend": "Отправить код повторно",

@@ -7,6 +7,38 @@ import { FAQ_CATEGORIES_PT, FAQ_ITEMS_PT } from '@/content/faq-data.pt'
  * conjunto de dados por localidade (content/faq-data.pt).
  */
 export const pt: PartialDictionary = {
+  adminHub: {
+    "tabChats": "Conversas",
+    "tabCustomers": "Clientes",
+    "tabUploads": "Ficheiros carregados",
+    "loading": "A carregar…",
+    "loadError": "Não foi possível carregar. Tente novamente.",
+    "back": "Voltar",
+    "custHint": "Todos os clientes registados no sistema (tradutores excluídos).",
+    "custSearch": "Pesquisar nome, e-mail ou telefone…",
+    "custName": "Nome completo",
+    "custEmail": "E-mail",
+    "custPhone": "Telefone",
+    "custOrders": "Encomendas",
+    "custTotal": "Montante total",
+    "custJoined": "Registado",
+    "custNone": "Ainda não há registos de clientes.",
+    "custOrderList": "Encomendas",
+    "custNoOrders": "Este cliente não tem encomendas.",
+    "orderNo": "N.º da encomenda",
+    "orderDate": "Data",
+    "orderStatus": "Estado",
+    "upHint": "Todos os ficheiros carregados na página de orçamento (guardados mesmo sem encomenda).",
+    "upFile": "Ficheiro",
+    "upUploader": "Carregado por",
+    "upWhen": "Data",
+    "upWords": "Palavras",
+    "upSize": "Tamanho",
+    "upDownload": "Descarregar",
+    "upNone": "Ainda não há ficheiros carregados.",
+    "upGuest": "Convidado"
+  },
+
   smsVerify: {
     "sendCode": "Enviar código",
     "resend": "Reenviar código",
