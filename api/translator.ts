@@ -1,4 +1,5 @@
 import { matchesTranslator, computePayout, estimatePages } from './_pool-logic'
+import { sendOrderEmail } from './_email'
 
 /**
  * Tercüman paneli SUNUCU uç noktası (Edge). GÜVENLİK: tercümanlara doğrudan yazma
@@ -111,7 +112,7 @@ async function signedUrl(bucket: string, path: string, expiresIn = 3600): Promis
 }
 
 const ORDER_COLS =
-  'id,order_no,service,source_lang,target_lang,document_type,word_count,urgent,sworn,notarization,apostille,physical_delivery,input_mode,source_text,note,delivery_days,created_at,' +
+  'id,order_no,service,source_lang,target_lang,document_type,word_count,urgent,sworn,notarization,apostille,physical_delivery,input_mode,source_text,note,delivery_days,created_at,locale,' +
   'contact_name,contact_email,contact_phone,delivery_address,delivery_city,delivery_postal_code,delivery_country'
 
 // İş-akışı kolonları dahil (Aktif/Onay bekleyen/Onaylanan/Tamamlanan sayfaları).
@@ -266,6 +267,10 @@ export default async function handler(req: Request): Promise<Response> {
     )
     const updated = (await uRes.json()) as unknown[]
     if (!Array.isArray(updated) || updated.length === 0) return json({ error: 'race' }, 409)
+    // Müşteriye "işleme alındı" maili (best-effort; hata olsa da claim başarılı).
+    try {
+      await sendOrderEmail('in_progress', order as Parameters<typeof sendOrderEmail>[1])
+    } catch { /* yut */ }
     return json({ ok: true, payout })
   }
 
@@ -345,6 +350,11 @@ export default async function handler(req: Request): Promise<Response> {
         status: 'pending',
       }),
     })
+    // Müşteriye teslim maili: kargo → "kargoya verildi" (takip no ile), dijital → "teslim edildi".
+    try {
+      const mail = { ...order, tracking_info: tracking } as Parameters<typeof sendOrderEmail>[1]
+      await sendOrderEmail(order.physical_delivery ? 'shipped' : 'delivered', mail)
+    } catch { /* yut */ }
     return json({ ok: true })
   }
 
@@ -359,6 +369,11 @@ export default async function handler(req: Request): Promise<Response> {
       approved_at: nowIso(),
     })
     if (!ok) return json({ error: 'bad_state' }, 409)
+    // Müşteriye "çeviriniz tamamlandı" maili (best-effort).
+    try {
+      const ord = await fetchOrder(orderId)
+      if (ord) await sendOrderEmail('translated', ord as Parameters<typeof sendOrderEmail>[1])
+    } catch { /* yut */ }
     return json({ ok: true })
   }
 

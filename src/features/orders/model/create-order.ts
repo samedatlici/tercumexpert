@@ -21,6 +21,7 @@ export interface CreateOrderInput {
   breakdown: QuoteBreakdown
   inputMode: 'file' | 'text'
   sourceText?: string
+  locale?: string
   files: OrderFileInput[]
   contactName?: string | null
   contactEmail?: string | null
@@ -81,6 +82,7 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
       delivery_days: b.deliveryDays,
       input_mode: input.inputMode,
       source_text: input.sourceText ?? null,
+      locale: input.locale ?? null,
       contact_name: input.contactName ?? null,
       contact_email: input.contactEmail ?? null,
       contact_phone: input.contactPhone ?? null,
@@ -111,6 +113,23 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
         words,
       })
     }
+  }
+
+  // Müşteriye "siparişiniz alındı" maili (best-effort; başarısız olsa da sipariş kaydı geçerli).
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    const token = session?.access_token
+    if (token) {
+      await fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ event: 'received', orderId: order.id }),
+      })
+    }
+  } catch {
+    /* mail hatası siparişi bozmaz */
   }
 
   return { orderNo: order.order_no as number, id: order.id as string }

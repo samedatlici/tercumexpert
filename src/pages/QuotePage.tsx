@@ -211,6 +211,7 @@ export default function QuotePage() {
       breakdown: result,
       inputMode: mode,
       sourceText: mode === 'text' ? text : undefined,
+      locale,
       files: files.map((f) => ({ file: f.file, words: f.status === 'ok' ? f.words : 0 })),
       contactName,
       contactEmail: user.email ?? null,
