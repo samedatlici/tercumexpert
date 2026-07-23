@@ -476,5 +476,28 @@ export default async function handler(req: Request): Promise<Response> {
     return json({ translator: trow, jobs: jrows, wallet: computeWallet(lrows) })
   }
 
+  // -------- Admin: TÜM siparişler (Siparişler sayfası) --------
+  if (action === 'adminOrders') {
+    if (!isAdmin) return json({ error: 'forbidden' }, 403)
+    const cols =
+      'id,order_no,status,work_status,created_at,completed_at,delivery_days,contact_name,contact_email,service,source_lang,target_lang,physical_delivery,urgent,total,translator_id'
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/orders?select=${cols}&order=created_at.desc`, {
+      headers: svcHeaders(),
+    })
+    if (!r.ok) return json({ error: 'load' }, 200)
+    const rows = (await r.json()) as Array<Record<string, unknown>>
+    const names: Record<string, string | null> = {}
+    const out: Array<Record<string, unknown>> = []
+    for (const o of rows) {
+      const tid = (o.translator_id as string) || ''
+      if (tid && !(tid in names)) {
+        const info = await getTranslatorInfo(tid)
+        names[tid] = info?.name ?? null
+      }
+      out.push({ ...o, translatorName: tid ? names[tid] : null })
+    }
+    return json({ orders: out })
+  }
+
   return json({ error: 'unknown_action' }, 400)
 }

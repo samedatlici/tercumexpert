@@ -550,22 +550,169 @@ function ProfileEditor({
 /* Admin bölümü: başvuru/onay yönetimi (tercümandan üstün yetki)       */
 /* ------------------------------------------------------------------ */
 
-/** Admin: sekmeli yönetim — Tercümanlar (onaylı hesaplar+profil) · Başvurular · iş akışı · Cüzdan. */
-type AdminTab = 'translators' | 'applications' | 'active' | 'pending' | 'approved' | 'completed' | 'wallet'
+/** Admin: sekmeli yönetim — Tercümanlar · Başvurular · Siparişler · iş akışı · Cüzdan. */
+type AdminTab = 'translators' | 'applications' | 'orders' | 'active' | 'pending' | 'approved' | 'completed' | 'wallet'
 const ADMIN_TABS: { key: AdminTab; icon: IconName }[] = [
   { key: 'translators', icon: 'Users' },
   { key: 'applications', icon: 'FileText' },
+  { key: 'orders', icon: 'PackageCheck' },
   { key: 'active', icon: 'Cog' },
   { key: 'pending', icon: 'Clock' },
   { key: 'approved', icon: 'Check' },
-  { key: 'completed', icon: 'PackageCheck' },
+  { key: 'completed', icon: 'CircleCheck' },
   { key: 'wallet', icon: 'Wallet' },
 ]
 
+/* ---- Tercüman filtreleri (Tercümanlar + Başvurular ortak) ---- */
+interface TFilters {
+  name: string
+  country: string
+  city: string
+  source: string
+  target: string
+  eitherDir: boolean
+  expertise: string[]
+}
+const EMPTY_TFILTERS: TFilters = { name: '', country: '', city: '', source: '', target: '', eitherDir: false, expertise: [] }
+function norm(s: string): string {
+  return (s || '').toLocaleLowerCase('tr').trim()
+}
+function matchesTFilters(r: Translator, f: TFilters): boolean {
+  if (f.name && !norm(r.full_name ?? '').includes(norm(f.name))) return false
+  if (f.country && r.country !== f.country) return false
+  if (f.city && norm(r.city ?? '') !== norm(f.city)) return false
+  const pairs = r.language_pairs ?? []
+  if (f.source || f.target) {
+    const ok = pairs.some((p) => {
+      const fwd = (!f.source || p.source === f.source) && (!f.target || p.target === f.target)
+      const rev = f.eitherDir && (!f.source || p.target === f.source) && (!f.target || p.source === f.target)
+      return fwd || rev
+    })
+    if (!ok) return false
+  }
+  if (f.expertise.length) {
+    const exp = r.expertise ?? []
+    if (!f.expertise.some((e) => exp.includes(e))) return false
+  }
+  return true
+}
+
+function TranslatorFilters({
+  t,
+  locale,
+  filters,
+  setFilters,
+  count,
+}: {
+  t: TDict
+  locale: string
+  filters: TFilters
+  setFilters: (f: TFilters) => void
+  count: number
+}) {
+  const { dict } = useI18n()
+  const areaLabel = (id: string) => (dict.quote.areas as Record<string, string>)[id] ?? id
+  const fl = t.admin.filters
+  const set = (patch: Partial<TFilters>) => setFilters({ ...filters, ...patch })
+  const toggleExp = (k: string) =>
+    set({ expertise: filters.expertise.includes(k) ? filters.expertise.filter((x) => x !== k) : [...filters.expertise, k] })
+  const active =
+    !!filters.name || !!filters.country || !!filters.city || !!filters.source || !!filters.target || filters.expertise.length > 0
+
+  return (
+    <div className="mb-4 space-y-3 rounded-lg border border-border bg-surface p-4">
+      <div className="relative">
+        <Icon name="Users" className="pointer-events-none absolute inset-y-0 start-3 my-auto size-4 text-text-muted" />
+        <input
+          value={filters.name}
+          onChange={(e) => set({ name: e.target.value })}
+          placeholder={fl.namePlaceholder}
+          className={cn(inputClass, 'ps-9')}
+        />
+      </div>
+      <CountryCitySelect
+        country={filters.country}
+        city={filters.city}
+        onCountry={(c) => set({ country: c, city: '' })}
+        onCity={(c) => set({ city: c })}
+        countryLabel={fl.country}
+        cityLabel={fl.city}
+        countryPlaceholder={fl.anyCountry}
+        cityPlaceholder={fl.anyCity}
+        cityDisabledPlaceholder={fl.cityNeedsCountry}
+        selectClassName={inputClass}
+      />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className={labelClass}>{fl.sourceLang}</label>
+          <select value={filters.source} onChange={(e) => set({ source: e.target.value })} className={inputClass}>
+            <option value="">{fl.anyLang}</option>
+            {PANEL_LANGUAGES.map((c) => (
+              <option key={c} value={c}>{languageName(c, locale)}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className={labelClass}>{fl.targetLang}</label>
+          <select value={filters.target} onChange={(e) => set({ target: e.target.value })} className={inputClass}>
+            <option value="">{fl.anyLang}</option>
+            {PANEL_LANGUAGES.map((c) => (
+              <option key={c} value={c}>{languageName(c, locale)}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <label className="flex items-center gap-2 text-sm">
+        <input type="checkbox" checked={filters.eitherDir} onChange={(e) => set({ eitherDir: e.target.checked })} className="size-4 accent-black" />
+        {fl.eitherDirection}
+      </label>
+      <div>
+        <label className={labelClass}>{fl.expertise}</label>
+        <div className="flex flex-wrap gap-2">
+          {AREA_IDS.map((k) => (
+            <button
+              key={k}
+              type="button"
+              onClick={() => toggleExp(k)}
+              className={cn(
+                'rounded-full border px-3 py-1 text-xs font-medium transition-colors',
+                filters.expertise.includes(k)
+                  ? 'border-secondary bg-secondary text-secondary-foreground'
+                  : 'border-border bg-surface text-text-secondary hover:bg-surface-muted',
+              )}
+            >
+              {areaLabel(k)}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="flex items-center justify-between gap-2 border-t border-border pt-3">
+        <span className="text-xs text-text-secondary">{fl.results.replace('{n}', String(count))}</span>
+        {active && (
+          <Button type="button" intent="outline" size="sm" onClick={() => setFilters(EMPTY_TFILTERS)}>
+            {fl.clear}
+          </Button>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function AdminSection({ t, locale }: { t: TDict; locale: string }) {
   const [tab, setTab] = useState<AdminTab>('translators')
+  const [openTid, setOpenTid] = useState<string | null>(null)
+  const openTranslator = (id: string) => {
+    setOpenTid(id)
+    setTab('translators')
+  }
   const adminLabel = (k: AdminTab) =>
-    k === 'translators' ? t.admin.translatorsTab : k === 'applications' ? t.admin.applicationsTab : t.tabs[k]
+    k === 'translators'
+      ? t.admin.translatorsTab
+      : k === 'applications'
+        ? t.admin.applicationsTab
+        : k === 'orders'
+          ? t.admin.ordersTab
+          : t.tabs[k]
 
   return (
     <div>
@@ -589,9 +736,11 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
       </div>
 
       {tab === 'translators' ? (
-        <AdminTranslators t={t} locale={locale} />
+        <AdminTranslators t={t} locale={locale} openId={openTid} onOpened={() => setOpenTid(null)} />
       ) : tab === 'applications' ? (
         <AdminApplications t={t} locale={locale} />
+      ) : tab === 'orders' ? (
+        <AdminOrders t={t} locale={locale} onOpenTranslator={openTranslator} />
       ) : tab === 'wallet' ? (
         <AdminWalletSection t={t} />
       ) : (
@@ -607,6 +756,8 @@ function AdminApplications({ t, locale }: { t: TDict; locale: string }) {
   const [rows, setRows] = useState<Translator[]>([])
   const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
   const [busyId, setBusyId] = useState<string | null>(null)
+  const [filters, setFilters] = useState<TFilters>(EMPTY_TFILTERS)
+  const visible = useMemo(() => rows.filter((r) => matchesTFilters(r, filters)), [rows, filters])
 
   const load = () => {
     setState('loading')
@@ -644,17 +795,24 @@ function AdminApplications({ t, locale }: { t: TDict; locale: string }) {
 
   return (
     <div>
-      <p className="mb-5 text-sm text-text-secondary">
+      <p className="mb-4 text-sm text-text-secondary">
         {t.admin.applicationsSummary.replace('{total}', String(rows.length)).replace('{pending}', String(pendingCount))}
       </p>
+
+      {state === 'idle' && rows.length > 0 && (
+        <TranslatorFilters t={t} locale={locale} filters={filters} setFilters={setFilters} count={visible.length} />
+      )}
 
       {state === 'loading' && <p className="py-10 text-center text-sm text-text-secondary">{t.loading}</p>}
       {state === 'error' && <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{t.admin.loadError}</p>}
       {state === 'idle' && rows.length === 0 && <p className="py-10 text-center text-sm text-text-secondary">{t.admin.noPending}</p>}
+      {state === 'idle' && rows.length > 0 && visible.length === 0 && (
+        <p className="py-10 text-center text-sm text-text-secondary">{t.admin.noMatch}</p>
+      )}
 
-      {state === 'idle' && rows.length > 0 && (
+      {state === 'idle' && visible.length > 0 && (
         <div className="space-y-3">
-          {rows.map((r) => (
+          {visible.map((r) => (
             <article key={r.id} className="rounded-lg border border-border bg-surface p-4">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
@@ -1500,10 +1658,22 @@ function AdminWalletSection({ t }: { t: TDict }) {
 }
 
 /** Admin: onaylı (aktif) tercüman listesi → tıklayınca admin-özel profil. */
-function AdminTranslators({ t, locale }: { t: TDict; locale: string }) {
+function AdminTranslators({
+  t,
+  locale,
+  openId,
+  onOpened,
+}: {
+  t: TDict
+  locale: string
+  openId?: string | null
+  onOpened?: () => void
+}) {
   const [rows, setRows] = useState<Translator[]>([])
   const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
   const [selected, setSelected] = useState<Translator | null>(null)
+  const [filters, setFilters] = useState<TFilters>(EMPTY_TFILTERS)
+  const visible = useMemo(() => rows.filter((r) => matchesTFilters(r, filters)), [rows, filters])
 
   useEffect(() => {
     supabase
@@ -1521,6 +1691,15 @@ function AdminTranslators({ t, locale }: { t: TDict; locale: string }) {
       })
   }, [])
 
+  // Siparişler sayfasından "tercüman adına tıkla → profili aç" (başka sekmeden gelir).
+  useEffect(() => {
+    if (!openId) return
+    const row = rows.find((r) => r.id === openId) ?? ({ id: openId } as Translator)
+    setSelected(row)
+    onOpened?.()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openId, rows])
+
   if (selected) return <AdminTranslatorProfile t={t} locale={locale} translator={selected} onBack={() => setSelected(null)} />
   if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{t.loading}</p>
   if (state === 'error')
@@ -1532,32 +1711,43 @@ function AdminTranslators({ t, locale }: { t: TDict; locale: string }) {
       </div>
     )
   return (
-    <div className="space-y-2">
-      {rows.map((r) => (
-        <button
-          key={r.id}
-          type="button"
-          onClick={() => setSelected(r)}
-          className="flex w-full items-center justify-between gap-3 rounded-lg border border-border bg-surface p-4 text-start transition-colors hover:bg-surface-muted"
-        >
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="font-semibold">{r.full_name || '—'}</span>
-              {r.is_sworn && <Pill tone="primary">{t.admin.swornBadge}</Pill>}
-              <Pill tone={r.iban_verified ? 'success' : 'neutral'}>
-                <Icon name={r.iban_verified ? 'ShieldCheck' : 'Lock'} className="size-3.5" />
-                {r.iban_verified ? t.admin.ibanVerified : t.admin.ibanNotVerified}
-              </Pill>
-            </div>
-            <p className="mt-1 truncate text-xs text-text-secondary">
-              {(r.language_pairs ?? []).length === 0
-                ? '—'
-                : r.language_pairs.map((p) => `${languageName(p.source, locale)}→${languageName(p.target, locale)}`).join(', ')}
-            </p>
-          </div>
-          <Icon name="ChevronRight" className="size-5 shrink-0 text-text-muted" />
-        </button>
-      ))}
+    <div>
+      <TranslatorFilters t={t} locale={locale} filters={filters} setFilters={setFilters} count={visible.length} />
+      {visible.length === 0 ? (
+        <p className="py-10 text-center text-sm text-text-secondary">{t.admin.noMatch}</p>
+      ) : (
+        <div className="space-y-2">
+          {visible.map((r) => (
+            <button
+              key={r.id}
+              type="button"
+              onClick={() => setSelected(r)}
+              className="flex w-full items-center justify-between gap-3 rounded-lg border border-border bg-surface p-4 text-start transition-colors hover:bg-surface-muted"
+            >
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-semibold">{r.full_name || '—'}</span>
+                  {r.is_sworn && <Pill tone="primary">{t.admin.swornBadge}</Pill>}
+                  <Pill tone={r.iban_verified ? 'success' : 'neutral'}>
+                    <Icon name={r.iban_verified ? 'ShieldCheck' : 'Lock'} className="size-3.5" />
+                    {r.iban_verified ? t.admin.ibanVerified : t.admin.ibanNotVerified}
+                  </Pill>
+                </div>
+                <p className="mt-1 truncate text-xs text-text-secondary">
+                  {[r.city, countryDisplayName(r.country ?? '', locale, r.country ?? '')].filter(Boolean).join(', ')}
+                  {(r.language_pairs ?? []).length > 0 && (
+                    <>
+                      {' · '}
+                      {r.language_pairs.map((p) => `${languageName(p.source, locale)}→${languageName(p.target, locale)}`).join(', ')}
+                    </>
+                  )}
+                </p>
+              </div>
+              <Icon name="ChevronRight" className="size-5 shrink-0 text-text-muted" />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -1735,6 +1925,166 @@ function AdminTranslatorProfile({
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Admin: Siparişler sayfası (tüm siparişler + filtre + tercüman linki) */
+/* ------------------------------------------------------------------ */
+
+interface AdminOrderRow {
+  id: string
+  order_no: number
+  status: string
+  work_status: string | null
+  created_at: string
+  completed_at: string | null
+  delivery_days: number | null
+  contact_name: string | null
+  service: string
+  source_lang: string
+  target_lang: string
+  physical_delivery: boolean
+  urgent: boolean
+  total: number | null
+  translator_id: string | null
+  translatorName: string | null
+}
+
+function AdminOrders({
+  t,
+  locale,
+  onOpenTranslator,
+}: {
+  t: TDict
+  locale: string
+  onOpenTranslator: (id: string) => void
+}) {
+  const { dict, formatCurrency } = useI18n()
+  const serviceName = (s: string) => (dict.quote.areas as Record<string, string>)[s] ?? s
+  const [rows, setRows] = useState<AdminOrderRow[]>([])
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const [q, setQ] = useState('')
+  const o = t.admin.orders
+
+  useEffect(() => {
+    translatorApi<{ orders?: AdminOrderRow[]; error?: string }>('adminOrders')
+      .then((r) => {
+        if (r.error) {
+          setState('error')
+          return
+        }
+        setRows(r.orders ?? [])
+        setState('idle')
+      })
+      .catch(() => setState('error'))
+  }, [])
+
+  const isDone = (r: AdminOrderRow) => r.work_status === 'completed'
+  // Tamamlanmayanlar üstte (en yeni→en eski), tamamlananlar altta (en yeni tamamlanan→en eski).
+  const sorted = useMemo(() => {
+    const inc = rows.filter((r) => !isDone(r)).sort((a, b) => b.created_at.localeCompare(a.created_at))
+    const done = rows.filter(isDone).sort((a, b) => (b.completed_at ?? '').localeCompare(a.completed_at ?? ''))
+    return [...inc, ...done]
+  }, [rows])
+  const filtered = useMemo(() => {
+    const s = norm(q)
+    if (!s) return sorted
+    return sorted.filter((r) => String(r.order_no).includes(s) || norm(r.contact_name ?? '').includes(s))
+  }, [sorted, q])
+
+  const statusLabel = (r: AdminOrderRow): string => {
+    if (r.status === 'cancelled') return o.statusCancelled
+    switch (r.work_status) {
+      case 'claimed':
+        return o.statusClaimed
+      case 'submitted':
+        return o.statusSubmitted
+      case 'approved':
+        return o.statusApproved
+      case 'completed':
+        return o.statusCompleted
+      default:
+        return o.statusAvailable
+    }
+  }
+  const deadline = (r: AdminOrderRow): string => {
+    try {
+      const d = new Date(r.created_at)
+      d.setDate(d.getDate() + (r.delivery_days || 1) + (r.physical_delivery ? 2 : 0))
+      return d.toLocaleDateString(locale)
+    } catch {
+      return '—'
+    }
+  }
+  const fmtDate = (iso: string | null) => {
+    if (!iso) return '—'
+    try {
+      return new Date(iso).toLocaleDateString(locale)
+    } catch {
+      return '—'
+    }
+  }
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{t.loading}</p>
+  if (state === 'error')
+    return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{o.loadError}</p>
+
+  return (
+    <div>
+      <div className="relative mb-4">
+        <Icon name="FileText" className="pointer-events-none absolute inset-y-0 start-3 my-auto size-4 text-text-muted" />
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={o.searchPlaceholder} className={cn(inputClass, 'ps-9')} />
+      </div>
+      <p className="mb-3 text-xs text-text-secondary">{o.results.replace('{n}', String(filtered.length))}</p>
+
+      {filtered.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
+          <p className="text-sm text-text-secondary">{rows.length === 0 ? o.empty : t.admin.noMatch}</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {filtered.map((r) => (
+            <article key={r.id} className="rounded-lg border border-border bg-surface p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="font-semibold">{t.pool.orderNo} #{r.order_no}</h3>
+                  {r.urgent && <Pill tone="danger">{t.pool.urgent}</Pill>}
+                  {r.physical_delivery ? <Pill tone="dark">{t.pool.cargo}</Pill> : <Pill tone="outline">{t.pool.digital}</Pill>}
+                </div>
+                <Pill tone={isDone(r) ? 'success' : 'neutral'}>{isDone(r) ? o.done : o.inProgress}</Pill>
+              </div>
+
+              <dl className="mt-3 grid gap-x-4 gap-y-2 text-sm sm:grid-cols-2">
+                <Row label={t.pool.service}>{serviceName(r.service)}</Row>
+                <Row label={t.pool.langPair}>
+                  {languageName(r.source_lang, locale)} → {languageName(r.target_lang, locale)}
+                </Row>
+                <Row label={o.customer}>{r.contact_name || '—'}</Row>
+                <Row label={o.translator}>
+                  {r.translator_id ? (
+                    <button
+                      type="button"
+                      onClick={() => onOpenTranslator(r.translator_id as string)}
+                      className="inline-flex items-center gap-1 font-medium text-secondary underline underline-offset-2 hover:opacity-80"
+                    >
+                      {r.translatorName || '—'} <Icon name="ArrowRight" className="size-3.5" />
+                    </button>
+                  ) : (
+                    <span className="text-text-muted">{o.unassigned}</span>
+                  )}
+                </Row>
+                <Row label={o.status}>{statusLabel(r)}</Row>
+                <Row label={t.pool.deadline}>{deadline(r)}</Row>
+                {isDone(r) && <Row label={o.completedOn}>{fmtDate(r.completed_at)}</Row>}
+                <Row label={o.placedOn}>{fmtDate(r.created_at)}</Row>
+                {r.total != null && <Row label={o.total}>{formatCurrency(r.total)}</Row>}
+              </dl>
+            </article>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
