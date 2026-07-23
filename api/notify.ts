@@ -16,6 +16,8 @@ const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xtqymenxaozzwmqfssod.s
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 const ADMIN_EMAIL = 'admin@tercumexpert.com'
 const ADMIN_LOCALE = 'tr'
+// PDFShift ile HTML→PDF (env: PDFSHIFT_API_KEY). Yoksa/başarısızsa HTML eke düşer.
+const PDFSHIFT_KEY = process.env.PDFSHIFT_API_KEY || ''
 
 function json(obj: unknown, status = 200): Response {
   return new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json' } })
@@ -29,10 +31,34 @@ function money(n: number): string {
 }
 /** UTF-8 güvenli base64 (Edge'de Buffer yok; btoa ham binary ister). */
 function toBase64Utf8(str: string): string {
-  const bytes = new TextEncoder().encode(str)
+  return bytesToBase64(new TextEncoder().encode(str))
+}
+function bytesToBase64(bytes: Uint8Array): string {
   let bin = ''
-  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i])
+  const chunk = 0x8000
+  for (let i = 0; i < bytes.length; i += chunk) {
+    bin += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, i + chunk)))
+  }
   return btoa(bin)
+}
+
+/** HTML'i PDFShift ile gerçek PDF'e çevirir → base64. Anahtar yoksa/hata olursa null. */
+async function htmlToPdfBase64(html: string): Promise<string | null> {
+  if (!PDFSHIFT_KEY) return null
+  try {
+    const res = await fetch('https://api.pdfshift.io/v3/convert/pdf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${btoa(`api:${PDFSHIFT_KEY}`)}`,
+      },
+      body: JSON.stringify({ source: html, format: 'A4', margin: '0', delay: 400 }),
+    })
+    if (!res.ok) return null
+    return bytesToBase64(new Uint8Array(await res.arrayBuffer()))
+  } catch {
+    return null
+  }
 }
 async function getUser(token: string): Promise<{ id: string } | null> {
   try {
@@ -47,11 +73,19 @@ async function getUser(token: string): Promise<{ id: string } | null> {
   }
 }
 
-/** Fatura HTML'ini üretip .html eki olarak döndürür (best-effort). */
-function invoiceAttachment(order: InvoiceOrder, locale: string, isSellerCopy: boolean, suffix: string): EmailAttachment | null {
+/** Faturayı üretir: önce gerçek PDF (PDFShift), olmazsa HTML eke düşer. Best-effort. */
+async function invoiceAttachment(
+  order: InvoiceOrder,
+  locale: string,
+  isSellerCopy: boolean,
+  suffix: string,
+): Promise<EmailAttachment | null> {
   try {
     const html = buildInvoiceHtml({ order, locale, isSellerCopy })
-    return { filename: `${invoiceNumber(order)}${suffix}.html`, content: toBase64Utf8(html) }
+    const base = `${invoiceNumber(order)}${suffix}`
+    const pdf = await htmlToPdfBase64(html)
+    if (pdf) return { filename: `${base}.pdf`, content: pdf }
+    return { filename: `${base}.html`, content: toBase64Utf8(html) } // güvenli yedek
   } catch {
     return null
   }
@@ -91,7 +125,7 @@ export default async function handler(req: Request): Promise<Response> {
   // 1) Müşteriye "sipariş alındı" + müşteri faturası (kendi dilinde).
   let customerOk = false
   try {
-    const att = invoiceAttachment(ord, custLocale, false, '')
+    const att = await invoiceAttachment(ord, custLocale, false, '')
     const mail = buildEmail({
       event: 'received',
       locale: custLocale,
@@ -113,7 +147,7 @@ export default async function handler(req: Request): Promise<Response> {
   try {
     const ex = emailExtra(ADMIN_LOCALE)
     const langs = `${(ord.source_lang || '').toUpperCase()} → ${(ord.target_lang || '').toUpperCase()}`
-    const att = invoiceAttachment(ord, ADMIN_LOCALE, true, '-satici')
+    const att = await invoiceAttachment(ord, ADMIN_LOCALE, true, '-satici')
     const mail = buildEmail({
       event: 'admin_new_order',
       locale: ADMIN_LOCALE,
