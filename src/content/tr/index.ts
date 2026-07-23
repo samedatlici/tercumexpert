@@ -1365,6 +1365,25 @@ export const tr = {
     },
   },
 
+  smsVerify: {
+    sendCode: 'Kod gönder',
+    resend: 'Kodu tekrar gönder',
+    codeLabel: 'SMS kodu',
+    confirm: 'Onayla',
+    verified: 'Telefon doğrulandı',
+    sent: 'Kod telefonunuza gönderildi.',
+    mustVerify: 'Devam etmek için telefon numaranızı SMS ile doğrulayın.',
+    reverifyHint: 'Telefon numaranızı değiştirirseniz, yeni numarayı SMS ile yeniden doğrulamanız gerekir.',
+    invalid: 'Kod hatalı. Lütfen tekrar deneyin.',
+    expired: 'Kodun süresi doldu. Lütfen yeni bir kod isteyin.',
+    rateLimited: 'Çok sık denediniz. Lütfen biraz bekleyip tekrar deneyin.',
+    notConfigured: 'SMS doğrulama şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin veya destek ile iletişime geçin.',
+    sendFailed: 'Kod gönderilemedi. Numaranızı kontrol edip tekrar deneyin.',
+    enterPhone: 'Lütfen önce geçerli bir telefon numarası girin.',
+    error: 'Bir sorun oluştu. Lütfen tekrar deneyin.',
+    devCode: 'Test modu — doğrulama kodunuz: {code}',
+  },
+
   notFound: {
     seo: { title: 'Sayfa bulunamadı', description: 'Aradığınız sayfa bulunamadı.' },
     title: 'Sayfa bulunamadı',

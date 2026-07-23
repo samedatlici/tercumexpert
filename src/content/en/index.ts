@@ -11,6 +11,7 @@ import { FAQ_CATEGORIES_EN, FAQ_ITEMS_EN } from '@/content/faq-data.en'
  */
 export const en: PartialDictionary = {
   common: {
+      "brand": "TercümExpert",
     tagline: 'Your reliable partner in professional translation services.',
     nav: {
       home: 'Home',
@@ -1037,6 +1038,10 @@ export const en: PartialDictionary = {
     ],
     fallback: `One of our customer representatives can give you the most accurate assistance with your question. You can message us via WhatsApp using the button below, and your message will be forwarded ready to send.`,
     contact: {
+      "introTitle": "Welcome",
+      "introDesc": "So I can assist you better, may I first have your name and email address?",
+      "start": "Start chat",
+      "introError": "Please enter your name and email address.",
       whatsapp: `WhatsApp`,
       email: `Email`,
       phone: `Phone`,
@@ -1365,6 +1370,25 @@ export const en: PartialDictionary = {
       rateLimited: 'Too many attempts. Please wait a moment and try again.',
       generic: 'Something went wrong. Please try again later.',
     },
+  },
+
+  smsVerify: {
+    sendCode: 'Send code',
+    resend: 'Resend code',
+    codeLabel: 'SMS code',
+    confirm: 'Confirm',
+    verified: 'Phone verified',
+    sent: 'A code has been sent to your phone.',
+    mustVerify: 'To continue, verify your phone number via SMS.',
+    reverifyHint: 'If you change your phone number, you must verify the new number again via SMS.',
+    invalid: 'Incorrect code. Please try again.',
+    expired: 'The code has expired. Please request a new one.',
+    rateLimited: 'Too many attempts. Please wait a moment and try again.',
+    notConfigured: 'SMS verification is currently unavailable. Please try again later or contact support.',
+    sendFailed: 'The code could not be sent. Check your number and try again.',
+    enterPhone: 'Please enter a valid phone number first.',
+    error: 'Something went wrong. Please try again.',
+    devCode: 'Test mode — your verification code: {code}',
   },
 
   notFound: {
