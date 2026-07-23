@@ -1241,6 +1241,28 @@ export const pl: PartialDictionary = {
       "loadError": "Nie udało się załadować portfela. Spróbuj ponownie."
     }
   },
+  authx: {
+    "rememberMe": "Zapamiętaj mnie",
+    "showPassword": "Pokaż hasło",
+    "hidePassword": "Ukryj hasło",
+    "forgot": "Nie pamiętam hasła",
+    "forgotTitle": "Resetowanie hasła",
+    "forgotDesc": "Podaj zarejestrowany adres e-mail, a wyślemy Ci jednorazowy link do zresetowania hasła.",
+    "forgotEmail": "Adres e-mail",
+    "forgotSubmit": "Wyślij link resetujący",
+    "forgotSent": "Link został wysłany na Twój adres e-mail. Sprawdź skrzynkę odbiorczą (oraz folder spam).",
+    "forgotBack": "Powrót do logowania",
+    "resetTitle": "Ustaw nowe hasło",
+    "resetDesc": "Wprowadź nowe hasło i potwierdź je, wpisując je ponownie.",
+    "newPassword": "Nowe hasło",
+    "newPasswordRepeat": "Nowe hasło (powtórz)",
+    "mismatch": "Hasła nie są zgodne.",
+    "weak": "Hasło musi zawierać co najmniej 6 znaków.",
+    "resetSubmit": "Zaktualizuj hasło",
+    "resetSuccess": "Twoje hasło zostało zaktualizowane. Możesz teraz zalogować się przy użyciu nowego hasła.",
+    "resetInvalid": "Link jest nieprawidłowy lub wygasł. Poproś o nowy link resetujący.",
+    "goLogin": "Zaloguj się"
+  },
   notFound: {
     seo: { title: 'Nie znaleziono strony', description: 'Nie udało się znaleźć szukanej strony.' },
     title: 'Nie znaleziono strony',

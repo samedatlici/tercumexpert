@@ -1247,6 +1247,28 @@ export const nl: PartialDictionary = {
       "loadError": "De portemonnee kon niet worden geladen. Probeer het opnieuw."
     }
   },
+  authx: {
+    "rememberMe": "Aangemeld blijven",
+    "showPassword": "Wachtwoord tonen",
+    "hidePassword": "Wachtwoord verbergen",
+    "forgot": "Wachtwoord vergeten",
+    "forgotTitle": "Wachtwoord opnieuw instellen",
+    "forgotDesc": "Voer uw geregistreerde e-mailadres in en wij sturen u een eenmalige link om uw wachtwoord opnieuw in te stellen.",
+    "forgotEmail": "E-mail",
+    "forgotSubmit": "Herstellink verzenden",
+    "forgotSent": "De link is naar uw e-mailadres verzonden. Controleer uw postvak IN (en uw map met ongewenste e-mail).",
+    "forgotBack": "Terug naar inloggen",
+    "resetTitle": "Nieuw wachtwoord instellen",
+    "resetDesc": "Voer uw nieuwe wachtwoord in en bevestig het door het opnieuw te typen.",
+    "newPassword": "Nieuw wachtwoord",
+    "newPasswordRepeat": "Nieuw wachtwoord (herhalen)",
+    "mismatch": "De wachtwoorden komen niet overeen.",
+    "weak": "Het wachtwoord moet minimaal 6 tekens lang zijn.",
+    "resetSubmit": "Wachtwoord bijwerken",
+    "resetSuccess": "Uw wachtwoord is bijgewerkt. U kunt nu inloggen met uw nieuwe wachtwoord.",
+    "resetInvalid": "De link is ongeldig of verlopen. Vraag een nieuwe herstellink aan.",
+    "goLogin": "Inloggen"
+  },
   notFound: {
     seo: { title: "Pagina niet gevonden", description: "De pagina die u zoekt, kon niet worden gevonden." },
     title: "Pagina niet gevonden",

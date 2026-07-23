@@ -1247,6 +1247,28 @@ export const de: PartialDictionary = {
       "loadError": "Das Wallet konnte nicht geladen werden. Bitte versuchen Sie es erneut."
     }
   },
+  authx: {
+    "rememberMe": "Angemeldet bleiben",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort verbergen",
+    "forgot": "Passwort vergessen",
+    "forgotTitle": "Passwort zurücksetzen",
+    "forgotDesc": "Geben Sie Ihre registrierte E-Mail-Adresse ein, und wir senden Ihnen einen einmaligen Link zum Zurücksetzen Ihres Passworts.",
+    "forgotEmail": "E-Mail",
+    "forgotSubmit": "Link zum Zurücksetzen senden",
+    "forgotSent": "Der Link wurde an Ihre E-Mail-Adresse gesendet. Überprüfen Sie Ihren Posteingang (und Ihren Spam-Ordner).",
+    "forgotBack": "Zurück zur Anmeldung",
+    "resetTitle": "Neues Passwort festlegen",
+    "resetDesc": "Geben Sie Ihr neues Passwort ein und bestätigen Sie es, indem Sie es erneut eingeben.",
+    "newPassword": "Neues Passwort",
+    "newPasswordRepeat": "Neues Passwort (wiederholen)",
+    "mismatch": "Die Passwörter stimmen nicht überein.",
+    "weak": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+    "resetSubmit": "Passwort aktualisieren",
+    "resetSuccess": "Ihr Passwort wurde aktualisiert. Sie können sich jetzt mit Ihrem neuen Passwort anmelden.",
+    "resetInvalid": "Der Link ist ungültig oder abgelaufen. Bitte fordern Sie einen neuen Link zum Zurücksetzen an.",
+    "goLogin": "Anmelden"
+  },
   notFound: {
     seo: { title: 'Seite nicht gefunden', description: 'Die von Ihnen gesuchte Seite konnte nicht gefunden werden.' },
     title: 'Seite nicht gefunden',

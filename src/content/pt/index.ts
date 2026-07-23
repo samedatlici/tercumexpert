@@ -1246,6 +1246,28 @@ export const pt: PartialDictionary = {
       "loadError": "Não foi possível carregar a carteira. Tente novamente."
     }
   },
+  authx: {
+    "rememberMe": "Lembrar-me",
+    "showPassword": "Mostrar palavra-passe",
+    "hidePassword": "Ocultar palavra-passe",
+    "forgot": "Esqueci-me da palavra-passe",
+    "forgotTitle": "Repor palavra-passe",
+    "forgotDesc": "Introduza o endereço de correio eletrónico com que se registou e enviar-lhe-emos uma ligação de utilização única para repor a sua palavra-passe.",
+    "forgotEmail": "Correio eletrónico",
+    "forgotSubmit": "Enviar ligação de reposição",
+    "forgotSent": "A ligação foi enviada para o seu correio eletrónico. Verifique a sua caixa de entrada (e a pasta de spam).",
+    "forgotBack": "Voltar ao início de sessão",
+    "resetTitle": "Definir uma nova palavra-passe",
+    "resetDesc": "Introduza a sua nova palavra-passe e confirme-a escrevendo-a novamente.",
+    "newPassword": "Nova palavra-passe",
+    "newPasswordRepeat": "Nova palavra-passe (repetir)",
+    "mismatch": "As palavras-passe não coincidem.",
+    "weak": "A palavra-passe deve ter, pelo menos, 6 caracteres.",
+    "resetSubmit": "Atualizar palavra-passe",
+    "resetSuccess": "A sua palavra-passe foi atualizada. Pode agora iniciar sessão com a sua nova palavra-passe.",
+    "resetInvalid": "A ligação é inválida ou expirou. Solicite uma nova ligação de reposição.",
+    "goLogin": "Iniciar sessão"
+  },
   notFound: {
     seo: { title: 'Página não encontrada', description: 'Não foi possível encontrar a página que procura.' },
     title: 'Página não encontrada',

@@ -29,6 +29,10 @@ interface AuthContextValue {
   sendGuestCode: (email: string, firstName: string, lastName: string, phone?: string, locale?: string) => Promise<{ error: string | null }>
   /** Misafir hızlı geçiş: e-posta koduyla oturum açar. */
   verifyGuestCode: (email: string, code: string) => Promise<{ error: string | null }>
+  /** Şifre sıfırlama e-postası gönderir (tek kullanımlık bağlantı). */
+  resetPassword: (email: string, redirectTo: string) => Promise<{ error: string | null }>
+  /** Oturumdaki kullanıcının şifresini günceller (sıfırlama bağlantısından sonra). */
+  updatePassword: (newPassword: string) => Promise<{ error: string | null }>
   signOut: () => Promise<void>
 }
 
@@ -135,6 +139,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       async verifyGuestCode(email, code) {
         const { error } = await supabase.auth.verifyOtp({ email, token: code, type: 'email' })
+        return { error: error ? trError(error.message) : null }
+      },
+      async resetPassword(email, redirectTo) {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo })
+        return { error: error ? trError(error.message) : null }
+      },
+      async updatePassword(newPassword) {
+        const { error } = await supabase.auth.updateUser({ password: newPassword })
         return { error: error ? trError(error.message) : null }
       },
       async signOut() {

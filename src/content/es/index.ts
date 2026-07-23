@@ -1247,6 +1247,28 @@ export const es: PartialDictionary = {
       "loadError": "No se pudo cargar la cartera. Inténtelo de nuevo."
     }
   },
+  authx: {
+    "rememberMe": "Recordarme",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "forgot": "Olvidé mi contraseña",
+    "forgotTitle": "Restablecer contraseña",
+    "forgotDesc": "Introduzca la dirección de correo electrónico con la que se registró y le enviaremos un enlace de un solo uso para restablecer su contraseña.",
+    "forgotEmail": "Correo electrónico",
+    "forgotSubmit": "Enviar enlace de restablecimiento",
+    "forgotSent": "El enlace se ha enviado a su correo electrónico. Revise su bandeja de entrada (y su carpeta de spam).",
+    "forgotBack": "Volver al inicio de sesión",
+    "resetTitle": "Establecer una nueva contraseña",
+    "resetDesc": "Introduzca su nueva contraseña y confírmela escribiéndola de nuevo.",
+    "newPassword": "Nueva contraseña",
+    "newPasswordRepeat": "Nueva contraseña (repetir)",
+    "mismatch": "Las contraseñas no coinciden.",
+    "weak": "La contraseña debe tener al menos 6 caracteres.",
+    "resetSubmit": "Actualizar contraseña",
+    "resetSuccess": "Su contraseña se ha actualizado. Ahora puede iniciar sesión con su nueva contraseña.",
+    "resetInvalid": "El enlace no es válido o ha caducado. Solicite un nuevo enlace de restablecimiento.",
+    "goLogin": "Iniciar sesión"
+  },
   notFound: {
     seo: { title: 'Página no encontrada', description: 'No se pudo encontrar la página que busca.' },
     title: 'Página no encontrada',

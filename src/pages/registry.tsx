@@ -10,6 +10,7 @@ const PartnershipPage = lazy(() => import('./PartnershipPage'))
 const FaqPage = lazy(() => import('./FaqPage'))
 const ContactPage = lazy(() => import('./ContactPage'))
 const AuthPage = lazy(() => import('./AuthPage'))
+const ResetPasswordPage = lazy(() => import('./ResetPasswordPage'))
 const OrderDetailPage = lazy(() => import('./OrderDetailPage'))
 const BlogPage = lazy(() => import('./BlogPage'))
 const LegalPage = lazy(() => import('./LegalPage'))
@@ -28,6 +29,7 @@ const MAP: Partial<Record<RouteId, LazyExoticComponent<ComponentType>>> = {
   faq: FaqPage,
   contact: ContactPage,
   auth: AuthPage,
+  resetPassword: ResetPasswordPage,
   order: OrderDetailPage,
   admin: AdminPage,
   translator: TranslatorPage,

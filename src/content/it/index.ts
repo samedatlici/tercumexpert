@@ -1247,6 +1247,28 @@ export const it: PartialDictionary = {
       "loadError": "Impossibile caricare il portafoglio. La preghiamo di riprovare."
     }
   },
+  authx: {
+    "rememberMe": "Ricordami",
+    "showPassword": "Mostra password",
+    "hidePassword": "Nascondi password",
+    "forgot": "Ho dimenticato la password",
+    "forgotTitle": "Reimposta password",
+    "forgotDesc": "Inserisca l'indirizzo email con cui si è registrato e le invieremo un link monouso per reimpostare la password.",
+    "forgotEmail": "Email",
+    "forgotSubmit": "Invia link di reimpostazione",
+    "forgotSent": "Il link è stato inviato alla sua email. Controlli la sua casella di posta (e la cartella spam).",
+    "forgotBack": "Torna all'accesso",
+    "resetTitle": "Imposta una nuova password",
+    "resetDesc": "Inserisca la sua nuova password e la confermi digitandola di nuovo.",
+    "newPassword": "Nuova password",
+    "newPasswordRepeat": "Nuova password (ripeti)",
+    "mismatch": "Le password non corrispondono.",
+    "weak": "La password deve contenere almeno 6 caratteri.",
+    "resetSubmit": "Aggiorna password",
+    "resetSuccess": "La sua password è stata aggiornata. Ora può accedere con la sua nuova password.",
+    "resetInvalid": "Il link non è valido o è scaduto. La preghiamo di richiedere un nuovo link di reimpostazione.",
+    "goLogin": "Accedi"
+  },
   notFound: {
     seo: { title: "Pagina non trovata", description: "La pagina che sta cercando non è stata trovata." },
     title: "Pagina non trovata",

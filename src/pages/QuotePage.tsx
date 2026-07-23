@@ -54,6 +54,9 @@ const ACCEPT =
 
 type Mode = 'file' | 'text'
 
+/** Fiyat formu taslağı (giriş için sayfadan ayrılınca seçimler kaybolmasın). */
+const QUOTE_DRAFT_KEY = 'te-quote-draft'
+
 interface FileEntry {
   key: string
   file: File
@@ -83,27 +86,48 @@ export default function QuotePage() {
   const keyCounter = useRef(0)
   const pendingRef = useRef<QuoteBreakdown | null>(null)
 
-  const [mode, setMode] = useState<Mode>('file')
+  // Kaydedilmiş taslak (giriş/kayıt için sayfadan ayrılıp dönen kullanıcı seçimlerini kaybetmesin).
+  const draft0 = (() => {
+    try {
+      return JSON.parse(sessionStorage.getItem(QUOTE_DRAFT_KEY) || 'null') as Record<string, unknown> | null
+    } catch {
+      return null
+    }
+  })()
+
+  const [mode, setMode] = useState<Mode>((draft0?.mode as Mode) ?? 'file')
   const [files, setFiles] = useState<FileEntry[]>([])
   const [sizeError, setSizeError] = useState(false)
-  const [text, setText] = useState('')
+  const [text, setText] = useState<string>((draft0?.text as string) ?? '')
 
-  const [service, setService] = useState<AreaId>(AREAS[0].id)
-  const [sourceLang, setSourceLang] = useState('tr')
-  const [targetLang, setTargetLang] = useState('en')
-  const [documentType, setDocumentType] = useState<string>(docsForArea(AREAS[0].id)[0])
-  const [urgent, setUrgent] = useState(false)
-  const [sworn, setSworn] = useState(false)
-  const [notarization, setNotarization] = useState(false)
-  const [apostille, setApostille] = useState(false)
-  const [physicalDelivery, setPhysicalDelivery] = useState(false)
+  const [service, setService] = useState<AreaId>((draft0?.service as AreaId) ?? AREAS[0].id)
+  const [sourceLang, setSourceLang] = useState((draft0?.sourceLang as string) ?? 'tr')
+  const [targetLang, setTargetLang] = useState((draft0?.targetLang as string) ?? 'en')
+  const [documentType, setDocumentType] = useState<string>((draft0?.documentType as string) ?? docsForArea(AREAS[0].id)[0])
+  const [urgent, setUrgent] = useState(!!draft0?.urgent)
+  const [sworn, setSworn] = useState(!!draft0?.sworn)
+  const [notarization, setNotarization] = useState(!!draft0?.notarization)
+  const [apostille, setApostille] = useState(!!draft0?.apostille)
+  const [physicalDelivery, setPhysicalDelivery] = useState(!!draft0?.physicalDelivery)
   const [result, setResult] = useState<QuoteBreakdown | null>(null)
   const [gateOpen, setGateOpen] = useState(false)
   const [needInput, setNeedInput] = useState(false)
   const [ordering, setOrdering] = useState(false)
-  const [note, setNote] = useState('')
+  const [note, setNote] = useState<string>((draft0?.note as string) ?? '')
   const [orderError, setOrderError] = useState<string | null>(null)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
+
+  // Seçimleri sürekli kaydet (dosyalar hariç — tarayıcı güvenliği gereği dosyalar taşınamaz).
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        QUOTE_DRAFT_KEY,
+        JSON.stringify({ mode, text, service, sourceLang, targetLang, documentType, urgent, sworn, notarization, apostille, physicalDelivery, note }),
+      )
+    } catch {
+      /* yut */
+    }
+  }, [mode, text, service, sourceLang, targetLang, documentType, urgent, sworn, notarization, apostille, physicalDelivery, note])
 
   // Kullanıcı giriş yapınca (veya misafir doğrulaması tamamlanınca) bekleyen fiyatı göster.
   useEffect(() => {
@@ -226,6 +250,12 @@ export default function QuotePage() {
       setOrdering(false)
       setOrderError(q.orderConfirm.error)
       return
+    }
+    // Sipariş verildi → taslağı temizle (bir dahaki sefere sıfırdan başlasın).
+    try {
+      sessionStorage.removeItem(QUOTE_DRAFT_KEY)
+    } catch {
+      /* yut */
     }
     // Onay + takip için ayrı sipariş sayfasına yönlendir.
     navigate(buildPath(locale, 'order', { slug: String(res.orderNo) }))
@@ -720,7 +750,10 @@ function PriceGate() {
       </div>
       <p className="mt-1 text-sm text-text-secondary">{g.subtitle}</p>
 
-      <Link to={buildPath(locale, 'auth')} className="mt-4 block">
+      <Link
+        to={`${buildPath(locale, 'auth')}?next=${encodeURIComponent(window.location.pathname)}`}
+        className="mt-4 block"
+      >
         <Button intent="secondary" block>{g.loginCta}</Button>
       </Link>
 

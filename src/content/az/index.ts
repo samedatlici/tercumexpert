@@ -1241,6 +1241,28 @@ export const az: PartialDictionary = {
       "loadError": "Pul kisəsi yüklənə bilmədi. Zəhmət olmasa yenidən cəhd edin."
     }
   },
+  authx: {
+    "rememberMe": "Məni xatırla",
+    "showPassword": "Parolu göstər",
+    "hidePassword": "Parolu gizlət",
+    "forgot": "Parolumu unutdum",
+    "forgotTitle": "Parolun bərpası",
+    "forgotDesc": "Qeydiyyatdan keçdiyiniz e-poçt ünvanını daxil edin, biz sizə parolu bərpa etmək üçün birdəfəlik keçid göndərəcəyik.",
+    "forgotEmail": "E-poçt",
+    "forgotSubmit": "Bərpa keçidini göndər",
+    "forgotSent": "Keçid e-poçtunuza göndərildi. Gələnlər qutunuzu (və spam qovluğunuzu) yoxlayın.",
+    "forgotBack": "Girişə qayıt",
+    "resetTitle": "Yeni parol təyin edin",
+    "resetDesc": "Yeni parolunuzu daxil edin və onu yenidən yazaraq təsdiqləyin.",
+    "newPassword": "Yeni parol",
+    "newPasswordRepeat": "Yeni parol (təkrar)",
+    "mismatch": "Parollar uyğun gəlmir.",
+    "weak": "Parol ən azı 6 simvoldan ibarət olmalıdır.",
+    "resetSubmit": "Parolu yenilə",
+    "resetSuccess": "Parolunuz yeniləndi. İndi yeni parolunuzla daxil ola bilərsiniz.",
+    "resetInvalid": "Keçid etibarsızdır və ya vaxtı bitib. Zəhmət olmasa, yeni bərpa keçidi tələb edin.",
+    "goLogin": "Daxil ol"
+  },
   notFound: {
     seo: { title: 'Səhifə tapılmadı', description: 'Axtardığınız səhifə tapılmadı.' },
     title: 'Səhifə tapılmadı',

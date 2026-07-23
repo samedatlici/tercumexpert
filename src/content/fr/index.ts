@@ -1247,6 +1247,28 @@ export const fr: PartialDictionary = {
       "loadError": "Impossible de charger le portefeuille. Veuillez réessayer."
     }
   },
+  authx: {
+    "rememberMe": "Se souvenir de moi",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "forgot": "Mot de passe oublié",
+    "forgotTitle": "Réinitialiser le mot de passe",
+    "forgotDesc": "Saisissez votre adresse e-mail enregistrée et nous vous enverrons un lien à usage unique pour réinitialiser votre mot de passe.",
+    "forgotEmail": "E-mail",
+    "forgotSubmit": "Envoyer le lien de réinitialisation",
+    "forgotSent": "Le lien a été envoyé à votre adresse e-mail. Vérifiez votre boîte de réception (et votre dossier de courrier indésirable).",
+    "forgotBack": "Retour à la connexion",
+    "resetTitle": "Définir un nouveau mot de passe",
+    "resetDesc": "Saisissez votre nouveau mot de passe et confirmez-le en le saisissant à nouveau.",
+    "newPassword": "Nouveau mot de passe",
+    "newPasswordRepeat": "Nouveau mot de passe (répéter)",
+    "mismatch": "Les mots de passe ne correspondent pas.",
+    "weak": "Le mot de passe doit comporter au moins 6 caractères.",
+    "resetSubmit": "Mettre à jour le mot de passe",
+    "resetSuccess": "Votre mot de passe a été mis à jour. Vous pouvez désormais vous connecter avec votre nouveau mot de passe.",
+    "resetInvalid": "Le lien est invalide ou a expiré. Veuillez demander un nouveau lien de réinitialisation.",
+    "goLogin": "Se connecter"
+  },
   notFound: {
     seo: { title: "Page introuvable", description: "La page que vous recherchez est introuvable." },
     title: "Page introuvable",

@@ -17,6 +17,7 @@ export type RouteId =
   | 'faq'
   | 'contact'
   | 'auth'
+  | 'resetPassword'
   | 'order'
   | 'admin'
   | 'translator'
@@ -37,6 +38,7 @@ const ROUTE_SLUGS: Record<RouteId, Partial<Record<Locale, string>>> = {
   faq: { tr: 'sss', en: 'faq', fr: 'faq', de: 'faq', es: 'faq', it: 'faq', ru: 'faq', ar: 'faq' },
   contact: { tr: 'iletisim', en: 'contact', fr: 'contact', de: 'kontakt', es: 'contacto', it: 'contatti', ru: 'kontakty', ar: 'ittisal' },
   auth: { tr: 'giris', en: 'login', fr: 'connexion', de: 'anmelden', es: 'acceso', it: 'accedi', ru: 'vhod', ar: 'dukhul' },
+  resetPassword: { tr: 'sifre-yenile', en: 'reset-password' },
   order: { tr: 'siparis', en: 'order', fr: 'commande', de: 'bestellung', es: 'pedido', it: 'ordine', ru: 'zakaz', ar: 'talab' },
   admin: { tr: 'yonetim', en: 'admin' },
   translator: { tr: 'tercuman', en: 'translator' },

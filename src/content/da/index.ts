@@ -1247,6 +1247,28 @@ export const da: PartialDictionary = {
       "loadError": "Kunne ikke indlæse tegnebogen. Prøv venligst igen."
     }
   },
+  authx: {
+    "rememberMe": "Husk mig",
+    "showPassword": "Vis adgangskode",
+    "hidePassword": "Skjul adgangskode",
+    "forgot": "Glemt min adgangskode",
+    "forgotTitle": "Nulstil adgangskode",
+    "forgotDesc": "Indtast din registrerede e-mailadresse, og vi sender dig et engangslink til at nulstille din adgangskode.",
+    "forgotEmail": "E-mail",
+    "forgotSubmit": "Send nulstillingslink",
+    "forgotSent": "Linket er blevet sendt til din e-mail. Tjek din indbakke (og din spammappe).",
+    "forgotBack": "Tilbage til login",
+    "resetTitle": "Angiv en ny adgangskode",
+    "resetDesc": "Indtast din nye adgangskode, og bekræft den ved at skrive den igen.",
+    "newPassword": "Ny adgangskode",
+    "newPasswordRepeat": "Ny adgangskode (gentag)",
+    "mismatch": "Adgangskoderne stemmer ikke overens.",
+    "weak": "Adgangskoden skal være på mindst 6 tegn.",
+    "resetSubmit": "Opdater adgangskode",
+    "resetSuccess": "Din adgangskode er blevet opdateret. Du kan nu logge ind med din nye adgangskode.",
+    "resetInvalid": "Linket er ugyldigt eller udløbet. Anmod venligst om et nyt nulstillingslink.",
+    "goLogin": "Log ind"
+  },
   notFound: {
     seo: { title: "Siden blev ikke fundet", description: "Den side, du leder efter, kunne ikke findes." },
     title: "Siden blev ikke fundet",

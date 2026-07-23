@@ -1,17 +1,19 @@
 import { useState, type FormEvent, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
 import { GoogleIcon } from '@/components/common/GoogleIcon'
+import { PasswordInput } from '@/components/common/PasswordInput'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { useAuth } from '@/app/providers/AuthProvider'
+import { setRemember } from '@/lib/supabase'
 import { OrdersList } from '@/features/orders/ui/OrdersList'
 import { buildPath } from '@/app/router/routes'
 import { ConsentText } from '@/features/legal/ConsentText'
 
 type Mode = 'login' | 'register'
-type View = 'form' | 'verify'
+type View = 'form' | 'verify' | 'forgot'
 
 const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
 
@@ -22,7 +24,8 @@ export default function AuthPage() {
   const { locale, dict } = useI18n()
   const a = dict.auth
   const navigate = useNavigate()
-  const { user, signInWithGoogle, signInWithPassword, signUp, verifyEmailCode, resendCode, signOut } = useAuth()
+  const [params] = useSearchParams()
+  const { user, signInWithGoogle, signInWithPassword, signUp, verifyEmailCode, resendCode, resetPassword, signOut } = useAuth()
 
   const [mode, setMode] = useState<Mode>('login')
   const [view, setView] = useState<View>('form')
@@ -31,13 +34,18 @@ export default function AuthPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [consent, setConsent] = useState(false)
+  const [remember, setRememberState] = useState(true)
   const [code, setCode] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
   const homePath = buildPath(locale, 'home')
-  const verifyRedirect = `${window.location.origin}${homePath}`
+  // Giriş sonrası: geldiği sayfaya dön (?next=/...); yoksa ana sayfa.
+  const nextParam = params.get('next')
+  const target = nextParam && nextParam.startsWith('/') && !nextParam.startsWith('//') ? nextParam : homePath
+  const verifyRedirect = `${window.location.origin}${target}`
+  const x = dict.authx
 
   // Zaten giriş yapılmışsa hesap kartı göster.
   if (user) {
@@ -74,8 +82,9 @@ export default function AuthPage() {
 
   const onGoogle = async () => {
     resetMessages()
+    setRemember(remember)
     setBusy(true)
-    const { error } = await signInWithGoogle(`${window.location.origin}${homePath}`)
+    const { error } = await signInWithGoogle(`${window.location.origin}${target}`)
     if (error) {
       setError(error)
       setBusy(false)
@@ -90,11 +99,12 @@ export default function AuthPage() {
     if (password.length < 6) return setError(a.errors.passwordShort)
 
     setBusy(true)
+    setRemember(remember)
     if (mode === 'login') {
       const { error } = await signInWithPassword(email, password)
       setBusy(false)
       if (error) return setError(error)
-      navigate(buildPath(locale, 'home'))
+      navigate(target)
       return
     }
     // register
@@ -110,7 +120,19 @@ export default function AuthPage() {
     setBusy(false)
     if (error) return setError(error)
     if (needsVerification) setView('verify')
-    else navigate(buildPath(locale, 'home'))
+    else navigate(target)
+  }
+
+  const onForgot = async (e: FormEvent) => {
+    e.preventDefault()
+    resetMessages()
+    if (!emailOk(email)) return setError(a.errors.emailInvalid)
+    setBusy(true)
+    const resetRedirect = `${window.location.origin}${buildPath(locale, 'resetPassword')}`
+    const { error } = await resetPassword(email, resetRedirect)
+    setBusy(false)
+    if (error) return setError(error)
+    setInfo(x.forgotSent)
   }
 
   const onVerify = async (e: FormEvent) => {
@@ -124,9 +146,10 @@ export default function AuthPage() {
       return setError(error)
     }
     // Doğrulama başarılı — oturumu garantiye almak için şifreyle giriş yap.
+    setRemember(remember)
     await signInWithPassword(email, password)
     setBusy(false)
-    navigate(buildPath(locale, 'home'))
+    navigate(target)
   }
 
   const onResend = async () => {
@@ -136,6 +159,33 @@ export default function AuthPage() {
     setBusy(false)
     if (error) return setError(error)
     setInfo(a.verify.resent)
+  }
+
+  // ——— Şifremi unuttum ekranı ———
+  if (view === 'forgot') {
+    return (
+      <>
+        <Seo title={a.seo.title} description={a.seo.description} routeId="auth" />
+        <Shell>
+          <button type="button" onClick={() => { setView('form'); resetMessages() }} className="mb-4 inline-flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
+            <Icon name="ArrowRight" className="size-4 rotate-180" /> {x.forgotBack}
+          </button>
+          <span className="inline-flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Icon name="KeyRound" className="size-8" />
+          </span>
+          <h1 className="mt-4 text-2xl font-bold">{x.forgotTitle}</h1>
+          <p className="mt-2 text-sm text-text-secondary">{x.forgotDesc}</p>
+          <form className="mt-6 space-y-4" onSubmit={onForgot} noValidate>
+            <Field label={x.forgotEmail}>
+              <input type="email" className={inputClass} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
+            </Field>
+            {error && <Alert kind="error">{error}</Alert>}
+            {info && <Alert kind="info">{info}</Alert>}
+            <Button type="submit" intent="secondary" size="lg" block disabled={busy}>{x.forgotSubmit}</Button>
+          </form>
+        </Shell>
+      </>
+    )
   }
 
   // ——— 6 haneli doğrulama kodu ekranı ———
@@ -217,8 +267,27 @@ export default function AuthPage() {
             <input type="email" className={inputClass} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
           </Field>
           <Field label={a.fields.password}>
-            <input type="password" className={inputClass} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
+            <PasswordInput
+              value={password}
+              onChange={setPassword}
+              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+              className={inputClass}
+              showLabel={x.showPassword}
+              hideLabel={x.hidePassword}
+            />
           </Field>
+
+          {mode === 'login' && (
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <label className="flex items-center gap-2 text-sm">
+                <input type="checkbox" className="size-4 accent-black" checked={remember} onChange={(e) => setRememberState(e.target.checked)} />
+                {x.rememberMe}
+              </label>
+              <button type="button" onClick={() => { setView('forgot'); resetMessages() }} className="text-sm text-text-secondary underline underline-offset-4 hover:text-text-primary">
+                {x.forgot}
+              </button>
+            </div>
+          )}
 
           {mode === 'register' && (
             <label className="flex items-start gap-3 text-sm">
