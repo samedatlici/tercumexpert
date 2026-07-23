@@ -1,11 +1,13 @@
-import { sendOrderEmail, buildEmail, sendEmail, emailExtra, orderUrl } from './_email'
+import { sendEmail, buildEmail, emailExtra, orderUrl, type EmailAttachment } from './_email'
+import { buildInvoiceHtml, invoiceNumber, type InvoiceOrder } from './_invoice'
 
 /**
- * Sipariş bildirimleri (EDGE — güvenilir, hafif; chromium/PDF YOK).
+ * Sipariş bildirimleri (EDGE — güvenilir, hafif; chromium YOK).
  * Sipariş oluşunca istemci çağırır:
- *  - Müşteriye "Siparişiniz alındı" (kendi dilinde).
- *  - admin@tercumexpert.com'a "Yeni sipariş aldınız" (TR) + detay tablosu.
- * PDF fatura ayrı/isteğe bağlıdır; bu uç mailleri HER ZAMAN gönderir.
+ *  - Müşteriye "Siparişiniz alındı" (kendi dilinde) + FATURA (HTML eki, kendi dilinde).
+ *  - admin@tercumexpert.com'a "Yeni sipariş aldınız" (TR) + detay + SATICI faturası (HTML eki).
+ * Fatura HTML olarak eklenir (tarayıcıda açılır / "Yazdır → PDF"). Üretimi best-effort:
+ * başarısız olsa bile mailler HER ZAMAN eksiz gider.
  * GÜVENLİK: siparişin çağıran kullanıcıya ait olduğu erişim jetonuyla doğrulanır.
  */
 export const config = { runtime: 'edge' }
@@ -25,6 +27,13 @@ function money(n: number): string {
     return `${(n || 0).toFixed(2)} TRY`
   }
 }
+/** UTF-8 güvenli base64 (Edge'de Buffer yok; btoa ham binary ister). */
+function toBase64Utf8(str: string): string {
+  const bytes = new TextEncoder().encode(str)
+  let bin = ''
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i])
+  return btoa(bin)
+}
 async function getUser(token: string): Promise<{ id: string } | null> {
   try {
     const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
@@ -38,16 +47,14 @@ async function getUser(token: string): Promise<{ id: string } | null> {
   }
 }
 
-interface OrderRow {
-  order_no: number
-  contact_name: string | null
-  contact_email: string | null
-  contact_phone: string | null
-  locale: string | null
-  source_lang: string | null
-  target_lang: string | null
-  total: number | null
-  user_id?: string
+/** Fatura HTML'ini üretip .html eki olarak döndürür (best-effort). */
+function invoiceAttachment(order: InvoiceOrder, locale: string, isSellerCopy: boolean, suffix: string): EmailAttachment | null {
+  try {
+    const html = buildInvoiceHtml({ order, locale, isSellerCopy })
+    return { filename: `${invoiceNumber(order)}${suffix}.html`, content: toBase64Utf8(html) }
+  } catch {
+    return null
+  }
 }
 
 export default async function handler(req: Request): Promise<Response> {
@@ -69,34 +76,51 @@ export default async function handler(req: Request): Promise<Response> {
   const user = await getUser(token)
   if (!user) return json({ ok: false, error: 'invalid_token' }, 200)
 
-  const cols = 'order_no,contact_name,contact_email,contact_phone,locale,source_lang,target_lang,total,user_id'
+  const cols =
+    'order_no,created_at,locale,source_lang,target_lang,total,tax,contact_name,contact_email,contact_phone,' +
+    'delivery_address,delivery_city,delivery_postal_code,delivery_country,user_id'
   const r = await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}&select=${cols}`, {
     headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
   })
   if (!r.ok) return json({ ok: false, error: 'load' }, 200)
-  const ord = ((await r.json()) as OrderRow[])[0]
+  const ord = ((await r.json()) as Array<InvoiceOrder & { user_id?: string }>)[0]
   if (!ord || ord.user_id !== user.id) return json({ ok: false, error: 'not_found' }, 200)
 
-  // 1) Müşteriye "sipariş alındı".
+  const custLocale = ord.locale || 'tr'
+
+  // 1) Müşteriye "sipariş alındı" + müşteri faturası (kendi dilinde).
   let customerOk = false
   try {
-    const res = await sendOrderEmail('received', ord as Parameters<typeof sendOrderEmail>[1])
-    customerOk = res.ok
+    const att = invoiceAttachment(ord, custLocale, false, '')
+    const mail = buildEmail({
+      event: 'received',
+      locale: custLocale,
+      name: ord.contact_name || '',
+      orderNo: ord.order_no,
+      orderUrl: orderUrl(custLocale, ord.order_no),
+      invoiceNote: !!att,
+    })
+    if (ord.contact_email) {
+      const res = await sendEmail(ord.contact_email, mail.subject, mail.html, att ? [att] : [])
+      customerOk = res.ok
+    }
   } catch {
     /* yut */
   }
 
-  // 2) Admine "yeni sipariş" + detaylar.
+  // 2) Admine "yeni sipariş" + detaylar + satıcı faturası (TR).
   let adminOk = false
   try {
     const ex = emailExtra(ADMIN_LOCALE)
     const langs = `${(ord.source_lang || '').toUpperCase()} → ${(ord.target_lang || '').toUpperCase()}`
+    const att = invoiceAttachment(ord, ADMIN_LOCALE, true, '-satici')
     const mail = buildEmail({
       event: 'admin_new_order',
       locale: ADMIN_LOCALE,
       name: '',
       orderNo: ord.order_no,
       orderUrl: orderUrl(ADMIN_LOCALE, ord.order_no),
+      invoiceNote: !!att,
       details: [
         { label: ex.lblCustomer, value: ord.contact_name || '—' },
         { label: 'E-posta', value: ord.contact_email || '—' },
@@ -105,7 +129,7 @@ export default async function handler(req: Request): Promise<Response> {
         { label: ex.lblTotal, value: money(Number(ord.total) || 0) },
       ],
     })
-    const res = await sendEmail(ADMIN_EMAIL, mail.subject, mail.html)
+    const res = await sendEmail(ADMIN_EMAIL, mail.subject, mail.html, att ? [att] : [])
     adminOk = res.ok
   } catch {
     /* yut */
