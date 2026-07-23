@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
@@ -39,6 +39,15 @@ export default function AuthPage() {
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  // "Sıfırlama bağlantısı gönder" tuşu için bekleme süresi (spam engeli). Kalan saniye.
+  const [cooldown, setCooldown] = useState(0)
+
+  // Bekleme süresini her saniye azalt.
+  useEffect(() => {
+    if (cooldown <= 0) return
+    const t = setTimeout(() => setCooldown((s) => (s <= 1 ? 0 : s - 1)), 1000)
+    return () => clearTimeout(t)
+  }, [cooldown])
 
   const homePath = buildPath(locale, 'home')
   // Giriş sonrası: geldiği sayfaya dön (?next=/...); yoksa ana sayfa.
@@ -133,6 +142,8 @@ export default function AuthPage() {
     e.preventDefault()
     resetMessages()
     if (!emailOk(email)) return setError(a.errors.emailInvalid)
+    // Spam engeli: bekleme süresi dolmadan tekrar denenirse hız-limiti uyarısı (14 dil).
+    if (cooldown > 0) return setError(errText('rateLimited'))
     setBusy(true)
     const resetRedirect = `${window.location.origin}${buildPath(locale, 'resetPassword')}`
     // Markalı TercümExpert e-postası (14 dil) — /api/reset üzerinden gönderilir.
@@ -148,6 +159,7 @@ export default function AuthPage() {
       /* güvenlik gereği yut */
     }
     setBusy(false)
+    setCooldown(30) // 30 sn boyunca tekrar gönderim engellenir
     setInfo(x.forgotSent)
   }
 
@@ -197,7 +209,9 @@ export default function AuthPage() {
             </Field>
             {error && <Alert kind="error">{error}</Alert>}
             {info && <Alert kind="info">{info}</Alert>}
-            <Button type="submit" intent="secondary" size="lg" block disabled={busy}>{x.forgotSubmit}</Button>
+            <Button type="submit" intent="secondary" size="lg" block disabled={busy || cooldown > 0}>
+              {cooldown > 0 ? `${x.forgotSubmit} (${cooldown})` : x.forgotSubmit}
+            </Button>
           </form>
         </Shell>
       </>
