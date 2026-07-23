@@ -34,7 +34,7 @@ export default function AuthPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [consent, setConsent] = useState(false)
-  const [remember, setRememberState] = useState(true)
+  const [remember, setRememberState] = useState(false)
   const [code, setCode] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)

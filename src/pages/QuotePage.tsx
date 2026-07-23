@@ -9,6 +9,7 @@ import { useI18n } from '@/hooks/useI18n'
 import { useAuth } from '@/app/providers/AuthProvider'
 import { buildPath } from '@/app/router/routes'
 import { createOrder } from '@/features/orders/model/create-order'
+import { saveQuoteFiles, loadQuoteFiles, clearQuoteFiles, type StoredFileEntry } from '@/lib/quote-file-store'
 import { cn } from '@/lib/cn'
 import { calculateQuote } from '@/features/quote-calculator/model/calculate'
 import type { QuoteBreakdown } from '@/features/quote-calculator/model/types'
@@ -85,6 +86,8 @@ export default function QuotePage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const keyCounter = useRef(0)
   const pendingRef = useRef<QuoteBreakdown | null>(null)
+  // Dosya deposu ilk yüklenene kadar üzerine yazmayı engeller (yarış durumu koruması).
+  const filesRestored = useRef(false)
 
   // Kaydedilmiş taslak (giriş/kayıt için sayfadan ayrılıp dönen kullanıcı seçimlerini kaybetmesin).
   const draft0 = (() => {
@@ -128,6 +131,59 @@ export default function QuotePage() {
       /* yut */
     }
   }, [mode, text, service, sourceLang, targetLang, documentType, urgent, sworn, notarization, apostille, physicalDelivery, note])
+
+  // Yüklenen dosyaları geri yükle (giriş için sayfadan ayrılıp dönen kullanıcı için).
+  // Dosyalar IndexedDB'de saklanır; metin taslağı gibi geri gelir.
+  useEffect(() => {
+    let active = true
+    void loadQuoteFiles().then((stored) => {
+      if (!active) return
+      if (!stored.length) {
+        filesRestored.current = true
+        return
+      }
+      let maxN = 0
+      const entries: FileEntry[] = stored.map((s) => {
+        const n = Number.parseInt(s.key.replace(/\D/g, ''), 10)
+        if (Number.isFinite(n) && n > maxN) maxN = n
+        return { key: s.key, file: s.file, name: s.name, words: s.words, status: s.status as FileEntry['status'] }
+      })
+      keyCounter.current = Math.max(keyCounter.current, maxN)
+      filesRestored.current = true
+      setFiles(entries)
+      // Kaydedilirken yarım kalan (pending) sözcük sayımlarını tamamla.
+      entries.forEach((e) => {
+        if (e.status !== 'pending') return
+        extractWordCount(e.file)
+          .then((res) =>
+            setFiles((prev) =>
+              prev.map((x) =>
+                x.key === e.key ? { ...x, words: res.status === 'ok' ? res.words : 0, status: res.status } : x,
+              ),
+            ),
+          )
+          .catch(() =>
+            setFiles((prev) => prev.map((x) => (x.key === e.key ? { ...x, status: 'error' as const } : x))),
+          )
+      })
+    })
+    return () => {
+      active = false
+    }
+  }, [])
+
+  // Yüklenen dosyaları sürekli IndexedDB'ye kaydet (ilk geri yükleme bitmeden yazma).
+  useEffect(() => {
+    if (!filesRestored.current) return
+    const entries: StoredFileEntry[] = files.map((f) => ({
+      key: f.key,
+      name: f.name,
+      words: f.words,
+      status: f.status,
+      file: f.file,
+    }))
+    void saveQuoteFiles(entries)
+  }, [files])
 
   // Kullanıcı giriş yapınca (veya misafir doğrulaması tamamlanınca) bekleyen fiyatı göster.
   useEffect(() => {
@@ -251,12 +307,13 @@ export default function QuotePage() {
       setOrderError(q.orderConfirm.error)
       return
     }
-    // Sipariş verildi → taslağı temizle (bir dahaki sefere sıfırdan başlasın).
+    // Sipariş verildi → taslağı ve saklanan dosyaları temizle (sonraki sefer sıfırdan).
     try {
       sessionStorage.removeItem(QUOTE_DRAFT_KEY)
     } catch {
       /* yut */
     }
+    void clearQuoteFiles()
     // Onay + takip için ayrı sipariş sayfasına yönlendir.
     navigate(buildPath(locale, 'order', { slug: String(res.orderNo) }))
   }
