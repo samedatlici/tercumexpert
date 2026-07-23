@@ -2,6 +2,12 @@ import type { PartialDictionary } from '@/types/i18n'
 import { FAQ_CATEGORIES_PL, FAQ_ITEMS_PL } from '@/content/faq-data.pl'
 
 export const pl: PartialDictionary = {
+  delivery: {
+    "ready": "Twoje tłumaczenie jest gotowe",
+    "download": "Pobierz tłumaczenie",
+    "hint": "Twoje tłumaczenie zostało również wysłane na Twój adres e-mail. Sprawdź swoją skrzynkę odbiorczą (oraz folder ze spamem)."
+  },
+
   adminHub: {
     "tabChats": "Rozmowy",
     "tabCustomers": "Klienci",

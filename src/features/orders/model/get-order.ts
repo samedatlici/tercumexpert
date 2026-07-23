@@ -24,6 +24,8 @@ export interface OrderDetail {
   delivery_city: string | null
   delivery_postal_code: string | null
   delivery_country: string | null
+  /** Dijital teslim + "teslim edildi" ise: müşterinin indirebileceği çeviri dosyaları. */
+  translations?: Array<{ name: string; url: string | null }>
 }
 
 /**

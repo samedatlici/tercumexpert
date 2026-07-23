@@ -1372,6 +1372,12 @@ export const en: PartialDictionary = {
     },
   },
 
+  delivery: {
+    ready: 'Your translation is ready',
+    download: 'Download translation',
+    hint: 'Your translation has also been sent to your email address. Check your inbox (and spam folder).',
+  },
+
   adminHub: {
     tabChats: 'Conversations',
     tabCustomers: 'Customers',

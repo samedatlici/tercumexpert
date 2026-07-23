@@ -8,6 +8,12 @@ import { FAQ_CATEGORIES_AR, FAQ_ITEMS_AR } from '@/content/faq-data.ar'
  * FAQ data comes from content/faq-data.ar.
  */
 export const ar: PartialDictionary = {
+  delivery: {
+    "ready": "ترجمتك جاهزة",
+    "download": "تنزيل الترجمة",
+    "hint": "لقد تم إرسال ترجمتك أيضًا إلى عنوان بريدك الإلكتروني. يُرجى التحقق من صندوق الوارد (ومجلد البريد العشوائي)."
+  },
+
   adminHub: {
     "tabChats": "المحادثات",
     "tabCustomers": "العملاء",

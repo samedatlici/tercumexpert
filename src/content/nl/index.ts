@@ -8,6 +8,12 @@ import { FAQ_CATEGORIES_NL, FAQ_ITEMS_NL } from '@/content/faq-data.nl'
  * Engels (§10). De FAQ-gegevens komen uit content/faq-data.nl.
  */
 export const nl: PartialDictionary = {
+  delivery: {
+    "ready": "Uw vertaling is klaar",
+    "download": "Vertaling downloaden",
+    "hint": "Uw vertaling is ook naar uw e-mailadres verzonden. Controleer uw inbox (en uw spammap)."
+  },
+
   adminHub: {
     "tabChats": "Gesprekken",
     "tabCustomers": "Klanten",

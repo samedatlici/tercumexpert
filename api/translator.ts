@@ -1,5 +1,5 @@
 import { matchesTranslator, computePayout, estimatePages } from './_pool-logic'
-import { sendOrderEmail, buildEmail, sendEmail, type EmailAttachment } from './_email'
+import { sendOrderEmail, buildEmail, sendEmail, orderUrl, deliverLabel, type EmailAttachment } from './_email'
 
 /**
  * Tercüman paneli SUNUCU uç noktası (Edge). GÜVENLİK: tercümanlara doğrudan yazma
@@ -48,6 +48,35 @@ async function downloadReceipt(path: string): Promise<string | null> {
   } catch {
     return null
   }
+}
+
+// E-posta eki için toplam güvenli sınır (~20MB). Aşan büyük dosyalar EK olarak
+// gönderilmez; müşteri yine sipariş sayfasından (imzalı link) indirir. Her formatı destekler.
+const ATTACH_LIMIT = 20 * 1024 * 1024
+/** Çeviri dosyalarını (translations kovası) e-posta eki yapar; boyut sınırını koruyarak. */
+async function translationAttachments(tf: unknown): Promise<EmailAttachment[]> {
+  const files = Array.isArray(tf) ? (tf as Array<{ name?: string; path?: string }>) : []
+  const out: EmailAttachment[] = []
+  let budget = ATTACH_LIMIT
+  for (const f of files) {
+    if (!f?.path) continue
+    try {
+      // Boyutu ucuza öğren (Range ile) → çok büyükse indirme, ek yapma.
+      const probe = await fetch(`${SUPABASE_URL}/storage/v1/object/translations/${f.path}`, {
+        headers: svcHeaders({ Range: 'bytes=0-0' }),
+      })
+      const cr = probe.headers.get('content-range')
+      const size = cr ? Number(cr.split('/')[1]) : Number(probe.headers.get('content-length') || '0')
+      if (!size || size > budget) continue
+      const r = await fetch(`${SUPABASE_URL}/storage/v1/object/translations/${f.path}`, { headers: svcHeaders() })
+      if (!r.ok) continue
+      out.push({ filename: f.name || 'ceviri', content: bytesToBase64(new Uint8Array(await r.arrayBuffer())) })
+      budget -= size
+    } catch {
+      /* atla */
+    }
+  }
+  return out
 }
 
 interface LedgerRow {
@@ -385,10 +414,31 @@ export default async function handler(req: Request): Promise<Response> {
         status: 'pending',
       }),
     })
-    // Müşteriye teslim maili: kargo → "kargoya verildi" (takip no ile), dijital → "teslim edildi".
+    // Müşteriye teslim maili.
     try {
-      const mail = { ...order, tracking_info: tracking } as Parameters<typeof sendOrderEmail>[1]
-      await sendOrderEmail(order.physical_delivery ? 'shipped' : 'delivered', mail)
+      if (order.physical_delivery) {
+        // Kargo teslim: "kargoya verildi" (takip no ile). Çeviri dosyası GÖNDERİLMEZ (fiziksel kargolanır).
+        const mail = { ...order, tracking_info: tracking } as Parameters<typeof sendOrderEmail>[1]
+        await sendOrderEmail('shipped', mail)
+      } else {
+        // Dijital teslim: markalı "teslim edildi" maili + çeviri dosyası EKİ + indirme butonu (sipariş sayfası).
+        const to = String(order.contact_email || '').trim()
+        if (to) {
+          const loc = typeof order.locale === 'string' ? order.locale : 'tr'
+          const oNo = order.order_no as number
+          const { subject, html } = buildEmail({
+            event: 'delivered',
+            locale: loc,
+            name: (order.contact_name as string) || '',
+            orderNo: oNo,
+            orderUrl: orderUrl(loc, oNo),
+            ctaUrl: orderUrl(loc, oNo),
+            ctaLabel: deliverLabel(loc),
+          })
+          const attachments = await translationAttachments(order.translation_files)
+          await sendEmail(to, subject, html, attachments)
+        }
+      }
     } catch { /* yut */ }
     return json({ ok: true })
   }

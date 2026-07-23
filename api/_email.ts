@@ -83,6 +83,7 @@ interface EmailStrings {
   trackButton: string
   trackCodeLabel: string
   reviewButton: string
+  downloadTranslation: string
   regards: string
   brandSignature: string
   footer: string
@@ -115,6 +116,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Kargonu Takip Et',
     trackCodeLabel: 'Kargo takip numarası',
     reviewButton: 'Bizi Değerlendirin',
+    downloadTranslation: "Çevirinizi indirin",
     regards: 'Saygılarımızla,',
     brandSignature: 'TercümExpert Ekibi',
     footer: 'Bu e-posta siparişinizle ilgili olarak TercümExpert tarafından gönderilmiştir. Lütfen bu adrese yanıt vermeyin.',
@@ -145,6 +147,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Track Shipment',
     trackCodeLabel: 'Tracking number',
     reviewButton: 'Leave a Review',
+    downloadTranslation: "Download your translation",
     regards: 'Best regards,',
     brandSignature: 'The TercümExpert Team',
     footer: 'This email was sent by TercümExpert regarding your order. Please do not reply to this address.',
@@ -175,6 +178,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Suivre l’envoi',
     trackCodeLabel: 'Numéro de suivi',
     reviewButton: 'Laisser un avis',
+    downloadTranslation: "Télécharger votre traduction",
     regards: 'Cordialement,',
     brandSignature: 'L’équipe TercümExpert',
     footer: 'Cet e-mail a été envoyé par TercümExpert concernant votre commande. Merci de ne pas répondre à cette adresse.',
@@ -205,6 +209,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Sendung verfolgen',
     trackCodeLabel: 'Sendungsnummer',
     reviewButton: 'Bewertung abgeben',
+    downloadTranslation: "Ihre Übersetzung herunterladen",
     regards: 'Mit freundlichen Grüßen,',
     brandSignature: 'Ihr TercümExpert-Team',
     footer: 'Diese E-Mail wurde von TercümExpert zu Ihrer Bestellung versendet. Bitte antworten Sie nicht auf diese Adresse.',
@@ -235,6 +240,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Zending volgen',
     trackCodeLabel: 'Trackingnummer',
     reviewButton: 'Een beoordeling achterlaten',
+    downloadTranslation: "Download uw vertaling",
     regards: 'Met vriendelijke groet,',
     brandSignature: 'Het TercümExpert-team',
     footer: 'Deze e-mail is door TercümExpert verzonden met betrekking tot uw bestelling. Beantwoord dit adres alstublieft niet.',
@@ -265,6 +271,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Seguir el envío',
     trackCodeLabel: 'Número de seguimiento',
     reviewButton: 'Dejar una reseña',
+    downloadTranslation: "Descargue su traducción",
     regards: 'Un cordial saludo,',
     brandSignature: 'El equipo de TercümExpert',
     footer: 'Este correo ha sido enviado por TercümExpert en relación con su pedido. Por favor, no responda a esta dirección.',
@@ -295,6 +302,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'تتبع الشحنة',
     trackCodeLabel: 'رقم التتبع',
     reviewButton: 'أضف تقييماً',
+    downloadTranslation: "تنزيل ترجمتك",
     regards: 'مع أطيب التحيات،',
     brandSignature: 'فريق TercümExpert',
     footer: 'تم إرسال هذا البريد الإلكتروني من TercümExpert بخصوص طلبك. يُرجى عدم الرد على هذا العنوان.',
@@ -325,6 +333,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Отследить отправление',
     trackCodeLabel: 'Трек-номер',
     reviewButton: 'Оставить отзыв',
+    downloadTranslation: "Скачать ваш перевод",
     regards: 'С наилучшими пожеланиями,',
     brandSignature: 'Команда TercümExpert',
     footer: 'Это письмо отправлено компанией TercümExpert в связи с вашим заказом. Пожалуйста, не отвечайте на этот адрес.',
@@ -355,6 +364,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Çatdırılmanı izləyin',
     trackCodeLabel: 'İzləmə nömrəsi',
     reviewButton: 'Rəy bildirin',
+    downloadTranslation: "Tərcümənizi yükləyin",
     regards: 'Hörmətlə,',
     brandSignature: 'TercümExpert komandası',
     footer: 'Bu e-poçt sifarişinizlə bağlı TercümExpert tərəfindən göndərilmişdir. Xahiş edirik, bu ünvana cavab yazmayın.',
@@ -385,6 +395,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Śledź przesyłkę',
     trackCodeLabel: 'Numer śledzenia',
     reviewButton: 'Wystaw opinię',
+    downloadTranslation: "Pobierz swoje tłumaczenie",
     regards: 'Z poważaniem,',
     brandSignature: 'Zespół TercümExpert',
     footer: 'Ta wiadomość została wysłana przez TercümExpert w związku z Twoim zamówieniem. Prosimy nie odpowiadać na ten adres.',
@@ -415,6 +426,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Проследяване на пратката',
     trackCodeLabel: 'Номер за проследяване',
     reviewButton: 'Оставете отзив',
+    downloadTranslation: "Изтеглете вашия превод",
     regards: 'С уважение,',
     brandSignature: 'Екипът на TercümExpert',
     footer: 'Този имейл е изпратен от TercümExpert относно вашата поръчка. Моля, не отговаряйте на този адрес.',
@@ -445,6 +457,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Rastrear envio',
     trackCodeLabel: 'Número de rastreamento',
     reviewButton: 'Deixar uma avaliação',
+    downloadTranslation: "Baixe a sua tradução",
     regards: 'Atenciosamente,',
     brandSignature: 'A equipa da TercümExpert',
     footer: 'Este e-mail foi enviado pela TercümExpert relativamente ao seu pedido. Por favor, não responda a este endereço.',
@@ -475,6 +488,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Spor forsendelse',
     trackCodeLabel: 'Sporingsnummer',
     reviewButton: 'Skriv en anmeldelse',
+    downloadTranslation: "Download din oversættelse",
     regards: 'Med venlig hilsen,',
     brandSignature: 'TercümExpert-teamet',
     footer: 'Denne e-mail er sendt af TercümExpert vedrørende din ordre. Besvar venligst ikke denne adresse.',
@@ -505,6 +519,7 @@ const STRINGS: Record<string, EmailStrings> = {
     trackButton: 'Traccia la spedizione',
     trackCodeLabel: 'Numero di tracciamento',
     reviewButton: 'Lascia una recensione',
+    downloadTranslation: "Scarica la tua traduzione",
     regards: 'Cordiali saluti,',
     brandSignature: 'Il team di TercümExpert',
     footer: 'Questa email è stata inviata da TercümExpert in merito al tuo ordine. Ti preghiamo di non rispondere a questo indirizzo.',
@@ -531,6 +546,10 @@ const STRINGS: Record<string, EmailStrings> = {
 
 function S(locale: string): EmailStrings {
   return STRINGS[locale] ?? STRINGS.en
+}
+/** "Çevirinizi indirin" — teslim mailindeki indirme butonu etiketi (14 dil). */
+export function deliverLabel(locale: string): string {
+  return S(normalizeLocale(locale)).downloadTranslation
 }
 
 // Fatura + admin-sipariş maili ek metinleri (14 dil).

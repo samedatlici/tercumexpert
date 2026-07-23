@@ -12,10 +12,25 @@ const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 const COLS =
   'id,order_no,created_at,status,service,source_lang,target_lang,document_type,word_count,urgent,' +
   'notarization,physical_delivery,total,delivery_days,input_mode,note,tracking_url,carrier,contact_phone,' +
-  'delivery_address,delivery_city,delivery_postal_code,delivery_country,user_id'
+  'delivery_address,delivery_city,delivery_postal_code,delivery_country,translation_files,user_id'
 
 function json(obj: unknown, status = 200): Response {
   return new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json' } })
+}
+/** Çeviri dosyası için imzalı indirme URL'i (translations kovası). */
+async function signedUrl(path: string, expiresIn = 3600): Promise<string | null> {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/sign/translations/${path}`, {
+      method: 'POST',
+      headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ expiresIn }),
+    })
+    if (!res.ok) return null
+    const d = (await res.json()) as { signedURL?: string }
+    return d?.signedURL ? `${SUPABASE_URL}/storage/v1${d.signedURL}` : null
+  } catch {
+    return null
+  }
 }
 async function getUserId(token: string): Promise<string | null> {
   try {
@@ -57,5 +72,21 @@ export default async function handler(req: Request): Promise<Response> {
   // Sahiplik kontrolü: sipariş yoksa VEYA başkasına aitse → boş (bulunamadı).
   if (!ord || ord.user_id !== userId) return json({}, 200)
   delete ord.user_id // istemciye sızdırma
+
+  // Dijital teslim + "teslim edildi" ise çeviri dosyalarını indirilebilir yap.
+  // Kargo teslimde ASLA gönderilmez (tercüman fiziksel kargolar).
+  const tf = ord.translation_files
+  delete ord.translation_files // ham yolu istemciye sızdırma
+  if (!ord.physical_delivery && ord.status === 'delivered' && Array.isArray(tf)) {
+    const out: Array<{ name: string; url: string | null }> = []
+    for (const f of tf as Array<{ name?: string; path?: string }>) {
+      if (!f?.path) continue
+      const name = f.name || 'ceviri'
+      const u = await signedUrl(f.path)
+      // &download=<ad> → tarayıcı dosyayı (her formatta) indirir, sekmede açmaz.
+      out.push({ name, url: u ? `${u}&download=${encodeURIComponent(name)}` : null })
+    }
+    if (out.length) ord.translations = out
+  }
   return json({ order: ord })
 }

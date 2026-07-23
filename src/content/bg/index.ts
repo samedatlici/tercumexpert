@@ -2,6 +2,12 @@ import type { PartialDictionary } from '@/types/i18n'
 import { FAQ_CATEGORIES_BG, FAQ_ITEMS_BG } from '@/content/faq-data.bg'
 
 export const bg: PartialDictionary = {
+  delivery: {
+    "ready": "Вашият превод е готов",
+    "download": "Изтегляне на превода",
+    "hint": "Вашият превод беше изпратен и на Вашия имейл адрес. Моля, проверете входящата си поща (и папката за спам)."
+  },
+
   adminHub: {
     "tabChats": "Разговори",
     "tabCustomers": "Клиенти",

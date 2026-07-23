@@ -8,6 +8,12 @@ import { FAQ_CATEGORIES_IT, FAQ_ITEMS_IT } from '@/content/faq-data.it'
  * fallback inglese (§10). I dati della FAQ provengono da content/faq-data.it.
  */
 export const it: PartialDictionary = {
+  delivery: {
+    "ready": "La tua traduzione è pronta",
+    "download": "Scarica la traduzione",
+    "hint": "La tua traduzione è stata inviata anche al tuo indirizzo e-mail. Controlla la tua casella di posta (e la cartella spam)."
+  },
+
   adminHub: {
     "tabChats": "Conversazioni",
     "tabCustomers": "Clienti",

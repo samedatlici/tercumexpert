@@ -7,6 +7,12 @@ import { FAQ_CATEGORIES_RU, FAQ_ITEMS_RU } from '@/content/faq-data.ru'
  * переведены на русский; ключи, иконки и технические токены сохранены как есть.
  */
 export const ru: PartialDictionary = {
+  delivery: {
+    "ready": "Ваш перевод готов",
+    "download": "Скачать перевод",
+    "hint": "Ваш перевод также был отправлен на вашу электронную почту. Пожалуйста, проверьте папку «Входящие» (и папку «Спам»)."
+  },
+
   adminHub: {
     "tabChats": "Переписки",
     "tabCustomers": "Клиенты",

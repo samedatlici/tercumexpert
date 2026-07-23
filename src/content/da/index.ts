@@ -8,6 +8,12 @@ import { FAQ_CATEGORIES_DA, FAQ_ITEMS_DA } from '@/content/faq-data.da'
  * FAQ-data hentes fra content/faq-data.da.
  */
 export const da: PartialDictionary = {
+  delivery: {
+    "ready": "Din oversættelse er klar",
+    "download": "Download oversættelse",
+    "hint": "Din oversættelse er også blevet sendt til din e-mailadresse. Tjek din indbakke (og spam-mappen)."
+  },
+
   adminHub: {
     "tabChats": "Samtaler",
     "tabCustomers": "Kunder",

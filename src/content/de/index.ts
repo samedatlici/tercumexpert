@@ -8,6 +8,12 @@ import { FAQ_CATEGORIES_DE, FAQ_ITEMS_DE } from '@/content/faq-data.de'
  * eigenen, sprachspezifischen Datensatz (content/faq-data.de).
  */
 export const de: PartialDictionary = {
+  delivery: {
+    "ready": "Ihre Übersetzung ist fertig",
+    "download": "Übersetzung herunterladen",
+    "hint": "Ihre Übersetzung wurde auch an Ihre E-Mail-Adresse gesendet. Bitte prüfen Sie Ihren Posteingang (und den Spam-Ordner)."
+  },
+
   adminHub: {
     "tabChats": "Konversationen",
     "tabCustomers": "Kunden",

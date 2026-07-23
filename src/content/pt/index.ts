@@ -7,6 +7,12 @@ import { FAQ_CATEGORIES_PT, FAQ_ITEMS_PT } from '@/content/faq-data.pt'
  * conjunto de dados por localidade (content/faq-data.pt).
  */
 export const pt: PartialDictionary = {
+  delivery: {
+    "ready": "A sua tradução está pronta",
+    "download": "Descarregar tradução",
+    "hint": "A sua tradução também foi enviada para o seu endereço de e-mail. Verifique a sua caixa de entrada (e a pasta de spam)."
+  },
+
   adminHub: {
     "tabChats": "Conversas",
     "tabCustomers": "Clientes",

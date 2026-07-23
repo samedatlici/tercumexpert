@@ -236,6 +236,26 @@ export default function OrderDetailPage() {
                   <Icon name="Truck" className="mt-0.5 size-4 shrink-0 text-text-muted" /> {o.cargoPending}
                 </p>
               )
+            ) : currentIndex >= steps.indexOf('delivered') && order.translations && order.translations.length > 0 ? (
+              <div className="space-y-3">
+                <p className="flex items-start gap-2 text-sm font-semibold text-success">
+                  <Icon name="CircleCheck" className="mt-0.5 size-4 shrink-0" /> {dict.delivery.ready}
+                </p>
+                <div className="space-y-2">
+                  {order.translations.map((f, i) =>
+                    f.url ? (
+                      <a key={i} href={f.url} target="_blank" rel="noopener noreferrer" download>
+                        <Button intent="secondary" block>
+                          <Icon name="FileText" className="size-5" />
+                          {dict.delivery.download}
+                          {order.translations!.length > 1 ? ` — ${f.name}` : ''}
+                        </Button>
+                      </a>
+                    ) : null,
+                  )}
+                </div>
+                <p className="text-xs text-text-muted">{dict.delivery.hint}</p>
+              </div>
             ) : (
               <p className="flex items-start gap-2 text-sm text-text-secondary">
                 <Icon name="Mail" className="mt-0.5 size-4 shrink-0 text-text-muted" />

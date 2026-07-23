@@ -1365,6 +1365,12 @@ export const tr = {
     },
   },
 
+  delivery: {
+    ready: 'Çeviriniz hazır',
+    download: 'Çeviriyi indir',
+    hint: 'Çeviriniz ayrıca e-posta adresinize de gönderildi. Gelen kutunuzu (ve spam klasörünü) kontrol edin.',
+  },
+
   adminHub: {
     tabChats: 'Sohbetler',
     tabCustomers: 'Müşteriler',

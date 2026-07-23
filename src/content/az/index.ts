@@ -2,6 +2,12 @@ import type { PartialDictionary } from '@/types/i18n'
 import { FAQ_CATEGORIES_AZ, FAQ_ITEMS_AZ } from '@/content/faq-data.az'
 
 export const az: PartialDictionary = {
+  delivery: {
+    "ready": "Tərcüməniz hazırdır",
+    "download": "Tərcüməni yükləyin",
+    "hint": "Tərcüməniz həmçinin e-poçt ünvanınıza göndərilib. Zəhmət olmasa, gələnlər qutunuzu (və spam qovluğunu) yoxlayın."
+  },
+
   adminHub: {
     "tabChats": "Söhbətlər",
     "tabCustomers": "Müştərilər",

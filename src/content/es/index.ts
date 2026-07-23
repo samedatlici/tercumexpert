@@ -8,6 +8,12 @@ import { FAQ_CATEGORIES_ES, FAQ_ITEMS_ES } from '@/content/faq-data.es'
  * conjunto de datos propio y específico del idioma (content/faq-data.es).
  */
 export const es: PartialDictionary = {
+  delivery: {
+    "ready": "Su traducción está lista",
+    "download": "Descargar traducción",
+    "hint": "Su traducción también se ha enviado a su dirección de correo electrónico. Revise su bandeja de entrada (y la carpeta de spam)."
+  },
+
   adminHub: {
     "tabChats": "Conversaciones",
     "tabCustomers": "Clientes",
