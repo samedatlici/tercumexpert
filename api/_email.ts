@@ -21,7 +21,24 @@ const BRAND_BLUE = '#1d4ed8'
 const BRAND_GREEN = '#16a34a'
 const INK = '#0f172a'
 
-export type EmailEvent = 'received' | 'in_progress' | 'translated' | 'shipped' | 'delivered' | 'review' | 'admin_new_order'
+export type EmailEvent = 'received' | 'in_progress' | 'translated' | 'shipped' | 'delivered' | 'review' | 'admin_new_order' | 'payment'
+
+// Ödeme maili metinleri (tr+en; diğer diller tr'ye düşer — çoğu tercüman TR).
+const PAYMENT: Record<string, { subject: string; heading: string; body: string }> = {
+  tr: {
+    subject: 'Ödemeniz gerçekleştirildi',
+    heading: 'Ödemeniz yapıldı',
+    body: 'Cüzdanınızdaki çekilebilir bakiye banka hesabınıza gönderildi. Ödeme dekontu bu e-postaya PDF olarak eklenmiştir. Tutar cüzdanınızda “Ödenen” bölümünde görünür.',
+  },
+  en: {
+    subject: 'Your payment has been made',
+    heading: 'Your payment has been made',
+    body: 'Your withdrawable wallet balance has been sent to your bank account. The payment receipt is attached to this email as a PDF. The amount now appears under “Paid out” in your wallet.',
+  },
+}
+function paymentStrings(locale: string): { subject: string; heading: string; body: string } {
+  return PAYMENT[normalizeLocale(locale)] ?? PAYMENT.tr
+}
 
 // Sipariş route slug'ı (src/app/router/routes.ts ile aynı; eksik dillerde EN'e düşer).
 const ORDER_SLUG: Record<string, string> = {
@@ -637,6 +654,12 @@ export function buildEmail(p: BuildParams): { subject: string; html: string } {
       cta = button(s.viewOrder, p.orderUrl, BRAND_BLUE)
       break
     }
+    case 'payment': {
+      const pm = paymentStrings(p.locale)
+      subject = pm.subject; heading = pm.heading; bodyText = pm.body
+      cta = ''
+      break
+    }
   }
 
   // Buton override (ör. admin maili → müşteri sipariş sayfası yerine tercüme havuzu).
@@ -658,7 +681,7 @@ export function buildEmail(p: BuildParams): { subject: string; html: string } {
       : ''
 
   const signature = `<p style="margin:22px 0 0;font-size:14px;line-height:1.5;color:#475569;text-align:${align};">${esc(s.regards)}<br><strong style="color:${INK};">${esc(s.brandSignature)}</strong></p>`
-  const showChip = p.event !== 'review'
+  const showChip = p.event !== 'review' && p.event !== 'payment'
   const bodyHtml = greetHtml + (showChip ? orderChip : '') + para(bodyText) + detailsHtml + invNoteHtml + cta + signature
   const finalSubject = subject.replace('{no}', no)
   return { subject: finalSubject, html: shell(p.locale, heading, bodyHtml) }

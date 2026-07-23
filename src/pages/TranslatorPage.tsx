@@ -470,13 +470,15 @@ function ProfileEditor({
 
   // Onaydan sonra Ad Soyad + Doğum tarihi kilitli (sunucu da zorlar).
   const locked = !!translator.was_approved
-  // Onay-düşüren değişiklik: dil çifti / IBAN / yeminli / uzmanlık değişirse onay düşer.
+  const isApproved = translator.status === 'approved'
+  // Onay-DÜŞÜREN değişiklik: dil çifti / yeminli / uzmanlık (IBAN HARİÇ).
   const willRevoke =
-    translator.status === 'approved' &&
+    isApproved &&
     (JSON.stringify(pairs) !== JSON.stringify(translator.language_pairs ?? []) ||
       JSON.stringify(expertise) !== JSON.stringify(translator.expertise ?? []) ||
-      iban.trim() !== (translator.iban ?? '') ||
       isSworn !== !!translator.is_sworn)
+  // IBAN değişikliği: hesap onaylı KALIR, yalnız IBAN yeniden onay bekler (yeni iş alınamaz).
+  const ibanReverify = isApproved && iban.trim() !== (translator.iban ?? '')
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -584,6 +586,12 @@ function ProfileEditor({
       </div>
       <PairPicker t={t} locale={locale} pairs={pairs} setPairs={setPairs} />
       <ExpertisePicker t={t} selected={expertise} setSelected={setExpertise} />
+      {ibanReverify && !willRevoke && (
+        <div className="flex items-start gap-2 rounded-md border border-secondary/40 bg-surface-muted p-3.5 text-sm">
+          <Icon name="ShieldCheck" className="mt-0.5 size-4 shrink-0 text-text-secondary" />
+          <p className="text-text-secondary">{t.profile.ibanReverify}</p>
+        </div>
+      )}
       {willRevoke && (
         <div className="rounded-md border border-danger/40 bg-danger/5 p-3.5 text-sm">
           <p className="flex items-start gap-2 font-semibold text-danger">
@@ -610,16 +618,28 @@ function ProfileEditor({
 /* ------------------------------------------------------------------ */
 
 /** Admin: sekmeli yönetim — Tercümanlar · Başvurular · Siparişler · iş akışı · Cüzdan. */
-type AdminTab = 'translators' | 'applications' | 'orders' | 'active' | 'pending' | 'approved' | 'completed' | 'wallet'
+type AdminTab =
+  | 'translators'
+  | 'applications'
+  | 'iban'
+  | 'orders'
+  | 'active'
+  | 'pending'
+  | 'approved'
+  | 'completed'
+  | 'wallet'
+  | 'payments'
 const ADMIN_TABS: { key: AdminTab; icon: IconName }[] = [
   { key: 'translators', icon: 'Users' },
   { key: 'applications', icon: 'FileText' },
+  { key: 'iban', icon: 'ShieldCheck' },
   { key: 'orders', icon: 'PackageCheck' },
   { key: 'active', icon: 'Cog' },
   { key: 'pending', icon: 'Clock' },
   { key: 'approved', icon: 'Check' },
   { key: 'completed', icon: 'CircleCheck' },
   { key: 'wallet', icon: 'Wallet' },
+  { key: 'payments', icon: 'Coins' },
 ]
 
 /* ---- Tercüman filtreleri (Tercümanlar + Başvurular ortak) ---- */
@@ -771,9 +791,13 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
       ? t.admin.translatorsTab
       : k === 'applications'
         ? t.admin.applicationsTab
-        : k === 'orders'
-          ? t.admin.ordersTab
-          : t.tabs[k]
+        : k === 'iban'
+          ? t.admin.ibanTab
+          : k === 'orders'
+            ? t.admin.ordersTab
+            : k === 'payments'
+              ? t.admin.paymentsTab
+              : t.tabs[k]
 
   return (
     <div>
@@ -800,10 +824,14 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
         <AdminTranslators t={t} locale={locale} openId={openTid} onOpened={() => setOpenTid(null)} />
       ) : tab === 'applications' ? (
         <AdminApplications t={t} locale={locale} />
+      ) : tab === 'iban' ? (
+        <AdminIbanApprovals t={t} />
       ) : tab === 'orders' ? (
         <AdminOrders t={t} locale={locale} onOpenTranslator={openTranslator} />
       ) : tab === 'wallet' ? (
         <AdminWalletSection t={t} />
+      ) : tab === 'payments' ? (
+        <AdminPayments t={t} />
       ) : (
         <WorkflowSection t={t} locale={locale} status={TAB_STATUS[tab]} isAdmin />
       )}
@@ -2152,6 +2180,201 @@ function AdminOrders({
             </article>
           ))}
         </div>
+      )}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Admin: IBAN onayları — iban_verified=false onaylı tercümanlar         */
+/* ------------------------------------------------------------------ */
+
+function AdminIbanApprovals({ t }: { t: TDict }) {
+  const [rows, setRows] = useState<Translator[]>([])
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const [busyId, setBusyId] = useState<string | null>(null)
+
+  const load = () => {
+    setState('loading')
+    supabase
+      .from('translators')
+      .select('*')
+      .eq('status', 'approved')
+      .eq('iban_verified', false)
+      .order('updated_at', { ascending: false })
+      .then(({ data, error }) => {
+        if (error) {
+          setState('error')
+          return
+        }
+        // Yalnızca IBAN GİRMİŞ olanlar (boş IBAN = onaylanacak bir şey yok).
+        setRows(((data as Translator[]) ?? []).filter((r) => (r.iban ?? '').trim() !== ''))
+        setState('idle')
+      })
+  }
+  useEffect(load, [])
+
+  const act = async (id: string, patch: Partial<Translator>) => {
+    setBusyId(id)
+    const { error } = await supabase.from('translators').update(patch).eq('id', id)
+    setBusyId(null)
+    if (!error) setRows((prev) => prev.filter((r) => r.id !== id))
+    else alert(t.admin.actionError)
+  }
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{t.loading}</p>
+  if (state === 'error')
+    return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{t.admin.loadError}</p>
+  if (rows.length === 0)
+    return (
+      <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
+        <p className="text-sm text-text-secondary">{t.admin.noIbanPending}</p>
+      </div>
+    )
+  return (
+    <div className="space-y-3">
+      <p className="text-sm text-text-secondary">{t.admin.ibanHint}</p>
+      {rows.map((r) => (
+        <article key={r.id} className="rounded-lg border border-border bg-surface p-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-semibold">{r.full_name || '—'}</h3>
+            {r.was_approved && <Pill tone="dark">{t.admin.returningBadge}</Pill>}
+          </div>
+          <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
+            <Detail label={t.form.iban}><span dir="ltr" className="font-mono">{r.iban}</span></Detail>
+            <Detail label={t.form.ibanName}>{r.iban_name || '—'}</Detail>
+          </dl>
+          <div className="mt-3 flex flex-wrap gap-2 border-t border-border pt-3">
+            <Button type="button" intent="secondary" size="sm" disabled={busyId === r.id} onClick={() => act(r.id, { iban_verified: true })}>
+              {t.admin.ibanApprove}
+            </Button>
+            <Button type="button" intent="outline" size="sm" disabled={busyId === r.id} onClick={() => act(r.id, { iban: null, iban_name: null })}>
+              {t.admin.reject}
+            </Button>
+          </div>
+        </article>
+      ))}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Admin: Ödemeler — bakiyesi olan tercümanlar, dekontlu manuel ödeme    */
+/* ------------------------------------------------------------------ */
+
+interface PaymentRow {
+  translatorId: string
+  name: string | null
+  iban: string | null
+  iban_name: string | null
+  amount: number
+}
+
+function AdminPayments({ t }: { t: TDict }) {
+  const { formatCurrency } = useI18n()
+  const [rows, setRows] = useState<PaymentRow[]>([])
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const [receipts, setReceipts] = useState<Record<string, string>>({}) // translatorId → yüklenen dekont yolu
+  const [uploadingId, setUploadingId] = useState<string | null>(null)
+  const [busyId, setBusyId] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
+
+  useEffect(() => {
+    translatorApi<{ payments?: PaymentRow[]; error?: string }>('adminPayments')
+      .then((r) => {
+        if (r.error) {
+          setState('error')
+          return
+        }
+        setRows(r.payments ?? [])
+        setState('idle')
+      })
+      .catch(() => setState('error'))
+  }, [])
+
+  const upload = async (translatorId: string, file: File) => {
+    setUploadingId(translatorId)
+    const path = `${translatorId}/${Date.now()}-dekont.pdf`
+    const { error } = await supabase.storage
+      .from('receipts')
+      .upload(path, file, { upsert: true, contentType: file.type || 'application/pdf' })
+    setUploadingId(null)
+    if (!error) setReceipts((prev) => ({ ...prev, [translatorId]: path }))
+    else alert(t.admin.actionError)
+  }
+
+  const pay = async (translatorId: string) => {
+    const receiptPath = receipts[translatorId]
+    if (!receiptPath) return
+    setBusyId(translatorId)
+    setNotice(null)
+    const r = await translatorApi<{ ok?: boolean; error?: string }>('payTranslator', { translatorId, receiptPath })
+    setBusyId(null)
+    if (r.ok) {
+      setRows((prev) => prev.filter((x) => x.translatorId !== translatorId))
+      setNotice(t.admin.paid)
+    } else {
+      setNotice(t.admin.actionError)
+    }
+  }
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{t.loading}</p>
+  if (state === 'error')
+    return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{t.admin.loadError}</p>
+
+  return (
+    <div className="space-y-3">
+      <p className="rounded-md border border-border bg-surface-muted/50 p-3 text-sm text-text-secondary">{t.admin.paymentsHint}</p>
+      {notice && <p className="rounded-md border border-success/40 bg-success/10 p-3 text-sm text-success">{notice}</p>}
+      {rows.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
+          <p className="text-sm text-text-secondary">{t.admin.noPayments}</p>
+        </div>
+      ) : (
+        rows.map((r) => (
+          <article key={r.translatorId} className="rounded-lg border border-border bg-surface p-4">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h3 className="font-semibold">{r.name || '—'}</h3>
+                <dl className="mt-2 grid gap-1.5 text-sm">
+                  <Detail label={t.form.iban}><span dir="ltr" className="font-mono">{r.iban || '—'}</span></Detail>
+                  {r.iban_name && <Detail label={t.form.ibanName}>{r.iban_name}</Detail>}
+                </dl>
+              </div>
+              <div className="text-end">
+                <p className="text-xs text-text-secondary">{t.admin.paymentAmount}</p>
+                <span className="inline-flex items-center rounded-lg border border-success bg-success px-3 py-1.5 text-lg font-bold text-white">
+                  {formatCurrency(r.amount)}
+                </span>
+              </div>
+            </div>
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
+              <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-sm font-medium hover:bg-surface-muted">
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0]
+                    if (f) upload(r.translatorId, f)
+                  }}
+                />
+                <Icon name="Upload" className="size-4" />
+                {uploadingId === r.translatorId ? t.admin.uploading : receipts[r.translatorId] ? t.admin.receiptUploaded : t.admin.uploadReceipt}
+              </label>
+              <Button
+                type="button"
+                intent="secondary"
+                size="sm"
+                disabled={!receipts[r.translatorId] || busyId === r.translatorId}
+                onClick={() => pay(r.translatorId)}
+              >
+                {busyId === r.translatorId ? t.admin.uploading : t.admin.markPaid}
+              </Button>
+              {!receipts[r.translatorId] && <span className="text-xs text-text-muted">{t.admin.receiptRequired}</span>}
+            </div>
+          </article>
+        ))
       )}
     </div>
   )

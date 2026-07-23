@@ -1,5 +1,5 @@
 import { matchesTranslator, computePayout, estimatePages } from './_pool-logic'
-import { sendOrderEmail } from './_email'
+import { sendOrderEmail, buildEmail, sendEmail, type EmailAttachment } from './_email'
 
 /**
  * Tercüman paneli SUNUCU uç noktası (Edge). GÜVENLİK: tercümanlara doğrudan yazma
@@ -18,6 +18,37 @@ const ADMIN_EMAIL = 'admin@tercumexpert.com'
 const nowIso = () => new Date().toISOString()
 const TAX_RATE = 0.2 // KDV %20 (pricing.config.ts taxRatePercent ile AYNI olmalı)
 const LOCK_MS = 7 * 24 * 60 * 60 * 1000 // kazanç 7 gün kilitli, sonra çekilebilir
+
+/** Uint8Array → base64 (Edge; Buffer yok). */
+function bytesToBase64(bytes: Uint8Array): string {
+  let bin = ''
+  const chunk = 0x8000
+  for (let i = 0; i < bytes.length; i += chunk) {
+    bin += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, i + chunk)))
+  }
+  return btoa(bin)
+}
+/** Tercümanın e-postası (auth admin). */
+async function getUserEmail(userId: string): Promise<string | null> {
+  try {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${userId}`, { headers: svcHeaders() })
+    if (!r.ok) return null
+    const u = (await r.json()) as { email?: string }
+    return u?.email ?? null
+  } catch {
+    return null
+  }
+}
+/** Dekont PDF'ini receipts deposundan indirir → base64. */
+async function downloadReceipt(path: string): Promise<string | null> {
+  try {
+    const r = await fetch(`${SUPABASE_URL}/storage/v1/object/receipts/${path}`, { headers: svcHeaders() })
+    if (!r.ok) return null
+    return bytesToBase64(new Uint8Array(await r.arrayBuffer()))
+  } catch {
+    return null
+  }
+}
 
 interface LedgerRow {
   amount: number | string
@@ -184,6 +215,7 @@ export default async function handler(req: Request): Promise<Response> {
     action?: string
     orderId?: string
     translatorId?: string
+    receiptPath?: string
     files?: Array<{ name?: string; path?: string }>
     reason?: string
     tracking?: string
@@ -500,6 +532,98 @@ export default async function handler(req: Request): Promise<Response> {
       out.push({ ...o, translatorName: tid ? names[tid] : null })
     }
     return json({ orders: out })
+  }
+
+  // -------- Admin: Ödemeler — çekilebilir bakiyesi olan tercümanlar --------
+  if (action === 'adminPayments') {
+    if (!isAdmin) return json({ error: 'forbidden' }, 403)
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/translator_ledger?status=eq.pending&select=amount,created_at,translator_id`,
+      { headers: svcHeaders() },
+    )
+    if (!r.ok) return json({ error: 'load' }, 200)
+    const rows = (await r.json()) as Array<{ amount: number | string; created_at: string; translator_id: string }>
+    const now = Date.now()
+    const sums: Record<string, number> = {}
+    for (const e of rows) {
+      // Yalnızca çekilebilir (7 günü dolmuş) kazançlar ödenir.
+      if (now - new Date(e.created_at).getTime() >= LOCK_MS) {
+        sums[e.translator_id] = (sums[e.translator_id] ?? 0) + (Number(e.amount) || 0)
+      }
+    }
+    const out: Array<Record<string, unknown>> = []
+    for (const id of Object.keys(sums)) {
+      if (sums[id] <= 0) continue // 0 bakiyeli listelenmez
+      const tr = await fetch(`${SUPABASE_URL}/rest/v1/translators?id=eq.${id}&select=full_name,iban,iban_name`, {
+        headers: svcHeaders(),
+      })
+      const trow = tr.ok ? ((await tr.json()) as Array<Record<string, unknown>>)[0] : null
+      out.push({
+        translatorId: id,
+        name: trow?.full_name ?? null,
+        iban: trow?.iban ?? null,
+        iban_name: trow?.iban_name ?? null,
+        amount: Math.round(sums[id]),
+      })
+    }
+    return json({ payments: out })
+  }
+
+  // -------- Admin: bir tercümana ödeme yap (dekont ZORUNLU) --------
+  if (action === 'payTranslator') {
+    if (!isAdmin) return json({ error: 'forbidden' }, 403)
+    const id = body.translatorId
+    const receiptPath = typeof body.receiptPath === 'string' ? body.receiptPath : ''
+    if (!id || !receiptPath) return json({ error: 'need_receipt' }, 400) // dekont yüklenmeden ödeme yok
+    const lr = await fetch(
+      `${SUPABASE_URL}/rest/v1/translator_ledger?translator_id=eq.${id}&status=eq.pending&select=id,amount,created_at`,
+      { headers: svcHeaders() },
+    )
+    if (!lr.ok) return json({ error: 'load' }, 200)
+    const entries = (await lr.json()) as Array<{ id: string; amount: number | string; created_at: string }>
+    const now = Date.now()
+    const payable = entries.filter((e) => now - new Date(e.created_at).getTime() >= LOCK_MS)
+    const total = payable.reduce((sum, e) => sum + (Number(e.amount) || 0), 0)
+    if (payable.length === 0 || total <= 0) return json({ error: 'nothing_to_pay' }, 409)
+
+    // Çekilebilir kayıtları 'paid' işaretle + dekont yolu.
+    const ok = await (async () => {
+      const idsList = payable.map((e) => e.id).join(',')
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/translator_ledger?id=in.(${idsList})`, {
+        method: 'PATCH',
+        headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+        body: JSON.stringify({ status: 'paid', paid_at: nowIso(), receipt_path: receiptPath }),
+      })
+      return res.ok
+    })()
+    if (!ok) return json({ error: 'update_failed' }, 200)
+
+    // Tercümana ödeme maili + dekont eki (best-effort).
+    try {
+      const tr = await fetch(`${SUPABASE_URL}/rest/v1/translators?id=eq.${id}&select=user_id,full_name`, {
+        headers: svcHeaders(),
+      })
+      const trow = tr.ok ? ((await tr.json()) as Array<{ user_id: string; full_name: string | null }>)[0] : null
+      if (trow) {
+        const email = await getUserEmail(trow.user_id)
+        if (email) {
+          const pdf = await downloadReceipt(receiptPath)
+          const att: EmailAttachment[] = pdf ? [{ filename: 'dekont.pdf', content: pdf }] : []
+          const mail = buildEmail({
+            event: 'payment',
+            locale: 'tr',
+            name: trow.full_name || '',
+            orderNo: '',
+            orderUrl: '',
+            details: [{ label: 'Ödenen tutar', value: `${Math.round(total)} TL` }],
+          })
+          await sendEmail(email, mail.subject, mail.html, att)
+        }
+      }
+    } catch {
+      /* mail hatası ödemeyi bozmaz */
+    }
+    return json({ ok: true, amount: Math.round(total) })
   }
 
   return json({ error: 'unknown_action' }, 400)
