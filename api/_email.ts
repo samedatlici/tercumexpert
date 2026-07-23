@@ -523,7 +523,7 @@ function shell(locale: string, heading: string, bodyHtml: string): string {
 <tr><td align="center">
 <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">
 <tr><td style="padding:20px 28px;border-bottom:1px solid #eef0f3;">
-<span style="font-size:18px;font-weight:800;color:${BRAND_BLUE};letter-spacing:-.2px;">Tercüm<span style="color:${INK};">Expert</span></span>
+<span style="font-size:18px;font-weight:800;color:${INK};letter-spacing:-.2px;">TercümExpert</span>
 </td></tr>
 <tr><td dir="${dir}" style="padding:28px;text-align:${align};font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
 <h1 style="margin:0 0 14px;font-size:20px;line-height:1.3;color:${INK};font-weight:700;">${esc(heading)}</h1>
