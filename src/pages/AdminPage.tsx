@@ -101,7 +101,7 @@ export default function AdminPage() {
     return (
       <Shell>
         <Center icon="Lock" title={a.loginTitle} desc={a.loginDesc}>
-          <Link to={buildPath(locale, 'auth')}><Button intent="secondary" block>{a.login}</Button></Link>
+          <Link to={`${buildPath(locale, 'auth')}?next=${encodeURIComponent(window.location.pathname)}`}><Button intent="secondary" block>{a.login}</Button></Link>
         </Center>
       </Shell>
     )

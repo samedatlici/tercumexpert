@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type Dispatch, type ReactNode, ty
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon, type IconName } from '@/components/common/Icon'
-import { PhoneInput } from '@/components/common/PhoneInput'
+import { PhoneVerifyField } from '@/features/translator/ui/PhoneVerifyField'
 import { useI18n } from '@/hooks/useI18n'
 import { useAuth } from '@/app/providers/AuthProvider'
 import { buildPath } from '@/app/router/routes'
@@ -59,7 +59,7 @@ export default function TranslatorPage() {
     if (!user) {
       return (
         <Center icon="Lock" title={t.loginTitle} desc={t.loginDesc}>
-          <Link to={buildPath(locale, 'auth')}>
+          <Link to={`${buildPath(locale, 'auth')}?next=${encodeURIComponent(window.location.pathname)}`}>
             <Button intent="secondary" block>{t.login}</Button>
           </Link>
         </Center>
@@ -268,9 +268,11 @@ function ApplicationForm({
   existingId?: string
   onDone: () => void
 }) {
+  const { dict } = useI18n()
   const [fullName, setFullName] = useState('')
   const [birthDate, setBirthDate] = useState('')
   const [phone, setPhone] = useState('')
+  const [phoneVerified, setPhoneVerified] = useState(false)
   const [country, setCountry] = useState(() => defaultCountryForLocale(locale))
   const [city, setCity] = useState('')
   const [address, setAddress] = useState('')
@@ -284,6 +286,11 @@ function ApplicationForm({
     e.preventDefault()
     if (!fullName.trim() || pairs.length === 0) {
       setErr(pairs.length === 0 ? t.form.atLeastOnePair : t.form.required)
+      return
+    }
+    // Telefon SMS doğrulaması ZORUNLU (başvuru için).
+    if (!phone || !phoneVerified) {
+      setErr(dict.smsVerify.mustVerify)
       return
     }
     setErr(null)
@@ -330,8 +337,14 @@ function ApplicationForm({
           </div>
         </div>
         <div>
-          <label className={labelClass}>{t.form.phone}</label>
-          <PhoneInput onChange={setPhone} />
+          <label className={labelClass}>{t.form.phone} <span className="text-danger">*</span></label>
+          <PhoneVerifyField
+            defaultCountry={country}
+            onState={(s) => {
+              setPhone(s.phone)
+              setPhoneVerified(s.verified)
+            }}
+          />
         </div>
         <CountryCitySelect
           country={country}
@@ -453,9 +466,11 @@ function ProfileEditor({
   translator: Translator
   onSaved: () => void
 }) {
+  const { dict } = useI18n()
   const [fullName, setFullName] = useState(translator.full_name ?? '')
   const [birthDate, setBirthDate] = useState(translator.birth_date ?? '')
   const [phone, setPhone] = useState(translator.phone ?? '')
+  const [phoneVerified, setPhoneVerified] = useState(!!translator.phone)
   const [country, setCountry] = useState(translator.country ?? '')
   const [city, setCity] = useState(translator.city ?? '')
   const [address, setAddress] = useState(translator.address ?? '')
@@ -467,6 +482,7 @@ function ProfileEditor({
   const [consent, setConsent] = useState(false)
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<'ok' | 'err' | null>(null)
+  const [phoneMsg, setPhoneMsg] = useState<string | null>(null)
 
   // Onaydan sonra Ad Soyad + Doğum tarihi kilitli (sunucu da zorlar).
   const locked = !!translator.was_approved
@@ -480,9 +496,17 @@ function ProfileEditor({
   // IBAN değişikliği: hesap onaylı KALIR, yalnız IBAN yeniden onay bekler (yeni iş alınamaz).
   const ibanReverify = isApproved && iban.trim() !== (translator.iban ?? '')
 
+  // Telefon değiştiyse yeni numara SMS ile doğrulanmış olmalı (değişmezse doğrulama gerekmez).
+  const phoneChanged = phone !== (translator.phone ?? '')
+
   const save = async (e: React.FormEvent) => {
     e.preventDefault()
     if (willRevoke && !consent) return
+    if (phoneChanged && !phoneVerified) {
+      setPhoneMsg(dict.smsVerify.mustVerify)
+      return
+    }
+    setPhoneMsg(null)
     setBusy(true)
     setMsg(null)
     const { error } = await supabase
@@ -502,6 +526,12 @@ function ProfileEditor({
       })
       .eq('id', translator.id)
     setBusy(false)
+    // Sunucu backstop: doğrulanmamış telefon → özel mesaj.
+    if (error && /phone_not_verified/.test(error.message)) {
+      setPhoneMsg(dict.smsVerify.mustVerify)
+      setMsg('err')
+      return
+    }
     setMsg(error ? 'err' : 'ok')
     if (!error) onSaved()
   }
@@ -548,8 +578,17 @@ function ProfileEditor({
       </div>
       <div>
         <label className={labelClass}>{t.form.phone}</label>
-        <PhoneInput onChange={setPhone} />
-        {translator.phone && <p className="mt-1 text-xs text-text-muted">{t.profile.current}: <span dir="ltr">{translator.phone}</span></p>}
+        <PhoneVerifyField
+          defaultCountry={country || undefined}
+          initialVerifiedPhone={translator.phone ?? null}
+          onState={(s) => {
+            setPhone(s.phone)
+            setPhoneVerified(s.verified)
+            setPhoneMsg(null)
+          }}
+        />
+        <p className="mt-1 text-xs text-text-muted">{dict.smsVerify.reverifyHint}</p>
+        {phoneMsg && <p className="mt-1 text-xs text-danger">{phoneMsg}</p>}
       </div>
       <CountryCitySelect
         country={country}
