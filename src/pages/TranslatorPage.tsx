@@ -409,6 +409,8 @@ function TranslatorPanel({
         <PoolTab t={t} locale={locale} />
       ) : TAB_STATUS[tab] ? (
         <WorkflowSection t={t} locale={locale} status={TAB_STATUS[tab]} isAdmin={false} translatorId={translator.id} />
+      ) : tab === 'wallet' ? (
+        <WalletSection t={t} />
       ) : (
         <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
           <p className="text-sm text-text-secondary">{t.soon}</p>
@@ -548,19 +550,22 @@ function ProfileEditor({
 /* Admin bölümü: başvuru/onay yönetimi (tercümandan üstün yetki)       */
 /* ------------------------------------------------------------------ */
 
-/** Admin: sekmeli yönetim — Tercümanlar (başvuru/onay) + iş akışı sekmeleri (tüm tercümanlar). */
-type AdminTab = 'applications' | 'active' | 'pending' | 'approved' | 'completed'
+/** Admin: sekmeli yönetim — Tercümanlar (onaylı hesaplar+profil) · Başvurular · iş akışı · Cüzdan. */
+type AdminTab = 'translators' | 'applications' | 'active' | 'pending' | 'approved' | 'completed' | 'wallet'
 const ADMIN_TABS: { key: AdminTab; icon: IconName }[] = [
-  { key: 'applications', icon: 'Users' },
+  { key: 'translators', icon: 'Users' },
+  { key: 'applications', icon: 'FileText' },
   { key: 'active', icon: 'Cog' },
   { key: 'pending', icon: 'Clock' },
   { key: 'approved', icon: 'Check' },
   { key: 'completed', icon: 'PackageCheck' },
+  { key: 'wallet', icon: 'Wallet' },
 ]
 
 function AdminSection({ t, locale }: { t: TDict; locale: string }) {
-  const [tab, setTab] = useState<AdminTab>('applications')
-  const adminLabel = (k: AdminTab) => (k === 'applications' ? t.admin.applicationsTab : t.tabs[k])
+  const [tab, setTab] = useState<AdminTab>('translators')
+  const adminLabel = (k: AdminTab) =>
+    k === 'translators' ? t.admin.translatorsTab : k === 'applications' ? t.admin.applicationsTab : t.tabs[k]
 
   return (
     <div>
@@ -583,8 +588,12 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
         ))}
       </div>
 
-      {tab === 'applications' ? (
+      {tab === 'translators' ? (
+        <AdminTranslators t={t} locale={locale} />
+      ) : tab === 'applications' ? (
         <AdminApplications t={t} locale={locale} />
+      ) : tab === 'wallet' ? (
+        <AdminWalletSection t={t} />
       ) : (
         <WorkflowSection t={t} locale={locale} status={TAB_STATUS[tab]} isAdmin />
       )}
@@ -601,9 +610,11 @@ function AdminApplications({ t, locale }: { t: TDict; locale: string }) {
 
   const load = () => {
     setState('loading')
+    // Yalnızca BAŞVURULAR: bekleyen + reddedilen. Onaylılar "Tercümanlar" sayfasında.
     supabase
       .from('translators')
       .select('*')
+      .in('status', ['pending', 'rejected'])
       .order('created_at', { ascending: false })
       .then(({ data, error }) => {
         if (error) {
@@ -621,7 +632,9 @@ function AdminApplications({ t, locale }: { t: TDict; locale: string }) {
     const { error } = await supabase.from('translators').update(patch).eq('id', id)
     setBusyId(null)
     if (!error) {
-      setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ...patch } : r)))
+      // Onaylanınca başvurular listesinden düşer (artık "Tercümanlar"da).
+      if (patch.status === 'approved') setRows((prev) => prev.filter((r) => r.id !== id))
+      else setRows((prev) => prev.map((r) => (r.id === id ? { ...r, ...patch } : r)))
     } else {
       alert(t.admin.actionError)
     }
@@ -632,12 +645,12 @@ function AdminApplications({ t, locale }: { t: TDict; locale: string }) {
   return (
     <div>
       <p className="mb-5 text-sm text-text-secondary">
-        {t.admin.summary.replace('{total}', String(rows.length)).replace('{pending}', String(pendingCount))}
+        {t.admin.applicationsSummary.replace('{total}', String(rows.length)).replace('{pending}', String(pendingCount))}
       </p>
 
       {state === 'loading' && <p className="py-10 text-center text-sm text-text-secondary">{t.loading}</p>}
       {state === 'error' && <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{t.admin.loadError}</p>}
-      {state === 'idle' && rows.length === 0 && <p className="py-10 text-center text-sm text-text-secondary">{t.admin.noApplications}</p>}
+      {state === 'idle' && rows.length === 0 && <p className="py-10 text-center text-sm text-text-secondary">{t.admin.noPending}</p>}
 
       {state === 'idle' && rows.length > 0 && (
         <div className="space-y-3">
@@ -1298,6 +1311,431 @@ function JobCard({
         )}
       </div>
     </article>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Faz 5: Cüzdan (tercüman + admin) + admin tercüman profili            */
+/* ------------------------------------------------------------------ */
+
+interface WalletData {
+  total: number
+  locked: number
+  withdrawable: number
+  paid: number
+  entries: Array<{ amount: number; status: string; created_at: string; paid_at: string | null; order_no: number | null; unlocked: boolean }>
+}
+
+function StatCard({ label, value, icon, accent }: { label: string; value: string; icon: IconName; accent?: string }) {
+  return (
+    <div className="rounded-lg border border-border bg-surface p-4">
+      <div className="flex items-center gap-1.5 text-text-secondary">
+        <Icon name={icon} className="size-4" />
+        <span className="text-xs font-medium">{label}</span>
+      </div>
+      <p className={cn('mt-1.5 text-xl font-bold', accent)}>{value}</p>
+    </div>
+  )
+}
+
+/** Cüzdan görünümü (tercüman paneli + admin profili ortak kullanır). */
+function WalletView({ t, data }: { t: TDict; data: WalletData }) {
+  const { formatCurrency } = useI18n()
+  const w = t.wallet
+  const fmtDate = (iso: string) => {
+    try {
+      return new Date(iso).toLocaleDateString()
+    } catch {
+      return '—'
+    }
+  }
+  return (
+    <div className="space-y-4">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard label={w.total} value={formatCurrency(data.total)} icon="Wallet" />
+        <StatCard label={w.locked} value={formatCurrency(data.locked)} icon="Lock" accent="text-text-muted" />
+        <StatCard label={w.withdrawable} value={formatCurrency(data.withdrawable)} icon="Coins" accent="text-success" />
+        <StatCard label={w.paid} value={formatCurrency(data.paid)} icon="Check" accent="text-text-secondary" />
+      </div>
+      <p className="rounded-md border border-border bg-surface-muted/50 p-3 text-xs text-text-secondary">{w.payInfo}</p>
+      {data.entries.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-8 text-center text-sm text-text-secondary">{w.empty}</div>
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full text-sm">
+            <thead className="bg-surface-muted text-text-secondary">
+              <tr>
+                <th className="px-3 py-2 text-start font-medium">{w.entryOrder}</th>
+                <th className="px-3 py-2 text-start font-medium">{w.date}</th>
+                <th className="px-3 py-2 text-start font-medium">{w.statusCol}</th>
+                <th className="px-3 py-2 text-end font-medium">{w.amount}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {data.entries.map((e, i) => (
+                <tr key={i} className="bg-surface">
+                  <td className="whitespace-nowrap px-3 py-2 font-medium">{e.order_no ? `#${e.order_no}` : '—'}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-text-secondary">{fmtDate(e.created_at)}</td>
+                  <td className="px-3 py-2">
+                    <Pill tone={e.status === 'paid' ? 'dark' : e.unlocked ? 'success' : 'neutral'}>
+                      {e.status === 'paid' ? w.statusPaid : e.unlocked ? w.statusUnlocked : w.statusPending}
+                    </Pill>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-2 text-end font-semibold">{formatCurrency(e.amount)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/** Tercümanın kendi cüzdanı (server 'wallet' eylemi). */
+function WalletSection({ t }: { t: TDict }) {
+  const [data, setData] = useState<WalletData | null>(null)
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  useEffect(() => {
+    translatorApi<WalletData & { error?: string }>('wallet')
+      .then((r) => {
+        if (r.error) {
+          setState('error')
+          return
+        }
+        setData(r)
+        setState('idle')
+      })
+      .catch(() => setState('error'))
+  }, [])
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{t.pool.loading}</p>
+  if (state === 'error' || !data)
+    return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{t.wallet.loadError}</p>
+  return <WalletView t={t} data={data} />
+}
+
+interface AdminWalletData {
+  summary: { ciro: number; kdv: number; payouts: number; net: number; firmShare: number; count: number }
+  orders: Array<{ order_no: number; total: number; payout: number; firmShare: number; completed_at: string; translator: string | null }>
+}
+
+/** Admin cüzdanı: tamamlanan siparişlerde firma payı + KDV/tercüman dökümü. */
+function AdminWalletSection({ t }: { t: TDict }) {
+  const { formatCurrency } = useI18n()
+  const [d, setD] = useState<AdminWalletData | null>(null)
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const aw = t.adminWallet
+  useEffect(() => {
+    translatorApi<AdminWalletData & { error?: string }>('adminWallet')
+      .then((r) => {
+        if (r.error) {
+          setState('error')
+          return
+        }
+        setD(r)
+        setState('idle')
+      })
+      .catch(() => setState('error'))
+  }, [])
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{t.pool.loading}</p>
+  if (state === 'error' || !d)
+    return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{aw.loadError}</p>
+  const s = d.summary
+  const fmtDate = (iso: string) => {
+    try {
+      return new Date(iso).toLocaleDateString()
+    } catch {
+      return '—'
+    }
+  }
+  return (
+    <div className="space-y-4">
+      <p className="text-sm text-text-secondary">{aw.count.replace('{n}', String(s.count))}</p>
+
+      <div className="rounded-lg border border-success bg-success/5 p-5">
+        <p className="text-xs font-medium text-text-secondary">{aw.firmShare}</p>
+        <p className="mt-1 text-3xl font-bold text-success">{formatCurrency(s.firmShare)}</p>
+        <p className="mt-1.5 text-xs text-text-muted">{aw.firmShareHint}</p>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard label={aw.ciro} value={formatCurrency(s.ciro)} icon="TrendingUp" />
+        <StatCard label={aw.kdv} value={formatCurrency(s.kdv)} icon="Landmark" accent="text-text-muted" />
+        <StatCard label={aw.payouts} value={formatCurrency(s.payouts)} icon="Users" accent="text-text-muted" />
+        <StatCard label={aw.net} value={formatCurrency(s.net)} icon="Coins" accent="text-success" />
+      </div>
+
+      {d.orders.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-8 text-center text-sm text-text-secondary">{aw.empty}</div>
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full text-sm">
+            <thead className="bg-surface-muted text-text-secondary">
+              <tr>
+                <th className="px-3 py-2 text-start font-medium">{aw.colOrder}</th>
+                <th className="px-3 py-2 text-start font-medium">{aw.colTranslator}</th>
+                <th className="px-3 py-2 text-start font-medium">{aw.colDate}</th>
+                <th className="px-3 py-2 text-end font-medium">{aw.colTotal}</th>
+                <th className="px-3 py-2 text-end font-medium">{aw.colPayout}</th>
+                <th className="px-3 py-2 text-end font-medium">{aw.colFirm}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {d.orders.map((o, i) => (
+                <tr key={i} className="bg-surface">
+                  <td className="whitespace-nowrap px-3 py-2 font-medium">#{o.order_no}</td>
+                  <td className="px-3 py-2">{o.translator || '—'}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-text-secondary">{fmtDate(o.completed_at)}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-end">{formatCurrency(o.total)}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-end text-text-muted">−{formatCurrency(o.payout)}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-end font-semibold text-success">{formatCurrency(o.firmShare)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/** Admin: onaylı (aktif) tercüman listesi → tıklayınca admin-özel profil. */
+function AdminTranslators({ t, locale }: { t: TDict; locale: string }) {
+  const [rows, setRows] = useState<Translator[]>([])
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const [selected, setSelected] = useState<Translator | null>(null)
+
+  useEffect(() => {
+    supabase
+      .from('translators')
+      .select('*')
+      .eq('status', 'approved')
+      .order('full_name', { ascending: true })
+      .then(({ data, error }) => {
+        if (error) {
+          setState('error')
+          return
+        }
+        setRows((data as Translator[]) ?? [])
+        setState('idle')
+      })
+  }, [])
+
+  if (selected) return <AdminTranslatorProfile t={t} locale={locale} translator={selected} onBack={() => setSelected(null)} />
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{t.loading}</p>
+  if (state === 'error')
+    return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{t.admin.loadError}</p>
+  if (rows.length === 0)
+    return (
+      <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
+        <p className="text-sm text-text-secondary">{t.admin.noApproved}</p>
+      </div>
+    )
+  return (
+    <div className="space-y-2">
+      {rows.map((r) => (
+        <button
+          key={r.id}
+          type="button"
+          onClick={() => setSelected(r)}
+          className="flex w-full items-center justify-between gap-3 rounded-lg border border-border bg-surface p-4 text-start transition-colors hover:bg-surface-muted"
+        >
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-semibold">{r.full_name || '—'}</span>
+              {r.is_sworn && <Pill tone="primary">{t.admin.swornBadge}</Pill>}
+              <Pill tone={r.iban_verified ? 'success' : 'neutral'}>
+                <Icon name={r.iban_verified ? 'ShieldCheck' : 'Lock'} className="size-3.5" />
+                {r.iban_verified ? t.admin.ibanVerified : t.admin.ibanNotVerified}
+              </Pill>
+            </div>
+            <p className="mt-1 truncate text-xs text-text-secondary">
+              {(r.language_pairs ?? []).length === 0
+                ? '—'
+                : r.language_pairs.map((p) => `${languageName(p.source, locale)}→${languageName(p.target, locale)}`).join(', ')}
+            </p>
+          </div>
+          <Icon name="ChevronRight" className="size-5 shrink-0 text-text-muted" />
+        </button>
+      ))}
+    </div>
+  )
+}
+
+interface DetailJob {
+  order_no: number
+  service: string
+  source_lang: string
+  target_lang: string
+  work_status: string
+  translator_payout: number | null
+  physical_delivery: boolean
+  claimed_at: string | null
+  completed_at: string | null
+  tracking_info: string | null
+}
+interface DetailData {
+  translator: Translator
+  jobs: DetailJob[]
+  wallet: WalletData
+}
+
+/** Admin-özel tercüman profili — TÜM işlemleri izlenir. Tercümanın kendisi GÖRMEZ. */
+function AdminTranslatorProfile({
+  t,
+  locale,
+  translator,
+  onBack,
+}: {
+  t: TDict
+  locale: string
+  translator: Translator
+  onBack: () => void
+}) {
+  const { dict, formatCurrency } = useI18n()
+  const areaLabel = (id: string) => (dict.quote.areas as Record<string, string>)[id] ?? id
+  const [d, setD] = useState<DetailData | null>(null)
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const [ibanBusy, setIbanBusy] = useState(false)
+  const [ibanVerified, setIbanVerified] = useState(!!translator.iban_verified)
+  const p = t.admin.profile
+
+  useEffect(() => {
+    translatorApi<DetailData & { error?: string }>('translatorDetail', { translatorId: translator.id })
+      .then((r) => {
+        if (r.error || !r.translator) {
+          setState('error')
+          return
+        }
+        setD(r)
+        setIbanVerified(!!r.translator.iban_verified)
+        setState('idle')
+      })
+      .catch(() => setState('error'))
+  }, [translator.id])
+
+  const toggleIban = async () => {
+    setIbanBusy(true)
+    const next = !ibanVerified
+    const { error } = await supabase.from('translators').update({ iban_verified: next }).eq('id', translator.id)
+    setIbanBusy(false)
+    if (!error) setIbanVerified(next)
+    else alert(t.admin.actionError)
+  }
+
+  const back = (
+    <button type="button" onClick={onBack} className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-text-secondary hover:text-text-primary">
+      <Icon name="ArrowLeft" className="size-4" /> {p.back}
+    </button>
+  )
+
+  if (state === 'loading')
+    return (
+      <div>
+        {back}
+        <p className="py-10 text-center text-sm text-text-secondary">{t.loading}</p>
+      </div>
+    )
+  if (state === 'error' || !d)
+    return (
+      <div>
+        {back}
+        <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{t.admin.loadError}</p>
+      </div>
+    )
+
+  const tr = d.translator
+  const statusLabel = (ws: string) => (t.jobs as Record<string, string>)['status_' + ws] ?? ws
+  const fmtDate = (iso: string | null) => {
+    if (!iso) return '—'
+    try {
+      return new Date(iso).toLocaleDateString()
+    } catch {
+      return '—'
+    }
+  }
+
+  return (
+    <div>
+      {back}
+
+      <div className="mb-1 flex flex-wrap items-center gap-2">
+        <h2 className="text-xl font-bold">{tr.full_name || '—'}</h2>
+        {tr.is_sworn && <Pill tone="primary">{t.admin.swornBadge}</Pill>}
+        <Pill tone={ibanVerified ? 'success' : 'neutral'}>
+          <Icon name={ibanVerified ? 'ShieldCheck' : 'Lock'} className="size-3.5" />
+          {ibanVerified ? t.admin.ibanVerified : t.admin.ibanNotVerified}
+        </Pill>
+      </div>
+      <p className="mb-5 text-xs text-text-muted">{p.adminOnly}</p>
+
+      {/* Bilgiler */}
+      <div className="rounded-lg border border-border bg-surface p-4">
+        <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-text-muted">{p.infoTitle}</h3>
+        <dl className="grid gap-2 text-sm sm:grid-cols-2">
+          <Detail label={t.form.phone}>{tr.phone ? <span dir="ltr">{tr.phone}</span> : '—'}</Detail>
+          <Detail label={t.form.birthDate}>{tr.birth_date || '—'}</Detail>
+          <Detail label={t.admin.colLocation}>
+            {[tr.city, countryDisplayName(tr.country ?? '', locale, tr.country ?? '')].filter(Boolean).join(', ') || '—'}
+          </Detail>
+          <Detail label={t.admin.colLangs}>
+            {(tr.language_pairs ?? []).length === 0
+              ? '—'
+              : tr.language_pairs.map((pp) => `${languageName(pp.source, locale)}→${languageName(pp.target, locale)}`).join(', ')}
+          </Detail>
+          <Detail label={t.admin.colExpertise}>
+            {(tr.expertise ?? []).length === 0 ? '—' : tr.expertise.map((k) => areaLabel(k)).join(', ')}
+          </Detail>
+          <Detail label={t.form.iban}>{tr.iban ? <span dir="ltr">{tr.iban}</span> : '—'}</Detail>
+          {tr.iban_name && <Detail label={t.form.ibanName}>{tr.iban_name}</Detail>}
+          <Detail label={t.form.address}>{tr.address || '—'}</Detail>
+        </dl>
+        <div className="mt-3 border-t border-border pt-3">
+          <Button type="button" intent="outline" size="sm" disabled={ibanBusy} onClick={toggleIban}>
+            {ibanVerified ? t.admin.unverifyIban : t.admin.verifyIban}
+          </Button>
+        </div>
+      </div>
+
+      {/* Cüzdan */}
+      <div className="mt-6">
+        <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-text-muted">{p.walletTitle}</h3>
+        <WalletView t={t} data={d.wallet} />
+      </div>
+
+      {/* İşler */}
+      <div className="mt-6">
+        <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-text-muted">{p.jobsTitle}</h3>
+        {d.jobs.length === 0 ? (
+          <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-8 text-center text-sm text-text-secondary">{p.noJobs}</div>
+        ) : (
+          <div className="overflow-x-auto rounded-lg border border-border">
+            <table className="w-full text-sm">
+              <thead className="bg-surface-muted text-text-secondary">
+                <tr>
+                  <th className="px-3 py-2 text-start font-medium">{t.wallet.entryOrder}</th>
+                  <th className="px-3 py-2 text-start font-medium">{t.pool.langPair}</th>
+                  <th className="px-3 py-2 text-start font-medium">{t.jobs.statusLabel}</th>
+                  <th className="px-3 py-2 text-start font-medium">{t.wallet.date}</th>
+                  <th className="px-3 py-2 text-end font-medium">{t.pool.earning}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {d.jobs.map((j, i) => (
+                  <tr key={i} className="bg-surface">
+                    <td className="whitespace-nowrap px-3 py-2 font-medium">#{j.order_no}</td>
+                    <td className="whitespace-nowrap px-3 py-2">{languageName(j.source_lang, locale)}→{languageName(j.target_lang, locale)}</td>
+                    <td className="px-3 py-2">{statusLabel(j.work_status)}</td>
+                    <td className="whitespace-nowrap px-3 py-2 text-text-secondary">{fmtDate(j.completed_at ?? j.claimed_at)}</td>
+                    <td className="whitespace-nowrap px-3 py-2 text-end font-semibold">{formatCurrency(Number(j.translator_payout) || 0)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 

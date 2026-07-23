@@ -15,6 +15,49 @@ const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xtqymenxaozzwmqfssod.s
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 const ADMIN_EMAIL = 'admin@tercumexpert.com'
 const nowIso = () => new Date().toISOString()
+const TAX_RATE = 0.2 // KDV %20 (pricing.config.ts taxRatePercent ile AYNI olmalı)
+const LOCK_MS = 7 * 24 * 60 * 60 * 1000 // kazanç 7 gün kilitli, sonra çekilebilir
+
+interface LedgerRow {
+  amount: number | string
+  status: string
+  created_at: string
+  paid_at: string | null
+  orders?: { order_no?: number } | null
+}
+
+/** Ledger satırlarından cüzdan özeti: toplam / kilitli (7 gün) / çekilebilir / ödenen + işlem listesi. */
+function computeWallet(rows: LedgerRow[]): {
+  total: number
+  locked: number
+  withdrawable: number
+  paid: number
+  entries: Array<{ amount: number; status: string; created_at: string; paid_at: string | null; order_no: number | null; unlocked: boolean }>
+} {
+  const now = Date.now()
+  let total = 0
+  let locked = 0
+  let withdrawable = 0
+  let paid = 0
+  const entries = []
+  for (const e of rows) {
+    const amt = Number(e.amount) || 0
+    total += amt
+    const unlocked = now - new Date(e.created_at).getTime() >= LOCK_MS
+    if (e.status === 'paid') paid += amt
+    else if (unlocked) withdrawable += amt
+    else locked += amt
+    entries.push({
+      amount: Math.round(amt),
+      status: e.status,
+      created_at: e.created_at,
+      paid_at: e.paid_at ?? null,
+      order_no: e.orders?.order_no ?? null,
+      unlocked: e.status !== 'paid' && unlocked,
+    })
+  }
+  return { total: Math.round(total), locked: Math.round(locked), withdrawable: Math.round(withdrawable), paid: Math.round(paid), entries }
+}
 
 function svcHeaders(extra?: Record<string, string>): Record<string, string> {
   return { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, ...(extra ?? {}) }
@@ -138,6 +181,7 @@ export default async function handler(req: Request): Promise<Response> {
   let body: {
     action?: string
     orderId?: string
+    translatorId?: string
     files?: Array<{ name?: string; path?: string }>
     reason?: string
     tracking?: string
@@ -333,6 +377,88 @@ export default async function handler(req: Request): Promise<Response> {
     })
     if (!ok) return json({ error: 'bad_state' }, 409)
     return json({ ok: true })
+  }
+
+  // -------- Tercüman cüzdanı: ledger + 7-gün kilit özeti --------
+  if (action === 'wallet') {
+    if (!translator) return json({ error: 'not_translator' }, 403)
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/translator_ledger?translator_id=eq.${translator.id}&select=amount,status,created_at,paid_at,orders(order_no)&order=created_at.desc`,
+      { headers: svcHeaders() },
+    )
+    if (!r.ok) return json({ error: 'load' }, 200)
+    return json(computeWallet((await r.json()) as LedgerRow[]))
+  }
+
+  // -------- Admin cüzdanı: tamamlanan siparişlerde firma payı (KDV dahil) --------
+  if (action === 'adminWallet') {
+    if (!isAdmin) return json({ error: 'forbidden' }, 403)
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/orders?work_status=eq.completed&select=order_no,total,translator_payout,completed_at,translator_id&order=completed_at.desc`,
+      { headers: svcHeaders() },
+    )
+    if (!r.ok) return json({ error: 'load' }, 200)
+    const rows = (await r.json()) as Array<Record<string, unknown>>
+    let ciro = 0
+    let kdv = 0
+    let payouts = 0
+    const orders: Array<Record<string, unknown>> = []
+    const names: Record<string, string | null> = {}
+    for (const o of rows) {
+      const total = Number(o.total) || 0
+      const payout = Number(o.translator_payout) || 0
+      const subtotal = total / (1 + TAX_RATE) // KDV hariç
+      const tax = total - subtotal
+      ciro += total
+      kdv += tax
+      payouts += payout
+      const tid = (o.translator_id as string) || ''
+      if (tid && !(tid in names)) {
+        const info = await getTranslatorInfo(tid)
+        names[tid] = info?.name ?? null
+      }
+      orders.push({
+        order_no: o.order_no,
+        total: Math.round(total),
+        payout: Math.round(payout),
+        firmShare: Math.round(total - payout),
+        completed_at: o.completed_at,
+        translator: tid ? names[tid] : null,
+      })
+    }
+    return json({
+      summary: {
+        ciro: Math.round(ciro),
+        kdv: Math.round(kdv),
+        payouts: Math.round(payouts),
+        net: Math.round(ciro - kdv - payouts), // firma net (KDV ve tercüman düşülmüş)
+        firmShare: Math.round(ciro - payouts), // firma payı (KDV dahil geriye kalan)
+        count: rows.length,
+      },
+      orders,
+    })
+  }
+
+  // -------- Admin: tek tercümanın profili (bilgiler + işler + cüzdan) --------
+  if (action === 'translatorDetail') {
+    if (!isAdmin) return json({ error: 'forbidden' }, 403)
+    const id = body.translatorId
+    if (!id) return json({ error: 'no_id' }, 400)
+    const tr = await fetch(`${SUPABASE_URL}/rest/v1/translators?id=eq.${id}&select=*`, { headers: svcHeaders() })
+    if (!tr.ok) return json({ error: 'load' }, 200)
+    const trow = ((await tr.json()) as Array<Record<string, unknown>>)[0]
+    if (!trow) return json({ error: 'not_found' }, 404)
+    const jr = await fetch(
+      `${SUPABASE_URL}/rest/v1/orders?translator_id=eq.${id}&work_status=in.(claimed,submitted,approved,completed)&select=order_no,service,source_lang,target_lang,work_status,translator_payout,physical_delivery,claimed_at,completed_at,tracking_info&order=claimed_at.desc`,
+      { headers: svcHeaders() },
+    )
+    const jrows = jr.ok ? ((await jr.json()) as Array<Record<string, unknown>>) : []
+    const lr = await fetch(
+      `${SUPABASE_URL}/rest/v1/translator_ledger?translator_id=eq.${id}&select=amount,status,created_at,paid_at,orders(order_no)&order=created_at.desc`,
+      { headers: svcHeaders() },
+    )
+    const lrows = lr.ok ? ((await lr.json()) as LedgerRow[]) : []
+    return json({ translator: trow, jobs: jrows, wallet: computeWallet(lrows) })
   }
 
   return json({ error: 'unknown_action' }, 400)
