@@ -17,7 +17,7 @@ describe('route slug eşleme', () => {
   it('splat path -> routeId çözer', () => {
     expect(resolveRouteId('tr', '')?.routeId).toBe('home')
     expect(resolveRouteId('tr', 'kurumsal')?.routeId).toBe('corporate')
-    expect(resolveRouteId('tr', 'is-ortakligi')?.routeId).toBe('partnership')
+    expect(resolveRouteId('tr', 'partner')?.routeId).toBe('partnership')
     const post = resolveRouteId('tr', 'blog/yeminli-tercume-nedir')
     expect(post?.routeId).toBe('blogPost')
     expect(post?.params.slug).toBe('yeminli-tercume-nedir')

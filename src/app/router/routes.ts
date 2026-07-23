@@ -32,7 +32,7 @@ const ROUTE_SLUGS: Record<RouteId, Partial<Record<Locale, string>>> = {
   services: { tr: 'hizmetler', en: 'services', fr: 'services', de: 'leistungen', es: 'servicios', it: 'servizi', ru: 'uslugi', ar: 'khadamat' },
   quote: { tr: 'fiyat-hesapla', en: 'get-quote', fr: 'devis', de: 'preis-berechnen', es: 'cotizacion', it: 'preventivo', ru: 'raschet-ceny', ar: 'alsaer' },
   corporate: { tr: 'kurumsal', en: 'corporate', fr: 'entreprises', de: 'unternehmen', es: 'empresas', it: 'aziende', ru: 'korporativnym', ar: 'lelsherikat' },
-  partnership: { tr: 'is-ortakligi', en: 'partnership', fr: 'partenariat', de: 'partnerschaft', es: 'colaboracion', it: 'partnership', ru: 'partnerstvo', ar: 'sharaka' },
+  partnership: { tr: 'partner', en: 'partnership', fr: 'partenariat', de: 'partnerschaft', es: 'colaboracion', it: 'partnership', ru: 'partnerstvo', ar: 'sharaka' },
   blog: { tr: 'blog', en: 'blog' },
   blogPost: { tr: 'blog', en: 'blog' },
   faq: { tr: 'sss', en: 'faq', fr: 'faq', de: 'faq', es: 'faq', it: 'faq', ru: 'faq', ar: 'faq' },
