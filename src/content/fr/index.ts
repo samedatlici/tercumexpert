@@ -15,6 +15,10 @@ export const fr: PartialDictionary = {
   },
 
   partnerPanel: {
+    ibanPending: "Vos coordonnées IBAN sont en attente d’approbation par l’administration.",
+    ibanPolicy: "Tant que votre IBAN et le titulaire du compte ne sont pas approuvés par notre équipe, vous ne pouvez pas recevoir de paiements. Vos gains continuent de s’accumuler dans votre portefeuille pendant cette période. Une fois vos informations approuvées, vous pouvez retirer les soldes dont le délai de 7 jours après la vente est écoulé et qui ne sont plus bloqués.",
+    fillRequired: "Veuillez remplir les champs obligatoires.",
+    phoneLockNote: "Votre numéro de téléphone pourra être modifié une fois la vérification par SMS activée.",
     panelTitle: "Espace partenaire",
     tabProfile: "Mon profil",
     tabCustomers: "Mes clients",

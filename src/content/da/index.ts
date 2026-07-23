@@ -15,6 +15,10 @@ export const da: PartialDictionary = {
   },
 
   partnerPanel: {
+    ibanPending: "Dine IBAN-oplysninger afventer godkendelse fra administrationen.",
+    ibanPolicy: "Indtil din IBAN og kontohaver er godkendt af vores team, kan du ikke modtage betalinger. Din indtjening fortsætter med at samle sig i din tegnebog i denne periode. Når dine oplysninger er godkendt, kan du hæve saldi, hvor den 7-dages spærring siden salget er udløbet.",
+    fillRequired: "Udfyld venligst de påkrævede felter.",
+    phoneLockNote: "Dit telefonnummer kan opdateres, når SMS-bekræftelse aktiveres.",
     panelTitle: "Partnerpanel",
     tabProfile: "Min profil",
     tabCustomers: "Mine kunder",

@@ -15,6 +15,10 @@ export const de: PartialDictionary = {
   },
 
   partnerPanel: {
+    ibanPending: "Ihre IBAN-Angaben warten auf die Freigabe durch die Verwaltung.",
+    ibanPolicy: "Solange Ihre IBAN und der Kontoinhaber nicht von unserem Team freigegeben sind, können Sie keine Zahlungen erhalten. Ihre Einnahmen sammeln sich in dieser Zeit weiterhin in Ihrem Guthaben an. Sobald Ihre Angaben freigegeben sind, können Sie Guthaben auszahlen, bei denen die 7-tägige Sperrfrist seit dem Verkauf abgelaufen ist.",
+    fillRequired: "Bitte füllen Sie die Pflichtfelder aus.",
+    phoneLockNote: "Ihre Telefonnummer kann geändert werden, sobald die SMS-Bestätigung aktiviert ist.",
     panelTitle: "Partner-Bereich",
     tabProfile: "Mein Profil",
     tabCustomers: "Meine Kunden",

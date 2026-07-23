@@ -9,6 +9,10 @@ export const az: PartialDictionary = {
   },
 
   partnerPanel: {
+    ibanPending: "IBAN məlumatlarınız rəhbərliyin təsdiqini gözləyir.",
+    ibanPolicy: "IBAN və hesab sahibi məlumatlarınız komandamız tərəfindən təsdiqlənənə qədər ödəniş ala bilməzsiniz. Bu müddətdə qazancınız pul kisənizdə toplanmağa davam edir. Məlumatlarınız təsdiqləndikdən sonra satışdan 7 gün keçmiş və kilidi açılmış balanslarınızı çıxara bilərsiniz.",
+    fillRequired: "Zəhmət olmasa, zəruri sahələri doldurun.",
+    phoneLockNote: "Telefon nömrəniz SMS doğrulaması aktiv olduqda yenilənə biləcək.",
     panelTitle: "Partnyor paneli",
     tabProfile: "Profilim",
     tabCustomers: "Müştərilərim",

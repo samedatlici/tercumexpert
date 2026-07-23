@@ -9,6 +9,10 @@ export const pl: PartialDictionary = {
   },
 
   partnerPanel: {
+    ibanPending: "Państwa dane IBAN oczekują na zatwierdzenie przez administrację.",
+    ibanPolicy: "Do czasu zatwierdzenia Państwa numeru IBAN i właściciela rachunku przez nasz zespół nie mogą Państwo otrzymywać płatności. W tym czasie Państwa zarobki nadal gromadzą się w portfelu. Po zatwierdzeniu danych mogą Państwo wypłacić środki, dla których upłynął 7-dniowy okres blokady od sprzedaży.",
+    fillRequired: "Prosimy wypełnić wymagane pola.",
+    phoneLockNote: "Numer telefonu będzie można zmienić po włączeniu weryfikacji SMS.",
     panelTitle: "Panel partnera",
     tabProfile: "Mój profil",
     tabCustomers: "Moi klienci",

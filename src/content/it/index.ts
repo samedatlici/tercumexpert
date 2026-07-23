@@ -15,6 +15,10 @@ export const it: PartialDictionary = {
   },
 
   partnerPanel: {
+    ibanPending: "I Suoi dati IBAN sono in attesa di approvazione da parte dell’amministrazione.",
+    ibanPolicy: "Finché il Suo IBAN e l’intestatario del conto non saranno approvati dal nostro team, non potrà ricevere pagamenti. In questo periodo i Suoi guadagni continuano ad accumularsi nel Suo portafoglio. Una volta approvati i Suoi dati, potrà prelevare i saldi per i quali è trascorso il blocco di 7 giorni dalla vendita.",
+    fillRequired: "La preghiamo di compilare i campi obbligatori.",
+    phoneLockNote: "Il Suo numero di telefono potrà essere aggiornato quando sarà attivata la verifica via SMS.",
     panelTitle: "Pannello partner",
     tabProfile: "Il mio profilo",
     tabCustomers: "I miei clienti",

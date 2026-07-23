@@ -12,9 +12,10 @@ import { Button } from '@/components/common/Button'
 import { Icon, type IconName } from '@/components/common/Icon'
 import { Seo } from '@/components/seo/Seo'
 import { PhoneInput } from '@/components/common/PhoneInput'
-import { CountryCitySelect } from '@/components/common/CountryCitySelect'
+import { CountryCitySelect, countryDisplayName } from '@/components/common/CountryCitySelect'
 import { ConsentText } from '@/features/legal/ConsentText'
 import { defaultCountryForLocale } from '@/app/config/country-codes'
+import { regionsFor } from '@/app/config/regions'
 
 const inputClass =
   'h-11 w-full rounded-md border border-border bg-surface px-3 text-base outline-none focus:border-border-strong'
@@ -183,21 +184,21 @@ function PartnerPanel({ partner, onSaved }: { partner: Partner; onSaved: () => v
   )
 }
 
-/* Davet kodu + bağlantı — kopyalanabilir, düzenlenemez (kaybolmasın). */
+/* Davet bağlantısı — kopyalanabilir, düzenlenemez (kaybolmasın). QR Faz 2b. */
 function InviteBox({ partner }: { partner: Partner }) {
   const { locale, dict } = useI18n()
   const pp = dict.partnerPanel
-  const [copied, setCopied] = useState<'code' | 'link' | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const origin = typeof window !== 'undefined' ? window.location.origin : ''
   const homePath = buildPath(locale, 'home')
   const link = `${origin}${homePath}${homePath.endsWith('/') ? '' : '/'}?ref=${partner.ref_code}`.replace(/\/\?/, '?')
 
-  const copy = async (what: 'code' | 'link', value: string) => {
+  const copy = async () => {
     try {
-      await navigator.clipboard.writeText(value)
-      setCopied(what)
-      setTimeout(() => setCopied(null), 2000)
+      await navigator.clipboard.writeText(link)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     } catch {
       /* pano yoksa yok say */
     }
@@ -205,23 +206,8 @@ function InviteBox({ partner }: { partner: Partner }) {
 
   return (
     <div className="rounded-lg border border-border bg-surface p-6">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <p className="text-sm font-semibold">{pp.refCodeLabel}</p>
-          <div className="mt-2 flex items-center gap-2">
-            <span className="rounded-md border border-border bg-surface-muted px-3 py-2 font-mono text-lg font-bold tracking-[0.15em]">
-              {partner.ref_code}
-            </span>
-            <Button type="button" intent="outline" size="sm" onClick={() => copy('code', partner.ref_code)} className="shrink-0">
-              {copied === 'code' ? pp.refCopied : pp.refCopy}
-            </Button>
-          </div>
-        </div>
-        <div>
-          <p className="text-sm font-semibold">{pp.refTitle}</p>
-          <p className="mt-0.5 text-xs text-text-secondary">{pp.refDesc}</p>
-        </div>
-      </div>
+      <h2 className="text-base font-semibold">{pp.refTitle}</h2>
+      <p className="mt-1 text-sm text-text-secondary">{pp.refDesc}</p>
       <div className="mt-3 flex flex-col gap-2 sm:flex-row">
         <input
           readOnly
@@ -230,52 +216,64 @@ function InviteBox({ partner }: { partner: Partner }) {
           className={`${inputClass} font-mono text-sm`}
           aria-label={pp.refTitle}
         />
-        <Button type="button" intent="secondary" onClick={() => copy('link', link)} className="shrink-0">
-          {copied === 'link' ? pp.refCopied : pp.refCopy}
+        <Button type="button" intent="secondary" onClick={copy} className="shrink-0">
+          {copied ? pp.refCopied : pp.refCopy}
         </Button>
       </div>
     </div>
   )
 }
 
-/* Profilim — davet kodu/link en üstte + zorunlu alanlar + IBAN + e-posta doğrulama. */
+/* Profilim — davet linki en üstte + zorunlu alanlar + IBAN + e-posta doğrulama.
+   Onaylı partnerde Şirket/Yetkili/Ülke/Telefon KİLİTLİ (server da zorlar). */
 function ProfileTab({ partner, onSaved }: { partner: Partner; onSaved: () => void }) {
   const { locale, dict } = useI18n()
   const pp = dict.partnerPanel
   const pf = dict.partnership.form
   const tf = dict.translator.form
+  const lockedHint = dict.translator.profile.lockedHint
   const sectors = dict.partnership.sectors.items
   const otherLabel = pf.sectorOptions[pf.sectorOptions.length - 1]
 
-  const [company, setCompany] = useState(partner.company ?? '')
+  // Kilitli alanlar (onaylı partner): partner satırından okunur, düzenlenmez, payload'a girmez.
+  const company = partner.company ?? ''
+  const contactName = partner.contact_name ?? ''
+  const country = partner.country ?? ''
+  const phone = partner.phone ?? ''
+
+  // Düzenlenebilir alanlar.
   const [sector, setSector] = useState(partner.sector ?? '')
   const [sectorOther, setSectorOther] = useState(partner.sector_other ?? '')
-  const [contactName, setContactName] = useState(partner.contact_name ?? '')
   const [titleRole, setTitleRole] = useState(partner.title_role ?? '')
-  const [phone, setPhone] = useState(partner.phone ?? '')
-  const [country, setCountry] = useState(partner.country ?? '')
   const [city, setCity] = useState(partner.city ?? '')
   const [address, setAddress] = useState(partner.address ?? '')
   const [iban, setIban] = useState(partner.iban ?? '')
   const [ibanName, setIbanName] = useState(partner.iban_name ?? '')
   const [busy, setBusy] = useState(false)
-  const [msg, setMsg] = useState<'ok' | 'err' | null>(null)
+  const [msg, setMsg] = useState<'ok' | 'err' | 'req' | null>(null)
+
+  const lockedInput = cn(inputClass, 'cursor-not-allowed bg-surface-muted text-text-muted')
+  const LockNote = ({ text }: { text: string }) => (
+    <p className="mt-1 text-xs text-text-muted"><Icon name="Lock" className="me-1 inline size-3" />{text}</p>
+  )
 
   const save = async (e: FormEvent) => {
     e.preventDefault()
+    // Zorunlu alanlar boş bırakılamaz (formdaki zorunluluklar burada da geçerli).
+    if (!sector || !city.trim() || (sector === 'other' && !sectorOther.trim())) {
+      setMsg('req')
+      return
+    }
     setBusy(true)
     setMsg(null)
+    // Yalnızca düzenlenebilir alanlar gönderilir; kilitli alanlar dokunulmaz.
     const { error } = await supabase
       .from('partners')
       .update({
-        company: company.trim() || null,
-        sector: sector || null,
+        sector,
         sector_other: sector === 'other' ? sectorOther.trim() : null,
-        contact_name: contactName.trim() || null,
         title_role: titleRole.trim() || null,
-        phone: phone.trim() || null,
-        country: country || null,
-        city: city || null,
+        city,
         address: address.trim() || null,
         iban: iban.trim() || null,
         iban_name: ibanName.trim() || null,
@@ -285,6 +283,8 @@ function ProfileTab({ partner, onSaved }: { partner: Partner; onSaved: () => voi
     setMsg(error ? 'err' : 'ok')
     if (!error) onSaved()
   }
+
+  const ibanSet = !!iban.trim()
 
   return (
     <div className="space-y-5">
@@ -308,20 +308,14 @@ function ProfileTab({ partner, onSaved }: { partner: Partner; onSaved: () => voi
           </Pill>
         </div>
 
-        {!iban.trim() && (
-          <div className="flex items-start gap-2 rounded-md border border-secondary/30 bg-surface-muted p-3 text-sm">
-            <Icon name="Wallet" className="mt-0.5 size-4 shrink-0 text-text-secondary" />
-            <p>{pp.ibanReminder}</p>
-          </div>
-        )}
-
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={labelClass}>{pf.fields.company}</label>
-            <input className={inputClass} value={company} onChange={(e) => setCompany(e.target.value)} autoComplete="organization" />
+            <input className={lockedInput} value={company} disabled autoComplete="organization" />
+            <LockNote text={lockedHint} />
           </div>
           <div>
-            <label className={labelClass}>{pf.fields.sector}</label>
+            <label className={labelClass}>{pf.fields.sector} <span className="text-danger">*</span></label>
             <select className={inputClass} value={sector} onChange={(e) => setSector(e.target.value)}>
               <option value="" disabled>{pf.sectorPlaceholder}</option>
               {sectors.map((s) => (
@@ -333,45 +327,54 @@ function ProfileTab({ partner, onSaved }: { partner: Partner; onSaved: () => voi
         </div>
         {sector === 'other' && (
           <div>
-            <label className={labelClass}>{pf.fields.sector}</label>
+            <label className={labelClass}>{pf.fields.sector} <span className="text-danger">*</span></label>
             <input className={inputClass} value={sectorOther} onChange={(e) => setSectorOther(e.target.value)} placeholder={pp.sectorOther} />
           </div>
         )}
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={labelClass}>{pf.fields.contactName}</label>
-            <input className={inputClass} value={contactName} onChange={(e) => setContactName(e.target.value)} autoComplete="name" />
+            <input className={lockedInput} value={contactName} disabled autoComplete="name" />
+            <LockNote text={lockedHint} />
           </div>
           <div>
             <label className={labelClass}>{pf.fields.titleRole}</label>
             <input className={inputClass} value={titleRole} onChange={(e) => setTitleRole(e.target.value)} />
           </div>
         </div>
-        <div>
-          <label className={labelClass}>{pf.fields.email}</label>
-          <input className={`${inputClass} cursor-not-allowed bg-surface-muted text-text-muted`} value={partner.email ?? ''} disabled dir="ltr" />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelClass}>{pf.fields.email}</label>
+            <input className={lockedInput} value={partner.email ?? ''} disabled dir="ltr" />
+          </div>
+          <div>
+            <label className={labelClass}>{pf.fields.phone}</label>
+            <input className={lockedInput} value={phone} disabled dir="ltr" />
+            <LockNote text={pp.phoneLockNote} />
+          </div>
         </div>
-        <div>
-          <label className={labelClass}>{pf.fields.phone}</label>
-          <PhoneInput onChange={setPhone} />
-          {partner.phone && <p className="mt-1 text-xs text-text-muted" dir="ltr">{partner.phone}</p>}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelClass}>{tf.country}</label>
+            <input className={lockedInput} value={countryDisplayName(country, locale, country)} disabled />
+            <LockNote text={lockedHint} />
+          </div>
+          <div>
+            <label className={labelClass}>{tf.city} <span className="text-danger">*</span></label>
+            <select className={inputClass} value={city} onChange={(e) => setCity(e.target.value)}>
+              <option value="">{tf.selectCity}</option>
+              {regionsFor(country).map((x) => (
+                <option key={x} value={x}>{x}</option>
+              ))}
+            </select>
+          </div>
         </div>
-        <CountryCitySelect
-          country={country}
-          city={city}
-          onCountry={setCountry}
-          onCity={setCity}
-          countryLabel={tf.country}
-          cityLabel={tf.city}
-          countryPlaceholder={tf.selectCountry}
-          cityPlaceholder={tf.selectCity}
-          cityDisabledPlaceholder={tf.cityNeedsCountry}
-          selectClassName={inputClass}
-        />
         <div>
           <label className={labelClass}>{tf.address}</label>
           <textarea rows={2} className={textareaClass} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" />
         </div>
+
+        {/* IBAN alanı + durum/politika */}
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={labelClass}>{tf.iban}</label>
@@ -382,8 +385,23 @@ function ProfileTab({ partner, onSaved }: { partner: Partner; onSaved: () => voi
             <input className={inputClass} value={ibanName} onChange={(e) => setIbanName(e.target.value)} />
           </div>
         </div>
+        {!ibanSet ? (
+          <div className="flex items-start gap-2 rounded-md border border-secondary/30 bg-surface-muted p-3 text-sm">
+            <Icon name="Wallet" className="mt-0.5 size-4 shrink-0 text-text-secondary" />
+            <p>{pp.ibanReminder}</p>
+          </div>
+        ) : !partner.iban_verified ? (
+          <div className="rounded-md border border-secondary/40 bg-surface-muted p-3.5 text-sm">
+            <p className="flex items-start gap-2 font-semibold">
+              <Icon name="ShieldCheck" className="mt-0.5 size-4 shrink-0 text-text-secondary" /> {pp.ibanPending}
+            </p>
+            <p className="mt-1.5 text-text-secondary">{pp.ibanPolicy}</p>
+          </div>
+        ) : null}
+
         {msg === 'ok' && <p className="text-sm text-success">{pp.saved}</p>}
         {msg === 'err' && <p className="text-sm text-danger">{pp.saveError}</p>}
+        {msg === 'req' && <p className="text-sm text-danger">{pp.fillRequired}</p>}
         <Button type="submit" intent="secondary" size="lg" disabled={busy}>
           {busy ? pp.submitting : pp.save}
         </Button>

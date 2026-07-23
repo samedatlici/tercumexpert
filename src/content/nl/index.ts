@@ -15,6 +15,10 @@ export const nl: PartialDictionary = {
   },
 
   partnerPanel: {
+    ibanPending: "Uw IBAN-gegevens wachten op goedkeuring door de beheerder.",
+    ibanPolicy: "Zolang uw IBAN en de rekeninghouder niet door ons team zijn goedgekeurd, kunt u geen betalingen ontvangen. Uw verdiensten blijven in deze periode in uw portemonnee oplopen. Zodra uw gegevens zijn goedgekeurd, kunt u saldi opnemen waarvan de wachttijd van 7 dagen na de verkoop is verstreken en die niet langer geblokkeerd zijn.",
+    fillRequired: "Vul de verplichte velden in.",
+    phoneLockNote: "Uw telefoonnummer kan worden gewijzigd zodra SMS-verificatie is ingeschakeld.",
     panelTitle: "Partnerpaneel",
     tabProfile: "Mijn profiel",
     tabCustomers: "Mijn klanten",

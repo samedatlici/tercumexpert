@@ -14,6 +14,10 @@ export const pt: PartialDictionary = {
   },
 
   partnerPanel: {
+    ibanPending: "Os seus dados de IBAN aguardam aprovação da administração.",
+    ibanPolicy: "Até que o seu IBAN e o titular da conta sejam aprovados pela nossa equipa, não poderá receber pagamentos. Durante este período, os seus ganhos continuam a acumular-se na sua carteira. Após a aprovação dos seus dados, poderá levantar os saldos cujo período de retenção de 7 dias desde a venda já tenha terminado.",
+    fillRequired: "Por favor, preencha os campos obrigatórios.",
+    phoneLockNote: "O seu número de telefone poderá ser atualizado quando a verificação por SMS for ativada.",
     panelTitle: "Painel de parceiro",
     tabProfile: "O meu perfil",
     tabCustomers: "Os meus clientes",

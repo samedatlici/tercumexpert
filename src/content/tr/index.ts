@@ -1372,6 +1372,10 @@ export const tr = {
   },
 
   partnerPanel: {
+    ibanPending: "IBAN bilgileriniz yönetim onayı bekliyor.",
+    ibanPolicy: "IBAN ve IBAN sahibi bilgileriniz yönetim tarafından onaylanana kadar ödeme alamazsınız. Bu süreçte elde ettiğiniz kazançlar cüzdanınızda birikmeye devam eder. Bilgileriniz onaylandığında, satışınızın üzerinden 7 gün geçmiş ve kilidi kalkmış bakiyelerinizi çekebilirsiniz.",
+    fillRequired: "Lütfen zorunlu alanları doldurun.",
+    phoneLockNote: "Telefon numaranız, SMS doğrulaması devreye girdiğinde güncellenebilecek.",
     panelTitle: "Partner Paneli",
     tabProfile: "Profilim",
     tabCustomers: "Müşterilerim",

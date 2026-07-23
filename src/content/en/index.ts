@@ -1379,6 +1379,10 @@ export const en: PartialDictionary = {
   },
 
   partnerPanel: {
+    ibanPending: "Your IBAN details are awaiting administrator approval.",
+    ibanPolicy: "Until your IBAN and account holder details are approved by our team, you cannot receive payments. Your earnings continue to accumulate in your wallet during this time. Once your details are approved, you can withdraw balances that have passed the 7-day hold since the sale and are no longer locked.",
+    fillRequired: "Please fill in the required fields.",
+    phoneLockNote: "Your phone number can be updated once SMS verification is enabled.",
     panelTitle: "Partner Panel",
     tabProfile: "My Profile",
     tabCustomers: "My Customers",

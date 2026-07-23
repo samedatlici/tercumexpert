@@ -15,6 +15,10 @@ export const es: PartialDictionary = {
   },
 
   partnerPanel: {
+    ibanPending: "Sus datos de IBAN están pendientes de aprobación por la administración.",
+    ibanPolicy: "Hasta que su IBAN y el titular de la cuenta sean aprobados por nuestro equipo, no podrá recibir pagos. Durante este periodo, sus ganancias se seguirán acumulando en su monedero. Una vez aprobados sus datos, podrá retirar los saldos que hayan superado el bloqueo de 7 días desde la venta y ya no estén retenidos.",
+    fillRequired: "Por favor, complete los campos obligatorios.",
+    phoneLockNote: "Su número de teléfono podrá actualizarse cuando se active la verificación por SMS.",
     panelTitle: "Panel de socios",
     tabProfile: "Mi perfil",
     tabCustomers: "Mis clientes",
