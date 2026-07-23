@@ -21,7 +21,7 @@ const BRAND_BLUE = '#1d4ed8'
 const BRAND_GREEN = '#16a34a'
 const INK = '#0f172a'
 
-export type EmailEvent = 'received' | 'in_progress' | 'translated' | 'shipped' | 'delivered' | 'review'
+export type EmailEvent = 'received' | 'in_progress' | 'translated' | 'shipped' | 'delivered' | 'review' | 'admin_new_order'
 
 // Sipariş route slug'ı (src/app/router/routes.ts ile aynı; eksik dillerde EN'e düşer).
 const ORDER_SLUG: Record<string, string> = {
@@ -494,6 +494,37 @@ const STRINGS: Record<string, EmailStrings> = {
 function S(locale: string): EmailStrings {
   return STRINGS[locale] ?? STRINGS.en
 }
+
+// Fatura + admin-sipariş maili ek metinleri (14 dil).
+interface EmailExtra {
+  invoiceAttached: string
+  subjectAdminOrder: string
+  headingAdminOrder: string
+  bodyAdminOrder: string
+  lblCustomer: string
+  lblTotal: string
+  lblService: string
+  lblLangs: string
+}
+const EXTRA: Record<string, EmailExtra> = {
+  tr: { invoiceAttached: 'Faturanız bu e-postaya PDF olarak eklenmiştir.', subjectAdminOrder: 'Yeni sipariş alındı — #{no}', headingAdminOrder: 'Yeni bir sipariş aldınız', bodyAdminOrder: 'TercümExpert üzerinden yeni bir sipariş verildi. Satıcı nüshası fatura bu e-postaya PDF olarak eklenmiştir. Sipariş detayları aşağıdadır.', lblCustomer: 'Müşteri', lblTotal: 'Tutar', lblService: 'Hizmet', lblLangs: 'Diller' },
+  en: { invoiceAttached: 'Your invoice is attached to this email as a PDF.', subjectAdminOrder: 'New order received — #{no}', headingAdminOrder: 'You have received a new order', bodyAdminOrder: 'A new order has just been placed on TercümExpert. The seller-copy invoice is attached to this email as a PDF. Order details are below.', lblCustomer: 'Customer', lblTotal: 'Total', lblService: 'Service', lblLangs: 'Languages' },
+  fr: { invoiceAttached: 'Votre facture est jointe à cet e-mail au format PDF.', subjectAdminOrder: 'Nouvelle commande reçue — #{no}', headingAdminOrder: 'Vous avez reçu une nouvelle commande', bodyAdminOrder: "Une nouvelle commande vient d'être passée sur TercümExpert. La facture (copie vendeur) est jointe à cet e-mail au format PDF. Les détails de la commande figurent ci-dessous.", lblCustomer: 'Client', lblTotal: 'Total', lblService: 'Service', lblLangs: 'Langues' },
+  de: { invoiceAttached: 'Ihre Rechnung ist dieser E-Mail als PDF beigefügt.', subjectAdminOrder: 'Neue Bestellung eingegangen — #{no}', headingAdminOrder: 'Sie haben eine neue Bestellung erhalten', bodyAdminOrder: 'Auf TercümExpert wurde soeben eine neue Bestellung aufgegeben. Die Rechnung (Verkäuferexemplar) ist dieser E-Mail als PDF beigefügt. Die Bestelldetails finden Sie unten.', lblCustomer: 'Kunde', lblTotal: 'Gesamt', lblService: 'Leistung', lblLangs: 'Sprachen' },
+  nl: { invoiceAttached: 'Uw factuur is als pdf bij deze e-mail gevoegd.', subjectAdminOrder: 'Nieuwe bestelling ontvangen — #{no}', headingAdminOrder: 'U heeft een nieuwe bestelling ontvangen', bodyAdminOrder: 'Er is zojuist een nieuwe bestelling geplaatst op TercümExpert. De factuur (verkoperskopie) is als pdf bij deze e-mail gevoegd. De bestelgegevens vindt u hieronder.', lblCustomer: 'Klant', lblTotal: 'Totaal', lblService: 'Dienst', lblLangs: 'Talen' },
+  es: { invoiceAttached: 'Su factura se adjunta a este correo electrónico en formato PDF.', subjectAdminOrder: 'Nuevo pedido recibido — #{no}', headingAdminOrder: 'Ha recibido un nuevo pedido', bodyAdminOrder: 'Se acaba de realizar un nuevo pedido en TercümExpert. La copia de la factura para el vendedor se adjunta a este correo electrónico en formato PDF. A continuación se indican los detalles del pedido.', lblCustomer: 'Cliente', lblTotal: 'Total', lblService: 'Servicio', lblLangs: 'Idiomas' },
+  ar: { invoiceAttached: 'فاتورتك مرفقة بهذا البريد الإلكتروني بصيغة PDF.', subjectAdminOrder: 'تم استلام طلب جديد — #{no}', headingAdminOrder: 'لقد استلمت طلبًا جديدًا', bodyAdminOrder: 'تم للتو تقديم طلب جديد على TercümExpert. نسخة البائع من الفاتورة مرفقة بهذا البريد الإلكتروني بصيغة PDF. تفاصيل الطلب موضحة أدناه.', lblCustomer: 'العميل', lblTotal: 'الإجمالي', lblService: 'الخدمة', lblLangs: 'اللغات' },
+  ru: { invoiceAttached: 'Ваш счёт прикреплён к этому письму в формате PDF.', subjectAdminOrder: 'Получен новый заказ — #{no}', headingAdminOrder: 'Вы получили новый заказ', bodyAdminOrder: 'На TercümExpert только что был размещён новый заказ. Экземпляр счёта для продавца прикреплён к этому письму в формате PDF. Детали заказа приведены ниже.', lblCustomer: 'Клиент', lblTotal: 'Итого', lblService: 'Услуга', lblLangs: 'Языки' },
+  az: { invoiceAttached: 'Qaimə-fakturanız bu e-poçta PDF formatında əlavə edilmişdir.', subjectAdminOrder: 'Yeni sifariş alındı — #{no}', headingAdminOrder: 'Yeni sifariş aldınız', bodyAdminOrder: 'TercümExpert saytında yeni sifariş verildi. Satıcı nüsxəsi qaimə-faktura bu e-poçta PDF formatında əlavə edilmişdir. Sifariş təfərrüatları aşağıdadır.', lblCustomer: 'Müştəri', lblTotal: 'Ümumi məbləğ', lblService: 'Xidmət', lblLangs: 'Dillər' },
+  pl: { invoiceAttached: 'Twoja faktura jest załączona do tej wiadomości e-mail w formacie PDF.', subjectAdminOrder: 'Otrzymano nowe zamówienie — #{no}', headingAdminOrder: 'Otrzymałeś nowe zamówienie', bodyAdminOrder: 'W serwisie TercümExpert właśnie złożono nowe zamówienie. Egzemplarz faktury dla sprzedawcy jest załączony do tej wiadomości e-mail w formacie PDF. Szczegóły zamówienia znajdują się poniżej.', lblCustomer: 'Klient', lblTotal: 'Razem', lblService: 'Usługa', lblLangs: 'Języki' },
+  bg: { invoiceAttached: 'Вашата фактура е приложена към този имейл във формат PDF.', subjectAdminOrder: 'Получена нова поръчка — #{no}', headingAdminOrder: 'Получихте нова поръчка', bodyAdminOrder: 'Току-що беше направена нова поръчка в TercümExpert. Копието на фактурата за продавача е приложено към този имейл във формат PDF. Детайлите на поръчката са по-долу.', lblCustomer: 'Клиент', lblTotal: 'Обща сума', lblService: 'Услуга', lblLangs: 'Езици' },
+  pt: { invoiceAttached: 'A sua fatura está anexada a este e-mail em formato PDF.', subjectAdminOrder: 'Novo pedido recebido — #{no}', headingAdminOrder: 'Você recebeu um novo pedido', bodyAdminOrder: 'Um novo pedido acaba de ser efetuado na TercümExpert. A cópia da fatura para o vendedor está anexada a este e-mail em formato PDF. Os detalhes do pedido encontram-se abaixo.', lblCustomer: 'Cliente', lblTotal: 'Total', lblService: 'Serviço', lblLangs: 'Idiomas' },
+  da: { invoiceAttached: 'Din faktura er vedhæftet denne e-mail som en PDF.', subjectAdminOrder: 'Ny ordre modtaget — #{no}', headingAdminOrder: 'Du har modtaget en ny ordre', bodyAdminOrder: 'Der er netop afgivet en ny ordre på TercümExpert. Sælgerkopien af fakturaen er vedhæftet denne e-mail som en PDF. Ordredetaljerne findes nedenfor.', lblCustomer: 'Kunde', lblTotal: 'Total', lblService: 'Ydelse', lblLangs: 'Sprog' },
+  it: { invoiceAttached: 'La fattura è allegata a questa e-mail in formato PDF.', subjectAdminOrder: 'Nuovo ordine ricevuto — #{no}', headingAdminOrder: 'Hai ricevuto un nuovo ordine', bodyAdminOrder: "È appena stato effettuato un nuovo ordine su TercümExpert. La copia della fattura per il venditore è allegata a questa e-mail in formato PDF. I dettagli dell'ordine sono riportati di seguito.", lblCustomer: 'Cliente', lblTotal: 'Totale', lblService: 'Servizio', lblLangs: 'Lingue' },
+}
+export function emailExtra(locale: string): EmailExtra {
+  return EXTRA[normalizeLocale(locale)] ?? EXTRA.en
+}
 function esc(s: string): string {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
@@ -509,6 +540,8 @@ interface BuildParams {
   orderUrl: string
   tracking?: string
   reviewUrl?: string
+  invoiceNote?: boolean // 'received' mailine "faturanız ektedir" satırı ekler
+  details?: Array<{ label: string; value: string }> // 'admin_new_order' için detay tablosu
 }
 
 /** Markalı HTML mail gövdesi (inline stiller — mail istemcileri için). Arapça'da RTL. */
@@ -596,23 +629,58 @@ export function buildEmail(p: BuildParams): { subject: string; html: string } {
       subject = s.subjectReview; heading = s.headingReview; bodyText = s.bodyReview
       cta = p.reviewUrl ? button(s.reviewButton, p.reviewUrl, BRAND_GREEN) : ''
       break
+    case 'admin_new_order': {
+      const ex = emailExtra(p.locale)
+      subject = ex.subjectAdminOrder; heading = ex.headingAdminOrder; bodyText = ex.bodyAdminOrder
+      cta = button(s.viewOrder, p.orderUrl, BRAND_BLUE)
+      break
+    }
   }
 
+  // 'received' → fatura eki bilgisi. 'admin_new_order' → detay tablosu.
+  const invNoteHtml =
+    p.invoiceNote && (p.event === 'received' || p.event === 'admin_new_order')
+      ? `<p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:${INK};font-weight:600;text-align:${align};">${esc(emailExtra(p.locale).invoiceAttached)}</p>`
+      : ''
+  const detailsHtml =
+    p.details && p.details.length
+      ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:4px 0 16px;border:1px solid #eef0f3;border-radius:8px;">${p.details
+          .map(
+            (d, i) =>
+              `<tr${i % 2 ? ' style="background:#f8fafc;"' : ''}><td style="padding:8px 12px;font-size:13px;color:#64748b;text-align:${align};">${esc(d.label)}</td><td style="padding:8px 12px;font-size:13px;color:${INK};font-weight:600;text-align:${rtl ? 'left' : 'right'};">${esc(d.value)}</td></tr>`,
+          )
+          .join('')}</table>`
+      : ''
+
   const signature = `<p style="margin:22px 0 0;font-size:14px;line-height:1.5;color:#475569;text-align:${align};">${esc(s.regards)}<br><strong style="color:${INK};">${esc(s.brandSignature)}</strong></p>`
-  const bodyHtml = greetHtml + (p.event === 'review' ? '' : orderChip) + para(bodyText) + cta + signature
+  const showChip = p.event !== 'review'
+  const bodyHtml = greetHtml + (showChip ? orderChip : '') + para(bodyText) + detailsHtml + invNoteHtml + cta + signature
   const finalSubject = subject.replace('{no}', no)
   return { subject: finalSubject, html: shell(p.locale, heading, bodyHtml) }
 }
 
-/** Resend ile mail gönderir. RESEND_API_KEY yoksa sessizce atlar (işlemi bozmaz). */
-export async function sendEmail(to: string, subject: string, html: string): Promise<{ ok: boolean; skipped?: boolean }> {
+/** Resend eki: content = base64 PDF. */
+export interface EmailAttachment {
+  filename: string
+  content: string // base64
+}
+
+/** Resend ile mail gönderir (opsiyonel PDF ekiyle). RESEND_API_KEY yoksa sessizce atlar. */
+export async function sendEmail(
+  to: string,
+  subject: string,
+  html: string,
+  attachments?: EmailAttachment[],
+): Promise<{ ok: boolean; skipped?: boolean }> {
   if (!RESEND_API_KEY) return { ok: false, skipped: true }
   if (!to || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to)) return { ok: false, skipped: true }
   try {
+    const payload: Record<string, unknown> = { from: EMAIL_FROM, to, subject, html }
+    if (attachments && attachments.length) payload.attachments = attachments
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: EMAIL_FROM, to, subject, html }),
+      body: JSON.stringify(payload),
     })
     return { ok: res.ok }
   } catch {
@@ -646,6 +714,12 @@ export async function sendOrderEmail(event: EmailEvent, order: OrderLikeEmail): 
     reviewUrl: GOOGLE_REVIEW_URL,
   })
   return sendEmail(to, subject, html)
+}
+
+/** Sipariş takip sayfası URL'i (mail butonları için). */
+export function orderUrl(locale: string, orderNo: number | string): string {
+  const l = normalizeLocale(locale)
+  return `${SITE_URL}/${l}/${orderSlug(l)}/${orderNo}`
 }
 
 export { GOOGLE_REVIEW_URL, SITE_URL }

@@ -115,21 +115,22 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
     }
   }
 
-  // Müşteriye "siparişiniz alındı" maili (best-effort; başarısız olsa da sipariş kaydı geçerli).
+  // Sipariş alındı → fatura (PDF) oluştur + müşteriye "siparişiniz alındı"+fatura maili
+  // + admine "yeni sipariş" maili+satıcı faturası. Best-effort; hata siparişi bozmaz.
   try {
     const {
       data: { session },
     } = await supabase.auth.getSession()
     const token = session?.access_token
     if (token) {
-      await fetch('/api/notify', {
+      await fetch('/api/order-invoice', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ event: 'received', orderId: order.id }),
+        body: JSON.stringify({ orderId: order.id }),
       })
     }
   } catch {
-    /* mail hatası siparişi bozmaz */
+    /* mail/fatura hatası siparişi bozmaz */
   }
 
   return { orderNo: order.order_no as number, id: order.id as string }
