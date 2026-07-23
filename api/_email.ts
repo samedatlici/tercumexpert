@@ -803,4 +803,42 @@ export function panelUrl(locale: string): string {
   return `${SITE_URL}/${l}/${slug}`
 }
 
+// =====================================================================
+// Partner e-posta doğrulama kodu maili (markalı, 14 dil).
+// =====================================================================
+interface PVStrings { subject: string; heading: string; intro: string; note: string; ignore: string }
+const PARTNER_VERIFY: Record<string, PVStrings> = {
+  tr: { subject: 'Partner e-posta doğrulama kodunuz', heading: 'E-posta adresinizi doğrulayın', intro: 'İş ortağı panelinizde e-posta adresinizi doğrulamak için aşağıdaki kodu girin:', note: 'Kod 15 dakika boyunca geçerlidir.', ignore: 'Bu talebi siz oluşturmadıysanız bu e-postayı güvenle yok sayabilirsiniz.' },
+  en: { subject: 'Your partner e-mail verification code', heading: 'Verify your e-mail address', intro: 'Enter the code below in your partner panel to verify your e-mail address:', note: 'The code is valid for 15 minutes.', ignore: 'If you did not request this, you can safely ignore this e-mail.' },
+  fr: { subject: 'Votre code de vérification e-mail partenaire', heading: 'Vérifiez votre adresse e-mail', intro: 'Saisissez le code ci-dessous dans votre espace partenaire pour vérifier votre adresse e-mail :', note: 'Le code est valable 15 minutes.', ignore: "Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail en toute sécurité." },
+  de: { subject: 'Ihr Partner-E-Mail-Bestätigungscode', heading: 'Bestätigen Sie Ihre E-Mail-Adresse', intro: 'Geben Sie den folgenden Code in Ihrem Partner-Panel ein, um Ihre E-Mail-Adresse zu bestätigen:', note: 'Der Code ist 15 Minuten gültig.', ignore: 'Falls Sie diese Anfrage nicht gestellt haben, können Sie diese E-Mail bedenkenlos ignorieren.' },
+  nl: { subject: 'Uw partner-e-mailverificatiecode', heading: 'Verifieer uw e-mailadres', intro: 'Voer de onderstaande code in uw partnerpaneel in om uw e-mailadres te verifiëren:', note: 'De code is 15 minuten geldig.', ignore: 'Als u dit verzoek niet heeft ingediend, kunt u deze e-mail veilig negeren.' },
+  es: { subject: 'Su código de verificación de e-mail de socio', heading: 'Verifique su dirección de e-mail', intro: 'Introduzca el siguiente código en su panel de socio para verificar su dirección de e-mail:', note: 'El código es válido durante 15 minutos.', ignore: 'Si no ha realizado esta solicitud, puede ignorar este mensaje con total tranquilidad.' },
+  ar: { subject: 'رمز التحقق من البريد الإلكتروني للشريك', heading: 'تحقّق من عنوان بريدك الإلكتروني', intro: 'أدخل الرمز أدناه في لوحة الشريك الخاصة بك للتحقق من عنوان بريدك الإلكتروني:', note: 'الرمز صالح لمدة 15 دقيقة.', ignore: 'إذا لم تكن أنت من قدّم هذا الطلب، فيمكنك تجاهل هذا البريد الإلكتروني بأمان.' },
+  ru: { subject: 'Ваш код подтверждения e-mail партнёра', heading: 'Подтвердите Ваш адрес e-mail', intro: 'Введите приведённый ниже код в партнёрской панели, чтобы подтвердить Ваш адрес e-mail:', note: 'Код действителен в течение 15 минут.', ignore: 'Если Вы не отправляли данный запрос, Вы можете спокойно проигнорировать это письмо.' },
+  az: { subject: 'Partnyor e-poçt doğrulama kodunuz', heading: 'E-poçt ünvanınızı doğrulayın', intro: 'E-poçt ünvanınızı doğrulamaq üçün aşağıdakı kodu partnyor panelinizə daxil edin:', note: 'Kod 15 dəqiqə etibarlıdır.', ignore: 'Əgər bu sorğunu siz göndərməmisinizsə, bu e-poçtu təhlükəsiz şəkildə nəzərə almaya bilərsiniz.' },
+  pl: { subject: 'Twój kod weryfikacji e-mail partnera', heading: 'Zweryfikuj swój adres e-mail', intro: 'Wprowadź poniższy kod w panelu partnera, aby zweryfikować swój adres e-mail:', note: 'Kod jest ważny przez 15 minut.', ignore: 'Jeśli to nie Pan/Pani wysłał(a) tę prośbę, może Pan/Pani bezpiecznie zignorować tę wiadomość.' },
+  bg: { subject: 'Вашият код за потвърждение на партньорски имейл', heading: 'Потвърдете своя имейл адрес', intro: 'Въведете кода по-долу в партньорския си панел, за да потвърдите своя имейл адрес:', note: 'Кодът е валиден 15 минути.', ignore: 'Ако не сте отправяли тази заявка, можете спокойно да пренебрегнете този имейл.' },
+  pt: { subject: 'O seu código de verificação de e-mail de parceiro', heading: 'Verifique o seu endereço de e-mail', intro: 'Introduza o código abaixo no seu painel de parceiro para verificar o seu endereço de e-mail:', note: 'O código é válido durante 15 minutos.', ignore: 'Se não efetuou este pedido, pode ignorar este email com segurança.' },
+  da: { subject: 'Din partner-e-mailbekræftelseskode', heading: 'Bekræft din e-mailadresse', intro: 'Indtast koden nedenfor i dit partnerpanel for at bekræfte din e-mailadresse:', note: 'Koden er gyldig i 15 minutter.', ignore: 'Hvis du ikke har anmodet om dette, kan du roligt se bort fra denne e-mail.' },
+  it: { subject: 'Il Suo codice di verifica e-mail partner', heading: 'Verifichi il Suo indirizzo e-mail', intro: 'Inserisca il codice qui sotto nel Suo pannello partner per verificare il Suo indirizzo e-mail:', note: 'Il codice è valido per 15 minuti.', ignore: 'Se non ha effettuato Lei questa richiesta, può ignorare questa email in tutta tranquillità.' },
+}
+/** Partner e-posta doğrulama kodu maili. */
+export function buildPartnerVerify(locale: string, name: string, code: string): { subject: string; html: string } {
+  const l = normalizeLocale(locale)
+  const s = S(l)
+  const v = PARTNER_VERIFY[l] ?? PARTNER_VERIFY.tr
+  const rtl = l === 'ar'
+  const align = rtl ? 'right' : 'left'
+  const greet = name.trim() ? s.greeting.replace('{name}', esc(name.trim())) : s.greetingNoName
+  const greetHtml = `<p style="margin:0 0 12px;font-size:15px;line-height:1.6;color:${INK};font-weight:600;text-align:${align};">${greet}</p>`
+  const para = (txt: string) => `<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#334155;text-align:${align};">${esc(txt)}</p>`
+  const codeBox = `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px auto 14px;"><tr><td style="border-radius:10px;background:#f1f5f9;border:1px solid #e2e8f0;padding:14px 30px;"><span style="font-family:'SFMono-Regular',Menlo,Consolas,monospace;font-size:30px;font-weight:800;letter-spacing:8px;color:${INK};">${esc(code)}</span></td></tr></table>`
+  const noteHtml = `<p style="margin:0 0 8px;font-size:13px;color:#64748b;text-align:center;">${esc(v.note)}</p>`
+  const ignoreHtml = `<p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:#94a3b8;text-align:${align};">${esc(v.ignore)}</p>`
+  const signature = `<p style="margin:22px 0 0;font-size:14px;line-height:1.5;color:#475569;text-align:${align};">${esc(s.regards)}<br><strong style="color:${INK};">${esc(s.brandSignature)}</strong></p>`
+  const body = greetHtml + para(v.intro) + `<div style="text-align:center;">${codeBox}${noteHtml}</div>` + ignoreHtml + signature
+  return { subject: v.subject, html: shell(l, v.heading, body) }
+}
+
 export { GOOGLE_REVIEW_URL, SITE_URL }
