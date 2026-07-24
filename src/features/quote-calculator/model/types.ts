@@ -13,8 +13,6 @@ export interface QuoteInput {
   sworn: boolean
   /** Ek: Noter onayı (yeminli ile aynı anda seçilemez). */
   notarization: boolean
-  /** Ek: Apostil süreci desteği. */
-  apostille: boolean
   physicalDelivery: boolean
 }
 

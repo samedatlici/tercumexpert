@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useI18n } from '@/hooks/useI18n'
+import { useTabParam } from '@/hooks/useTabParam'
 import { useAuth } from '@/app/providers/AuthProvider'
 import { usePartner } from '@/features/partner/model/usePartner'
 import { partnerApi } from '@/features/partner/model/api'
@@ -146,7 +147,10 @@ const P_TABS: { key: PTab; icon: IconName }[] = [
 function PartnerPanel({ partner, onSaved }: { partner: Partner; onSaved: () => void }) {
   const { dict } = useI18n()
   const pp = dict.partnerPanel
-  const [tab, setTab] = useState<PTab>('profile')
+  const [tab, setTab] = useTabParam<PTab>(
+    ['profile', 'customers', 'ordersNew', 'ordersActive', 'ordersDelivery', 'ordersDone', 'allOrders', 'wallet'],
+    'profile',
+  )
   const tabLabel: Record<PTab, string> = {
     profile: pp.tabProfile,
     customers: pp.tabCustomers,
@@ -1129,7 +1133,10 @@ const A_TABS: { key: ATab; icon: IconName }[] = [
 function PartnerAdminSection() {
   const { dict } = useI18n()
   const pp = dict.partnerPanel
-  const [tab, setTab] = useState<ATab>('allOrders')
+  const [tab, setTab] = useTabParam<ATab>(
+    ['applications', 'iban', 'partners', 'ordersNew', 'ordersActive', 'ordersDelivery', 'ordersDone', 'allOrders', 'wallet', 'payments'],
+    'allOrders',
+  )
   const label: Record<ATab, string> = {
     applications: pp.tabApplications,
     iban: pp.tabIban,

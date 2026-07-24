@@ -5,7 +5,6 @@ import { PRICING, AREA_BASE_PRICE, QUOTE_LANGUAGES, type LanguageTier } from '..
 /** Tercüman kazanç oranları — SABİT. Fiyatlar (TL) ileride değişse de bu YÜZDELER DEĞİŞMEZ. */
 export const TRANSLATOR_PAYOUT_RATE = 0.3 // çeviri (taban+kelime+acil), KDV/noter/kargo HARİÇ
 export const SWORN_PAYOUT_RATE = 0.4 // yeminli ek ücreti: %40 tercüman / %60 admin
-export const APOSTILLE_PAYOUT_RATE = 0.3 // apostil ek ücreti: %30 tercüman / %70 admin
 
 export interface OrderLike {
   service: string // alan (area) id
@@ -14,7 +13,6 @@ export interface OrderLike {
   word_count: number
   urgent: boolean
   sworn?: boolean
-  apostille?: boolean
 }
 export interface TranslatorLite {
   expertise: string[]
@@ -71,8 +69,7 @@ export function computePayout(o: OrderLike): number {
   const urgency = o.urgent ? Math.round(translation * (PRICING.urgencyMultiplier - 1)) : 0
   const translationShare = Math.round(TRANSLATOR_PAYOUT_RATE * (basePrice + wordPrice + urgency))
   const swornShare = o.sworn ? Math.round(SWORN_PAYOUT_RATE * PRICING.swornFee) : 0
-  const apostilleShare = o.apostille ? Math.round(APOSTILLE_PAYOUT_RATE * PRICING.apostilleFee) : 0
-  return translationShare + swornShare + apostilleShare
+  return translationShare + swornShare
 }
 
 export function estimatePages(words: number): number {

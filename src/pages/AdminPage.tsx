@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Icon } from '@/components/common/Icon'
 import { useI18n } from '@/hooks/useI18n'
+import { useTabParam } from '@/hooks/useTabParam'
 import { useAuth } from '@/app/providers/AuthProvider'
 import { buildPath } from '@/app/router/routes'
 import { isAdminEmail } from '@/app/config/admin.config'
@@ -108,7 +109,10 @@ export default function AdminPage() {
   const h = dict.adminHub
   const { user, loading: authLoading } = useAuth()
   const admin = isAdminEmail(user?.email)
-  const [tab, setTab] = useState<Tab>('chats')
+  const [tab, setTab] = useTabParam<Tab>(
+    ['chats', 'members', 'customers', 'translators', 'partners', 'deleted', 'banned', 'manage', 'uploads'],
+    'chats',
+  )
 
   useEffect(() => {
     const meta = document.createElement('meta')

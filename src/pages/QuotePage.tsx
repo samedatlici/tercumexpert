@@ -148,7 +148,6 @@ export default function QuotePage() {
   const [urgent, setUrgent] = useState(!!draft0?.urgent)
   const [sworn, setSworn] = useState(!!draft0?.sworn)
   const [notarization, setNotarization] = useState(!!draft0?.notarization)
-  const [apostille, setApostille] = useState(!!draft0?.apostille)
   const [physicalDelivery, setPhysicalDelivery] = useState(!!draft0?.physicalDelivery)
   const [result, setResult] = useState<QuoteBreakdown | null>(null)
   const [gateOpen, setGateOpen] = useState(false)
@@ -163,12 +162,12 @@ export default function QuotePage() {
     try {
       sessionStorage.setItem(
         QUOTE_DRAFT_KEY,
-        JSON.stringify({ mode, text, service, sourceLang, targetLang, documentType, urgent, sworn, notarization, apostille, physicalDelivery, note }),
+        JSON.stringify({ mode, text, service, sourceLang, targetLang, documentType, urgent, sworn, notarization, physicalDelivery, note }),
       )
     } catch {
       /* yut */
     }
-  }, [mode, text, service, sourceLang, targetLang, documentType, urgent, sworn, notarization, apostille, physicalDelivery, note])
+  }, [mode, text, service, sourceLang, targetLang, documentType, urgent, sworn, notarization, physicalDelivery, note])
 
   // Yüklenen dosyaları geri yükle (giriş için sayfadan ayrılıp dönen kullanıcı için).
   // Dosyalar IndexedDB'de saklanır; metin taslağı gibi geri gelir.
@@ -324,7 +323,6 @@ export default function QuotePage() {
       urgent,
       sworn,
       notarization,
-      apostille,
       physicalDelivery,
     })
     if (user) {
@@ -364,7 +362,6 @@ export default function QuotePage() {
       urgent,
       sworn,
       notarization,
-      apostille,
       physicalDelivery,
       breakdown: result,
       inputMode: mode,
@@ -610,7 +607,6 @@ export default function QuotePage() {
                   setResult(null)
                 }}
               />
-              <Checkbox label={q.options.apostille} checked={apostille} onChange={(v) => { setApostille(v); setResult(null) }} />
               <Checkbox
                 label={q.options.physicalDelivery}
                 checked={physicalDelivery || sworn || notarization}

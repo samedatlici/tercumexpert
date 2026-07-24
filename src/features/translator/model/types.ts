@@ -23,6 +23,8 @@ export interface Translator {
   expertise: string[]
   status: TranslatorStatus
   was_approved: boolean
+  /** Başvuruda yüklenen CV'nin depo yolu (özel kova). Admin imzalı URL ile indirir. */
+  cv_path?: string | null
   created_at: string
   updated_at: string
 }

@@ -14,6 +14,7 @@ import { AREA_IDS } from '@/app/config/areas.config'
 import { defaultCountryForLocale } from '@/app/config/country-codes'
 import { CountryCitySelect, countryDisplayName } from '@/components/common/CountryCitySelect'
 import { translatorApi } from '@/features/translator/model/api'
+import { useTabParam } from '@/hooks/useTabParam'
 import { uploadTranslationFiles } from '@/features/translator/model/upload-translation'
 import type { LanguagePair, Translator } from '@/features/translator/model/types'
 
@@ -279,17 +280,30 @@ function ApplicationForm({
   const [isSworn, setIsSworn] = useState(false)
   const [pairs, setPairs] = useState<LanguagePair[]>([])
   const [expertise, setExpertise] = useState<string[]>([])
+  const [cvFile, setCvFile] = useState<File | null>(null)
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!fullName.trim() || pairs.length === 0) {
-      setErr(pairs.length === 0 ? t.form.atLeastOnePair : t.form.required)
+    // CV ZORUNLU: yüklemeden başvuru gönderilemez.
+    if (!fullName.trim() || pairs.length === 0 || !cvFile) {
+      setErr(!cvFile ? t.form.cvRequired : pairs.length === 0 ? t.form.atLeastOnePair : t.form.required)
       return
     }
     setErr(null)
     setBusy(true)
+    // CV'yi güvenli depoya yükle (özel kova; yalnız kendi klasörüne). Yol kayda işlenir.
+    const ext = (cvFile.name.split('.').pop() || 'pdf').toLowerCase().slice(0, 8)
+    const cvPath = `${userId}/cv-${Date.now()}.${ext}`
+    const { error: upErr } = await supabase.storage
+      .from('translator-cv')
+      .upload(cvPath, cvFile, { upsert: true, contentType: cvFile.type || undefined })
+    if (upErr) {
+      setBusy(false)
+      setErr(t.form.cvUploadError)
+      return
+    }
     // IBAN başvuruda İSTENMEZ; tercüman onaylandıktan sonra profilinden girer.
     const payload = {
       full_name: fullName.trim(),
@@ -301,6 +315,7 @@ function ApplicationForm({
       is_sworn: isSworn,
       language_pairs: pairs,
       expertise,
+      cv_path: cvPath,
     }
     // Reddedilmiş kaydı yeniden gönder (UPDATE, status→pending) veya yeni kayıt (INSERT).
     const { error } = existingId
@@ -360,6 +375,23 @@ function ApplicationForm({
         </label>
         <PairPicker t={t} locale={locale} pairs={pairs} setPairs={setPairs} />
         <ExpertisePicker t={t} selected={expertise} setSelected={setExpertise} />
+        {/* CV (ZORUNLU) */}
+        <div>
+          <label className={labelClass}>{t.form.cv} <span className="text-danger">*</span></label>
+          <p className="mb-2 text-xs text-text-muted">{t.form.cvHint}</p>
+          <label className="flex min-h-[44px] cursor-pointer items-center gap-3 rounded-md border border-border bg-surface-muted/40 px-3 py-2 text-sm hover:border-border-strong">
+            <span className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-1.5 font-medium">
+              <Icon name="FileText" className="size-4" /> {t.form.cvChoose}
+            </span>
+            <span className="truncate text-text-secondary">{cvFile ? cvFile.name : t.form.cvNone}</span>
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx,.odt,.rtf"
+              className="hidden"
+              onChange={(e) => setCvFile(e.target.files?.[0] ?? null)}
+            />
+          </label>
+        </div>
         {err && <p className="text-sm text-danger">{err}</p>}
         <Button type="submit" intent="secondary" size="lg" block disabled={busy}>
           {busy ? t.form.submitting : t.form.submit}
@@ -404,7 +436,8 @@ function TranslatorPanel({
   translator: Translator
   onSaved: () => void
 }) {
-  const [tab, setTab] = useState<Tab>('profile')
+  // Sekme URL'de (?tab=) → yenileyince aynı sekme açık kalır.
+  const [tab, setTab] = useTabParam<Tab>(['profile', 'pool', 'active', 'pending', 'approved', 'completed', 'wallet'], 'profile')
 
   return (
     <div>
@@ -782,7 +815,10 @@ function TranslatorFilters({
 }
 
 function AdminSection({ t, locale }: { t: TDict; locale: string }) {
-  const [tab, setTab] = useState<AdminTab>('translators')
+  const [tab, setTab] = useTabParam<AdminTab>(
+    ['translators', 'applications', 'iban', 'orders', 'active', 'pending', 'approved', 'completed', 'wallet', 'payments'],
+    'translators',
+  )
   const [openTid, setOpenTid] = useState<string | null>(null)
   const openTranslator = (id: string) => {
     setOpenTid(id)
@@ -838,6 +874,23 @@ function AdminSection({ t, locale }: { t: TDict; locale: string }) {
         <WorkflowSection t={t} locale={locale} status={TAB_STATUS[tab]} isAdmin />
       )}
     </div>
+  )
+}
+
+/** Admin: başvurudaki CV'yi imzalı URL ile indirir (özel kova; sunucu imzalar). */
+function CvDownload({ t, translatorId }: { t: TDict; translatorId: string }) {
+  const [busy, setBusy] = useState(false)
+  const open = async () => {
+    setBusy(true)
+    const res = await translatorApi<{ url?: string; error?: string }>('cvUrl', { translatorId })
+    setBusy(false)
+    if (res?.url) window.open(res.url, '_blank', 'noopener,noreferrer')
+    else alert(t.admin.actionError)
+  }
+  return (
+    <Button type="button" intent="outline" size="sm" disabled={busy} onClick={open}>
+      <Icon name="FileText" className="size-4" /> {t.admin.cvDownload}
+    </Button>
   )
 }
 
@@ -916,6 +969,7 @@ function AdminApplications({ t, locale }: { t: TDict; locale: string }) {
                   <p className="mt-1 text-xs text-text-muted">{new Date(r.created_at).toLocaleDateString()}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
+                  {r.cv_path && <CvDownload t={t} translatorId={r.id} />}
                   {r.status !== 'approved' && (
                     <Button type="button" intent="secondary" size="sm" disabled={busyId === r.id} onClick={() => act(r.id, { status: 'approved' })}>
                       {t.admin.approve}
@@ -1093,7 +1147,6 @@ function PoolTab({ t, locale, ibanVerified }: { t: TDict; locale: string; ibanVe
                   {o.urgent && <Pill tone="danger">{t.pool.urgent}</Pill>}
                   {o.sworn && <Pill tone="primary">{t.pool.sworn}</Pill>}
                   {o.notarization && <Pill tone="primary">{t.pool.notary}</Pill>}
-                  {o.apostille && <Pill tone="primary">{t.pool.apostille}</Pill>}
                   {o.physical_delivery ? (
                     <Pill tone="dark">{t.pool.cargo}</Pill>
                   ) : (
@@ -1439,7 +1492,6 @@ function JobCard({
           {job.urgent && <Pill tone="danger">{t.pool.urgent}</Pill>}
           {job.sworn && <Pill tone="primary">{t.pool.sworn}</Pill>}
           {job.notarization && <Pill tone="primary">{t.pool.notary}</Pill>}
-          {job.apostille && <Pill tone="primary">{t.pool.apostille}</Pill>}
           {job.physical_delivery ? <Pill tone="dark">{t.pool.cargo}</Pill> : <Pill tone="outline">{t.pool.digital}</Pill>}
         </div>
       </div>

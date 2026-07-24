@@ -65,9 +65,8 @@ export function calculateQuote(input: QuoteInput, config: PricingConfig = PRICIN
   const urgencySurcharge = input.urgent ? round(translation * (config.urgencyMultiplier - 1)) : 0
   const swornFee = input.sworn ? config.swornFee : 0
   const notaryFee = input.notarization ? config.notarizationFee : 0
-  const apostilleFee = input.apostille ? config.apostilleFee : 0
   const physicalFee = input.physicalDelivery ? config.physicalDeliveryFee : 0
-  const addonsPrice = urgencySurcharge + swornFee + notaryFee + apostilleFee + physicalFee
+  const addonsPrice = urgencySurcharge + swornFee + notaryFee + physicalFee
 
   const preMin = basePrice + wordPrice + addonsPrice
   const subtotal = Math.max(preMin, config.minimumOrderAmount)
