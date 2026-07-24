@@ -15,6 +15,15 @@ export const es: PartialDictionary = {
   },
 
   partnerPanel: {
+    tabPayments: "Pagos",
+    payHint: "Los pagos se realizan el 2 y el 17 de cada mes. El día de pago, suba el comprobante de cada socio y pulse «Pagado»; el botón no funciona hasta que se suba un comprobante. Solo se listan los saldos disponibles (tras el bloqueo de 7 días); los socios con saldo 0 no aparecen.",
+    noPayments: "No hay socios pendientes de pago.",
+    paid: "Pago registrado y socio notificado.",
+    noApplications: "No hay solicitudes pendientes.",
+    approve: "Aprobar",
+    reject: "Rechazar",
+    noIban: "No hay IBAN pendientes de aprobación.",
+    approveIban: "Aprobar IBAN",
     adminTitle: "Gestión de socios",
     tabApplications: "Solicitudes",
     tabIban: "Aprobaciones IBAN",

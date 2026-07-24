@@ -9,6 +9,15 @@ export const az: PartialDictionary = {
   },
 
   partnerPanel: {
+    tabPayments: "Ödənişlər",
+    payHint: "Ödənişlər hər ayın 2-si və 17-də edilir. Ödəniş günü hər partnyorun qəbzini yükləyib “Ödənildi”yə basın; qəbz yüklənmədən düymə işləməz. Yalnız çıxarıla bilən (7 günü dolmuş) balanslar siyahılanır; balansı 0 olan partnyorlar görünmür.",
+    noPayments: "Ödəniş gözləyən partnyor yoxdur.",
+    paid: "Ödəniş qeydə alındı və partnyora bildirildi.",
+    noApplications: "Gözləyən müraciət yoxdur.",
+    approve: "Təsdiqlə",
+    reject: "Rədd et",
+    noIban: "Təsdiq gözləyən IBAN yoxdur.",
+    approveIban: "IBAN-ı təsdiqlə",
     adminTitle: "Partnyor idarəetməsi",
     tabApplications: "Müraciətlər",
     tabIban: "IBAN təsdiqləri",

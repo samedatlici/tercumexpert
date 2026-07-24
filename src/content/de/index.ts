@@ -15,6 +15,15 @@ export const de: PartialDictionary = {
   },
 
   partnerPanel: {
+    tabPayments: "Zahlungen",
+    payHint: "Zahlungen erfolgen am 2. und 17. jedes Monats. Laden Sie am Zahltag den Beleg jedes Partners hoch und drücken Sie „Bezahlt“; die Schaltfläche funktioniert erst nach dem Hochladen eines Belegs. Es werden nur auszahlbare Guthaben (nach der 7-tägigen Sperrfrist) aufgeführt; Partner mit einem Guthaben von 0 werden nicht angezeigt.",
+    noPayments: "Keine Partner mit ausstehender Zahlung.",
+    paid: "Zahlung erfasst und Partner benachrichtigt.",
+    noApplications: "Keine ausstehenden Anfragen.",
+    approve: "Genehmigen",
+    reject: "Ablehnen",
+    noIban: "Keine IBANs zur Freigabe.",
+    approveIban: "IBAN freigeben",
     adminTitle: "Partnerverwaltung",
     tabApplications: "Anfragen",
     tabIban: "IBAN-Freigaben",

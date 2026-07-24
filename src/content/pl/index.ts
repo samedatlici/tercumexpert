@@ -9,6 +9,15 @@ export const pl: PartialDictionary = {
   },
 
   partnerPanel: {
+    tabPayments: "Płatności",
+    payHint: "Płatności są realizowane 2. i 17. dnia każdego miesiąca. W dniu płatności prosimy przesłać potwierdzenie każdego partnera i nacisnąć „Opłacono”; przycisk nie działa, dopóki nie przesłano potwierdzenia. Wyświetlane są tylko salda dostępne do wypłaty (po 7-dniowej blokadzie); partnerzy z saldem 0 nie są pokazywani.",
+    noPayments: "Brak partnerów oczekujących na płatność.",
+    paid: "Płatność zapisana, a partner powiadomiony.",
+    noApplications: "Brak oczekujących wniosków.",
+    approve: "Zatwierdź",
+    reject: "Odrzuć",
+    noIban: "Brak numerów IBAN oczekujących na zatwierdzenie.",
+    approveIban: "Zatwierdź IBAN",
     adminTitle: "Zarządzanie partnerami",
     tabApplications: "Wnioski",
     tabIban: "Zatwierdzenia IBAN",

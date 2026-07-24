@@ -1068,7 +1068,7 @@ function AdminOrdersTable({ rows }: { rows: AdminOrder[] }) {
   )
 }
 
-type ATab = 'applications' | 'iban' | 'partners' | 'ordersNew' | 'ordersActive' | 'ordersDelivery' | 'ordersDone' | 'allOrders' | 'wallet'
+type ATab = 'applications' | 'iban' | 'partners' | 'ordersNew' | 'ordersActive' | 'ordersDelivery' | 'ordersDone' | 'allOrders' | 'wallet' | 'payments'
 const A_TABS: { key: ATab; icon: IconName }[] = [
   { key: 'applications', icon: 'Check' },
   { key: 'iban', icon: 'ShieldCheck' },
@@ -1079,6 +1079,7 @@ const A_TABS: { key: ATab; icon: IconName }[] = [
   { key: 'ordersDone', icon: 'PackageCheck' },
   { key: 'allOrders', icon: 'BarChart3' },
   { key: 'wallet', icon: 'Wallet' },
+  { key: 'payments', icon: 'Coins' },
 ]
 
 function PartnerAdminSection() {
@@ -1095,8 +1096,9 @@ function PartnerAdminSection() {
     ordersDone: pp.tabOrdersDone,
     allOrders: pp.tabAllOrders,
     wallet: pp.tabWallet,
+    payments: pp.tabPayments,
   }
-  const soon = tab === 'applications' || tab === 'iban' || tab === 'partners'
+  const soon = tab === 'partners'
   return (
     <div>
       <h1 className="mb-5 text-2xl font-bold">{pp.adminTitle}</h1>
@@ -1119,6 +1121,12 @@ function PartnerAdminSection() {
         <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
           <p className="text-sm text-text-secondary">{pp.soon}</p>
         </div>
+      ) : tab === 'applications' ? (
+        <ApplicationsTab />
+      ) : tab === 'iban' ? (
+        <IbanApprovalsTab />
+      ) : tab === 'payments' ? (
+        <PartnerAdminPayments />
       ) : tab === 'allOrders' ? (
         <AdminAllOrdersTab />
       ) : tab === 'wallet' ? (
@@ -1246,6 +1254,236 @@ function AdminWalletTab() {
             </tbody>
           </table>
         </div>
+      )}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Faz 3b: Başvurular · IBAN Onayları · Ödemeler                       */
+/* ------------------------------------------------------------------ */
+function AdminEmpty({ text }: { text: string }) {
+  return <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center text-sm text-text-secondary">{text}</div>
+}
+function AdminLoadErr() {
+  const { dict } = useI18n()
+  return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{dict.partnerPanel.loadError}</p>
+}
+function Field2({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div>
+      <dt className="text-xs text-text-secondary">{label}</dt>
+      <dd className="mt-0.5 font-medium">{children}</dd>
+    </div>
+  )
+}
+
+/* Başvurular — bekleyen partner başvuruları; onayla/reddet (admin RLS). */
+function ApplicationsTab() {
+  const { locale, dict } = useI18n()
+  const pp = dict.partnerPanel
+  const pf = dict.partnership.form
+  const tf = dict.translator.form
+  const otherLabel = pf.sectorOptions[pf.sectorOptions.length - 1]
+  const [rows, setRows] = useState<Partner[]>([])
+  const [state, setState] = useState<LoadState>('loading')
+  const [busyId, setBusyId] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+    supabase.from('partners').select('*').eq('status', 'pending').order('created_at', { ascending: false })
+      .then(({ data, error }) => {
+        if (!active) return
+        if (error) setState('error')
+        else { setRows((data as Partner[]) ?? []); setState('idle') }
+      })
+    return () => { active = false }
+  }, [])
+
+  const act = async (id: string, status: 'approved' | 'rejected') => {
+    setBusyId(id)
+    await supabase.from('partners').update({ status }).eq('id', id)
+    setBusyId(null)
+    setRows((prev) => prev.filter((x) => x.id !== id))
+  }
+  const sectorLabel = (p: Partner) =>
+    p.sector === 'other' ? (p.sector_other || otherLabel) : (dict.partnership.sectors.items.find((s) => s.key === p.sector)?.title || p.sector || '—')
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{pp.loading}</p>
+  if (state === 'error') return <AdminLoadErr />
+  if (rows.length === 0) return <AdminEmpty text={pp.noApplications} />
+
+  return (
+    <div className="space-y-3">
+      {rows.map((p) => (
+        <article key={p.id} className="rounded-lg border border-border bg-surface p-4">
+          <h3 className="font-semibold">{p.company || p.contact_name || '—'}</h3>
+          <dl className="mt-3 grid gap-3 sm:grid-cols-3">
+            <Field2 label={pf.fields.sector}>{sectorLabel(p)}</Field2>
+            <Field2 label={pf.fields.contactName}>{p.contact_name || '—'}</Field2>
+            <Field2 label={pf.fields.titleRole}>{p.title_role || '—'}</Field2>
+            <Field2 label={pf.fields.email}><span dir="ltr">{p.email || '—'}</span></Field2>
+            <Field2 label={pf.fields.phone}><span dir="ltr">{p.phone || '—'}</span></Field2>
+            <Field2 label={tf.country}>{[countryDisplayName(p.country || '', locale, p.country || ''), p.city].filter(Boolean).join(' · ') || '—'}</Field2>
+          </dl>
+          <div className="mt-3 flex flex-wrap gap-2 border-t border-border pt-3">
+            <Button type="button" intent="secondary" size="sm" disabled={busyId === p.id} onClick={() => act(p.id, 'approved')}>{pp.approve}</Button>
+            <Button type="button" intent="outline" size="sm" disabled={busyId === p.id} onClick={() => act(p.id, 'rejected')}>{pp.reject}</Button>
+          </div>
+        </article>
+      ))}
+    </div>
+  )
+}
+
+/* IBAN Onayları — onay bekleyen (iban dolu, doğrulanmamış) partnerler. */
+function IbanApprovalsTab() {
+  const { dict } = useI18n()
+  const pp = dict.partnerPanel
+  const tf = dict.translator.form
+  const [rows, setRows] = useState<Partner[]>([])
+  const [state, setState] = useState<LoadState>('loading')
+  const [busyId, setBusyId] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+    supabase.from('partners').select('*').eq('status', 'approved').eq('iban_verified', false).order('updated_at', { ascending: false })
+      .then(({ data, error }) => {
+        if (!active) return
+        if (error) setState('error')
+        else { setRows(((data as Partner[]) ?? []).filter((p) => (p.iban ?? '').trim())); setState('idle') }
+      })
+    return () => { active = false }
+  }, [])
+
+  const approve = async (id: string) => {
+    setBusyId(id)
+    await supabase.from('partners').update({ iban_verified: true }).eq('id', id)
+    setBusyId(null)
+    setRows((prev) => prev.filter((x) => x.id !== id))
+  }
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{pp.loading}</p>
+  if (state === 'error') return <AdminLoadErr />
+  if (rows.length === 0) return <AdminEmpty text={pp.noIban} />
+
+  return (
+    <div className="space-y-3">
+      {rows.map((p) => (
+        <article key={p.id} className="rounded-lg border border-border bg-surface p-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h3 className="font-semibold">{p.contact_name || '—'}{p.company ? ` · ${p.company}` : ''}</h3>
+              <dl className="mt-2 grid gap-1.5 text-sm">
+                <Field2 label={tf.iban}><span dir="ltr" className="font-mono">{p.iban || '—'}</span></Field2>
+                {p.iban_name && <Field2 label={tf.ibanName}>{p.iban_name}</Field2>}
+              </dl>
+            </div>
+            <Button type="button" intent="secondary" size="sm" disabled={busyId === p.id} onClick={() => approve(p.id)}>{pp.approveIban}</Button>
+          </div>
+        </article>
+      ))}
+    </div>
+  )
+}
+
+/* Ödemeler — çekilebilir bakiyesi olan partnerler; dekontlu manuel ödeme (2 ve 17'sinde). */
+interface PartnerPaymentRow {
+  partnerId: string
+  name: string | null
+  company: string | null
+  iban: string | null
+  iban_name: string | null
+  amount: number
+}
+function PartnerAdminPayments() {
+  const { dict, formatCurrency } = useI18n()
+  const pp = dict.partnerPanel
+  const ta = dict.translator.admin
+  const tf = dict.translator.form
+  const [rows, setRows] = useState<PartnerPaymentRow[]>([])
+  const [state, setState] = useState<LoadState>('loading')
+  const [receipts, setReceipts] = useState<Record<string, string>>({})
+  const [uploadingId, setUploadingId] = useState<string | null>(null)
+  const [busyId, setBusyId] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+    partnerApi<{ payments?: PartnerPaymentRow[]; error?: string }>('adminPartnerPayments')
+      .then((r) => {
+        if (!active) return
+        if (r.error) { setState('error'); return }
+        setRows(r.payments ?? [])
+        setState('idle')
+      })
+      .catch(() => active && setState('error'))
+    return () => { active = false }
+  }, [])
+
+  const upload = async (partnerId: string, file: File) => {
+    setUploadingId(partnerId)
+    const path = `partner/${partnerId}/${Date.now()}-dekont.pdf`
+    const { error } = await supabase.storage.from('receipts').upload(path, file, { upsert: true, contentType: file.type || 'application/pdf' })
+    setUploadingId(null)
+    if (!error) setReceipts((prev) => ({ ...prev, [partnerId]: path }))
+    else setNotice(ta.actionError)
+  }
+  const pay = async (partnerId: string) => {
+    const receiptPath = receipts[partnerId]
+    if (!receiptPath) return
+    setBusyId(partnerId)
+    setNotice(null)
+    const r = await partnerApi<{ ok?: boolean; error?: string }>('payPartner', { partnerId, receiptPath })
+    setBusyId(null)
+    if (r.ok) {
+      setRows((prev) => prev.filter((x) => x.partnerId !== partnerId))
+      setNotice(pp.paid)
+    } else {
+      setNotice(ta.actionError)
+    }
+  }
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{pp.loading}</p>
+  if (state === 'error') return <AdminLoadErr />
+
+  return (
+    <div className="space-y-3">
+      <p className="rounded-md border border-border bg-surface-muted/50 p-3 text-sm text-text-secondary">{pp.payHint}</p>
+      {notice && <p className="rounded-md border border-success/40 bg-success/10 p-3 text-sm text-success">{notice}</p>}
+      {rows.length === 0 ? (
+        <AdminEmpty text={pp.noPayments} />
+      ) : (
+        rows.map((r) => (
+          <article key={r.partnerId} className="rounded-lg border border-border bg-surface p-4">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h3 className="font-semibold">{r.name || '—'}{r.company ? ` · ${r.company}` : ''}</h3>
+                <dl className="mt-2 grid gap-1.5 text-sm">
+                  <Field2 label={tf.iban}><span dir="ltr" className="font-mono">{r.iban || '—'}</span></Field2>
+                  {r.iban_name && <Field2 label={tf.ibanName}>{r.iban_name}</Field2>}
+                </dl>
+              </div>
+              <div className="text-end">
+                <p className="text-xs text-text-secondary">{ta.paymentAmount}</p>
+                <span className="inline-flex items-center rounded-lg border border-success bg-success px-3 py-1.5 text-lg font-bold text-white">
+                  {formatCurrency(r.amount)}
+                </span>
+              </div>
+            </div>
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
+              <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-sm font-medium hover:bg-surface-muted">
+                <input type="file" accept="application/pdf" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(r.partnerId, f) }} />
+                <Icon name="Upload" className="size-4" />
+                {uploadingId === r.partnerId ? ta.uploading : receipts[r.partnerId] ? ta.receiptUploaded : ta.uploadReceipt}
+              </label>
+              <Button type="button" intent="secondary" size="sm" disabled={!receipts[r.partnerId] || busyId === r.partnerId} onClick={() => pay(r.partnerId)}>
+                {busyId === r.partnerId ? ta.uploading : ta.markPaid}
+              </Button>
+              {!receipts[r.partnerId] && <span className="text-xs text-text-muted">{ta.receiptRequired}</span>}
+            </div>
+          </article>
+        ))
       )}
     </div>
   )

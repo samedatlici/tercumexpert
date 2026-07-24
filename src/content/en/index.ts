@@ -1379,6 +1379,15 @@ export const en: PartialDictionary = {
   },
 
   partnerPanel: {
+    tabPayments: "Payments",
+    payHint: "Payments are made on the 2nd and 17th of each month. On payment day, upload each partner’s receipt and press “Paid”; the button will not work until a receipt is uploaded. Only withdrawable balances (past the 7-day hold) are listed; partners with a 0 balance are not shown.",
+    noPayments: "No partners awaiting payment.",
+    paid: "Payment recorded and the partner notified.",
+    noApplications: "No pending applications.",
+    approve: "Approve",
+    reject: "Reject",
+    noIban: "No IBANs awaiting approval.",
+    approveIban: "Approve IBAN",
     adminTitle: "Partner Management",
     tabApplications: "Applications",
     tabIban: "IBAN Approvals",

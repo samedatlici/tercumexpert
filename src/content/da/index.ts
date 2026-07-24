@@ -15,6 +15,15 @@ export const da: PartialDictionary = {
   },
 
   partnerPanel: {
+    tabPayments: "Betalinger",
+    payHint: "Betalinger foretages den 2. og 17. i hver måned. På betalingsdagen skal du uploade hver partners kvittering og trykke på “Betalt”; knappen virker ikke, før en kvittering er uploadet. Kun saldi til rådighed for udbetaling (efter 7-dages spærringen) vises; partnere med en saldo på 0 vises ikke.",
+    noPayments: "Ingen partnere afventer betaling.",
+    paid: "Betaling registreret, og partneren er underrettet.",
+    noApplications: "Ingen ventende ansøgninger.",
+    approve: "Godkend",
+    reject: "Afvis",
+    noIban: "Ingen IBAN afventer godkendelse.",
+    approveIban: "Godkend IBAN",
     adminTitle: "Partneradministration",
     tabApplications: "Ansøgninger",
     tabIban: "IBAN-godkendelser",

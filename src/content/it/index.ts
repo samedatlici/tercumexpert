@@ -15,6 +15,15 @@ export const it: PartialDictionary = {
   },
 
   partnerPanel: {
+    tabPayments: "Pagamenti",
+    payHint: "I pagamenti vengono effettuati il 2 e il 17 di ogni mese. Nel giorno del pagamento, carichi la ricevuta di ogni partner e prema “Pagato”; il pulsante non funziona finché non viene caricata una ricevuta. Vengono elencati solo i saldi prelevabili (dopo il blocco di 7 giorni); i partner con saldo 0 non vengono mostrati.",
+    noPayments: "Nessun partner in attesa di pagamento.",
+    paid: "Pagamento registrato e partner notificato.",
+    noApplications: "Nessuna candidatura in sospeso.",
+    approve: "Approva",
+    reject: "Rifiuta",
+    noIban: "Nessun IBAN in attesa di approvazione.",
+    approveIban: "Approva IBAN",
     adminTitle: "Gestione partner",
     tabApplications: "Candidature",
     tabIban: "Approvazioni IBAN",

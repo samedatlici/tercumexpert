@@ -15,6 +15,15 @@ export const fr: PartialDictionary = {
   },
 
   partnerPanel: {
+    tabPayments: "Paiements",
+    payHint: "Les paiements sont effectués le 2 et le 17 de chaque mois. Le jour du paiement, téléchargez le reçu de chaque partenaire et appuyez sur « Payé » ; le bouton ne fonctionne pas tant qu’un reçu n’est pas téléchargé. Seuls les soldes retirables (au-delà du blocage de 7 jours) sont listés ; les partenaires ayant un solde de 0 n’apparaissent pas.",
+    noPayments: "Aucun partenaire en attente de paiement.",
+    paid: "Paiement enregistré et partenaire notifié.",
+    noApplications: "Aucune candidature en attente.",
+    approve: "Approuver",
+    reject: "Refuser",
+    noIban: "Aucun IBAN en attente de validation.",
+    approveIban: "Valider l’IBAN",
     adminTitle: "Gestion des partenaires",
     tabApplications: "Candidatures",
     tabIban: "Validations IBAN",

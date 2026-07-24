@@ -1,4 +1,4 @@
-import { buildPartnerVerify, sendEmail } from './_email'
+import { buildPartnerVerify, buildEmail, sendEmail, type EmailAttachment } from './_email'
 import { computePartnerShare } from './_pool-logic'
 
 /**
@@ -109,6 +109,24 @@ async function getApprovedPartner(userId: string): Promise<PartnerRow | null> {
   const p = await getPartner(userId)
   return p && p.status === 'approved' ? p : null
 }
+/** Uint8Array → base64 (Edge; Buffer yok). */
+function bytesToBase64(bytes: Uint8Array): string {
+  let bin = ''
+  const chunk = 0x8000
+  for (let i = 0; i < bytes.length; i += chunk) bin += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, i + chunk)))
+  return btoa(bin)
+}
+/** Dekont PDF'ini receipts deposundan indirir → base64. */
+async function downloadReceipt(path: string): Promise<string | null> {
+  try {
+    const r = await fetch(`${SUPABASE_URL}/storage/v1/object/receipts/${path}`, { headers: svcHeaders() })
+    if (!r.ok) return null
+    return bytesToBase64(new Uint8Array(await r.arrayBuffer()))
+  } catch {
+    return null
+  }
+}
+
 /** Bir partnerin getirdiği (referral) üye id'leri. */
 async function referredUserIds(partnerId: string): Promise<Array<{ user_id: string; created_at: string }>> {
   const r = await fetch(
@@ -128,7 +146,7 @@ export default async function handler(req: Request): Promise<Response> {
   const user = await getUser(token)
   if (!user) return json({ error: 'auth' }, 401)
 
-  let body: { action?: string; ref?: string; email?: string; code?: string; locale?: string }
+  let body: { action?: string; ref?: string; email?: string; code?: string; locale?: string; partnerId?: string; receiptPath?: string }
   try {
     body = await req.json()
   } catch {
@@ -317,6 +335,76 @@ export default async function handler(req: Request): Promise<Response> {
       }
     })
     return json({ orders })
+  }
+
+  // ---------- ADMIN: Ödemeler — çekilebilir bakiyesi olan partnerler ----------
+  if (action === 'adminPartnerPayments') {
+    if (user.email !== ADMIN_EMAIL) return json({ error: 'forbidden' }, 403)
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/partner_ledger?status=eq.pending&select=amount,created_at,partner_id`,
+      { headers: svcHeaders() },
+    )
+    const rows = r.ok ? ((await r.json()) as Array<{ amount: number | string; created_at: string; partner_id: string }>) : []
+    const now = Date.now()
+    const sums: Record<string, number> = {}
+    for (const e of rows) {
+      // Yalnızca çekilebilir (7 günü dolmuş) kazançlar ödenir.
+      if (now - new Date(e.created_at).getTime() >= LOCK_MS) {
+        sums[e.partner_id] = (sums[e.partner_id] ?? 0) + (Number(e.amount) || 0)
+      }
+    }
+    const out: Array<Record<string, unknown>> = []
+    for (const id of Object.keys(sums)) {
+      if (sums[id] <= 0) continue // 0 bakiyeli listelenmez
+      const pr = await fetch(`${SUPABASE_URL}/rest/v1/partners?id=eq.${id}&select=contact_name,company,iban,iban_name`, { headers: svcHeaders() })
+      const prow = pr.ok ? ((await pr.json()) as Array<Record<string, unknown>>)[0] : null
+      out.push({
+        partnerId: id,
+        name: prow?.contact_name ?? null,
+        company: prow?.company ?? null,
+        iban: prow?.iban ?? null,
+        iban_name: prow?.iban_name ?? null,
+        amount: Math.round(sums[id]),
+      })
+    }
+    return json({ payments: out })
+  }
+
+  // ---------- ADMIN: bir partnere ödeme yap (dekont ZORUNLU) ----------
+  if (action === 'payPartner') {
+    if (user.email !== ADMIN_EMAIL) return json({ error: 'forbidden' }, 403)
+    const id = body.partnerId
+    const receiptPath = typeof body.receiptPath === 'string' ? body.receiptPath : ''
+    if (!id || !receiptPath) return json({ error: 'need_receipt' }, 400)
+    const lr = await fetch(
+      `${SUPABASE_URL}/rest/v1/partner_ledger?partner_id=eq.${id}&status=eq.pending&select=id,amount,created_at`,
+      { headers: svcHeaders() },
+    )
+    const entries = lr.ok ? ((await lr.json()) as Array<{ id: string; amount: number | string; created_at: string }>) : []
+    const now = Date.now()
+    const payable = entries.filter((e) => now - new Date(e.created_at).getTime() >= LOCK_MS)
+    const total = payable.reduce((s, e) => s + (Number(e.amount) || 0), 0)
+    if (payable.length === 0 || total <= 0) return json({ error: 'nothing_to_pay' }, 409)
+    const idsList = payable.map((e) => e.id).join(',')
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/partner_ledger?id=in.(${idsList})`, {
+      method: 'PATCH',
+      headers: svcHeaders({ 'content-type': 'application/json', Prefer: 'return=minimal' }),
+      body: JSON.stringify({ status: 'paid', paid_at: new Date().toISOString(), receipt_path: receiptPath }),
+    })
+    if (!res.ok) return json({ error: 'update_failed' }, 200)
+    // Partnere ödeme maili + dekont eki (best-effort).
+    try {
+      const pr = await fetch(`${SUPABASE_URL}/rest/v1/partners?id=eq.${id}&select=contact_name,email`, { headers: svcHeaders() })
+      const prow = pr.ok ? ((await pr.json()) as Array<{ contact_name: string | null; email: string | null }>)[0] : null
+      const to = (prow?.email || '').trim()
+      if (to) {
+        const pdf = await downloadReceipt(receiptPath)
+        const att: EmailAttachment[] = pdf ? [{ filename: 'dekont.pdf', content: pdf }] : []
+        const mail = buildEmail({ event: 'payment', locale: 'tr', name: prow?.contact_name || '', orderNo: '', orderUrl: '' })
+        await sendEmail(to, mail.subject, mail.html, att)
+      }
+    } catch { /* yut */ }
+    return json({ ok: true })
   }
 
   return json({ error: 'unknown_action' }, 400)

@@ -14,6 +14,15 @@ export const pt: PartialDictionary = {
   },
 
   partnerPanel: {
+    tabPayments: "Pagamentos",
+    payHint: "Os pagamentos são efetuados no dia 2 e no dia 17 de cada mês. No dia de pagamento, carregue o comprovativo de cada parceiro e prima «Pago»; o botão não funciona enquanto não for carregado um comprovativo. Apenas os saldos disponíveis para levantamento (após a retenção de 7 dias) são listados; os parceiros com saldo 0 não aparecem.",
+    noPayments: "Não há parceiros a aguardar pagamento.",
+    paid: "Pagamento registado e parceiro notificado.",
+    noApplications: "Não há candidaturas pendentes.",
+    approve: "Aprovar",
+    reject: "Rejeitar",
+    noIban: "Não há IBAN a aguardar aprovação.",
+    approveIban: "Aprovar IBAN",
     adminTitle: "Gestão de parceiros",
     tabApplications: "Candidaturas",
     tabIban: "Aprovações de IBAN",

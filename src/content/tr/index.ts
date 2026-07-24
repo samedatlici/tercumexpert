@@ -1372,6 +1372,15 @@ export const tr = {
   },
 
   partnerPanel: {
+    tabPayments: "Ödemeler",
+    payHint: "Ödemeler her ayın 2’si ve 17’sinde yapılır. Ödeme gününde ödemesini gerçekleştirdiğiniz her partnerin dekontunu yükleyip “Ödendi”ye basın; dekont yüklenmeden buton çalışmaz. Yalnızca çekilebilir (7 günü dolmuş) bakiyeler listelenir; bakiyesi 0 olan partnerler görünmez.",
+    noPayments: "Ödeme bekleyen (bakiyesi olan) partner yok.",
+    paid: "Ödeme kaydedildi ve partnere bildirildi.",
+    noApplications: "Bekleyen başvuru yok.",
+    approve: "Onayla",
+    reject: "Reddet",
+    noIban: "Onay bekleyen IBAN yok.",
+    approveIban: "IBAN’ı onayla",
     adminTitle: "Partner Yönetimi",
     tabApplications: "Başvurular",
     tabIban: "IBAN Onayları",
