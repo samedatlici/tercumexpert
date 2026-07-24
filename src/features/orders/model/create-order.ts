@@ -4,6 +4,8 @@ import type { QuoteBreakdown } from '@/features/quote-calculator/model/types'
 export interface OrderFileInput {
   file: File
   words: number
+  /** Fiyat sayfasında 'quote-uploads' kovasına atılan kopyanın yolu (varsa). */
+  quotePath?: string
 }
 
 export interface CreateOrderInput {
@@ -99,13 +101,20 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
     return { error: error?.message ?? 'Sipariş oluşturulamadı.' }
   }
 
-  // Dosyaları yükle (hata olursa sipariş yine kaydolur; dosya eksik kalırsa ekip iletişime geçer).
-  // ÖNEMLİ: Dosya, fiyat sayfasında yüklenip giriş için sayfadan ayrıldıktan sonra IndexedDB'den
-  // geri yüklenmiş olabilir. Bazı tarayıcılarda IndexedDB'den gelen File nesnesi doğrudan Storage'a
-  // yüklenirken içeriği "boşalmış" gibi davranabiliyordu → dosya tercüman havuzunda görünmüyordu.
-  // Bunu önlemek için baytları okuyup TAZE bir Blob oluşturup onu yüklüyoruz.
+  // ---- Dosyaları siparişe bağla ----
+  // Dosya, fiyat sayfasında yüklenirken zaten 'quote-uploads' kovasına (sunucuda) kopyalanmış
+  // oluyor (admin "Yüklenen Dosyalar" arşivi bununla dolar). Giriş için sayfa yeniden yüklendikten
+  // sonra tarayıcıdaki File nesnesi bazı tarayıcılarda okunamaz hale gelebiliyor → o yüzden buna
+  // GÜVENMİYORUZ. Bunun yerine quotePath varsa dosyayı SUNUCUDA quote-uploads'tan order-files'a
+  // kopyalatıyoruz (kesin çözüm). quotePath yoksa (arşiv yetişmediyse) tarayıcı yüklemesine düşeriz.
+  const serverFiles: Array<{ quotePath: string; name: string; words: number }> = []
   let fileIndex = 0
-  for (const { file, words } of input.files) {
+  for (const { file, words, quotePath } of input.files) {
+    if (quotePath) {
+      serverFiles.push({ quotePath, name: file.name, words })
+      continue
+    }
+    // Yedek yol: quotePath yoksa tarayıcıdan (taze Blob) yükle.
     fileIndex += 1
     const path = `${input.userId}/${order.id}/${Date.now()}-${fileIndex}-${safeName(file.name)}`
     try {
@@ -124,6 +133,25 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
       }
     } catch {
       /* tek dosya yüklenemese de sipariş bozulmaz */
+    }
+  }
+
+  // Sunucu kopyası (quote-uploads → order-files). Tarayıcı dosyasına bağımlı DEĞİL.
+  if (serverFiles.length) {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      const token = session?.access_token
+      if (token) {
+        await fetch('/api/order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ orderNo: order.order_no, action: 'attachFiles', files: serverFiles }),
+        })
+      }
+    } catch {
+      /* sunucu kopyası başarısız olsa da sipariş bozulmaz */
     }
   }
 

@@ -100,6 +100,8 @@ interface FileEntry {
   name: string
   words: number
   status: ExtractStatus | 'pending'
+  /** 'quote-uploads' kovasındaki kopyanın yolu (sipariş anında sunucu kopyası için). */
+  quotePath?: string
 }
 
 interface DeliveryInfo {
@@ -182,7 +184,7 @@ export default function QuotePage() {
       const entries: FileEntry[] = stored.map((s) => {
         const n = Number.parseInt(s.key.replace(/\D/g, ''), 10)
         if (Number.isFinite(n) && n > maxN) maxN = n
-        return { key: s.key, file: s.file, name: s.name, words: s.words, status: s.status as FileEntry['status'] }
+        return { key: s.key, file: s.file, name: s.name, words: s.words, status: s.status as FileEntry['status'], quotePath: s.quotePath }
       })
       keyCounter.current = Math.max(keyCounter.current, maxN)
       filesRestored.current = true
@@ -217,6 +219,7 @@ export default function QuotePage() {
       words: f.words,
       status: f.status,
       file: f.file,
+      quotePath: f.quotePath,
     }))
     void saveQuoteFiles(entries)
   }, [files])
@@ -236,14 +239,16 @@ export default function QuotePage() {
 
   // Yüklenen HER dosyayı arşive kaydeder (siparişe dönmese/silinse de). Best-effort;
   // hata sipariş/fiyat akışını etkilemez. Anonim yüklemelerde user_id null (misafir).
-  const archiveUpload = async (file: File, words: number) => {
+  // DÖNÜŞ: 'quote-uploads' kovasındaki kopyanın yolu (başarılıysa) — sipariş anında
+  // belge, tarayıcı dosyasına güvenmeden SUNUCUDA buradan kopyalanır.
+  const archiveUpload = async (file: File, words: number): Promise<string | null> => {
     try {
       const uid = user?.id ?? null
       const path = `${uid ?? 'anon'}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${archiveSafeName(file.name)}`
       const { error: upErr } = await supabase.storage
         .from('quote-uploads')
         .upload(path, file, { upsert: false, contentType: file.type || undefined })
-      if (upErr) return
+      if (upErr) return null
       await supabase.from('quote_uploads').insert({
         user_id: uid,
         file_name: file.name,
@@ -253,8 +258,9 @@ export default function QuotePage() {
         word_count: words,
         locale,
       })
+      return path
     } catch {
-      /* arşiv best-effort */
+      return null
     }
   }
 
@@ -272,6 +278,12 @@ export default function QuotePage() {
       // güvenle yeniden okunabilir kalsın. Ardından listeye ekle ve kelime say.
       void materializeFile(original).then((f) => {
         setFiles((prev) => [...prev, { key, file: f, name: f.name, words: 0, status: 'pending' }])
+        // Arşiv yolu döndüğünde ilgili dosyanın quotePath'ini state'e işle → IndexedDB'ye
+        // kaydedilir ve giriş sonrası geri yüklenince sipariş anında sunucu kopyası için kullanılır.
+        const setPath = (path: string | null) => {
+          if (!path) return
+          setFiles((prev) => prev.map((e) => (e.key === key ? { ...e, quotePath: path } : e)))
+        }
         extractWordCount(f)
           .then((res) => {
             setFiles((prev) =>
@@ -279,11 +291,11 @@ export default function QuotePage() {
                 e.key === key ? { ...e, words: res.status === 'ok' ? res.words : 0, status: res.status } : e,
               ),
             )
-            void archiveUpload(f, res.status === 'ok' ? res.words : 0)
+            void archiveUpload(f, res.status === 'ok' ? res.words : 0).then(setPath)
           })
           .catch(() => {
             setFiles((prev) => prev.map((e) => (e.key === key ? { ...e, status: 'error' as const } : e)))
-            void archiveUpload(f, 0)
+            void archiveUpload(f, 0).then(setPath)
           })
       })
     }
@@ -358,7 +370,7 @@ export default function QuotePage() {
       inputMode: mode,
       sourceText: mode === 'text' ? text : undefined,
       locale,
-      files: files.map((f) => ({ file: f.file, words: f.status === 'ok' ? f.words : 0 })),
+      files: files.map((f) => ({ file: f.file, words: f.status === 'ok' ? f.words : 0, quotePath: f.quotePath })),
       contactName,
       contactEmail: user.email ?? null,
       contactPhone: delivery?.phone ?? ((user.user_metadata?.phone as string | undefined) || null),

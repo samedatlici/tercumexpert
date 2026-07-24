@@ -18,6 +18,9 @@ export interface StoredFileEntry {
   words: number
   status: string
   file: File
+  /** Fiyat sayfasında yüklenirken 'quote-uploads' kovasına atılan kopyanın yolu.
+   *  Sipariş anında belge, tarayıcı dosyasına GÜVENMEDEN sunucuda buradan kopyalanır. */
+  quotePath?: string
 }
 
 function openDb(): Promise<IDBDatabase | null> {

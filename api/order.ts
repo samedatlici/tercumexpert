@@ -45,6 +45,67 @@ async function getUserId(token: string): Promise<string | null> {
   }
 }
 
+/** Depo yolu için güvenli dosya adı. */
+function safeName(name: string): string {
+  const dot = name.lastIndexOf('.')
+  const ext = dot > -1 ? name.slice(dot) : ''
+  const base = (dot > -1 ? name.slice(0, dot) : name)
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-zA-Z0-9-_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 60)
+  return `${base || 'belge'}${ext.toLowerCase()}`
+}
+
+/**
+ * Bir dosyayı 'quote-uploads' kovasından 'order-files' kovasına SUNUCUDA kopyalar.
+ * Tarayıcı dosyasına bağımlı DEĞİL — baytlar zaten sunucuda. Önce Storage copy API'si
+ * denenir; olmazsa indir-yükle'ye düşülür (tipik belge boyutları için güvenli).
+ */
+async function copyQuoteToOrder(quotePath: string, dest: string): Promise<boolean> {
+  const auth = { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` }
+  // 1) Kovalar-arası kopya (veri fonksiyondan geçmez → büyük dosyalar için ideal).
+  // GÜVENLİK: Eski Supabase sürümleri 'destinationBucket'ı yok sayıp yanlış kovaya
+  // kopyalayabilir; dönen Key gerçekten order-files'ı işaret etmiyorsa BAŞARISIZ say
+  // ve indir-yükle yedeğine düş.
+  try {
+    const cp = await fetch(`${SUPABASE_URL}/storage/v1/object/copy`, {
+      method: 'POST',
+      headers: { ...auth, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        bucketId: 'quote-uploads',
+        sourceKey: quotePath,
+        destinationBucket: 'order-files',
+        destinationKey: dest,
+      }),
+    })
+    if (cp.ok) {
+      const d = (await cp.json().catch(() => ({}))) as { Key?: string; key?: string }
+      const key = String(d.Key || d.key || '')
+      if (key.includes('order-files')) return true
+    }
+  } catch {
+    /* aşağıdaki yedek yola düş */
+  }
+  // 2) Yedek: indir + yükle (sürümden bağımsız, doğru kovaya yazar).
+  try {
+    const dl = await fetch(`${SUPABASE_URL}/storage/v1/object/quote-uploads/${quotePath}`, { headers: auth })
+    if (!dl.ok) return false
+    const ct = dl.headers.get('content-type') || 'application/octet-stream'
+    const bytes = new Uint8Array(await dl.arrayBuffer())
+    const up = await fetch(`${SUPABASE_URL}/storage/v1/object/order-files/${dest}`, {
+      method: 'POST',
+      headers: { ...auth, 'content-type': ct, 'x-upsert': 'true' },
+      body: bytes,
+    })
+    return up.ok
+  } catch {
+    return false
+  }
+}
+
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') return json({ error: 'method' }, 405)
   if (!SERVICE_KEY) return json({ error: 'server_config' }, 200)
@@ -52,7 +113,7 @@ export default async function handler(req: Request): Promise<Response> {
   const token = (req.headers.get('authorization') || '').replace(/^Bearer\s+/i, '').trim()
   if (!token) return json({}, 200) // giriş yok → bulunamadı gibi davran
 
-  let body: { orderNo?: unknown; action?: unknown }
+  let body: { orderNo?: unknown; action?: unknown; files?: unknown }
   try {
     body = await req.json()
   } catch {
@@ -71,7 +132,47 @@ export default async function handler(req: Request): Promise<Response> {
   const ord = ((await r.json()) as Array<Record<string, unknown>>)[0]
   // Sahiplik kontrolü: sipariş yoksa VEYA başkasına aitse → boş (bulunamadı).
   if (!ord || ord.user_id !== userId) return json({}, 200)
+  const ownerId = ord.user_id as string
+  const orderId = ord.id as string
   delete ord.user_id // istemciye sızdırma
+
+  // ---- Belgeleri siparişe bağla (quote-uploads → order-files, SUNUCUDA) ----
+  // Fiyat sayfasında (giriş yapılmadan da) yüklenen dosya zaten quote-uploads'ta. Tarayıcı
+  // dosyasına güvenmeden burada order-files'a kopyalanır → tercüme havuzunda görünür.
+  if (body.action === 'attachFiles') {
+    const files = Array.isArray(body.files)
+      ? (body.files as Array<{ quotePath?: unknown; name?: unknown; words?: unknown }>)
+      : []
+    // Aynı yolun iki kez eklenmesini önle (idempotent): mevcut order_files yollarını al.
+    const exRes = await fetch(`${SUPABASE_URL}/rest/v1/order_files?order_id=eq.${orderId}&select=storage_path`, {
+      headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
+    })
+    const existing = exRes.ok ? ((await exRes.json()) as Array<{ storage_path: string }>).length : 0
+    let attached = 0
+    let idx = 0
+    for (const f of files) {
+      const quotePath = String(f?.quotePath || '').trim()
+      if (!quotePath) continue
+      idx += 1
+      const name = String(f?.name || 'belge').slice(0, 200)
+      const words = Number(f?.words) || 0
+      const dest = `${ownerId}/${orderId}/${Date.now()}-${idx}-${safeName(name)}`
+      const ok = await copyQuoteToOrder(quotePath, dest)
+      if (!ok) continue
+      const ins = await fetch(`${SUPABASE_URL}/rest/v1/order_files`, {
+        method: 'POST',
+        headers: {
+          apikey: SERVICE_KEY,
+          Authorization: `Bearer ${SERVICE_KEY}`,
+          'content-type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({ order_id: orderId, file_name: name, storage_path: dest, words }),
+      })
+      if (ins.ok) attached += 1
+    }
+    return json({ ok: true, attached, existing })
+  }
 
   // Sipariş yalnızca HAVUZDA (bir tercüman üstlenmeden) iken iptal edilebilir.
   const cancellable = ord.work_status === 'available' && ord.status !== 'cancelled'
