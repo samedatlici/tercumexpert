@@ -9,6 +9,11 @@ export const bg: PartialDictionary = {
   },
 
   partnerPanel: {
+    yourEarning: "Вашата печалба",
+    tabAllOrders: "Всички поръчки",
+    fltOrderNo: "№ на поръчка",
+    fltDateFrom: "От",
+    fltDateTo: "До",
     custFilter: "Търсене по име",
     custEmpty: "Все още не сте довели нито един член. Споделете връзката си за покана.",
     colName: "Име",

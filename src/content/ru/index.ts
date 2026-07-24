@@ -14,6 +14,11 @@ export const ru: PartialDictionary = {
   },
 
   partnerPanel: {
+    yourEarning: "Ваш доход",
+    tabAllOrders: "Все заказы",
+    fltOrderNo: "№ заказа",
+    fltDateFrom: "С",
+    fltDateTo: "По",
     custFilter: "Поиск по имени",
     custEmpty: "Вы ещё не привели ни одного участника. Поделитесь своей пригласительной ссылкой.",
     colName: "Имя",

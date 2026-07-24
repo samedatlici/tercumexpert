@@ -15,6 +15,11 @@ export const nl: PartialDictionary = {
   },
 
   partnerPanel: {
+    yourEarning: "Uw commissie",
+    tabAllOrders: "Alle bestellingen",
+    fltOrderNo: "Bestelnr.",
+    fltDateFrom: "Van",
+    fltDateTo: "Tot",
     custFilter: "Zoeken op naam",
     custEmpty: "U heeft nog geen leden aangebracht. Deel uw uitnodigingslink.",
     colName: "Naam",

@@ -9,6 +9,11 @@ export const az: PartialDictionary = {
   },
 
   partnerPanel: {
+    yourEarning: "Sizin qazancınız",
+    tabAllOrders: "Bütün sifarişlər",
+    fltOrderNo: "Sifariş nömrəsi",
+    fltDateFrom: "Başlanğıc",
+    fltDateTo: "Bitiş",
     custFilter: "Ada görə axtar",
     custEmpty: "Hələ heç bir üzv gətirməmisiniz. Dəvət linkinizi paylaşın.",
     colName: "Ad Soyad",

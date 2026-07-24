@@ -15,6 +15,11 @@ export const ar: PartialDictionary = {
   },
 
   partnerPanel: {
+    yourEarning: "ربحك",
+    tabAllOrders: "جميع الطلبات",
+    fltOrderNo: "رقم الطلب",
+    fltDateFrom: "من",
+    fltDateTo: "إلى",
     custFilter: "البحث بالاسم",
     custEmpty: "لم تُحضر أي عضو بعد. شارك رابط الدعوة الخاص بك.",
     colName: "الاسم",

@@ -127,7 +127,7 @@ function Center({
 
 /* ------------------------------------------------------------------ */
 /* Onaylı partner — Faz 2a: sekmeli panel (Profilim tam; diğerleri yakında) */
-type PTab = 'profile' | 'customers' | 'ordersNew' | 'ordersActive' | 'ordersDelivery' | 'ordersDone' | 'wallet'
+type PTab = 'profile' | 'customers' | 'ordersNew' | 'ordersActive' | 'ordersDelivery' | 'ordersDone' | 'allOrders' | 'wallet'
 const P_TABS: { key: PTab; icon: IconName }[] = [
   { key: 'profile', icon: 'QrCode' },
   { key: 'customers', icon: 'Users' },
@@ -135,6 +135,7 @@ const P_TABS: { key: PTab; icon: IconName }[] = [
   { key: 'ordersActive', icon: 'Cog' },
   { key: 'ordersDelivery', icon: 'Clock' },
   { key: 'ordersDone', icon: 'PackageCheck' },
+  { key: 'allOrders', icon: 'BarChart3' },
   { key: 'wallet', icon: 'Wallet' },
 ]
 
@@ -149,6 +150,7 @@ function PartnerPanel({ partner, onSaved }: { partner: Partner; onSaved: () => v
     ordersActive: pp.tabOrdersActive,
     ordersDelivery: pp.tabOrdersDelivery,
     ordersDone: pp.tabOrdersDone,
+    allOrders: pp.tabAllOrders,
     wallet: pp.tabWallet,
   }
 
@@ -177,10 +179,12 @@ function PartnerPanel({ partner, onSaved }: { partner: Partner; onSaved: () => v
         <ProfileTab partner={partner} onSaved={onSaved} />
       ) : tab === 'customers' ? (
         <CustomersTab />
+      ) : tab === 'allOrders' ? (
+        <AllOrdersTab />
       ) : tab === 'wallet' ? (
         <WalletTab />
       ) : (
-        <OrdersTab stage={tab} />
+        <OrdersTab key={tab} stage={tab} />
       )}
     </div>
   )
@@ -775,23 +779,59 @@ interface PartnerOrder {
   word_count: number
   total: number
   customerName: string
+  partnerShare: number
 }
 
-/* Sekme → hangi work_status'ler o aşamaya girer. */
+/* Sekme → hangi work_status'ler o aşamaya girer (her sipariş TEK aşamada görünür). */
 const STAGE_STATUS: Record<string, string[]> = {
   ordersNew: ['available'],
   ordersActive: ['claimed', 'submitted'],
-  ordersDelivery: ['approved', 'shipped'],
+  ordersDelivery: ['approved'],
   ordersDone: ['completed'],
 }
 
-/* Sipariş aşama sekmesi — müşterilerin siparişleri (read-only). */
-function OrdersTab({ stage }: { stage: string }) {
+/* Sipariş tablosu — toplam tutar + "Sizin kazancınız" (partner payı). */
+function OrdersTable({ rows }: { rows: PartnerOrder[] }) {
   const { dict, formatCurrency } = useI18n()
   const pp = dict.partnerPanel
+  return (
+    <div className="overflow-x-auto rounded-lg border border-border">
+      <table className="w-full text-sm">
+        <thead className="bg-surface-muted text-text-secondary">
+          <tr>
+            <th className="px-3 py-2 text-start font-medium">{pp.colOrderNo}</th>
+            <th className="px-3 py-2 text-start font-medium">{pp.colCustomer}</th>
+            <th className="px-3 py-2 text-start font-medium">{pp.colService}</th>
+            <th className="px-3 py-2 text-start font-medium">{pp.colLangs}</th>
+            <th className="px-3 py-2 text-start font-medium">{pp.colDate}</th>
+            <th className="px-3 py-2 text-end font-medium">{pp.colAmount}</th>
+            <th className="px-3 py-2 text-end font-medium">{pp.yourEarning}</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-border">
+          {rows.map((o) => (
+            <tr key={o.order_no} className="bg-surface">
+              <td className="whitespace-nowrap px-3 py-2 font-medium">#{o.order_no}</td>
+              <td className="whitespace-nowrap px-3 py-2">{o.customerName || '—'}</td>
+              <td className="px-3 py-2 text-text-secondary">{o.service || '—'}</td>
+              <td className="whitespace-nowrap px-3 py-2 text-text-secondary uppercase" dir="ltr">
+                {o.source_lang} → {o.target_lang}
+              </td>
+              <td className="whitespace-nowrap px-3 py-2 text-text-secondary">{fmtDate(o.created_at)}</td>
+              <td className="whitespace-nowrap px-3 py-2 text-end">{formatCurrency(o.total)}</td>
+              <td className="whitespace-nowrap px-3 py-2 text-end font-semibold text-success">{formatCurrency(o.partnerShare)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+/* Ortak sipariş yükleyici (tüm siparişler bir kez çekilir, sekme filtreler). */
+function usePartnerOrders() {
   const [rows, setRows] = useState<PartnerOrder[]>([])
   const [state, setState] = useState<LoadState>('loading')
-
   useEffect(() => {
     let active = true
     partnerApi<{ orders?: PartnerOrder[]; error?: string }>('orders')
@@ -804,44 +844,66 @@ function OrdersTab({ stage }: { stage: string }) {
       .catch(() => active && setState('error'))
     return () => { active = false }
   }, [])
+  return { rows, state }
+}
+
+/* Sipariş aşama sekmesi — müşterilerin siparişleri (read-only). key={tab} ile taze çekilir. */
+function OrdersTab({ stage }: { stage: string }) {
+  const { dict } = useI18n()
+  const pp = dict.partnerPanel
+  const { rows, state } = usePartnerOrders()
 
   if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{pp.loading}</p>
   if (state === 'error') return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{pp.loadError}</p>
 
   const allowed = STAGE_STATUS[stage] ?? []
   const filtered = rows.filter((o) => allowed.includes(o.work_status))
-
   if (filtered.length === 0)
     return <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-8 text-center text-sm text-text-secondary">{pp.ordEmpty}</div>
+  return <OrdersTable rows={filtered} />
+}
+
+/* Tüm Siparişler — partnerin bütün siparişleri; isim + sipariş no + tarih aralığı filtresi. */
+function AllOrdersTab() {
+  const { dict } = useI18n()
+  const pp = dict.partnerPanel
+  const { rows, state } = usePartnerOrders()
+  const [name, setName] = useState('')
+  const [no, setNo] = useState('')
+  const [from, setFrom] = useState('')
+  const [to, setTo] = useState('')
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{pp.loading}</p>
+  if (state === 'error') return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{pp.loadError}</p>
+
+  const day = (iso: string) => (iso || '').slice(0, 10)
+  const filtered = rows.filter((o) => {
+    if (name.trim() && !o.customerName.toLowerCase().includes(name.trim().toLowerCase())) return false
+    if (no.trim() && !String(o.order_no).includes(no.trim())) return false
+    if (from && day(o.created_at) < from) return false
+    if (to && day(o.created_at) > to) return false
+    return true
+  })
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-border">
-      <table className="w-full text-sm">
-        <thead className="bg-surface-muted text-text-secondary">
-          <tr>
-            <th className="px-3 py-2 text-start font-medium">{pp.colOrderNo}</th>
-            <th className="px-3 py-2 text-start font-medium">{pp.colCustomer}</th>
-            <th className="px-3 py-2 text-start font-medium">{pp.colService}</th>
-            <th className="px-3 py-2 text-start font-medium">{pp.colLangs}</th>
-            <th className="px-3 py-2 text-start font-medium">{pp.colDate}</th>
-            <th className="px-3 py-2 text-end font-medium">{pp.colAmount}</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-border">
-          {filtered.map((o) => (
-            <tr key={o.order_no} className="bg-surface">
-              <td className="whitespace-nowrap px-3 py-2 font-medium">#{o.order_no}</td>
-              <td className="whitespace-nowrap px-3 py-2">{o.customerName || '—'}</td>
-              <td className="px-3 py-2 text-text-secondary">{o.service || '—'}</td>
-              <td className="whitespace-nowrap px-3 py-2 text-text-secondary uppercase" dir="ltr">
-                {o.source_lang} → {o.target_lang}
-              </td>
-              <td className="whitespace-nowrap px-3 py-2 text-text-secondary">{fmtDate(o.created_at)}</td>
-              <td className="whitespace-nowrap px-3 py-2 text-end font-semibold">{formatCurrency(o.total)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-end gap-2">
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder={pp.custFilter} className={`${inputClass} w-auto max-w-[12rem]`} />
+        <input value={no} onChange={(e) => setNo(e.target.value.replace(/\D/g, ''))} placeholder={pp.fltOrderNo} inputMode="numeric" className={`${inputClass} w-auto max-w-[9rem]`} />
+        <label className="flex flex-col text-xs text-text-secondary">
+          {pp.fltDateFrom}
+          <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className={`${inputClass} w-auto`} />
+        </label>
+        <label className="flex flex-col text-xs text-text-secondary">
+          {pp.fltDateTo}
+          <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className={`${inputClass} w-auto`} />
+        </label>
+      </div>
+      {filtered.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-8 text-center text-sm text-text-secondary">{pp.ordEmpty}</div>
+      ) : (
+        <OrdersTable rows={filtered} />
+      )}
     </div>
   )
 }

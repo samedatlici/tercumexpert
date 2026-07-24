@@ -112,6 +112,31 @@ export function computePayout(o: OrderLike): number {
   return translationShare + swornShare + apostilleShare
 }
 
+/* ----------------------------- Partner komisyonu ----------------------------- */
+// Partner payı (hepsi KDV HARİÇ) — YÜZDELER SABİT (fiyat TL olarak değişse bile):
+//   • Ana çeviri bedelinin (taban+kelime) %20'si
+//   • Acil teslimat farkının %20'si
+//   • Yeminli ek ücretinin %10'u
+//   • Noter / Apostil / Fiziksel teslimat: partner EK PAY ALMAZ.
+export const PARTNER_TRANSLATION_RATE = 0.2
+export const PARTNER_URGENT_RATE = 0.2
+export const PARTNER_SWORN_RATE = 0.1
+
+/** Bir siparişin partnere ödenecek komisyonu (TL). Sunucuda hesaplanır; istemciye güvenilmez. */
+export function computePartnerShare(o: OrderLike): number {
+  const words = Math.max(0, Math.floor(o.word_count || 0))
+  const base = AREA_BASE_PRICE[o.service] ?? DEFAULT_BASE
+  const langMult = LANG_TIER_MULT[pairTier(o.source_lang, o.target_lang)]
+  const basePrice = Math.round(base)
+  const wordPrice = Math.round(baseWordCost(words) * langMult)
+  const translation = basePrice + wordPrice
+  const urgency = o.urgent ? Math.round(translation * (URGENCY_MULT - 1)) : 0
+  const translationShare = Math.round(PARTNER_TRANSLATION_RATE * translation)
+  const urgentShare = o.urgent ? Math.round(PARTNER_URGENT_RATE * urgency) : 0
+  const swornShare = o.sworn ? Math.round(PARTNER_SWORN_RATE * SWORN_FEE) : 0
+  return translationShare + urgentShare + swornShare
+}
+
 /** Kaba sayfa tahmini (≈250 kelime/sayfa). */
 export function estimatePages(words: number): number {
   return Math.max(1, Math.ceil((words || 0) / 250))

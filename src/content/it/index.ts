@@ -15,6 +15,11 @@ export const it: PartialDictionary = {
   },
 
   partnerPanel: {
+    yourEarning: "Il Suo guadagno",
+    tabAllOrders: "Tutti gli ordini",
+    fltOrderNo: "N. ordine",
+    fltDateFrom: "Da",
+    fltDateTo: "A",
     custFilter: "Cerca per nome",
     custEmpty: "Non ha ancora portato alcun membro. Condivida il Suo link di invito.",
     colName: "Nome",

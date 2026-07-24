@@ -9,6 +9,11 @@ export const pl: PartialDictionary = {
   },
 
   partnerPanel: {
+    yourEarning: "Państwa zarobek",
+    tabAllOrders: "Wszystkie zamówienia",
+    fltOrderNo: "Nr zamówienia",
+    fltDateFrom: "Od",
+    fltDateTo: "Do",
     custFilter: "Szukaj po nazwisku",
     custEmpty: "Nie pozyskali Państwo jeszcze żadnego członka. Prosimy udostępnić link z zaproszeniem.",
     colName: "Imię i nazwisko",

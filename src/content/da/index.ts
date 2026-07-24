@@ -15,6 +15,11 @@ export const da: PartialDictionary = {
   },
 
   partnerPanel: {
+    yourEarning: "Din indtjening",
+    tabAllOrders: "Alle ordrer",
+    fltOrderNo: "Ordrenr.",
+    fltDateFrom: "Fra",
+    fltDateTo: "Til",
     custFilter: "Søg efter navn",
     custEmpty: "Du har endnu ikke henvist nogen medlemmer. Del dit invitationslink.",
     colName: "Navn",

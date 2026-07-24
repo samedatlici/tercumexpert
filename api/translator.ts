@@ -1,4 +1,4 @@
-import { matchesTranslator, computePayout, estimatePages } from './_pool-logic'
+import { matchesTranslator, computePayout, computePartnerShare, estimatePages } from './_pool-logic'
 import { sendOrderEmail, buildEmail, sendEmail, orderUrl, deliverLabel, type EmailAttachment } from './_email'
 
 /**
@@ -414,6 +414,26 @@ export default async function handler(req: Request): Promise<Response> {
         status: 'pending',
       }),
     })
+    // Partner payı (varsa): siparişin müşterisi bir partnere bağlıysa, komisyonu partner_ledger'a
+    // KİLİTLİ (7 gün) düşür. Idempotent: partner_ledger_order_uniq (order_id benzersiz).
+    try {
+      const uRes = await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}&select=user_id`, { headers: svcHeaders() })
+      const uid = uRes.ok ? ((await uRes.json()) as Array<{ user_id?: string }>)[0]?.user_id : null
+      if (uid) {
+        const rRes = await fetch(`${SUPABASE_URL}/rest/v1/partner_referrals?user_id=eq.${uid}&select=partner_id`, { headers: svcHeaders() })
+        const pid = rRes.ok ? ((await rRes.json()) as Array<{ partner_id?: string }>)[0]?.partner_id : null
+        if (pid) {
+          const pShare = computePartnerShare(order as unknown as Parameters<typeof computePartnerShare>[0])
+          if (pShare > 0) {
+            await fetch(`${SUPABASE_URL}/rest/v1/partner_ledger`, {
+              method: 'POST',
+              headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'resolution=ignore-duplicates,return=minimal' }),
+              body: JSON.stringify({ partner_id: pid, order_id: orderId, amount: pShare, status: 'pending' }),
+            })
+          }
+        }
+      }
+    } catch { /* yut */ }
     // Müşteriye teslim maili.
     try {
       if (order.physical_delivery) {

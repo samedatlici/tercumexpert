@@ -1372,6 +1372,11 @@ export const tr = {
   },
 
   partnerPanel: {
+    yourEarning: "Sizin kazancınız",
+    tabAllOrders: "Tüm Siparişler",
+    fltOrderNo: "Sipariş no",
+    fltDateFrom: "Başlangıç",
+    fltDateTo: "Bitiş",
     custFilter: "İsimle ara",
     custEmpty: "Henüz getirdiğiniz bir üye yok. Davet bağlantınızı paylaşın.",
     colName: "Ad Soyad",

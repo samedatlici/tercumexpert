@@ -1,4 +1,5 @@
 import { buildPartnerVerify, sendEmail } from './_email'
+import { computePartnerShare } from './_pool-logic'
 
 /**
  * Partner (İş Ortağı) SUNUCU uç noktası (Edge). GÜVENLİK: hassas alanlar (status,
@@ -251,7 +252,7 @@ export default async function handler(req: Request): Promise<Response> {
     const refs = await referredUserIds(partner.id)
     const ids = refs.map((r) => r.user_id)
     if (ids.length === 0) return json({ orders: [] })
-    const cols = 'order_no,created_at,status,work_status,service,source_lang,target_lang,word_count,total,user_id'
+    const cols = 'order_no,created_at,status,work_status,service,source_lang,target_lang,word_count,urgent,sworn,apostille,total,user_id'
     const [oRes, users] = await Promise.all([
       fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=in.(${ids.join(',')})&select=${cols}&order=created_at.desc`, { headers: svcHeaders() }),
       listAuthUsers(),
@@ -263,6 +264,7 @@ export default async function handler(req: Request): Promise<Response> {
       work_status: o.work_status || 'available', service: o.service,
       source_lang: o.source_lang, target_lang: o.target_lang, word_count: o.word_count,
       total: o.total, customerName: nameMap.get(o.user_id as string) || '',
+      partnerShare: computePartnerShare(o as unknown as Parameters<typeof computePartnerShare>[0]),
     }))
     return json({ orders })
   }
