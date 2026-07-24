@@ -2,25 +2,28 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TercümExpert</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <title>TercümExpert — Profesyonel Çeviri Hizmetleri</title>
+    <meta name="description" content="Yeminli tercüme, noter onayı ve kurumsal çeviri çözümleri." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <script>
-      function teShow(t, d) {
-        var el = document.getElementById('root') || document.body
-        el.innerHTML = '<pre style="white-space:pre-wrap;padding:20px;color:#b00020;font:13px monospace">HATA (' + t + '): ' + String(d).replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</pre>'
-      }
       window.addEventListener('error', function (e) {
-        var x = e && e.error
-        teShow('error', x ? (x.name + ': ' + x.message + '\n' + (x.stack||'')) : (e && e.message))
-      })
-      window.addEventListener('unhandledrejection', function (e) {
-        var x = e && e.reason
-        teShow('promise', x ? ((x.name||'') + ': ' + (x.message||'') + '\n' + (x.stack||'')) : String(x))
+        var d = (e && e.error && e.error.stack) || (e && e.message) || 'bilinmeyen hata'
+        var el = document.getElementById('root') || document.body
+        el.innerHTML =
+          '<pre style="white-space:pre-wrap;padding:20px;color:#b00020;font:13px ui-monospace,monospace">TANI: ' +
+          String(d).replace(/&/g, '&amp;').replace(/</g, '&lt;') +
+          '</pre>'
       })
     </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>Bu uygulamayi goruntulemek icin JavaScript gerekir.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

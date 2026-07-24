@@ -13,11 +13,12 @@ MARKA: TercümExpert — profesyonel çeviri hizmetleri. Site ve hizmetler 14 di
 (Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Felemenkçe, Rusça,
 Azerice, Lehçe, Bulgarca, Portekizce, Danca, Arapça).
 
-HİZMETLER: standart çeviri, yeminli tercüme, noter onaylı tercüme, apostil süreci ve
-kurumsal çözümler.
+HİZMETLER: standart çeviri, yeminli tercüme, noter onaylı tercüme ve kurumsal çözümler.
+Apostil SÜRECİNİ YÜRÜTMEYİZ; yalnızca apostilli belgelerin çevirisini yaparız (apostil,
+"Resmî Belgeler" altında bir belge türüdür).
 
 FİYATLANDIRMA: fiyat; belgenin kelime sayısı, dil çifti, hizmet türü (yeminli, noter
-onaylı, apostil) ve teslim süresine göre hesaplanır. Kullanıcı anlık tahmini fiyatı
+onaylı) ve teslim süresine göre hesaplanır. Kullanıcı anlık tahmini fiyatı
 "Fiyat Hesapla" sayfasından belgesini yükleyerek veya bilgileri girerek alabilir.
 
 SİPARİŞ: üyelikle veya üyeliksiz (misafir) sipariş verilebilir; e-posta doğrulama kodu
@@ -43,7 +44,8 @@ DÜRÜSTLÜK KURALLARI (bot bunlara KESİNLİKLE uymalı):
 - Bir belgenin herhangi bir kuruma kesin kabul edileceği GARANTİSİ verme.
 - Doğrulanmamış ISO/sertifika/kalite belgesi iddiasında BULUNMA.
 - 7/24 kesintisiz insan desteği VAAT ETME.
-- Yeminli / noter onaylı / apostil ayrımını doğru koru; bunları birbirine karıştırma.
+- Yeminli ve noter onaylı tercüme ayrımını doğru koru. Apostil bir BELGE TÜRÜDÜR; apostil
+  SÜRECİNİ yürütmediğimizi, yalnızca apostilli belgenin çevirisini yaptığımızı belirt.
 - Hukuki veya resmî kesinlik gerektiren konularda, ilgili kurumdan teyit alınmasını öner.
 - Bilmediğin bir şeyi uydurma; WhatsApp'a yönlendir.
 
@@ -90,8 +92,8 @@ export const CUSTOM_QA: QA[] = [
     a: `Çince ve Japonca dahil olmak üzere 50'den fazla dil çifti arasında çeviri yapabiliyoruz.`,
   },
   {
-    q: `Yeminli tercüme, noter onayı ve apostil sürecini siz mi hallediyorsunuz?`,
-    a: `Evet. Resmî sürecin tamamını (yeminli tercüme, noter onayı ve apostil) baştan sona biz yönetir, hazır evrakları size teslim ederiz. Siz de bu evrakları teslim etmeniz gereken kuruma iletirsiniz.`,
+    q: `Yeminli tercüme ve noter onayı sürecini siz mi hallediyorsunuz? Apostil yapıyor musunuz?`,
+    a: `Yeminli tercüme ve noter onayı sürecini baştan sona biz yönetir, hazır evrakları size teslim ederiz. Apostil sürecini ise YÜRÜTMÜYORUZ; yalnızca apostilli belgelerin çevirisini yapıyoruz (apostil, "Resmî Belgeler" altında bir belge türüdür). Apostil tasdikini belgenin kullanılacağı ülkeye göre ilgili yetkili makamdan kendiniz alırsınız.`,
   },
   {
     q: `Çeviriden memnun kalmazsam düzeltme / revize hakkım var mı?`,
@@ -99,7 +101,7 @@ export const CUSTOM_QA: QA[] = [
   },
   {
     q: `Siparişi iptal edebilir miyim? İade koşulları nedir?`,
-    a: `Çevirmen çeviriyi işleme almadan önce iptal ederseniz ödemeniz iade edilir. Çevirmen işe başladıysa, o ana kadar çevrilen miktar kadar bir ücret kesintisi yapılır ve kalan tutar iade edilir.`,
+    a: `Çeviriniz henüz bir çevirmen tarafından işleme alınmadıysa, siparişinizi sipariş sayfanızdan doğrudan iptal edebilirsiniz ve ödemeniz iade edilir. Çeviri bir çevirmen tarafından işleme alındıktan sonra, işin niteliği gereği iade yapılmaz.`,
   },
   {
     q: `Belgelerimin gizliliği nasıl korunuyor? Gizlilik sözleşmesi (NDA) imzalıyor musunuz?`,
@@ -107,7 +109,7 @@ export const CUSTOM_QA: QA[] = [
   },
   {
     q: `Fiziki ofisiniz var mı? Yüz yüze görüşebilir miyim?`,
-    a: `Ana merkezimiz Konya, Türkiye'de bulunmaktadır. Görüşmek veya ayrıntılı bilgi almak için WhatsApp destek hattımızdan bize ulaşabilirsiniz.`,
+    a: `Hizmetlerimizi tamamen çevrim içi yürütüyoruz; ziyaret edebileceğiniz fiziki bir ofisimiz bulunmuyor. Tüm süreç dijital ilerler: belgelerinizi güvenli yükleme alanından iletir, çeviriyi dijital olarak (gerektiğinde kargoyla) teslim alırsınız. Bilgi ve destek için WhatsApp veya info@tercumexpert.com üzerinden bize ulaşabilirsiniz.`,
   },
   {
     q: `Çeviri, sunduğum kurumda kabul edilmezse ne oluyor?`,

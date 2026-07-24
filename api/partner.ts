@@ -292,7 +292,7 @@ export default async function handler(req: Request): Promise<Response> {
     const refs = await referredUserIds(partner.id)
     const ids = refs.map((r) => r.user_id)
     if (ids.length === 0) return json({ orders: [] })
-    const cols = 'order_no,created_at,status,work_status,service,source_lang,target_lang,word_count,urgent,sworn,apostille,total,user_id'
+    const cols = 'order_no,created_at,status,work_status,service,source_lang,target_lang,word_count,urgent,sworn,total,user_id'
     const [oRes, users] = await Promise.all([
       fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=in.(${ids.join(',')})&select=${cols}&order=created_at.desc`, { headers: svcHeaders() }),
       listAuthUsers(),
@@ -335,7 +335,7 @@ export default async function handler(req: Request): Promise<Response> {
     const userToPartner = new Map(refs.map((r) => [r.user_id, r.partner_id]))
     const partnerMap = new Map(partners.map((p) => [p.id, p]))
     const ids = [...new Set(refs.map((r) => r.user_id))]
-    const cols = 'order_no,created_at,status,work_status,service,source_lang,target_lang,word_count,urgent,sworn,apostille,total,user_id'
+    const cols = 'order_no,created_at,status,work_status,service,source_lang,target_lang,word_count,urgent,sworn,total,user_id'
     const [oRes, users] = await Promise.all([
       fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=in.(${ids.join(',')})&select=${cols}&order=created_at.desc`, { headers: svcHeaders() }),
       listAuthUsers(),

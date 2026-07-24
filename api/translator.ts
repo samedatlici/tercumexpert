@@ -233,7 +233,7 @@ async function signedUrl(bucket: string, path: string, expiresIn = 3600): Promis
 }
 
 const ORDER_COLS =
-  'id,order_no,service,source_lang,target_lang,document_type,word_count,urgent,sworn,notarization,apostille,physical_delivery,input_mode,source_text,note,delivery_days,created_at,locale,' +
+  'id,order_no,service,source_lang,target_lang,document_type,word_count,urgent,sworn,notarization,physical_delivery,input_mode,source_text,note,delivery_days,created_at,locale,' +
   'contact_name,contact_email,contact_phone,delivery_address,delivery_city,delivery_postal_code,delivery_country'
 
 // İş-akışı kolonları dahil (Aktif/Onay bekleyen/Onaylanan/Tamamlanan sayfaları).
@@ -390,6 +390,18 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   if (!isAdmin && !translator) return json({ error: 'not_translator' }, 403)
+
+  // -------- Admin: başvuru CV'si için imzalı indirme URL'i (özel kova) --------
+  if (action === 'cvUrl') {
+    if (!isAdmin) return json({ error: 'forbidden' }, 403)
+    const tid = body.translatorId
+    if (!tid) return json({ error: 'no_id' }, 400)
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/translators?id=eq.${tid}&select=cv_path`, { headers: svcHeaders() })
+    const row = r.ok ? ((await r.json()) as Array<{ cv_path: string | null }>)[0] : null
+    if (!row?.cv_path) return json({ error: 'no_cv' }, 404)
+    const u = await signedUrl('translator-cv', row.cv_path, 300)
+    return json({ url: u ? `${u}&download=CV` : null })
+  }
 
   // -------- Havuz: uyan available siparişler + dosya/metin + kazanç --------
   if (action === 'pool') {
