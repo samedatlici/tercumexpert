@@ -526,7 +526,7 @@ export const tr = {
       'driver-license': 'Sürücü Belgesi',
       'criminal-record': 'Adli Sicil Kaydı',
       'military-status': 'Askerlik Durum Belgesi',
-      apostille: "Apostil belgesi",
+      apostille: "Apostil Belgesi",
       'medical-report': 'Medikal Rapor',
       epicrisis: 'Epikriz (Hasta Çıkış Özeti)',
       prescription: 'Reçete',

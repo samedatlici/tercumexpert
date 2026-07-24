@@ -529,7 +529,7 @@ export const en: PartialDictionary = {
       'driver-license': 'Driver License',
       'criminal-record': 'Criminal Record',
       'military-status': 'Military Status Document',
-      apostille: "Apostille document",
+      apostille: "Apostille Document",
       'medical-report': 'Medical Report',
       epicrisis: 'Epicrisis (Discharge Summary)',
       prescription: 'Prescription',
