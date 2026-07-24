@@ -88,7 +88,7 @@ export const FAQ_ITEMS_DA: FaqItem[] = [
     category: "order",
     priority: 8,
     q: "Hvordan forløber bestillingsprocessen?",
-    a: "Når du har uploadet dit dokument og godkendt det foreløbige tilbud, oprettes din bestilling og tildeles en translatør med speciale i det relevante område. Oversættelsen gennemgår kvalitetskontrol; om nødvendigt håndteres notarpåtegning/apostille, og dit dokument leveres digitalt og, når det kræves, med kurér.",
+    a: "Når du har uploadet dit dokument og godkendt det foreløbige tilbud, oprettes din bestilling og tildeles en translatør med speciale i det relevante område. Oversættelsen gennemgår kvalitetskontrol; om nødvendigt håndteres notarpåtegningsprocessen, og dit dokument leveres digitalt og, når det kræves, med kurér.",
     keywords: ["bestillingsproces", "hvordan foregår det", "trin", "arbejdsgang"],
   },
   {
@@ -136,7 +136,7 @@ export const FAQ_ITEMS_DA: FaqItem[] = [
     category: "notary",
     priority: 14,
     q: "Hvordan foregår apostilleprocessen?",
-    a: "En apostille er en bekræftelse udstedt af den kompetente myndighed, så et dokument anerkendes som gyldigt i udlandet. Vi kan håndtere processen på dine vegne; hvilket dokument der skal apostilleres, og rækkefølgen af trinene afhænger af det land, hvor dokumentet skal bruges. I lande, der ikke er part i Haagerkonventionen, kan der kræves konsulær bekræftelse i stedet for en apostille.",
+    a: "En apostille er en bekræftelse udstedt af den kompetente myndighed, så et dokument anerkendes som gyldigt i udlandet. Vi udfører ikke apostilleprocessen; du skal selv indhente apostillen hos den kompetente myndighed i det land, hvor dit dokument er udstedt. Vi leverer udelukkende den autoriserede oversættelse af dine apostillerede dokumenter. I lande, der ikke er part i Haagerkonventionen, kan der kræves konsulær bekræftelse i stedet for en apostille.",
     keywords: ["apostille", "apostilleproces", "apostillebekræftelse", "gyldig i udlandet"],
   },
   {
@@ -202,7 +202,7 @@ export const FAQ_ITEMS_DA: FaqItem[] = [
     category: "general",
     priority: 22,
     q: "Hvilke ydelser tilbyder TercümExpert?",
-    a: "Vi tilbyder autoriseret og notarpåtegnet oversættelse, hjælp til apostilleprocessen, juridisk, teknisk, medicinsk og akademisk oversættelse samt lokalisering af hjemmesider og mobilapps. Du kan vælge den ydelse, der passer til dine behov, på skærmen Beregn pris.",
+    a: "Vi tilbyder autoriseret og notarpåtegnet oversættelse, oversættelse af apostillerede dokumenter, juridisk, teknisk, medicinsk og akademisk oversættelse samt lokalisering af hjemmesider og mobilapps. Du kan vælge den ydelse, der passer til dine behov, på skærmen Beregn pris.",
     keywords: ["ydelser", "hvad tilbyder I", "ydelsestyper", "hvilke ydelser"],
   },
   {
@@ -218,7 +218,7 @@ export const FAQ_ITEMS_DA: FaqItem[] = [
     category: "general",
     priority: 24,
     q: "Skal jeg møde op på et kontor personligt?",
-    a: "Nej. Hele processen — indhentning af tilbud, bestilling, betaling og levering — kan håndteres online. Du skal blot uploade og godkende dine dokumenter; du behøver ikke møde op nogen steder personligt.",
+    a: "Vi har ikke et fysisk kontor; vores ydelser leveres udelukkende online. Du skal blot sende dine dokumenter via sikker upload, og levering sker digitalt og, når det kræves, med kurér. Har du spørgsmål, kan du kontakte os via WhatsApp eller på info@tercumexpert.com.",
     keywords: ["kontor", "personligt fremmøde", "filial", "adresse", "kræver fremmøde"],
   },
   {
@@ -348,7 +348,7 @@ export const FAQ_ITEMS_DA: FaqItem[] = [
     category: "order",
     priority: 40,
     q: "Kan en bestilling annulleres efter betaling?",
-    a: "Hvis oversættelsen ikke er begyndt, er annullering og refundering som regel mulig. Er arbejdet gået i gang, kan der opkræves en delvis betaling for den udførte del. Send din annulleringsanmodning hurtigst muligt for at gøre processen nemmere.",
+    a: "Hvis din bestilling endnu ikke er taget under behandling af en oversætter, kan du annullere den fra din ordreside eller via info@tercumexpert.com, og din betaling refunderes fuldt ud til den oprindelige betalingsmetode. Når oversættelsen er blevet taget under behandling af en oversætter, foretages der ikke refundering, henset til arbejdets personspecifikke karakter.",
     keywords: ["annuller efter betaling", "refundering", "pengene tilbage", "annullering efter betaling"],
   },
   {
@@ -438,7 +438,7 @@ export const FAQ_ITEMS_DA: FaqItem[] = [
     category: "pricing",
     priority: 51,
     q: "Er gebyrer for notarpåtegning og apostille inkluderet i prisen?",
-    a: "Notarpåtegning og apostille er separate procedurer, der udføres af de relevante myndigheder og er underlagt officielle takster. Disse omkostninger vises særskilt fra oversættelsesgebyret; da de følger en officiel takst, er de måske ikke præcise på forhånd, og det faktiske beløb oplyses efter proceduren.",
+    a: "Notarpåtegning er en separat procedure, der udføres af de relevante myndigheder og er underlagt officielle takster; denne omkostning vises særskilt fra oversættelsesgebyret, og da den følger en officiel takst, er den måske ikke præcis på forhånd, idet det faktiske beløb bekræftes efter proceduren. Apostilleprocessen udføres derimod ikke af os; du skal selv indhente apostillen hos den kompetente myndighed, og vi oversætter udelukkende dit apostillerede dokument.",
     keywords: ["notargebyr", "apostillegebyr", "er det inkluderet", "notaromkostning", "apostilleomkostning"],
   },
   {
@@ -510,7 +510,7 @@ export const FAQ_ITEMS_DA: FaqItem[] = [
     category: "pricing",
     priority: 60,
     q: "Udstedes der refundering for annullerede bestillinger?",
-    a: "For bestillinger, der annulleres, før oversættelsen går i gang, refunderes betalingen. Er arbejdet gået i gang, kan det resterende beløb refunderes, efter at den udførte del er fratrukket. I tilfælde som en dobbelt opkrævning refunderes det overskydende beløb.",
+    a: "Hvis din bestilling annulleres, før den er taget under behandling af en oversætter, refunderes din betaling fuldt ud til den oprindelige betalingsmetode. Når oversættelsen er blevet taget under behandling af en oversætter, foretages der ikke refundering, henset til arbejdets personspecifikke karakter. I tilfælde som en dobbelt eller fejlagtig opkrævning refunderes det overskydende beløb.",
     keywords: ["refundering", "pengene tilbage", "annulleringsrefundering", "tilbagebetaling"],
   },
 
@@ -1112,7 +1112,7 @@ export const FAQ_ITEMS_DA: FaqItem[] = [
     category: "corporate",
     priority: 134,
     q: "Betjener I internationale virksomheder og flersprogede projekter?",
-    a: "Ja. Projekter, der spænder over flere lande og sprog, kan koordineres og køres centralt, med ensartet terminologi på tværs af det hele. Til erhvervsprojekter kan der også håndteres autoriseret oversættelse og, hvor det er nødvendigt, notarpåtegning og apostille.",
+    a: "Ja. Projekter, der spænder over flere lande og sprog, kan koordineres og køres centralt, med ensartet terminologi på tværs af det hele. Til erhvervsprojekter kan der også håndteres autoriseret oversættelse og, hvor det er nødvendigt, notarpåtegningsprocesser.",
     keywords: ["international virksomhed", "flersproget projekt", "erhverv notar apostille", "global virksomhed"],
   },
 

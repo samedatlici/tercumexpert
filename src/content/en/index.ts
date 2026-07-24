@@ -178,7 +178,7 @@ export const en: PartialDictionary = {
         { title: 'Document review', desc: 'The document type and purpose are assessed.' },
         { title: 'Expert matching', desc: 'A specialist translator in the field is assigned.' },
         { title: 'Translation & editing', desc: 'Translation and an independent final review.' },
-        { title: 'Approval & delivery', desc: 'Notary/apostille if required, then delivery.' },
+        { title: 'Approval & delivery', desc: 'Notary approval if required, then delivery.' },
       ],
     },
     delivery: {
@@ -187,11 +187,11 @@ export const en: PartialDictionary = {
     },
     notaryApostille: {
       title: 'Notary and apostille relationship',
-      desc: 'When required, sworn translation is made valid for official institutions through notary approval and the apostille process. The exact requirement depends on the institution where the document will be submitted.',
+      desc: 'When required, sworn translation can be made valid for official institutions through notary approval, and we can handle the notary approval process on your behalf. We do not carry out the apostille process; the apostille must be obtained by you from the competent authority, and we only translate your apostilled/official documents. The exact requirement depends on the institution where the document will be submitted.',
     },
     fullService: {
       title: 'Turnkey, Delivered to Your Door',
-      note: 'Send us your documents and we will manage the entire process — translation, notary approval and apostille included. Your finished documents arrive at your door by courier. Focus on your work and leave the rest to us.',
+      note: 'Send us your documents and we will manage the translation and, where required, the notary approval process. Your finished documents arrive at your door by courier. Focus on your work and leave the rest to us.',
     },
     cta: {
       title: 'Not sure which service you need?',
@@ -210,11 +210,6 @@ export const en: PartialDictionary = {
       name: 'Notarized Translation',
       short: 'Notary approval of a sworn translation.',
       benefits: ['Notary certification', 'Suitable for official applications', 'We handle the process'],
-    },
-    apostille: {
-      name: 'Apostille Process Support',
-      short: 'Guidance through the apostille process for validity abroad.',
-      benefits: ['International validity', 'Process consultancy', 'Institution guidance'],
     },
     legal: {
       name: 'Legal Translation',
@@ -399,7 +394,7 @@ export const en: PartialDictionary = {
       items: [
         { key: 'law', icon: 'Scale', title: 'Law Firms', desc: 'Need for sworn translation of case files, contracts and legal documents.' },
         { key: 'visa', icon: 'Plane', title: 'Visa Consultancy', desc: 'Documents requiring sworn translation such as passports, diplomas and civil records.' },
-        { key: 'education', icon: 'GraduationCap', title: 'Education Consultancy', desc: 'Sworn translation of student documents and apostille processes.' },
+        { key: 'education', icon: 'GraduationCap', title: 'Education Consultancy', desc: 'Sworn translation of student documents and apostilled paperwork.' },
         { key: 'health', icon: 'HeartPulse', title: 'Health Tourism', desc: 'Translation of medical reports, patient files and health documents.' },
         { key: 'patent', icon: 'Building2', title: 'Patent/Trademark Offices', desc: 'Technical translation of patent, trademark registration and legal documents.' },
         { key: 'realestate', icon: 'Home', title: 'Real Estate Offices', desc: 'Title deed, contract and official document translation for foreign investors.' },
@@ -495,7 +490,6 @@ export const en: PartialDictionary = {
       urgent: 'Urgent Delivery',
       sworn: 'Sworn (Certified) Translation',
       notarization: 'Notary Approval',
-      apostille: 'Apostille Process Support',
       physicalDelivery: 'Physical Delivery',
       swornNotaryHint: 'Notary approval already covers sworn translation; you only need to select the single option that suits your need.',
       physicalRequiredHint: 'Sworn and notarized translations are delivered as signed/stamped originals, so physical delivery is added automatically.',
@@ -534,6 +528,7 @@ export const en: PartialDictionary = {
       'driver-license': 'Driver License',
       'criminal-record': 'Criminal Record',
       'military-status': 'Military Status Document',
+      apostille: "Apostille document",
       'medical-report': 'Medical Report',
       epicrisis: 'Epicrisis (Discharge Summary)',
       prescription: 'Prescription',
@@ -898,7 +893,7 @@ export const en: PartialDictionary = {
       sections: [
         { heading: `Data Controller`, body: `Pursuant to the Personal Data Protection Law No. 6698 (“KVKK”), your personal data is processed by Samed Fazlı Atlıcı (“TercümExpert”), acting in its capacity as data controller, within the scope described below. Address: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya. E-mail: info@tercumexpert.com. Telephone: [TELEFON].` },
         { heading: `Personal Data Processed`, body: `We process your identity and contact data (first name, last name, e-mail address, telephone number), your delivery address information, your order and transaction data, the data contained within the documents you submit to us for translation, and the transaction security data relating to your use of the site (IP address, session and cookie records).` },
-        { heading: `Purposes of Processing`, body: `Your personal data is processed for the purposes of providing translation, sworn translation, notary and apostille certification services, preparing quotations and managing orders, managing customer relations and handling requests and complaints, fulfilling contractual and legal obligations, and ensuring the security of our services.` },
+        { heading: `Purposes of Processing`, body: `Your personal data is processed for the purposes of providing translation, sworn translation, notary certification services, preparing quotations and managing orders, managing customer relations and handling requests and complaints, fulfilling contractual and legal obligations, and ensuring the security of our services.` },
         { heading: `Legal Grounds for Processing`, body: `Your data is processed on the legal grounds that processing is necessary for the establishment or performance of a contract, for the fulfilment of our legal obligations, for the establishment and protection of a right, and for our legitimate interests, provided that this does not harm your fundamental rights and freedoms; and, where required, on the basis of your explicit consent (KVKK m.5 and m.6).` },
         { heading: `Method of Collection`, body: `Your personal data is collected electronically through the forms on our website, membership and order processes, e-mail and other communication channels.` },
         { heading: `Transfer of Personal Data`, body: `To the extent required by the service, your data may be transferred to our domestic and international suppliers from whom we obtain hosting, infrastructure, authentication, e-mail and analytics services, as well as to authorised public institutions and organisations, in accordance with the conditions set out in KVKK m.8 and m.9. Since the servers of some of the infrastructure and service providers we use are located abroad, your data may be transferred abroad within the framework of the safeguards prescribed by the legislation.` },
@@ -929,13 +924,13 @@ export const en: PartialDictionary = {
       title: `Distance Sales Agreement`,
       sections: [
         { heading: `Parties`, body: `This Distance Sales Agreement (“Agreement”) is concluded electronically between Samed Fazlı Atlıcı (“Seller”; address: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya, e-mail: info@tercumexpert.com, telephone: [TELEFON]) on the one part and the consumer placing the order (“Buyer”) on the other part, in accordance with the Consumer Protection Law No. 6502 and the Mesafeli Sözleşmeler Yönetmeliği.` },
-        { heading: `Subject of the Agreement`, body: `The subject of the Agreement is the provision of translation, sworn translation, notary and apostille certification services, whose characteristics and sale price are set out in the order summary, ordered electronically by the Buyer via tercumexpert.com.` },
+        { heading: `Subject of the Agreement`, body: `The subject of the Agreement is the provision of translation, sworn translation, notary certification services, whose characteristics and sale price are set out in the order summary, ordered electronically by the Buyer via tercumexpert.com.` },
         { heading: `Characteristics and Price of the Service`, body: `The type and scope of the service ordered, the method of delivery (digital or courier), and the total price including taxes are clearly displayed to the Buyer at the time of the order and are included in the order confirmation. Pricing is calculated according to the selected service and the characteristics of the document.` },
         { heading: `Payment`, body: `Payment is made through the payment methods offered at the order step. The order is processed after payment has been confirmed.` },
         { heading: `Performance and Delivery`, body: `For digital deliveries, the translation is transmitted to the Buyer via their account or e-mail once completed. For physical, wet-signed or sworn documents, delivery is made by courier to the address notified by the Buyer. Estimated delivery times are stated at the time of the order; they may vary depending on the volume of documents and the certification processes.` },
         { heading: `Right of Withdrawal`, body: `As a general rule, in contracts for the provision of services, the Buyer has the right to withdraw within fourteen (14) days from the date on which the contract is concluded, without providing any justification. However, the exceptions set out below are reserved.` },
         { heading: `Exceptions to the Right of Withdrawal`, body: `Pursuant to m.15 of the Mesafeli Sözleşmeler Yönetmeliği, the right of withdrawal cannot be exercised in respect of services whose performance has commenced with the Buyer's consent and has been completed before the withdrawal period expires, nor in respect of goods and services prepared specifically in line with the Buyer's requests or personal needs (including translation and certification services prepared specifically for a person or document). Cancellation requests submitted before the translation work begins are assessed separately.` },
-        { heading: `Cancellation and Refund`, body: `Orders that have not yet been taken on by a translator (i.e. not yet in progress) may be cancelled directly using the cancellation option on your order page; should you prefer, you may also submit your cancellation request via info@tercumexpert.com. Approved refunds are made within a reasonable period using the same method by which payment was made. For person-specific services whose performance has already commenced (having been taken on by a translator) or been completed, a refund may not be possible owing to the nature of the work.` },
+        { heading: `Cancellation and Refund`, body: `Orders that have not yet been taken on by a translator (i.e. not yet in progress) may be cancelled directly using the cancellation option on your order page; should you prefer, you may also submit your cancellation request via info@tercumexpert.com. Approved refunds are made within a reasonable period using the same method by which payment was made. Once the translation has been taken into processing by a translator, a refund is not made, owing to the person-specific nature of the work.` },
         { heading: `Resolution of Disputes`, body: `For disputes that may arise from this Agreement, the Tüketici Hakem Heyetleri and the Consumer Courts located at the Buyer's place of residence or at the place where the transaction was carried out have jurisdiction, within the monetary limits announced each year by the Ticaret Bakanlığı.` },
         { heading: `Entry into Force`, body: `By confirming the order, the Buyer declares that they have read and accepted all the terms of this Agreement. The Agreement enters into force upon confirmation of the order.` },
       ],
@@ -960,7 +955,7 @@ export const en: PartialDictionary = {
         { heading: "Parties and Subject", body: "This Partner Agreement is concluded between [COMPANY NAME] (“TercümExpert”) on the one part and the business partner who applies to and is approved for the programme (“Partner”) on the other, to govern the terms and conditions of the TercümExpert referral (partnership) programme." },
         { heading: "Application and Approval", body: "Partner status is obtained by completing the application form on the partnership page and being approved by TercümExpert. Approval is at TercümExpert’s discretion and an application may be rejected. The Partner verifies their e-mail address as part of the programme; no start-up fee is charged to join." },
         { heading: "Invitation Link and Customer Attribution", body: "Each approved Partner is assigned a unique, personal invitation link and an associated QR code. A customer who arrives through this link or QR code and signs up for the first time is permanently linked to that Partner; attribution occurs at the moment of first sign-up and cannot be changed afterwards. Commission arises only from the orders of customers linked to the Partner in this way." },
-        { heading: "Commission Structure", body: "The Partner’s share is calculated excluding value added tax (VAT) and add-on service differences, as follows: 20% of the base translation fee; if urgent delivery is selected, 20% of the urgent-delivery difference; if certified (sworn) translation is selected, 10% of the sworn-translation difference. No share is paid to the Partner from notary approval, apostille support or physical (courier) delivery fees, and VAT is not taken as a basis for commission. These percentages are fixed; the rates remain valid even if prices change. TercümExpert may update the rates and terms upon prior notice." },
+        { heading: "Commission Structure", body: "The Partner’s share is calculated excluding value added tax (VAT) and add-on service differences, as follows: 20% of the base translation fee; if urgent delivery is selected, 20% of the urgent-delivery difference; if certified (sworn) translation is selected, 10% of the sworn-translation difference. No share is paid to the Partner from notary approval or physical (courier) delivery fees, and VAT is not taken as a basis for commission. These percentages are fixed; the rates remain valid even if prices change. TercümExpert may update the rates and terms upon prior notice." },
         { heading: "Accrual and Wallet", body: "Commission is added to the Partner’s wallet when the referred customer’s order is completed and remains locked for seven (7) days from the date it is added; it becomes withdrawable once this period expires. Cancelled, refunded or unpaid orders are not taken as a basis for commission." },
         { heading: "Payments", body: "Withdrawable balances are paid to the IBAN provided by the Partner on the 2nd and 17th of each month. For a payment to be made, the mandatory fields in the Partner’s profile must be fully completed and the IBAN and account-holder details must be approved by TercümExpert. Tax obligations relating to payments are subject to the applicable legislation." },
         { heading: "Obligations of the Partner", body: "The Partner agrees to use accurate and non-misleading information in their promotion, to refrain from conduct that would harm TercümExpert’s brand and reputation, to keep their contact and payment details up to date, and to comply with the applicable legislation." },
@@ -1017,7 +1012,6 @@ export const en: PartialDictionary = {
     serviceLinks: {
       sworn: 'Sworn Translation',
       notarized: 'Notarized Translation',
-      apostille: 'Apostille Process',
       corporate: 'Corporate Solutions',
       partnership: 'Partnership Program',
     },
@@ -1066,7 +1060,7 @@ export const en: PartialDictionary = {
     send: 'Send',
     typing: 'Typing…',
     welcome:
-      'Hello and welcome to TercümExpert. I can help you with translation, pricing, notary approval, apostille or corporate services.',
+      'Hello and welcome to TercümExpert. I can help you with translation, pricing, notary approval or corporate services.',
     quickQuestions: [
       'How is the price calculated?',
       'What is sworn translation?',
@@ -1081,7 +1075,7 @@ export const en: PartialDictionary = {
     sensitiveWarning:
       'Please do not share sensitive personal data via this chat. You can send your documents through the secure upload area.',
     answers: [
-      `The price is calculated based on your document's word count, language pair, service type (sworn, notarized, apostille), and delivery time. For an instant estimate, you can upload your document or enter the details on the Calculate Price page.`,
+      `The price is calculated based on your document's word count, language pair, service type (sworn, notarized), and delivery time. For an instant estimate, you can upload your document or enter the details on the Calculate Price page.`,
       `A sworn translation is an official translation carried out by a sworn translator and certified with the translator's signature and stamp. Official institutions most often require sworn translations, and notary approval can be added when needed.`,
       `You can submit your document through the secure upload area on the Calculate Price page. Once uploaded, you will see an instant estimate right away and can complete your order.`,
       `For your corporate needs, we offer special pricing and priority delivery on regular, high-volume translations. For details, please visit our Corporate page or get in touch with us.`,
@@ -1153,6 +1147,12 @@ export const en: PartialDictionary = {
       saveError: 'Could not save. Please try again.',
       required: 'Please fill in the required fields.',
       atLeastOnePair: 'Add at least one language pair.',
+      cv: "CV / Résumé",
+      cvHint: "Upload a PDF or Word file (required).",
+      cvChoose: "Choose file",
+      cvNone: "No file selected",
+      cvRequired: "You must upload a CV to apply.",
+      cvUploadError: "CV could not be uploaded. Please try again.",
     },
     expertiseLabels: {
       legal: 'Legal',
@@ -1250,7 +1250,6 @@ export const en: PartialDictionary = {
       urgent: 'Urgent',
       sworn: 'Sworn',
       notary: 'Notarized',
-      apostille: 'Apostille',
       cargo: 'Cargo delivery',
       digital: 'Digital delivery',
       claim: 'Take this job',
@@ -1349,6 +1348,7 @@ export const en: PartialDictionary = {
       colExpertise: 'Expertise',
       colLocation: 'City / Country',
       swornBadge: 'Sworn',
+      cvDownload: "Download CV",
       returningBadge: 'Returning translator',
       ibanVerified: 'IBAN verified',
       ibanNotVerified: 'IBAN not verified',

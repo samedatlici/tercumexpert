@@ -388,7 +388,7 @@ export const da: PartialDictionary = {
         { title: "Gennemgang af dokument", desc: "Dokumenttypen og formålet vurderes." },
         { title: "Ekspertmatch", desc: "En specialiseret oversætter på området tildeles." },
         { title: "Oversættelse og korrektur", desc: "Oversættelse og en uafhængig endelig gennemgang." },
-        { title: "Godkendelse og levering", desc: "Notarpåtegning/apostille om nødvendigt, derefter levering." },
+        { title: "Godkendelse og levering", desc: "Notarpåtegning om nødvendigt, derefter levering." },
       ],
     },
     delivery: {
@@ -397,11 +397,11 @@ export const da: PartialDictionary = {
     },
     notaryApostille: {
       title: "Sammenhæng mellem notarpåtegning og apostille",
-      desc: "Når det er påkrævet, gøres en autoriseret oversættelse gyldig over for offentlige myndigheder gennem notarpåtegning og apostilleprocessen. Det præcise krav afhænger af den myndighed, hvor dokumentet skal indleveres.",
+      desc: "Når det er påkrævet, kan en autoriseret oversættelse gøres gyldig over for offentlige myndigheder gennem notarpåtegning, og vi kan varetage notarpåtegningsprocessen på dine vegne. Vi udfører ikke selve apostilleprocessen; apostillen skal indhentes af dig hos den kompetente myndighed, og vi oversætter udelukkende dine apostillerede/officielle dokumenter. Det præcise krav afhænger af den myndighed, hvor dokumentet skal indleveres.",
     },
     fullService: {
       title: "Nøglefærdigt, leveret til din dør",
-      note: "Send os dine dokumenter, så håndterer vi hele processen — oversættelse, notarpåtegning og apostille inklusive. Dine færdige dokumenter leveres til din dør med kurér. Fokusér på dit arbejde, og overlad resten til os.",
+      note: "Send os dine dokumenter, så håndterer vi oversættelsen og, hvor det er nødvendigt, notarpåtegningsprocessen. Dine færdige dokumenter leveres til din dør med kurér. Fokusér på dit arbejde, og overlad resten til os.",
     },
     cta: {
       title: "Er du i tvivl om, hvilken ydelse du har brug for?",
@@ -420,11 +420,6 @@ export const da: PartialDictionary = {
       name: "Oversættelse med notarpåtegning",
       short: "Notarpåtegning af en autoriseret oversættelse.",
       benefits: ["Notarpåtegning", "Egnet til officielle ansøgninger", "Vi håndterer processen"],
-    },
-    apostille: {
-      name: "Støtte til apostilleproces",
-      short: "Vejledning gennem apostilleprocessen med henblik på gyldighed i udlandet.",
-      benefits: ["International gyldighed", "Procesrådgivning", "Vejledning om myndigheder"],
     },
     legal: {
       name: "Juridisk oversættelse",
@@ -609,7 +604,7 @@ export const da: PartialDictionary = {
       items: [
         { key: 'law', icon: 'Scale', title: "Advokatfirmaer", desc: "Behov for autoriseret oversættelse af sagsakter, kontrakter og juridiske dokumenter." },
         { key: 'visa', icon: 'Plane', title: "Visumrådgivning", desc: "Dokumenter, der kræver autoriseret oversættelse, såsom pas, eksamensbeviser og personattester." },
-        { key: 'education', icon: 'GraduationCap', title: "Uddannelsesrådgivning", desc: "Autoriseret oversættelse af studiedokumenter og apostilleprocesser." },
+        { key: 'education', icon: 'GraduationCap', title: "Uddannelsesrådgivning", desc: "Autoriseret oversættelse af studiedokumenter og apostillerede dokumenter." },
         { key: 'health', icon: 'HeartPulse', title: "Sundhedsturisme", desc: "Oversættelse af lægejournaler, patientmapper og sundhedsdokumenter." },
         { key: 'patent', icon: 'Building2', title: "Patent-/varemærkekontorer", desc: "Teknisk oversættelse af patent-, varemærkeregistrerings- og juridiske dokumenter." },
         { key: 'realestate', icon: 'Home', title: "Ejendomsmæglere", desc: "Oversættelse af skøder, kontrakter og officielle dokumenter til udenlandske investorer." },
@@ -694,6 +689,7 @@ export const da: PartialDictionary = {
       "driver-license": "Kørekort",
       "criminal-record": "Straffeattest",
       "military-status": "Dokument for militær status",
+      apostille: "Apostille-dokument",
       "medical-report": "Lægeerklæring",
       "epicrisis": "Epikrise (udskrivningsresumé)",
       "prescription": "Recept",
@@ -776,7 +772,6 @@ export const da: PartialDictionary = {
     },
     options: {
       "sworn": "Autoriseret (bekræftet) oversættelse",
-      "apostille": "Hjælp til apostille-processen",
       "swornNotaryHint": "Notarpåtegning omfatter allerede autoriseret oversættelse; du skal blot vælge den ene mulighed, der passer til dit behov.",
       "physicalRequiredHint": "Autoriserede og notarbekræftede oversættelser leveres som underskrevne/stemplede originaler, så fysisk levering tilføjes automatisk.",
       urgent: "Hasteopgave",
@@ -1110,7 +1105,7 @@ export const da: PartialDictionary = {
       sections: [
         { heading: `Dataansvarlig`, body: `I henhold til lov nr. 6698 om beskyttelse af personoplysninger (“KVKK”) behandles dine personoplysninger i det nedenfor beskrevne omfang af Samed Fazlı Atlıcı (“TercümExpert”) i egenskab af dataansvarlig. Adresse: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya. E-mail: info@tercumexpert.com. Telefon: [TELEFON].` },
         { heading: `Behandlede personoplysninger`, body: `Der behandles dine identitets- og kontaktoplysninger (fornavn, efternavn, e-mailadresse, telefonnummer), dine leveringsadresseoplysninger, dine ordre- og transaktionsoplysninger, oplysninger indeholdt i de dokumenter, du fremsender til os med henblik på oversættelse, samt behandlingssikkerhedsoplysninger vedrørende din brug af webstedet (IP-adresse, sessions- og cookieregistreringer).` },
-        { heading: `Behandlingsformål`, body: `Dine personoplysninger behandles med henblik på levering af ydelser vedrørende oversættelse, autoriseret tolkning samt notar- og apostillebekræftelse, udarbejdelse af tilbud og administration af ordrer, kunderelationer samt håndtering af henvendelser og klager, opfyldelse af kontraktlige og lovmæssige forpligtelser samt sikring af ydelsernes sikkerhed.` },
+        { heading: `Behandlingsformål`, body: `Dine personoplysninger behandles med henblik på levering af ydelser vedrørende oversættelse, autoriseret tolkning samt notarbekræftelse, udarbejdelse af tilbud og administration af ordrer, kunderelationer samt håndtering af henvendelser og klager, opfyldelse af kontraktlige og lovmæssige forpligtelser samt sikring af ydelsernes sikkerhed.` },
         { heading: `Behandlingens retsgrundlag`, body: `Dine oplysninger behandles på grundlag af, at behandlingen er nødvendig for indgåelse eller opfyldelse af en aftale, opfyldelse af vores retlige forpligtelser, fastlæggelse og forsvar af en rettighed samt vores legitime interesser, forudsat at dette ikke krænker dine grundlæggende rettigheder og frihedsrettigheder; hvor det er påkrævet, behandles de på grundlag af dit udtrykkelige samtykke (KVKK m.5 og m.6).` },
         { heading: `Indsamlingsmetode`, body: `Dine personoplysninger indsamles elektronisk via formularer på webstedet, medlemskabs- og ordreprocesser, e-mail og øvrige kommunikationskanaler.` },
         { heading: `Videregivelse af personoplysninger`, body: `Dine oplysninger kan i det omfang, ydelsen kræver det, videregives til vores leverandører i ind- og udland, hos hvem vi indkøber hosting, infrastruktur, autentificering, e-mail og analyse, samt til kompetente offentlige myndigheder og institutioner, i overensstemmelse med betingelserne i KVKK m.8 og m.9. Da serverne hos visse af de infrastruktur- og tjenesteudbydere, vi anvender, er beliggende i udlandet, kan dine oplysninger overføres til udlandet inden for rammerne af de garantier, der er fastsat i lovgivningen.` },
@@ -1141,13 +1136,13 @@ export const da: PartialDictionary = {
       title: `Aftale om fjernsalg`,
       sections: [
         { heading: `Parterne`, body: `Denne aftale om fjernsalg (“Aftalen”) er indgået elektronisk mellem på den ene side Samed Fazlı Atlıcı (“Sælger”; adresse: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya, e-mail: info@tercumexpert.com, telefon: [TELEFON]) og på den anden side den forbruger, der afgiver ordren (“Køber”), i henhold til lov nr. 6502 om forbrugerbeskyttelse og Mesafeli Sözleşmeler Yönetmeliği.` },
-        { heading: `Aftalens genstand`, body: `Aftalens genstand er levering af ydelser vedrørende oversættelse, autoriseret tolkning samt notar- og apostillebekræftelse, som Køber har bestilt elektronisk via tercumexpert.com, og hvis egenskaber og salgspris er angivet i ordreoversigten.` },
+        { heading: `Aftalens genstand`, body: `Aftalens genstand er levering af ydelser vedrørende oversættelse, autoriseret tolkning samt notarbekræftelse, som Køber har bestilt elektronisk via tercumexpert.com, og hvis egenskaber og salgspris er angivet i ordreoversigten.` },
         { heading: `Ydelsens egenskaber og pris`, body: `Den bestilte ydelses type, omfang, leveringsform (digital eller fragt) og samlede pris inklusive afgifter vises tydeligt for Køber under bestillingen og fremgår af ordrebekræftelsen. Prisen beregnes ud fra den valgte ydelse og dokumentets egenskaber.` },
         { heading: `Betaling`, body: `Betalingen gennemføres med de betalingsmetoder, der tilbydes i ordretrinnet. Ordren behandles, efter at betalingen er blevet bekræftet.` },
         { heading: `Opfyldelse og levering`, body: `Ved digital levering fremsendes oversættelsen efter færdiggørelsen via Købers konto eller e-mail. Ved fysiske dokumenter med original underskrift eller autoriserede dokumenter sker leveringen med fragt til den adresse, Køber har oplyst. De forventede leveringstider angives under bestillingen; de kan variere afhængigt af dokumentmængden og bekræftelsesprocesserne.` },
         { heading: `Fortrydelsesret`, body: `Køber har som udgangspunkt ved aftaler om levering af ydelser fortrydelsesret inden for fjorten (14) dage fra aftalens indgåelse uden at skulle angive nogen begrundelse. De nedenfor anførte undtagelser gælder dog.` },
         { heading: `Undtagelser fra fortrydelsesretten`, body: `I henhold til Mesafeli Sözleşmeler Yönetmeliği m.15 kan fortrydelsesretten ikke udøves for ydelser, hvis udførelse er påbegyndt med Købers samtykke og fuldført inden fortrydelsesfristens udløb, samt for varer og ydelser, der er fremstillet særligt efter Købers ønsker eller personlige behov (herunder oversættelses- og bekræftelsesydelser, der er udarbejdet specifikt til en person eller et dokument). Anmodninger om annullering, der fremsendes, inden oversættelsesarbejdet er påbegyndt, vurderes særskilt.` },
-        { heading: `Annullering og tilbagebetaling`, body: `Ordrer, der endnu ikke er blevet påtaget af en oversætter (det vil sige endnu ikke er sat i gang), kan annulleres direkte via annulleringsmuligheden på din ordreside; ønsker du det, kan du også fremsende din anmodning om annullering via info@tercumexpert.com. Godkendte tilbagebetalinger foretages inden for en rimelig frist med samme betalingsmetode, som blev anvendt ved betalingen. Ved personlige ydelser, hvis udførelse allerede er påbegyndt (er blevet påtaget af en oversætter) eller er afsluttet, kan tilbagebetaling som følge af arbejdets art være udelukket.` },
+        { heading: `Annullering og tilbagebetaling`, body: `Ordrer, der endnu ikke er blevet påtaget af en oversætter (det vil sige endnu ikke er sat i gang), kan annulleres direkte via annulleringsmuligheden på din ordreside; ønsker du det, kan du også fremsende din anmodning om annullering via info@tercumexpert.com. Godkendte tilbagebetalinger foretages inden for en rimelig frist med samme betalingsmetode, som blev anvendt ved betalingen. Når oversættelsen er blevet taget under behandling af en oversætter, foretages der ikke tilbagebetaling, henset til arbejdets personspecifikke karakter.` },
         { heading: `Tvistløsning`, body: `Ved tvister, der måtte udspringe af denne Aftale, er Tüketici Hakem Heyetleri på Købers bopæl eller på det sted, hvor transaktionen er gennemført, samt forbrugerdomstolene kompetente inden for de beløbsgrænser, som Ticaret Bakanlığı hvert år bekendtgør.` },
         { heading: `Ikrafttræden`, body: `Ved at bekræfte ordren erklærer Køber at have læst og accepteret alle vilkårene i denne Aftale. Aftalen træder i kraft ved bekræftelsen af ordren.` },
       ],
@@ -1172,7 +1167,7 @@ export const da: PartialDictionary = {
         { heading: "Parter og genstand", body: "Denne Partneraftale indgås mellem [VIRKSOMHEDSNAVN] (“TercümExpert”) på den ene side og den forretningspartner, der ansøger om og godkendes til programmet (“Partner”), på den anden side, med henblik på at regulere vilkårene for TercümExperts henvisningsprogram (partnerprogram)." },
         { heading: "Ansøgning og godkendelse", body: "Partnerstatus opnås ved at udfylde ansøgningsformularen på partnersiden og blive godkendt af TercümExpert. Godkendelse sker efter TercümExperts skøn, og en ansøgning kan afvises. Partneren bekræfter sin e-mailadresse som led i programmet; der opkræves intet oprettelsesgebyr for at deltage." },
         { heading: "Invitationslink og kundetilknytning", body: "Hver godkendt Partner tildeles et unikt, personligt invitationslink og en tilhørende QR-kode. En kunde, der ankommer via dette link eller QR-kode og tilmelder sig for første gang, tilknyttes permanent den pågældende Partner; tilknytningen sker i det øjeblik, tilmeldingen sker første gang, og kan ikke ændres efterfølgende. Provision opstår kun af ordrer fra kunder, der er tilknyttet Partneren på denne måde." },
-        { heading: "Provisionsstruktur", body: "Partnerens andel beregnes eksklusive merværdiafgift (moms) og eksklusive forskelle for tillægsydelser, som følger: 20% af grundoversættelsesprisen; hvis hastelevering vælges, 20% af haste­leveringsforskellen; hvis autoriseret (edsvoren) oversættelse vælges, 10% af forskellen for den edsvorne oversættelse. Af gebyrer for notarbekræftelse, apostille­støtte og fysisk (kurér)levering udbetales der ingen andel til Partneren, og momsen tages ikke som grundlag for provisionen. Disse procenter er faste; satserne forbliver gyldige, selv om priserne ændres. TercümExpert kan opdatere satser og vilkår mod forudgående varsel." },
+        { heading: "Provisionsstruktur", body: "Partnerens andel beregnes eksklusive merværdiafgift (moms) og eksklusive forskelle for tillægsydelser, som følger: 20% af grundoversættelsesprisen; hvis hastelevering vælges, 20% af haste­leveringsforskellen; hvis autoriseret (edsvoren) oversættelse vælges, 10% af forskellen for den edsvorne oversættelse. Af gebyrer for notarbekræftelse og fysisk (kurér)levering udbetales der ingen andel til Partneren, og momsen tages ikke som grundlag for provisionen. Disse procenter er faste; satserne forbliver gyldige, selv om priserne ændres. TercümExpert kan opdatere satser og vilkår mod forudgående varsel." },
         { heading: "Optjening og tegnebog", body: "Provisionen tilføjes Partnerens tegnebog, når den henviste kundes ordre er afsluttet, og forbliver låst i syv (7) dage fra tilføjelsesdatoen; den bliver til rådighed for udbetaling, når denne periode udløber. Annullerede, refunderede eller ubetalte ordrer tages ikke som grundlag for provisionen." },
         { heading: "Betalinger", body: "Beløb til rådighed for udbetaling udbetales til den af Partneren angivne IBAN den 2. og 17. i hver måned. For at en betaling kan foretages, skal de obligatoriske felter i Partnerens profil være fuldt udfyldt, og IBAN samt kontohaveroplysningerne skal være godkendt af TercümExpert. Skattemæssige forpligtelser vedrørende betalinger er underlagt den gældende lovgivning." },
         { heading: "Partnerens forpligtelser", body: "Partneren accepterer at anvende korrekte og ikke-vildledende oplysninger i sin markedsføring, at afstå fra adfærd, der skader TercümExperts brand og omdømme, at holde sine kontakt- og betalingsoplysninger opdaterede og at overholde den gældende lovgivning." },
@@ -1229,7 +1224,6 @@ export const da: PartialDictionary = {
     serviceLinks: {
       sworn: "Autoriseret oversættelse",
       notarized: "Oversættelse med notarpåtegning",
-      apostille: "Apostilleproces",
       corporate: "Løsninger til erhverv",
       partnership: "Partnerprogram",
     },
@@ -1278,7 +1272,7 @@ export const da: PartialDictionary = {
     send: "Send",
     typing: "Skriver…",
     welcome:
-      "Hej og velkommen til TercümExpert. Jeg kan hjælpe dig med oversættelse, priser, notarpåtegning, apostille eller erhvervsydelser.",
+      "Hej og velkommen til TercümExpert. Jeg kan hjælpe dig med oversættelse, priser, notarpåtegning eller erhvervsydelser.",
     quickQuestions: [
       "Hvordan beregnes prisen?",
       "Hvad er autoriseret oversættelse?",
@@ -1293,7 +1287,7 @@ export const da: PartialDictionary = {
     sensitiveWarning:
       "Del venligst ikke følsomme personoplysninger via denne chat. Du kan sende dine dokumenter via det sikre uploadområde.",
     answers: [
-      `Prisen beregnes ud fra dokumentets antal ord, sprogkombinationen, typen af ydelse (autoriseret, notarbekræftet, apostille) og den ønskede leveringstid. For at få et øjeblikkeligt prisestimat kan De uploade Deres dokument eller indtaste oplysningerne på siden Beregn Pris.`,
+      `Prisen beregnes ud fra dokumentets antal ord, sprogkombinationen, typen af ydelse (autoriseret, notarbekræftet) og den ønskede leveringstid. For at få et øjeblikkeligt prisestimat kan De uploade Deres dokument eller indtaste oplysningerne på siden Beregn Pris.`,
       `En autoriseret oversættelse er en officiel oversættelse udført af en autoriseret translatør og bekræftet med translatørens underskrift og stempel. Offentlige myndigheder kræver oftest en autoriseret oversættelse, og en notarbekræftelse kan tilføjes efter behov.`,
       `De kan sende Deres dokument via det sikre uploadfelt på siden Beregn Pris. Efter uploaden ser De med det samme et prisestimat og kan færdiggøre Deres bestilling.`,
       `Til Deres erhvervsmæssige behov tilbyder vi særlige priser og prioriteret levering ved regelmæssige og større oversættelsesopgaver. For nærmere oplysninger kan De læse mere på vores Erhvervsside eller kontakte os.`,
@@ -1364,8 +1358,12 @@ export const da: PartialDictionary = {
       "saved": "Dine oplysninger er blevet gemt.",
       "saveError": "Kunne ikke gemme. Prøv venligst igen.",
       "required": "Udfyld venligst de påkrævede felter.",
-      "atLeastOnePair": "Tilføj mindst ét sprogpar."
-    },
+      "atLeastOnePair": "Tilføj mindst ét sprogpar.",cv: "CV",
+      cvHint: "Upload en PDF- eller Word-fil (påkrævet).",
+      cvChoose: "Vælg fil",
+      cvNone: "Ingen fil valgt",
+      cvRequired: "Du skal uploade et CV for at ansøge.",
+      cvUploadError: "CV'et kunne ikke uploades. Prøv igen.",},
     "expertiseLabels": {
       "legal": "Juridisk",
       "medical": "Medicinsk",
@@ -1457,7 +1455,6 @@ export const da: PartialDictionary = {
       "urgent": "Haster",
       "sworn": "Autoriseret",
       "notary": "Notariseret",
-      "apostille": "Apostille",
       "cargo": "Fragtlevering",
       "digital": "Digital levering",
       "claim": "Tag denne opgave",
@@ -1556,6 +1553,7 @@ export const da: PartialDictionary = {
       "colExpertise": "Ekspertise",
       "colLocation": "By / Land",
       "swornBadge": "Autoriseret",
+      cvDownload: "Download CV",
       "returningBadge": "Tilbagevendende oversætter",
       "ibanVerified": "IBAN verificeret",
       "ibanNotVerified": "IBAN ikke verificeret",

@@ -89,7 +89,7 @@ export const FAQ_ITEMS_NL: FaqItem[] = [
     category: 'order',
     priority: 8,
     q: "Hoe verloopt het bestelproces?",
-    a: "Zodra u uw document heeft geüpload en de voorlopige offerte heeft goedgekeurd, wordt uw bestelling aangemaakt en toegewezen aan een vertaler die gespecialiseerd is in het betreffende vakgebied. De vertaling gaat door een kwaliteitscontrole; indien nodig wordt de notariële bekrachtiging of apostille geregeld en wordt uw document digitaal geleverd, en waar nodig per koerier.",
+    a: "Zodra u uw document heeft geüpload en de voorlopige offerte heeft goedgekeurd, wordt uw bestelling aangemaakt en toegewezen aan een vertaler die gespecialiseerd is in het betreffende vakgebied. De vertaling gaat door een kwaliteitscontrole; indien nodig wordt de notariële bekrachtiging geregeld en wordt uw document digitaal geleverd, en waar nodig per koerier.",
     keywords: ["bestelproces", "hoe werkt het", "stappen", "proces"],
   },
   {
@@ -137,7 +137,7 @@ export const FAQ_ITEMS_NL: FaqItem[] = [
     category: 'notary',
     priority: 14,
     q: "Hoe verloopt de apostilleprocedure?",
-    a: "Een apostille is een bekrachtiging die door de bevoegde autoriteit wordt afgegeven zodat een document in het buitenland als geldig wordt erkend. Wij kunnen deze procedure voor u regelen; welk document een apostille nodig heeft en de volgorde van de stappen hangen af van het land waar het document zal worden gebruikt. In landen die geen partij zijn bij het Apostilleverdrag (Haags Verdrag) kan in plaats van een apostille een consulaire legalisatie nodig zijn.",
+    a: "Een apostille is een bekrachtiging die door de bevoegde autoriteit wordt afgegeven zodat een document in het buitenland als geldig wordt erkend. Wij voeren de apostilleprocedure niet uit; de apostille dient u zelf te verkrijgen bij de bevoegde autoriteit van het land waar uw document is opgesteld. Wij verzorgen uitsluitend de beëdigde vertaling van uw geapostilleerde documenten. In landen die geen partij zijn bij het Apostilleverdrag (Haags Verdrag) kan in plaats van een apostille een consulaire legalisatie nodig zijn.",
     keywords: ["apostille", "apostilleprocedure", "legalisatie", "geldig in buitenland"],
   },
   {
@@ -203,7 +203,7 @@ export const FAQ_ITEMS_NL: FaqItem[] = [
     category: 'general',
     priority: 22,
     q: "Welke diensten biedt TercümExpert aan?",
-    a: "Wij bieden beëdigde en notarieel bekrachtigde vertalingen, ondersteuning bij de apostilleprocedure, juridische, technische, medische en academische vertalingen en lokalisatie van websites en mobiele apps. Op het scherm Prijs berekenen kiest u de dienst die bij uw behoefte past.",
+    a: "Wij bieden beëdigde en notarieel bekrachtigde vertalingen, de vertaling van geapostilleerde documenten, juridische, technische, medische en academische vertalingen en lokalisatie van websites en mobiele apps. Op het scherm Prijs berekenen kiest u de dienst die bij uw behoefte past.",
     keywords: ["diensten", "wat bieden jullie", "soorten diensten", "welke diensten"],
   },
   {
@@ -219,7 +219,7 @@ export const FAQ_ITEMS_NL: FaqItem[] = [
     category: 'general',
     priority: 24,
     q: "Moet ik langskomen op een kantoor?",
-    a: "Nee. Het hele proces — offerte opvragen, bestellen, betalen en leveren — kan online worden afgehandeld. U hoeft alleen uw documenten te uploaden en goed te keuren; nergens langskomen is nodig.",
+    a: "Ons bedrijf beschikt niet over een fysiek kantoor; onze diensten worden volledig online geleverd. U bezorgt ons uw documenten uitsluitend via een beveiligde upload; de levering vindt digitaal plaats en, waar nodig, per koerier. Voor vragen kunt u ons bereiken via WhatsApp of op info@tercumexpert.com.",
     keywords: ["kantoor", "langskomen", "vestiging", "adres", "bezoek nodig"],
   },
   {
@@ -349,7 +349,7 @@ export const FAQ_ITEMS_NL: FaqItem[] = [
     category: 'order',
     priority: 40,
     q: "Kan een bestelling na betaling worden geannuleerd?",
-    a: "Is de vertaling nog niet begonnen, dan zijn annulering en terugbetaling doorgaans mogelijk. Is het werk al gestart, dan kan een deelbedrag in rekening worden gebracht op basis van het voltooide gedeelte. Uw annuleringsverzoek zo snel mogelijk doorgeven maakt het proces soepeler.",
+    a: "Zolang uw bestelling nog niet door een vertaler is aangenomen, kunt u deze annuleren via uw bestelpagina of via info@tercumexpert.com, en wordt uw betaling volledig terugbetaald via het oorspronkelijke betaalmiddel. Zodra de vertaling door een vertaler in behandeling is genomen, vindt gezien de persoonsgebonden aard van de dienst geen terugbetaling plaats.",
     keywords: ["annuleren na betaling", "terugbetaling", "geld terug"],
   },
   {
@@ -439,7 +439,7 @@ export const FAQ_ITEMS_NL: FaqItem[] = [
     category: 'pricing',
     priority: 51,
     q: "Zijn de kosten voor notariële bekrachtiging en apostille bij de prijs inbegrepen?",
-    a: "Notariële bekrachtiging en apostille zijn afzonderlijke procedures die door de bevoegde instanties worden uitgevoerd en aan officiële tarieven onderworpen zijn. Deze kosten worden apart van de vertaalprijs weergegeven; omdat ze een officieel tarief volgen, kunnen ze vooraf niet altijd exact zijn en wordt het werkelijke bedrag na de procedure meegedeeld.",
+    a: "De notariële bekrachtiging is een afzonderlijke procedure die door de bevoegde instanties wordt uitgevoerd en aan officiële tarieven onderworpen is; deze kosten worden apart van de vertaalprijs weergegeven, en omdat ze een officieel tarief volgen, kunnen ze vooraf niet altijd exact zijn, waarbij het werkelijke bedrag na de procedure wordt meegedeeld. De apostilleprocedure voeren wij daarentegen niet uit; de apostille dient u zelf te verkrijgen bij de bevoegde autoriteit, en wij vertalen uitsluitend uw geapostilleerde document.",
     keywords: ["notariskosten", "apostillekosten", "inbegrepen", "notaris kosten", "apostille kosten"],
   },
   {
@@ -511,7 +511,7 @@ export const FAQ_ITEMS_NL: FaqItem[] = [
     category: 'pricing',
     priority: 60,
     q: "Worden geannuleerde bestellingen terugbetaald?",
-    a: "Bij bestellingen die worden geannuleerd voordat de vertaling begint, wordt de betaling terugbetaald. Is het werk al gestart, dan kan het resterende bedrag worden terugbetaald na aftrek van het voltooide gedeelte. In gevallen als een dubbele afschrijving wordt het te veel betaalde bedrag terugbetaald.",
+    a: "Wordt uw bestelling geannuleerd voordat deze door een vertaler is aangenomen, dan wordt uw betaling volledig terugbetaald via het oorspronkelijke betaalmiddel. Zodra de vertaling door een vertaler in behandeling is genomen, vindt gezien de persoonsgebonden aard van de dienst geen terugbetaling plaats. In gevallen als een dubbele of onjuiste afschrijving wordt het te veel betaalde bedrag terugbetaald.",
     keywords: ["terugbetaling", "geld terug", "terugbetaling bij annulering", "restitutie"],
   },
 
@@ -1113,7 +1113,7 @@ export const FAQ_ITEMS_NL: FaqItem[] = [
     category: 'corporate',
     priority: 134,
     q: "Bedienen jullie internationale bedrijven en meertalige projecten?",
-    a: "Ja. Projecten die meerdere landen en talen omvatten, kunnen centraal worden gecoördineerd en uitgevoerd, met over de hele linie consistente terminologie. Voor zakelijke projecten kunnen ook beëdigde vertalingen en, waar nodig, notariële bekrachtiging en apostilleprocedures worden geregeld.",
+    a: "Ja. Projecten die meerdere landen en talen omvatten, kunnen centraal worden gecoördineerd en uitgevoerd, met over de hele linie consistente terminologie. Voor zakelijke projecten kunnen ook beëdigde vertalingen en, waar nodig, notariële bekrachtiging worden geregeld.",
     keywords: ["internationaal bedrijf", "meertalig project", "zakelijk notaris apostille"],
   },
 

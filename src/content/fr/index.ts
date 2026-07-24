@@ -388,7 +388,7 @@ export const fr: PartialDictionary = {
         { title: "Examen du document", desc: "Le type et l'objectif du document sont évalués." },
         { title: "Attribution à un expert", desc: "Un traducteur spécialisé dans le domaine est désigné." },
         { title: "Traduction et relecture", desc: "Traduction et relecture finale indépendante." },
-        { title: "Certification et livraison", desc: "Certification notariée/apostille si nécessaire, puis livraison." },
+        { title: "Certification et livraison", desc: "Certification notariée si nécessaire, puis livraison." },
       ],
     },
     delivery: {
@@ -397,11 +397,11 @@ export const fr: PartialDictionary = {
     },
     notaryApostille: {
       title: "Lien entre certification notariée et apostille",
-      desc: "Lorsque cela est requis, la traduction assermentée est rendue valable auprès des institutions officielles grâce à la certification notariée et à la procédure d'apostille. L'exigence exacte dépend de l'institution auprès de laquelle le document sera présenté.",
+      desc: "Lorsque cela est requis, la traduction assermentée peut être rendue valable auprès des institutions officielles grâce à la certification notariée, dont nous pouvons gérer la procédure pour votre compte. Nous n'effectuons pas la procédure d'apostille ; l'apostille doit être obtenue par vous-même auprès de l'autorité compétente, et nous traduisons uniquement vos documents apostillés/officiels. L'exigence exacte dépend de l'institution auprès de laquelle le document sera présenté.",
     },
     fullService: {
       title: "Clé en main, livré à votre porte",
-      note: "Envoyez-nous vos documents et nous gérons l'ensemble du processus — traduction, certification notariée et apostille inclus. Vos documents finalisés vous parviennent à votre porte par coursier. Concentrez-vous sur votre travail et laissez-nous le reste.",
+      note: "Envoyez-nous vos documents et nous gérons la traduction et, lorsque cela est nécessaire, la procédure de certification notariée. Vos documents finalisés vous parviennent à votre porte par coursier. Concentrez-vous sur votre travail et laissez-nous le reste.",
     },
     cta: {
       title: "Vous ne savez pas quel service il vous faut ?",
@@ -420,11 +420,6 @@ export const fr: PartialDictionary = {
       name: "Traduction certifiée par notaire",
       short: "Certification notariée d'une traduction assermentée.",
       benefits: ["Certification notariée", "Adaptée aux démarches officielles", "Nous gérons le processus"],
-    },
-    apostille: {
-      name: "Accompagnement pour l'apostille",
-      short: "Accompagnement dans la procédure d'apostille pour une validité à l'étranger.",
-      benefits: ["Validité internationale", "Conseil sur la procédure", "Orientation vers les institutions"],
     },
     legal: {
       name: "Traduction juridique",
@@ -609,7 +604,7 @@ export const fr: PartialDictionary = {
       items: [
         { key: 'law', icon: 'Scale', title: "Cabinets d'avocats", desc: "Besoin de traduction assermentée de dossiers, contrats et documents juridiques." },
         { key: 'visa', icon: 'Plane', title: "Conseil en visa", desc: "Documents nécessitant une traduction assermentée tels que passeports, diplômes et actes d'état civil." },
-        { key: 'education', icon: 'GraduationCap', title: "Conseil en études", desc: "Traduction assermentée de documents d'étudiants et procédures d'apostille." },
+        { key: 'education', icon: 'GraduationCap', title: "Conseil en études", desc: "Traduction assermentée de documents d'étudiants et de pièces apostillées." },
         { key: 'health', icon: 'HeartPulse', title: "Tourisme médical", desc: "Traduction de comptes rendus médicaux, dossiers patients et documents de santé." },
         { key: 'patent', icon: 'Building2', title: "Offices de brevets/marques", desc: "Traduction technique de brevets, dépôts de marques et documents juridiques." },
         { key: 'realestate', icon: 'Home', title: "Agences immobilières", desc: "Traduction de titres de propriété, contrats et documents officiels pour investisseurs étrangers." },
@@ -694,6 +689,7 @@ export const fr: PartialDictionary = {
       "driver-license": "Permis de conduire",
       "criminal-record": "Casier judiciaire",
       "military-status": "Attestation de situation militaire",
+      apostille: "Document apostillé",
       "medical-report": "Rapport médical",
       "epicrisis": "Compte rendu d'hospitalisation",
       "prescription": "Ordonnance",
@@ -776,7 +772,6 @@ export const fr: PartialDictionary = {
     },
     options: {
       "sworn": "Traduction assermentée (certifiée)",
-      "apostille": "Assistance à la procédure d'apostille",
       "swornNotaryHint": "La certification notariée couvre déjà la traduction assermentée ; il vous suffit de sélectionner la seule option correspondant à votre besoin.",
       "physicalRequiredHint": "Les traductions assermentées et notariées sont remises sous forme d'originaux signés et cachetés ; l'envoi physique est donc ajouté automatiquement.",
       urgent: "Livraison urgente",
@@ -1110,7 +1105,7 @@ export const fr: PartialDictionary = {
       sections: [
         { heading: `Responsable du traitement`, body: `Conformément à la loi n° 6698 sur la protection des données personnelles (« KVKK »), vos données personnelles sont traitées par Samed Fazlı Atlıcı (« TercümExpert »), en sa qualité de responsable du traitement, dans le cadre décrit ci-après. Adresse : Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya. Courriel : info@tercumexpert.com. Téléphone : [TELEFON].` },
         { heading: `Données personnelles traitées`, body: `Sont traitées vos données d'identité et de contact (nom, prénom, adresse électronique, numéro de téléphone), vos informations d'adresse de livraison, vos données de commande et de transaction, les données figurant dans le contenu des documents que vous nous transmettez à des fins de traduction, ainsi que les données de sécurité des opérations liées à votre utilisation du site (adresse IP, journaux de session et de cookies).` },
-        { heading: `Finalités du traitement`, body: `Vos données personnelles sont traitées aux fins suivantes : la fourniture des prestations de traduction, de traduction assermentée, de certification notariale et d'apostille, l'établissement des devis et la gestion des commandes, la relation client ainsi que le traitement des demandes et réclamations, l'exécution des obligations contractuelles et légales et la garantie de la sécurité du service.` },
+        { heading: `Finalités du traitement`, body: `Vos données personnelles sont traitées aux fins suivantes : la fourniture des prestations de traduction, de traduction assermentée, de certification notariale, l'établissement des devis et la gestion des commandes, la relation client ainsi que le traitement des demandes et réclamations, l'exécution des obligations contractuelles et légales et la garantie de la sécurité du service.` },
         { heading: `Bases juridiques du traitement`, body: `Vos données sont traitées sur les fondements juridiques suivants : la nécessité pour la conclusion ou l'exécution d'un contrat, l'exécution de nos obligations légales, l'établissement et la protection d'un droit, ainsi que nos intérêts légitimes, sous réserve de ne pas porter atteinte à vos libertés et droits fondamentaux ; et, lorsque cela est nécessaire, sur le fondement de votre consentement explicite (KVKK m.5 et m.6).` },
         { heading: `Méthode de collecte`, body: `Vos données personnelles sont collectées par voie électronique au moyen des formulaires du site web, des processus d'adhésion et de commande, du courrier électronique et des autres canaux de communication.` },
         { heading: `Transfert des données personnelles`, body: `Dans la mesure nécessaire à la prestation, vos données peuvent être transférées, conformément aux conditions prévues aux articles KVKK m.8 et m.9, à nos prestataires situés en Turquie et à l'étranger auprès desquels nous recourons à des services d'hébergement, d'infrastructure, d'authentification, de messagerie et d'analyse, ainsi qu'aux autorités et organismes publics habilités. Certains de nos prestataires d'infrastructure et de services disposant de serveurs situés à l'étranger, vos données peuvent être transférées à l'étranger dans le cadre des garanties prévues par la réglementation.` },
@@ -1141,13 +1136,13 @@ export const fr: PartialDictionary = {
       title: `Contrat de vente à distance`,
       sections: [
         { heading: `Parties`, body: `Le présent Contrat de vente à distance (« Contrat ») est conclu par voie électronique, conformément à la loi n° 6502 sur la protection du consommateur et au Mesafeli Sözleşmeler Yönetmeliği, entre, d'une part, Samed Fazlı Atlıcı (« Vendeur » ; adresse : Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya, courriel : info@tercumexpert.com, téléphone : [TELEFON]) et, d'autre part, le consommateur passant la commande (« Acheteur »).` },
-        { heading: `Objet du contrat`, body: `Le Contrat a pour objet la fourniture des prestations de traduction, de traduction assermentée, de certification notariale et d'apostille commandées par l'Acheteur par voie électronique via tercumexpert.com, dont les caractéristiques et le prix de vente sont indiqués dans le récapitulatif de la commande.` },
+        { heading: `Objet du contrat`, body: `Le Contrat a pour objet la fourniture des prestations de traduction, de traduction assermentée, de certification notariale commandées par l'Acheteur par voie électronique via tercumexpert.com, dont les caractéristiques et le prix de vente sont indiqués dans le récapitulatif de la commande.` },
         { heading: `Caractéristiques et prix de la prestation`, body: `Le type et l'étendue de la prestation commandée, son mode de livraison (numérique ou par transporteur) ainsi que son prix total toutes taxes comprises sont clairement présentés à l'Acheteur lors de la commande et figurent dans la confirmation de commande. La tarification est calculée en fonction de la prestation choisie et des caractéristiques du document.` },
         { heading: `Paiement`, body: `Le paiement s'effectue selon les moyens de paiement proposés à l'étape de la commande. La commande est traitée après confirmation du paiement.` },
         { heading: `Exécution et livraison`, body: `Pour les livraisons numériques, la traduction est transmise, une fois achevée, via le compte de l'Acheteur ou par courrier électronique. Pour les documents physiques, signés à l'encre ou assermentés, la livraison est effectuée par transporteur à l'adresse indiquée par l'Acheteur. Les délais de livraison estimés sont précisés lors de la commande ; ils peuvent varier en fonction du volume des documents et des procédures de certification.` },
         { heading: `Droit de rétractation`, body: `En principe, pour les contrats portant sur la fourniture de services, l'Acheteur dispose d'un droit de rétractation qu'il peut exercer, sans avoir à justifier de motif, dans un délai de quatorze (14) jours à compter de la date de conclusion du contrat. Les exceptions énoncées ci-dessous demeurent toutefois réservées.` },
         { heading: `Exceptions au droit de rétractation`, body: `Conformément à l'article m.15 du Mesafeli Sözleşmeler Yönetmeliği, le droit de rétractation ne peut être exercé pour les services dont l'exécution a commencé avec l'accord de l'Acheteur et s'est achevée avant l'expiration du délai de rétractation, ni pour les biens et services spécialement préparés selon les demandes ou les besoins personnels de l'Acheteur (y compris les prestations de traduction et de certification préparées sur mesure pour une personne ou un document). Les demandes d'annulation transmises avant le commencement du travail de traduction font l'objet d'une appréciation distincte.` },
-        { heading: `Annulation et remboursement`, body: `Les commandes qui n'ont pas encore été prises en charge par un traducteur (c'est-à-dire dont l'exécution n'a pas commencé) peuvent être annulées directement au moyen de l'option d'annulation figurant sur votre page de commande ; si vous le souhaitez, vous pouvez également transmettre votre demande d'annulation à l'adresse info@tercumexpert.com. Les remboursements accordés sont effectués dans un délai raisonnable selon le mode de paiement utilisé lors de la transaction. Pour les services personnalisés dont l'exécution a déjà commencé (pris en charge par un traducteur) ou est achevée, le remboursement peut ne pas être possible en raison de la nature de la prestation.` },
+        { heading: `Annulation et remboursement`, body: `Les commandes qui n'ont pas encore été prises en charge par un traducteur (c'est-à-dire dont l'exécution n'a pas commencé) peuvent être annulées directement au moyen de l'option d'annulation figurant sur votre page de commande ; si vous le souhaitez, vous pouvez également transmettre votre demande d'annulation à l'adresse info@tercumexpert.com. Les remboursements accordés sont effectués dans un délai raisonnable selon le mode de paiement utilisé lors de la transaction. Une fois que la traduction a été prise en charge par un traducteur, aucun remboursement n'est effectué, en raison de la nature personnalisée de la prestation.` },
         { heading: `Règlement des litiges`, body: `Pour les litiges susceptibles de naître du présent Contrat, dans les limites des seuils pécuniaires annoncés chaque année par le Ticaret Bakanlığı, sont compétents les Tüketici Hakem Heyetleri et les tribunaux de la consommation du lieu de résidence de l'Acheteur ou du lieu où la transaction a été réalisée.` },
         { heading: `Entrée en vigueur`, body: `En confirmant sa commande, l'Acheteur déclare avoir lu et accepté l'ensemble des conditions du présent Contrat. Le Contrat entre en vigueur dès la confirmation de la commande.` },
       ],
@@ -1172,7 +1167,7 @@ export const fr: PartialDictionary = {
         { heading: "Parties et objet", body: "Le présent Contrat de partenariat est conclu entre [RAISON SOCIALE] (« TercümExpert ») d’une part et le partenaire commercial qui postule au programme et y est approuvé (« Partenaire ») d’autre part, afin de régir les conditions du programme de parrainage (partenariat) de TercümExpert." },
         { heading: "Candidature et approbation", body: "Le statut de Partenaire s’obtient en remplissant le formulaire de candidature sur la page de partenariat et en étant approuvé par TercümExpert. L’approbation relève de la discrétion de TercümExpert et une candidature peut être refusée. Le Partenaire vérifie son adresse e-mail dans le cadre du programme ; aucun frais d’adhésion n’est facturé." },
         { heading: "Lien d’invitation et attribution des clients", body: "Un lien d’invitation personnel et unique, ainsi qu’un QR code associé, sont attribués à chaque Partenaire approuvé. Le client qui arrive via ce lien ou ce QR code et s’inscrit pour la première fois est rattaché de façon permanente à ce Partenaire ; l’attribution a lieu au moment de la première inscription et ne peut être modifiée par la suite. La commission ne naît que des commandes des clients ainsi rattachés au Partenaire." },
-        { heading: "Structure de la commission", body: "La part du Partenaire est calculée hors taxe sur la valeur ajoutée (TVA) et hors différences liées aux services complémentaires, comme suit : 20 % du montant de base de la traduction ; si la livraison urgente est choisie, 20 % de la différence de livraison urgente ; si la traduction assermentée est choisie, 10 % de la différence de traduction assermentée. Aucune part n’est versée au Partenaire sur les frais de certification notariale, d’apostille ou de livraison physique (par transporteur), et la TVA n’est pas prise en compte pour la commission. Ces pourcentages sont fixes ; les taux restent valables même si les prix évoluent. TercümExpert peut mettre à jour les taux et conditions moyennant un préavis." },
+        { heading: "Structure de la commission", body: "La part du Partenaire est calculée hors taxe sur la valeur ajoutée (TVA) et hors différences liées aux services complémentaires, comme suit : 20 % du montant de base de la traduction ; si la livraison urgente est choisie, 20 % de la différence de livraison urgente ; si la traduction assermentée est choisie, 10 % de la différence de traduction assermentée. Aucune part n’est versée au Partenaire sur les frais de certification notariale ou de livraison physique (par transporteur), et la TVA n’est pas prise en compte pour la commission. Ces pourcentages sont fixes ; les taux restent valables même si les prix évoluent. TercümExpert peut mettre à jour les taux et conditions moyennant un préavis." },
         { heading: "Acquisition et portefeuille", body: "La commission est ajoutée au portefeuille du Partenaire lorsque la commande du client parrainé est terminée et reste bloquée pendant sept (7) jours à compter de son ajout ; elle devient retirable à l’expiration de ce délai. Les commandes annulées, remboursées ou non payées ne sont pas prises en compte pour la commission." },
         { heading: "Paiements", body: "Les soldes retirables sont versés sur l’IBAN indiqué par le Partenaire le 2 et le 17 de chaque mois. Pour qu’un paiement soit effectué, les champs obligatoires du profil du Partenaire doivent être entièrement remplis et l’IBAN ainsi que le titulaire du compte doivent être approuvés par TercümExpert. Les obligations fiscales relatives aux paiements sont soumises à la législation applicable." },
         { heading: "Obligations du Partenaire", body: "Le Partenaire s’engage à utiliser des informations exactes et non trompeuses dans ses promotions, à s’abstenir de tout comportement portant atteinte à la marque et à la réputation de TercümExpert, à tenir à jour ses coordonnées et informations de paiement, et à respecter la législation applicable." },
@@ -1229,7 +1224,6 @@ export const fr: PartialDictionary = {
     serviceLinks: {
       sworn: "Traduction assermentée",
       notarized: "Traduction certifiée par notaire",
-      apostille: "Procédure d'apostille",
       corporate: "Solutions pour entreprises",
       partnership: "Programme de partenariat",
     },
@@ -1278,7 +1272,7 @@ export const fr: PartialDictionary = {
     send: "Envoyer",
     typing: "En train d'écrire…",
     welcome:
-      "Bonjour et bienvenue chez TercümExpert. Je peux vous aider concernant la traduction, la tarification, la certification notariée, l'apostille ou les services pour entreprises.",
+      "Bonjour et bienvenue chez TercümExpert. Je peux vous aider concernant la traduction, la tarification, la certification notariée ou les services pour entreprises.",
     quickQuestions: [
       "Comment le prix est-il calculé ?",
       "Qu'est-ce que la traduction assermentée ?",
@@ -1293,7 +1287,7 @@ export const fr: PartialDictionary = {
     sensitiveWarning:
       "Veuillez ne pas partager de données personnelles sensibles via ce chat. Vous pouvez envoyer vos documents via la zone de téléversement sécurisée.",
     answers: [
-      `Le tarif est calculé en fonction du nombre de mots de votre document, de la paire de langues, du type de prestation (traduction assermentée, certifiée par notaire, apostille) et du délai de livraison. Pour obtenir une estimation instantanée, vous pouvez déposer votre document ou renseigner les informations depuis la page Calculer le Tarif.`,
+      `Le tarif est calculé en fonction du nombre de mots de votre document, de la paire de langues, du type de prestation (traduction assermentée, certifiée par notaire) et du délai de livraison. Pour obtenir une estimation instantanée, vous pouvez déposer votre document ou renseigner les informations depuis la page Calculer le Tarif.`,
       `Une traduction assermentée est une traduction officielle réalisée par un traducteur assermenté et validée par sa signature et son cachet. Les administrations exigent le plus souvent une traduction assermentée ; une certification notariale peut également y être ajoutée si nécessaire.`,
       `Vous pouvez nous transmettre votre document via l'espace de dépôt sécurisé disponible sur la page Calculer le Tarif. Une fois le document déposé, vous obtenez immédiatement une estimation du tarif et pouvez finaliser votre commande.`,
       `Pour vos besoins professionnels impliquant des traductions régulières et volumineuses, nous proposons une tarification dédiée et une livraison prioritaire. Pour en savoir plus, consultez notre page Entreprises ou contactez-nous directement.`,
@@ -1364,8 +1358,12 @@ export const fr: PartialDictionary = {
       "saved": "Vos informations ont été enregistrées.",
       "saveError": "Enregistrement impossible. Veuillez réessayer.",
       "required": "Veuillez remplir les champs obligatoires.",
-      "atLeastOnePair": "Ajoutez au moins une paire de langues."
-    },
+      "atLeastOnePair": "Ajoutez au moins une paire de langues.",cv: "CV",
+      cvHint: "Téléchargez un fichier PDF ou Word (obligatoire).",
+      cvChoose: "Choisir un fichier",
+      cvNone: "Aucun fichier sélectionné",
+      cvRequired: "Vous devez téléverser un CV pour postuler.",
+      cvUploadError: "Le CV n'a pas pu être téléversé. Veuillez réessayer.",},
     "expertiseLabels": {
       "legal": "Juridique",
       "medical": "Médical",
@@ -1457,7 +1455,6 @@ export const fr: PartialDictionary = {
       "urgent": "Urgent",
       "sworn": "Assermentée",
       "notary": "Notariée",
-      "apostille": "Apostille",
       "cargo": "Livraison par transporteur",
       "digital": "Livraison numérique",
       "claim": "Prendre cette mission",
@@ -1556,6 +1553,7 @@ export const fr: PartialDictionary = {
       "colExpertise": "Expertise",
       "colLocation": "Ville / Pays",
       "swornBadge": "Assermenté",
+      cvDownload: "Télécharger le CV",
       "returningBadge": "Traducteur de retour",
       "ibanVerified": "IBAN vérifié",
       "ibanNotVerified": "IBAN non vérifié",

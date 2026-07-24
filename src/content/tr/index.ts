@@ -174,7 +174,7 @@ export const tr = {
         { title: 'Belge incelemesi', desc: 'Belge türü ve amaç değerlendirilir.' },
         { title: 'Uzman eşleştirme', desc: 'Alanın uzmanı çevirmene atanır.' },
         { title: 'Çeviri & editör', desc: 'Çeviri ve bağımsız son okuma.' },
-        { title: 'Onay & teslim', desc: 'Gerekliyse noter/apostil, sonra teslim.' },
+        { title: 'Onay & teslim', desc: 'Gerekliyse noter onayı, sonra teslim.' },
       ],
     },
     delivery: {
@@ -183,11 +183,11 @@ export const tr = {
     },
     notaryApostille: {
       title: 'Noter ve apostil ilişkisi',
-      desc: 'Yeminli çeviri, gerektiğinde noter onayı ve apostil süreciyle resmî kurumlarda geçerli hâle getirilir. Kesin gereklilik, belgenin sunulacağı kuruma göre değişir.',
+      desc: 'Yeminli çeviri, gerektiğinde noter onayıyla resmî kurumlarda geçerli hâle getirilebilir; noter onayı sürecini sizin adınıza yürütebiliriz. Apostil işlemini biz yürütmeyiz; apostil, yetkili makamdan bizzat alınır ve biz yalnızca apostilli/resmî belgelerinizin çevirisini yaparız. Kesin gereklilik, belgenin sunulacağı kuruma göre değişir.',
     },
     fullService: {
       title: 'Kapınıza Kadar Anahtar Teslim',
-      note: 'Belgelerinizi bize iletin; çeviri, noter onayı ve apostil dâhil tüm süreci biz yönetelim. Hazır belgeleriniz kapınıza kadar kargoyla gelsin. Siz işinize odaklanın, gerisini bize bırakın.',
+      note: 'Belgelerinizi bize iletin; çeviri ve gerektiğinde noter onayı sürecini biz yönetelim. Hazır belgeleriniz kapınıza kadar kargoyla gelsin. Siz işinize odaklanın, gerisini bize bırakın.',
     },
     cta: {
       title: 'Hangi hizmete ihtiyacınız olduğundan emin değil misiniz?',
@@ -207,11 +207,6 @@ export const tr = {
       name: 'Noter Onaylı Tercüme',
       short: 'Yeminli çevirinin noter tarafından onaylanması.',
       benefits: ['Noter tasdiki', 'Resmî başvurulara uygun', 'Süreç yönetimi bizde'],
-    },
-    apostille: {
-      name: 'Apostil Süreci Desteği',
-      short: 'Yurt dışında geçerlilik için apostil sürecinde rehberlik.',
-      benefits: ['Uluslararası geçerlilik', 'Süreç danışmanlığı', 'Kurum yönlendirmesi'],
     },
     legal: {
       name: 'Hukuki Çeviri',
@@ -396,7 +391,7 @@ export const tr = {
       items: [
         { key: 'law', icon: 'Scale', title: 'Hukuk Büroları', desc: 'Dava dosyaları, sözleşmeler ve hukuki belgelerde yeminli tercüme ihtiyacı.' },
         { key: 'visa', icon: 'Plane', title: 'Vize Danışmanlık', desc: 'Pasaport, diploma, nüfus belgesi gibi yeminli tercüme gerektiren evraklar.' },
-        { key: 'education', icon: 'GraduationCap', title: 'Eğitim Danışmanlık', desc: 'Öğrenci belgelerinin yeminli tercümesi ve apostil süreçleri.' },
+        { key: 'education', icon: 'GraduationCap', title: 'Eğitim Danışmanlık', desc: 'Öğrenci belgelerinin ve apostilli evrakların yeminli tercümesi.' },
         { key: 'health', icon: 'HeartPulse', title: 'Sağlık Turizmi', desc: 'Tıbbi raporlar, hasta dosyaları ve sağlık belgelerinin çevirisi.' },
         { key: 'patent', icon: 'Building2', title: 'Patent/Marka Ofisleri', desc: 'Patent, marka tescili ve hukuki belgelerin teknik çevirisi.' },
         { key: 'realestate', icon: 'Home', title: 'Emlak Ofisleri', desc: 'Yabancı yatırımcılar için tapu, sözleşme ve resmi evrak çevirisi.' },
@@ -492,7 +487,6 @@ export const tr = {
       urgent: 'Acil Teslimat',
       sworn: 'Yeminli Tercüme',
       notarization: 'Noter Onayı',
-      apostille: 'Apostil Süreci Desteği',
       physicalDelivery: 'Fiziksel Teslimat',
       swornNotaryHint: 'Noter onayı, yeminli tercümeyi kapsar; ihtiyacınıza uygun olan tek seçeneği işaretlemeniz yeterlidir.',
       physicalRequiredHint: 'Yeminli ve noter onaylı çeviriler imzalı/kaşeli asıl nüsha olarak teslim edildiğinden fiziksel teslimat otomatik eklenir.',
@@ -531,6 +525,7 @@ export const tr = {
       'driver-license': 'Sürücü Belgesi',
       'criminal-record': 'Adli Sicil Kaydı',
       'military-status': 'Askerlik Durum Belgesi',
+      apostille: "Apostil belgesi",
       'medical-report': 'Medikal Rapor',
       epicrisis: 'Epikriz (Hasta Çıkış Özeti)',
       prescription: 'Reçete',
@@ -891,7 +886,7 @@ export const tr = {
       sections: [
         { heading: `Veri Sorumlusu`, body: `6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca kişisel verileriniz, veri sorumlusu sıfatıyla Samed Fazlı Atlıcı (“TercümExpert”) tarafından aşağıda açıklanan kapsamda işlenmektedir. Adres: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya. E-posta: info@tercumexpert.com. Telefon: [TELEFON].` },
         { heading: `İşlenen Kişisel Veriler`, body: `Kimlik ve iletişim verileriniz (ad, soyad, e-posta adresi, telefon numarası), teslimat adresi bilgileriniz, sipariş ve işlem verileriniz, çeviri amacıyla tarafımıza ilettiğiniz belgelerin içeriğindeki veriler ile siteyi kullanımınıza ilişkin işlem güvenliği verileri (IP adresi, oturum ve çerez kayıtları) işlenmektedir.` },
-        { heading: `İşleme Amaçları`, body: `Kişisel verileriniz; çeviri, yeminli tercüme, noter ve apostil onayı ile ilgili hizmetlerin sunulması, tekliflerin oluşturulması ve siparişlerin yönetimi, müşteri ilişkileri ile talep ve şikâyetlerin yönetimi, sözleşmesel ve yasal yükümlülüklerin yerine getirilmesi ve hizmet güvenliğinin sağlanması amaçlarıyla işlenir.` },
+        { heading: `İşleme Amaçları`, body: `Kişisel verileriniz; çeviri, yeminli tercüme, noter onayı ile ilgili hizmetlerin sunulması, tekliflerin oluşturulması ve siparişlerin yönetimi, müşteri ilişkileri ile talep ve şikâyetlerin yönetimi, sözleşmesel ve yasal yükümlülüklerin yerine getirilmesi ve hizmet güvenliğinin sağlanması amaçlarıyla işlenir.` },
         { heading: `İşlemenin Hukuki Sebepleri`, body: `Verileriniz; bir sözleşmenin kurulması veya ifası için gerekli olması, hukuki yükümlülüklerimizin yerine getirilmesi, bir hakkın tesisi ve korunması ve temel hak ve özgürlüklerinize zarar vermemek kaydıyla meşru menfaatlerimiz hukuki sebeplerine dayanılarak; gereken hâllerde ise açık rızanıza istinaden işlenir (KVKK m.5 ve m.6).` },
         { heading: `Toplama Yöntemi`, body: `Kişisel verileriniz; web sitesindeki formlar, üyelik ve sipariş süreçleri, e-posta ve diğer iletişim kanalları aracılığıyla elektronik ortamda toplanır.` },
         { heading: `Kişisel Verilerin Aktarılması`, body: `Verileriniz, hizmetin gerektirdiği ölçüde; barındırma, altyapı, kimlik doğrulama, e-posta ve analitik hizmeti aldığımız yurt içinde ve yurt dışında bulunan tedarikçilerimize ve yetkili kamu kurum ve kuruluşlarına, KVKK m.8 ve m.9’daki şartlara uygun olarak aktarılabilir. Kullandığımız bazı altyapı ve hizmet sağlayıcıların sunucuları yurt dışında bulunduğundan, verileriniz mevzuatta öngörülen güvenceler çerçevesinde yurt dışına aktarılabilir.` },
@@ -922,13 +917,13 @@ export const tr = {
       title: `Mesafeli Satış Sözleşmesi`,
       sections: [
         { heading: `Taraflar`, body: `İşbu Mesafeli Satış Sözleşmesi (“Sözleşme”); bir tarafta Samed Fazlı Atlıcı (“Satıcı”; adres: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya, e-posta: info@tercumexpert.com, telefon: [TELEFON]) ile diğer tarafta siparişi veren tüketici (“Alıcı”) arasında, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği uyarınca elektronik ortamda kurulmuştur.` },
-        { heading: `Sözleşmenin Konusu`, body: `Sözleşme’nin konusu; Alıcı’nın tercumexpert.com üzerinden elektronik ortamda sipariş ettiği, nitelikleri ve satış bedeli sipariş özetinde belirtilen çeviri, yeminli tercüme, noter ve apostil onayı ile ilgili hizmetlerin sunulmasıdır.` },
+        { heading: `Sözleşmenin Konusu`, body: `Sözleşme’nin konusu; Alıcı’nın tercumexpert.com üzerinden elektronik ortamda sipariş ettiği, nitelikleri ve satış bedeli sipariş özetinde belirtilen çeviri, yeminli tercüme, noter onayı ile ilgili hizmetlerin sunulmasıdır.` },
         { heading: `Hizmetin Nitelikleri ve Bedeli`, body: `Sipariş edilen hizmetin türü, kapsamı, teslim şekli (dijital veya kargo) ve vergiler dâhil toplam bedeli, sipariş sırasında Alıcı’ya açıkça gösterilir ve sipariş onayında yer alır. Fiyatlandırma, seçilen hizmete ve belge özelliklerine göre hesaplanır.` },
         { heading: `Ödeme`, body: `Ödeme, sipariş adımında sunulan ödeme yöntemleriyle gerçekleştirilir. Sipariş, ödemenin onaylanmasının ardından işleme alınır.` },
         { heading: `İfa ve Teslimat`, body: `Dijital teslimatlarda çeviri, tamamlanmasının ardından Alıcı’nın hesabı veya e-postası üzerinden iletilir. Fiziki, ıslak imzalı veya yeminli belgelerde teslimat, Alıcı’nın bildirdiği adrese kargo ile yapılır. Tahmini teslim süreleri sipariş sırasında belirtilir; belge yoğunluğuna ve onay süreçlerine göre değişebilir.` },
         { heading: `Cayma Hakkı`, body: `Alıcı, kural olarak hizmet sunumuna ilişkin sözleşmelerde, sözleşmenin kurulduğu tarihten itibaren on dört (14) gün içinde herhangi bir gerekçe göstermeksizin cayma hakkına sahiptir. Ancak aşağıda belirtilen istisnalar saklıdır.` },
         { heading: `Cayma Hakkının İstisnaları`, body: `Mesafeli Sözleşmeler Yönetmeliği m.15 uyarınca; Alıcı’nın onayıyla ifasına başlanan ve cayma süresi dolmadan tamamlanan hizmetler ile Alıcı’nın istekleri veya kişisel ihtiyaçları doğrultusunda özel olarak hazırlanan mal ve hizmetlerde (kişiye ya da belgeye özel hazırlanan çeviri ve onay hizmetleri dâhil) cayma hakkı kullanılamaz. Çeviri işine başlanmadan önce iletilen iptal talepleri ayrıca değerlendirilir.` },
-        { heading: `İptal ve İade`, body: `Henüz bir tercüman tarafından üstlenilmemiş (işleme alınmamış) siparişler, sipariş sayfanızdaki iptal seçeneğiyle doğrudan iptal edilebilir; dilerseniz iptal talebinizi info@tercumexpert.com üzerinden de iletebilirsiniz. Uygun görülen iadeler, ödemenin yapıldığı yöntemle makul süre içinde gerçekleştirilir. İfasına başlanmış (bir tercüman tarafından üstlenilmiş) veya tamamlanmış kişiye özel hizmetlerde iade, işin niteliği gereği mümkün olmayabilir.` },
+        { heading: `İptal ve İade`, body: `Henüz bir tercüman tarafından üstlenilmemiş (işleme alınmamış) siparişler, sipariş sayfanızdaki iptal seçeneğiyle doğrudan iptal edilebilir; dilerseniz iptal talebinizi info@tercumexpert.com üzerinden de iletebilirsiniz. Uygun görülen iadeler, ödemenin yapıldığı yöntemle makul süre içinde gerçekleştirilir. Çeviri bir tercüman tarafından işleme alındıktan sonra, işin kişiye özel niteliği gereği iade yapılmaz.` },
         { heading: `Uyuşmazlıkların Çözümü`, body: `İşbu Sözleşme’den doğabilecek uyuşmazlıklarda, Ticaret Bakanlığı’nca her yıl ilan edilen parasal sınırlar dâhilinde Alıcı’nın yerleşim yerindeki veya işlemin yapıldığı yerdeki Tüketici Hakem Heyetleri ile Tüketici Mahkemeleri yetkilidir.` },
         { heading: `Yürürlük`, body: `Alıcı, siparişi onaylamakla işbu Sözleşme’nin tüm koşullarını okuduğunu ve kabul ettiğini beyan eder. Sözleşme, siparişin onaylanması ile yürürlüğe girer.` },
       ],
@@ -953,7 +948,7 @@ export const tr = {
         { heading: "Taraflar ve Konu", body: "İşbu İş Ortaklığı Sözleşmesi, bir tarafta Samed Fazlı Atlıcı (“TercümExpert”) ile diğer tarafta programa başvurup onaylanan iş ortağı (“Partner”) arasında, TercümExpert yönlendirme (iş ortaklığı) programının şart ve koşullarını düzenlemek amacıyla kurulmuştur." },
         { heading: "Başvuru ve Onay", body: "Partner statüsü, iş ortaklığı sayfasındaki başvuru formunun doldurulması ve TercümExpert tarafından onaylanmasıyla kazanılır. Onay TercümExpert’in takdirindedir ve başvuru reddedilebilir. Partner, program kapsamında e-posta adresini doğrular; programa katılım için başlangıç ücreti alınmaz." },
         { heading: "Davet Bağlantısı ve Müşteri Atfı", body: "Onaylanan her Partner’e kendisine özel, benzersiz bir davet bağlantısı ve buna bağlı bir QR kodu tahsis edilir. Bu bağlantı veya QR kod aracılığıyla siteye gelip ilk kez üye olan müşteri, kalıcı olarak ilgili Partner’e bağlanır; atıf ilk üyelik anında gerçekleşir ve sonradan değiştirilemez. Komisyon hakkı yalnızca bu şekilde Partner’e bağlanmış müşterilerin siparişlerinden doğar." },
-        { heading: "Komisyon Yapısı", body: "Partner payı, katma değer vergisi (KDV) ve ek hizmet farkları hariç tutularak hesaplanır: ana çeviri bedelinin %20’si; acil teslimat seçilmişse acil teslimat farkının %20’si; yeminli tercüme seçilmişse yeminli tercüme farkının %10’u. Noter onayı, apostil süreç desteği ve fiziksel (kargo) teslimat bedellerinden Partner’e pay verilmez ve KDV komisyona esas alınmaz. Bu yüzdeler sabittir; fiyatlar değişse dahi oranlar geçerliliğini korur. TercümExpert, önceden bildirimde bulunmak kaydıyla oran ve koşulları güncelleyebilir." },
+        { heading: "Komisyon Yapısı", body: "Partner payı, katma değer vergisi (KDV) ve ek hizmet farkları hariç tutularak hesaplanır: ana çeviri bedelinin %20’si; acil teslimat seçilmişse acil teslimat farkının %20’si; yeminli tercüme seçilmişse yeminli tercüme farkının %10’u. Noter onayı ve fiziksel (kargo) teslimat bedellerinden Partner’e pay verilmez ve KDV komisyona esas alınmaz. Bu yüzdeler sabittir; fiyatlar değişse dahi oranlar geçerliliğini korur. TercümExpert, önceden bildirimde bulunmak kaydıyla oran ve koşulları güncelleyebilir." },
         { heading: "Hak Ediş ve Cüzdan", body: "Komisyon, yönlendirilen müşterinin ilgili siparişi tamamlandığında Partner’in cüzdanına eklenir ve eklendiği tarihten itibaren yedi (7) gün boyunca kilitli kalır; bu sürenin dolmasıyla çekilebilir hâle gelir. İptal edilen, iade edilen veya ödemesi tamamlanmayan siparişler komisyona esas alınmaz." },
         { heading: "Ödemeler", body: "Çekilebilir bakiyeler, her ayın 2’si ve 17’sinde Partner’in bildirdiği IBAN’a ödenir. Ödeme yapılabilmesi için Partner’in profilindeki zorunlu bilgilerin eksiksiz doldurulmuş ve IBAN ile IBAN sahibi bilgilerinin TercümExpert tarafından onaylanmış olması gerekir. Ödemelere ilişkin vergisel yükümlülükler yürürlükteki mevzuata tabidir." },
         { heading: "Partner’in Yükümlülükleri", body: "Partner; tanıtımlarında doğru ve yanıltıcı olmayan bilgi kullanmayı, TercümExpert’in marka ve itibarına zarar verecek davranışlardan kaçınmayı, iletişim ve ödeme bilgilerini güncel tutmayı ve yürürlükteki mevzuata uymayı kabul eder." },
@@ -1010,7 +1005,6 @@ export const tr = {
     serviceLinks: {
       sworn: 'Yeminli Tercüme',
       notarized: 'Noter Onaylı Tercüme',
-      apostille: 'Apostil Süreci',
       corporate: 'Kurumsal Çözümler',
       partnership: 'İş Ortaklığı Programı',
     },
@@ -1059,7 +1053,7 @@ export const tr = {
     send: 'Gönder',
     typing: 'Yazıyor…',
     welcome:
-      "Merhaba, TercümExpert'e hoş geldiniz. Çeviri, fiyatlandırma, noter onayı, apostil veya kurumsal hizmetler hakkında size yardımcı olabilirim.",
+      "Merhaba, TercümExpert'e hoş geldiniz. Çeviri, fiyatlandırma, noter onayı veya kurumsal hizmetler hakkında size yardımcı olabilirim.",
     quickQuestions: [
       'Fiyat nasıl hesaplanıyor?',
       'Yeminli tercüme nedir?',
@@ -1074,7 +1068,7 @@ export const tr = {
     sensitiveWarning:
       'Lütfen bu sohbet üzerinden hassas kişisel veri paylaşmayın. Belgelerinizi güvenli yükleme alanından iletebilirsiniz.',
     answers: [
-      `Fiyat; belgenizin kelime sayısı, dil çifti, hizmet türü (yeminli, noter onaylı, apostil) ve teslim süresine göre hesaplanır. Anında tahmini fiyat için Fiyat Hesapla sayfasından belgenizi yükleyebilir veya bilgileri girebilirsiniz.`,
+      `Fiyat; belgenizin kelime sayısı, dil çifti, hizmet türü (yeminli, noter onaylı) ve teslim süresine göre hesaplanır. Anında tahmini fiyat için Fiyat Hesapla sayfasından belgenizi yükleyebilir veya bilgileri girebilirsiniz.`,
       `Yeminli tercüme, yeminli bir tercüman tarafından yapılan ve tercümanın imza ve kaşesiyle onaylanan resmî çeviridir. Resmî kurumlar çoğunlukla yeminli çeviri talep eder; gerektiğinde noter onayı da eklenebilir.`,
       `Belgenizi Fiyat Hesapla sayfasındaki güvenli yükleme alanından iletebilirsiniz. Yükleme sonrası anında tahmini fiyatı görür ve siparişinizi tamamlayabilirsiniz.`,
       `Kurumsal ihtiyaçlarınız için düzenli ve hacimli çevirilerde özel fiyatlandırma ve öncelikli teslim sunuyoruz. Ayrıntılar için Kurumsal sayfamızı inceleyebilir veya bizimle iletişime geçebilirsiniz.`,
@@ -1146,6 +1140,12 @@ export const tr = {
       saveError: 'Kaydedilemedi. Lütfen tekrar deneyin.',
       required: 'Lütfen zorunlu alanları doldurun.',
       atLeastOnePair: 'En az bir dil çifti ekleyin.',
+      cv: "CV / Özgeçmiş",
+      cvHint: "PDF veya Word dosyası yükleyin (zorunlu).",
+      cvChoose: "Dosya seç",
+      cvNone: "Dosya seçilmedi",
+      cvRequired: "Başvuru için CV yüklemeniz zorunludur.",
+      cvUploadError: "CV yüklenemedi. Lütfen tekrar deneyin.",
     },
     expertiseLabels: {
       legal: 'Hukuk',
@@ -1243,7 +1243,6 @@ export const tr = {
       urgent: 'Acil',
       sworn: 'Yeminli',
       notary: 'Noter onaylı',
-      apostille: 'Apostil',
       cargo: 'Kargo teslim',
       digital: 'Dijital teslim',
       claim: 'İşi üstlen',
@@ -1342,6 +1341,7 @@ export const tr = {
       colExpertise: 'Uzmanlık',
       colLocation: 'Şehir / Ülke',
       swornBadge: 'Yeminli',
+      cvDownload: "CV indir",
       returningBadge: 'Eski tercüman',
       ibanVerified: 'IBAN doğrulandı',
       ibanNotVerified: 'IBAN doğrulanmadı',

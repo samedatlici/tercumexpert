@@ -99,7 +99,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'order',
     priority: 8,
     q: 'Sipariş süreci nasıl ilerler?',
-    a: 'Belgenizi yükleyip ön fiyatı onayladıktan sonra siparişiniz oluşturulur ve alanında uzman bir tercümana atanır. Çeviri kalite kontrolünden geçirilir; gerekiyorsa noter/apostil süreci yürütülür ve belgeniz dijital olarak, gerektiğinde kargoyla teslim edilir.',
+    a: 'Belgenizi yükleyip ön fiyatı onayladıktan sonra siparişiniz oluşturulur ve alanında uzman bir tercümana atanır. Çeviri kalite kontrolünden geçirilir; gerekiyorsa noter onayı süreci yürütülür ve belgeniz dijital olarak, gerektiğinde kargoyla teslim edilir.',
     keywords: ['siparis sureci', 'nasil ilerler', 'asamalar', 'surec'],
   },
   {
@@ -147,7 +147,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'notary',
     priority: 14,
     q: 'Apostil işlemi nasıl yürütülür?',
-    a: 'Apostil, bir belgenin yurt dışında geçerli sayılması için yetkili makam tarafından verilen tasdiktir. Süreci sizin adınıza takip edebiliriz; hangi belgeye apostil gerektiği ve işlem sırası, belgenin kullanılacağı ülkeye göre değişir. Lahey Sözleşmesi’ne taraf olmayan ülkelerde apostil yerine konsolosluk tasdiki gerekebilir.',
+    a: 'Apostil, bir belgenin yurt dışında geçerli sayılması için yetkili makam tarafından verilen tasdiktir. Apostil işlemini biz yürütmeyiz; apostili, belgenizin düzenlendiği ülkedeki yetkili makamdan bizzat almanız gerekir. Biz yalnızca apostilli belgelerinizin yeminli çevirisini yaparız. Lahey Sözleşmesi’ne taraf olmayan ülkelerde apostil yerine konsolosluk tasdiki gerekebilir.',
     keywords: ['apostil', 'apostil islemi', 'apostil tasdik', 'yurt disi gecerli'],
   },
   {
@@ -213,7 +213,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'general',
     priority: 22,
     q: 'TercümExpert hangi hizmetleri sunar?',
-    a: 'Yeminli ve noter onaylı tercüme, apostil süreci desteği, hukuki, teknik, medikal ve akademik çeviri ile web ve mobil uygulama lokalizasyonu sunuyoruz. İhtiyacınıza uygun hizmeti Fiyat Hesapla ekranında seçebilirsiniz.',
+    a: 'Yeminli ve noter onaylı tercüme, apostilli belgelerin çevirisi, hukuki, teknik, medikal ve akademik çeviri ile web ve mobil uygulama lokalizasyonu sunuyoruz. İhtiyacınıza uygun hizmeti Fiyat Hesapla ekranında seçebilirsiniz.',
     keywords: ['hizmetler', 'ne yapar', 'hizmet turleri', 'hangi hizmet'],
   },
   {
@@ -229,7 +229,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'general',
     priority: 24,
     q: 'Fiziksel ofise gelmek gerekir mi?',
-    a: 'Hayır. Tüm süreç —fiyat alma, sipariş, ödeme ve teslimat— çevrim içi yürütülebilir. Belgelerinizi yüklemeniz ve onaylamanız yeterlidir; herhangi bir yere gelmenize gerek yoktur.',
+    a: 'Firmamızın fiziksel bir ofisi bulunmamaktadır; hizmetlerimizi tamamen çevrim içi olarak sunuyoruz. Belgelerinizi güvenli yükleme yoluyla iletmeniz yeterlidir; teslimat dijital olarak, gerektiğinde kargoyla yapılır. Sorularınız için WhatsApp veya info@tercumexpert.com üzerinden bize ulaşabilirsiniz.',
     keywords: ['ofis', 'ofise gelme', 'sube', 'adres', 'gelmek zorunda'],
   },
   {
@@ -359,7 +359,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'order',
     priority: 40,
     q: 'Ödeme sonrası sipariş iptal edilebilir mi?',
-    a: 'Çeviri başlamadıysa iptal ve iade genellikle mümkündür. İş başladıysa, tamamlanan kısma göre kısmi ücret uygulanabilir. İptal talebinizi en kısa sürede iletmeniz sürecinizi kolaylaştırır.',
+    a: 'Siparişiniz bir tercüman tarafından işleme alınmadıysa, sipariş sayfanızdan veya info@tercumexpert.com üzerinden iptal edebilirsiniz; ödemeniz, ödemeyi yaptığınız yönteme tam olarak iade edilir. Çeviri bir tercüman tarafından işleme alındıktan sonra, işin kişiye özel niteliği gereği iade yapılmaz.',
     keywords: ['odeme sonrasi iptal', 'iade', 'geri odeme'],
   },
   {
@@ -449,7 +449,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'pricing',
     priority: 51,
     q: 'Noter onayı ve apostil ücreti fiyata dahil midir?',
-    a: 'Noter onayı ve apostil, yetkili makamlarca yapılan ayrı işlemlerdir ve resmî tarifeye tabidir. Bu masraflar çeviri ücretinden ayrı gösterilir; resmî tarifeye bağlı olduğundan önceden kesin olmayabilir ve gerçekleşen tutar işlem sonrası bildirilir.',
+    a: 'Noter onayı, yetkili makamlarca yapılan ayrı bir işlemdir ve resmî tarifeye tabidir; bu masraf çeviri ücretinden ayrı gösterilir, resmî tarifeye bağlı olduğundan önceden kesin olmayabilir ve gerçekleşen tutar işlem sonrası bildirilir. Apostil işlemini ise biz yürütmeyiz; apostili yetkili makamdan bizzat sizin almanız gerekir, biz yalnızca apostilli belgenizin çevirisini yaparız.',
     keywords: ['noter ucreti', 'apostil ucreti', 'dahil mi', 'noter masraf', 'apostil masraf'],
   },
   {
@@ -521,7 +521,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'pricing',
     priority: 60,
     q: 'İptal edilen siparişlerde ücret iadesi yapılır mı?',
-    a: 'Çeviri başlamadan iptal edilen siparişlerde ödeme iade edilir. İş başladıysa, tamamlanan kısım düşülerek kalan tutar iade edilebilir. Mükerrer çekim gibi durumlarda fazla tutar iade edilir.',
+    a: 'Siparişiniz bir tercüman tarafından işleme alınmadan iptal edilirse, ödemeniz ödemeyi yaptığınız yönteme tam olarak iade edilir. Çeviri bir tercüman tarafından işleme alındıktan sonra, işin kişiye özel niteliği gereği iade yapılmaz. Mükerrer veya hatalı çekim gibi durumlarda fazla tutar iade edilir.',
     keywords: ['iade', 'ucret iadesi', 'geri odeme', 'iptal iade'],
   },
 
@@ -1123,7 +1123,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'corporate',
     priority: 134,
     q: 'Uluslararası şirketlere ve çok dilli projelere hizmet verilir mi?',
-    a: 'Evet. Birden fazla ülke ve dil içeren projeler koordine edilerek yürütülebilir; terminoloji tutarlılığı merkezî olarak sağlanır. Kurumsal projelerde yeminli çeviri, gerektiğinde noter onayı ve apostil süreçleri de yürütülebilir.',
+    a: 'Evet. Birden fazla ülke ve dil içeren projeler koordine edilerek yürütülebilir; terminoloji tutarlılığı merkezî olarak sağlanır. Kurumsal projelerde yeminli çeviri ve gerektiğinde noter onayı süreçleri de yürütülebilir.',
     keywords: ['uluslararasi sirket', 'cok dilli proje', 'kurumsal noter apostil'],
   },
 

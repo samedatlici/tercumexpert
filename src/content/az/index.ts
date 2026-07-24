@@ -382,7 +382,7 @@ export const az: PartialDictionary = {
         { title: 'Sənəd baxışı', desc: 'Sənədin növü və məqsədi qiymətləndirilir.' },
         { title: 'Ekspert təyinatı', desc: 'Sahə üzrə ixtisaslaşmış tərcüməçi təyin edilir.' },
         { title: 'Tərcümə və redaktə', desc: 'Tərcümə və müstəqil yekun baxış.' },
-        { title: 'Təsdiq və çatdırılma', desc: 'Lazım olduqda notariat/apostil, sonra çatdırılma.' },
+        { title: 'Təsdiq və çatdırılma', desc: 'Lazım olduqda notariat təsdiqi, sonra çatdırılma.' },
       ],
     },
     delivery: {
@@ -391,11 +391,11 @@ export const az: PartialDictionary = {
     },
     notaryApostille: {
       title: 'Notariat və apostil əlaqəsi',
-      desc: 'Tələb olunduqda andlı tərcümə notariat təsdiqi və apostil prosesi vasitəsilə rəsmi qurumlar üçün etibarlı edilir. Dəqiq tələb sənədin təqdim olunacağı quruma görə dəyişir.',
+      desc: 'Tələb olunduqda andlı tərcümə notariat təsdiqi vasitəsilə rəsmi qurumlar üçün etibarlı edilir və notariat təsdiqini sizin adınıza həyata keçirə bilərik. Apostil prosesini isə biz aparmırıq; apostili özünüz səlahiyyətli orqandan almalısınız, biz yalnız apostilli/rəsmi sənədlərinizi tərcümə edirik. Dəqiq tələb sənədin təqdim olunacağı quruma görə dəyişir.',
     },
     fullService: {
       title: 'Açar Təslim, Qapınıza Qədər Çatdırılır',
-      note: 'Sənədlərinizi bizə göndərin, bütün prosesi — tərcümə, notariat təsdiqi və apostil daxil — biz idarə edək. Hazır sənədləriniz kuryer vasitəsilə qapınıza çatdırılır. Siz işinizə fokuslanın, qalanını bizə buraxın.',
+      note: 'Sənədlərinizi bizə göndərin, tərcüməni və lazım olduqda notariat təsdiqini biz idarə edək. Hazır sənədləriniz kuryer vasitəsilə qapınıza çatdırılır. Siz işinizə fokuslanın, qalanını bizə buraxın.',
     },
     cta: {
       title: 'Hansı xidmətə ehtiyacınız olduğundan əmin deyilsiniz?',
@@ -414,11 +414,6 @@ export const az: PartialDictionary = {
       name: 'Notariat Təsdiqli Tərcümə',
       short: 'Andlı tərcümənin notariat təsdiqi.',
       benefits: ['Notariat təsdiqi', 'Rəsmi müraciətlər üçün uyğun', 'Prosesi biz idarə edirik'],
-    },
-    apostille: {
-      name: 'Apostil Prosesi Dəstəyi',
-      short: 'Xaricdə etibarlılıq üçün apostil prosesində bələdçilik.',
-      benefits: ['Beynəlxalq etibarlılıq', 'Proses məsləhəti', 'Qurum bələdçiliyi'],
     },
     legal: {
       name: 'Hüquqi Tərcümə',
@@ -603,7 +598,7 @@ export const az: PartialDictionary = {
       items: [
         { key: 'law', icon: 'Scale', title: 'Hüquq Büroları', desc: 'İş sənədləri, müqavilələr və hüquqi sənədlərin andlı tərcüməsinə ehtiyac.' },
         { key: 'visa', icon: 'Plane', title: 'Viza Məsləhətçiliyi', desc: 'Pasport, diplom və vətəndaşlıq sənədləri kimi andlı tərcümə tələb edən sənədlər.' },
-        { key: 'education', icon: 'GraduationCap', title: 'Təhsil Məsləhətçiliyi', desc: 'Tələbə sənədlərinin andlı tərcüməsi və apostil prosesləri.' },
+        { key: 'education', icon: 'GraduationCap', title: 'Təhsil Məsləhətçiliyi', desc: 'Tələbə sənədlərinin və apostilli sənədlərin andlı tərcüməsi.' },
         { key: 'health', icon: 'HeartPulse', title: 'Sağlamlıq Turizmi', desc: 'Tibbi hesabatların, xəstə sənədlərinin və sağlamlıq sənədlərinin tərcüməsi.' },
         { key: 'patent', icon: 'Building2', title: 'Patent/Ticarət Nişanı Büroları', desc: 'Patent, ticarət nişanı qeydiyyatı və hüquqi sənədlərin texniki tərcüməsi.' },
         { key: 'realestate', icon: 'Home', title: 'Daşınmaz Əmlak Büroları', desc: 'Xarici investorlar üçün çıxarış, müqavilə və rəsmi sənəd tərcüməsi.' },
@@ -688,6 +683,7 @@ export const az: PartialDictionary = {
       "driver-license": "Sürücülük vəsiqəsi",
       "criminal-record": "Məhkumluq haqqında arayış",
       "military-status": "Hərbi vəziyyət sənədi",
+      apostille: "Apostilli sənəd",
       "medical-report": "Tibbi hesabat",
       "epicrisis": "Epikriz (xəstəlik xülasəsi)",
       "prescription": "Resept",
@@ -770,7 +766,6 @@ export const az: PartialDictionary = {
     },
     options: {
       "sworn": "Andlı (təsdiqli) tərcümə",
-      "apostille": "Apostil prosesinə dəstək",
       "swornNotaryHint": "Notarial təsdiq artıq andlı tərcüməni əhatə edir; yalnız ehtiyacınıza uyğun bir seçimi işarələməyiniz kifayətdir.",
       "physicalRequiredHint": "Andlı və notarial təsdiqli tərcümələr imzalanmış və möhürlənmiş orijinal kimi təqdim olunur, buna görə fiziki çatdırılma avtomatik əlavə edilir.",
       urgent: 'Təcili Çatdırılma',
@@ -1104,7 +1099,7 @@ export const az: PartialDictionary = {
       sections: [
         { heading: `Məlumat Məsulu`, body: `6698 saylı Şəxsi Məlumatların Qorunması Qanunu (“KVKK”) əsasında şəxsi məlumatlarınız, məlumat məsulu sifəti ilə Samed Fazlı Atlıcı (“TercümExpert”) tərəfindən aşağıda izah edilən çərçivədə işlənir. Ünvan: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya. E-poçt: info@tercumexpert.com. Telefon: [TELEFON].` },
         { heading: `İşlənən Şəxsi Məlumatlar`, body: `Kimlik və əlaqə məlumatlarınız (ad, soyad, e-poçt ünvanı, telefon nömrəsi), çatdırılma ünvanı məlumatlarınız, sifariş və əməliyyat məlumatlarınız, tərcümə məqsədi ilə bizə göndərdiyiniz sənədlərin məzmunundakı məlumatlar, habelə saytdan istifadənizə dair əməliyyat təhlükəsizliyi məlumatları (IP ünvanı, sessiya və çərəz qeydləri) işlənir.` },
-        { heading: `İşlənmə Məqsədləri`, body: `Şəxsi məlumatlarınız; tərcümə, andlı tərcümə, notariat və apostil təsdiqi ilə bağlı xidmətlərin göstərilməsi, təkliflərin hazırlanması və sifarişlərin idarə edilməsi, müştəri münasibətləri ilə müraciət və şikayətlərin idarə olunması, müqavilə və qanuni öhdəliklərin yerinə yetirilməsi və xidmət təhlükəsizliyinin təmin edilməsi məqsədləri ilə işlənir.` },
+        { heading: `İşlənmə Məqsədləri`, body: `Şəxsi məlumatlarınız; tərcümə, andlı tərcümə, notariat təsdiqi ilə bağlı xidmətlərin göstərilməsi, təkliflərin hazırlanması və sifarişlərin idarə edilməsi, müştəri münasibətləri ilə müraciət və şikayətlərin idarə olunması, müqavilə və qanuni öhdəliklərin yerinə yetirilməsi və xidmət təhlükəsizliyinin təmin edilməsi məqsədləri ilə işlənir.` },
         { heading: `İşlənmənin Hüquqi Əsasları`, body: `Məlumatlarınız; müqavilənin bağlanması və ya icrası üçün zəruri olması, hüquqi öhdəliklərimizin yerinə yetirilməsi, hüququn müəyyən edilməsi və qorunması, habelə əsas hüquq və azadlıqlarınıza zərər verməmək şərti ilə qanuni maraqlarımız hüquqi əsaslarına istinadən; zəruri hallarda isə açıq razılığınıza əsasən işlənir (KVKK m.5 və m.6).` },
         { heading: `Toplanma Üsulu`, body: `Şəxsi məlumatlarınız; veb-saytdakı formalar, üzvlük və sifariş prosesləri, e-poçt və digər əlaqə kanalları vasitəsilə elektron mühitdə toplanır.` },
         { heading: `Şəxsi Məlumatların Ötürülməsi`, body: `Məlumatlarınız, xidmətin tələb etdiyi həcmdə; hostinq, infrastruktur, kimlik doğrulama, e-poçt və analitika xidmətləri aldığımız ölkə daxilində və xaricində yerləşən təchizatçılarımıza və səlahiyyətli dövlət qurum və təşkilatlarına, KVKK m.8 və m.9-dakı şərtlərə uyğun olaraq ötürülə bilər. İstifadə etdiyimiz bəzi infrastruktur və xidmət təminatçılarının serverləri xaricdə yerləşdiyindən, məlumatlarınız qanunvericilikdə nəzərdə tutulan təminatlar çərçivəsində xaricə ötürülə bilər.` },
@@ -1135,13 +1130,13 @@ export const az: PartialDictionary = {
       title: `Məsafəli Satış Müqaviləsi`,
       sections: [
         { heading: `Tərəflər`, body: `Bu Məsafəli Satış Müqaviləsi (“Müqavilə”); bir tərəfdə Samed Fazlı Atlıcı (“Satıcı”; ünvan: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya, e-poçt: info@tercumexpert.com, telefon: [TELEFON]) ilə digər tərəfdə sifarişi verən istehlakçı (“Alıcı”) arasında, 6502 saylı Tüketicinin Korunması Hakkında Kanun və Mesafeli Sözleşmeler Yönetmeliği əsasında elektron mühitdə bağlanmışdır.` },
-        { heading: `Müqavilənin Mövzusu`, body: `Müqavilənin mövzusu; Alıcının tercumexpert.com vasitəsilə elektron mühitdə sifariş etdiyi, xüsusiyyətləri və satış dəyəri sifariş xülasəsində göstərilən tərcümə, andlı tərcümə, notariat və apostil təsdiqi ilə bağlı xidmətlərin göstərilməsidir.` },
+        { heading: `Müqavilənin Mövzusu`, body: `Müqavilənin mövzusu; Alıcının tercumexpert.com vasitəsilə elektron mühitdə sifariş etdiyi, xüsusiyyətləri və satış dəyəri sifariş xülasəsində göstərilən tərcümə, andlı tərcümə, notariat təsdiqi ilə bağlı xidmətlərin göstərilməsidir.` },
         { heading: `Xidmətin Xüsusiyyətləri və Dəyəri`, body: `Sifariş edilən xidmətin növü, əhatə dairəsi, təhvil forması (rəqəmsal və ya kargo) və vergilər daxil ümumi dəyəri, sifariş zamanı Alıcıya aydın şəkildə göstərilir və sifariş təsdiqində yer alır. Qiymətləndirmə, seçilən xidmətə və sənəd xüsusiyyətlərinə görə hesablanır.` },
         { heading: `Ödəniş`, body: `Ödəniş, sifariş mərhələsində təqdim olunan ödəniş üsulları ilə həyata keçirilir. Sifariş, ödənişin təsdiqindən sonra işə salınır.` },
         { heading: `İcra və Təhvil`, body: `Rəqəmsal təhvillərdə tərcümə, tamamlandıqdan sonra Alıcının hesabı və ya e-poçtu vasitəsilə göndərilir. Fiziki, yaş imzalı və ya andlı sənədlərdə təhvil, Alıcının bildirdiyi ünvana kargo ilə edilir. Təxmini təhvil müddətləri sifariş zamanı göstərilir; sənəd sıxlığına və təsdiq proseslərinə görə dəyişə bilər.` },
         { heading: `İmtina Hüququ`, body: `Alıcı, bir qayda olaraq xidmət göstərilməsinə dair müqavilələrdə, müqavilənin bağlandığı tarixdən etibarən on dörd (14) gün ərzində hər hansı bir səbəb göstərmədən imtina hüququna malikdir. Lakin aşağıda göstərilən istisnalar qüvvədə qalır.` },
         { heading: `İmtina Hüququnun İstisnaları`, body: `Mesafeli Sözleşmeler Yönetmeliği m.15 əsasında; Alıcının razılığı ilə icrasına başlanan və imtina müddəti bitmədən tamamlanan xidmətlərdə, habelə Alıcının istəkləri və ya şəxsi ehtiyacları əsasında xüsusi olaraq hazırlanan mal və xidmətlərdə (şəxsə və ya sənədə özəl hazırlanan tərcümə və təsdiq xidmətləri daxil) imtina hüququndan istifadə edilə bilməz. Tərcümə işinə başlanmazdan əvvəl göndərilən ləğv müraciətləri ayrıca dəyərləndirilir.` },
-        { heading: `Ləğv və Geri Qaytarma`, body: `Hələ bir tərcüməçi tərəfindən götürülməmiş (yəni icrasına başlanmamış) sifarişlər sifariş səhifənizdəki ləğv seçimi vasitəsilə birbaşa ləğv edilə bilər; istəsəniz, ləğv tələbinizi info@tercumexpert.com ünvanı üzərindən də göndərə bilərsiniz. Təsdiq edilmiş geri ödəmələr ödənişin həyata keçirildiyi üsulla ağlabatan müddət ərzində yerinə yetirilir. İcrasına başlanmış (bir tərcüməçi tərəfindən götürülmüş) və ya tamamlanmış şəxsə xas xidmətlərdə geri ödəmə işin xarakteri səbəbilə mümkün olmaya bilər.` },
+        { heading: `Ləğv və Geri Qaytarma`, body: `Hələ bir tərcüməçi tərəfindən götürülməmiş (yəni icrasına başlanmamış) sifarişlər sifariş səhifənizdəki ləğv seçimi vasitəsilə birbaşa ləğv edilə bilər; istəsəniz, ləğv tələbinizi info@tercumexpert.com ünvanı üzərindən də göndərə bilərsiniz. Təsdiq edilmiş geri ödəmələr ödənişin həyata keçirildiyi üsulla ağlabatan müddət ərzində yerinə yetirilir. Tərcümə bir tərcüməçi tərəfindən icraya götürüldükdən sonra, işin şəxsə xas xarakteri səbəbilə geri ödəmə edilmir.` },
         { heading: `Mübahisələrin Həlli`, body: `Bu Müqavilədən yarana biləcək mübahisələrdə, Ticaret Bakanlığı tərəfindən hər il elan edilən maliyyə hədləri daxilində Alıcının yaşayış yerindəki və ya əməliyyatın aparıldığı yerdəki Tüketici Hakem Heyetleri ilə İstehlakçı Məhkəmələri səlahiyyətlidir.` },
         { heading: `Qüvvəyə Minmə`, body: `Alıcı, sifarişi təsdiq etməklə bu Müqavilənin bütün şərtlərini oxuduğunu və qəbul etdiyini bəyan edir. Müqavilə, sifarişin təsdiqi ilə qüvvəyə minir.` },
       ],
@@ -1166,7 +1161,7 @@ export const az: PartialDictionary = {
         { heading: "Tərəflər və predmet", body: "Bu Tərəfdaşlıq müqaviləsi bir tərəfdən [ŞİRKƏT ADI] (“TercümExpert”) ilə digər tərəfdən proqrama müraciət edib təsdiqlənən biznes tərəfdaşı (“Tərəfdaş”) arasında, TercümExpert dəvət (tərəfdaşlıq) proqramının şərtlərini tənzimləmək məqsədilə bağlanmışdır." },
         { heading: "Müraciət və təsdiq", body: "Tərəfdaş statusu tərəfdaşlıq səhifəsindəki müraciət formasının doldurulması və TercümExpert tərəfindən təsdiqlənməsi ilə əldə edilir. Təsdiq TercümExpert-in mülahizəsindədir və müraciət rədd edilə bilər. Tərəfdaş proqram çərçivəsində e-poçt ünvanını təsdiqləyir; qoşulmaq üçün başlanğıc haqqı alınmır." },
         { heading: "Dəvət linki və müştəri təyinatı", body: "Təsdiqlənmiş hər Tərəfdaşa özünəməxsus, unikal dəvət linki və ona bağlı QR kod təyin edilir. Bu link və ya QR kod vasitəsilə sayta gəlib ilk dəfə qeydiyyatdan keçən müştəri daimi olaraq həmin Tərəfdaşa bağlanır; təyinat ilk qeydiyyat anında baş verir və sonradan dəyişdirilə bilməz. Komissiya yalnız bu şəkildə Tərəfdaşa bağlanmış müştərilərin sifarişlərindən yaranır." },
-        { heading: "Komissiya strukturu", body: "Tərəfdaşın payı əlavə dəyər vergisi (ƏDV) və əlavə xidmət fərqləri istisna olunmaqla hesablanır: əsas tərcümə dəyərinin 20%-i; təcili çatdırılma seçilibsə təcili çatdırılma fərqinin 20%-i; and içmiş (yeminli) tərcümə seçilibsə and içmiş tərcümə fərqinin 10%-i. Notarial təsdiq, apostil dəstəyi və fiziki (kuryer) çatdırılma haqlarından Tərəfdaşa pay verilmir və ƏDV komissiyaya əsas götürülmür. Bu faizlər sabitdir; qiymətlər dəyişsə də dərəcələr qüvvədə qalır. TercümExpert əvvəlcədən bildirməklə dərəcə və şərtləri yeniləyə bilər." },
+        { heading: "Komissiya strukturu", body: "Tərəfdaşın payı əlavə dəyər vergisi (ƏDV) və əlavə xidmət fərqləri istisna olunmaqla hesablanır: əsas tərcümə dəyərinin 20%-i; təcili çatdırılma seçilibsə təcili çatdırılma fərqinin 20%-i; and içmiş (yeminli) tərcümə seçilibsə and içmiş tərcümə fərqinin 10%-i. Notarial təsdiq və fiziki (kuryer) çatdırılma haqlarından Tərəfdaşa pay verilmir və ƏDV komissiyaya əsas götürülmür. Bu faizlər sabitdir; qiymətlər dəyişsə də dərəcələr qüvvədə qalır. TercümExpert əvvəlcədən bildirməklə dərəcə və şərtləri yeniləyə bilər." },
         { heading: "Hesablanma və pul kisəsi", body: "Komissiya dəvət edilən müştərinin sifarişi tamamlandıqda Tərəfdaşın pul kisəsinə əlavə olunur və əlavə edildiyi tarixdən etibarən yeddi (7) gün kilidli qalır; bu müddət bitdikdə çıxarıla bilən olur. Ləğv edilən, geri qaytarılan və ya ödənişi tamamlanmayan sifarişlər komissiyaya əsas götürülmür." },
         { heading: "Ödənişlər", body: "Çıxarıla bilən balanslar hər ayın 2-si və 17-də Tərəfdaşın bildirdiyi IBAN-a ödənilir. Ödənişin edilməsi üçün Tərəfdaşın profilindəki zəruri sahələr tam doldurulmalı, IBAN və hesab sahibi məlumatları TercümExpert tərəfindən təsdiqlənməlidir. Ödənişlərlə bağlı vergi öhdəlikləri qüvvədə olan qanunvericiliyə tabedir." },
         { heading: "Tərəfdaşın öhdəlikləri", body: "Tərəfdaş təbliğatında doğru və yanıltıcı olmayan məlumat istifadə etməyi, TercümExpert-in brend və nüfuzuna zərər verə biləcək davranışlardan çəkinməyi, əlaqə və ödəniş məlumatlarını güncəl saxlamağı və qüvvədə olan qanunvericiliyə əməl etməyi qəbul edir." },
@@ -1223,7 +1218,6 @@ export const az: PartialDictionary = {
     serviceLinks: {
       sworn: 'Andlı Tərcümə',
       notarized: 'Notariat Təsdiqli Tərcümə',
-      apostille: 'Apostil Prosesi',
       corporate: 'Korporativ Həllər',
       partnership: 'Tərəfdaşlıq Proqramı',
     },
@@ -1272,7 +1266,7 @@ export const az: PartialDictionary = {
     send: 'Göndər',
     typing: 'Yazır…',
     welcome:
-      'Salam və TercümExpert-ə xoş gəldiniz. Tərcümə, qiymətqoyma, notariat təsdiqi, apostil və ya korporativ xidmətlərdə sizə kömək edə bilərəm.',
+      'Salam və TercümExpert-ə xoş gəldiniz. Tərcümə, qiymətqoyma, notariat təsdiqi və ya korporativ xidmətlərdə sizə kömək edə bilərəm.',
     quickQuestions: [
       'Qiymət necə hesablanır?',
       'Andlı tərcümə nədir?',
@@ -1287,7 +1281,7 @@ export const az: PartialDictionary = {
     sensitiveWarning:
       'Zəhmət olmasa həssas şəxsi məlumatları bu söhbət vasitəsilə paylaşmayın. Sənədlərinizi təhlükəsiz yükləmə sahəsi vasitəsilə göndərə bilərsiniz.',
     answers: [
-      `Qiymət; sənədinizin söz sayına, dil cütünə, xidmət növünə (andlı, notarial təsdiqli, apostil) və çatdırılma müddətinə əsasən hesablanır. Dərhal təxmini qiymət üçün Qiymət Hesabla səhifəsindən sənədinizi yükləyə və ya məlumatları daxil edə bilərsiniz.`,
+      `Qiymət; sənədinizin söz sayına, dil cütünə, xidmət növünə (andlı, notarial təsdiqli) və çatdırılma müddətinə əsasən hesablanır. Dərhal təxmini qiymət üçün Qiymət Hesabla səhifəsindən sənədinizi yükləyə və ya məlumatları daxil edə bilərsiniz.`,
       `Andlı tərcümə, andlı tərcüməçi tərəfindən edilən və tərcüməçinin imzası və möhürü ilə təsdiqlənən rəsmi tərcümədir. Rəsmi qurumlar çox vaxt andlı tərcümə tələb edir; lazım gəldikdə notarial təsdiq də əlavə oluna bilər.`,
       `Sənədinizi Qiymət Hesabla səhifəsindəki təhlükəsiz yükləmə sahəsindən göndərə bilərsiniz. Yüklədikdən sonra təxmini qiyməti dərhal görür və sifarişinizi tamamlaya bilərsiniz.`,
       `Korporativ ehtiyaclarınız üçün müntəzəm və həcmli tərcümələrdə xüsusi qiymətləndirmə və prioritet çatdırılma təklif edirik. Ətraflı məlumat üçün Korporativ səhifəmizlə tanış ola və ya bizimlə əlaqə saxlaya bilərsiniz.`,
@@ -1358,8 +1352,12 @@ export const az: PartialDictionary = {
       "saved": "Məlumatlarınız yadda saxlanıldı.",
       "saveError": "Yadda saxlanmadı. Zəhmət olmasa yenidən cəhd edin.",
       "required": "Zəhmət olmasa tələb olunan sahələri doldurun.",
-      "atLeastOnePair": "Ən azı bir dil cütlüyü əlavə edin."
-    },
+      "atLeastOnePair": "Ən azı bir dil cütlüyü əlavə edin.",cv: "CV",
+      cvHint: "PDF və ya Word faylı yükləyin (mütləqdir).",
+      cvChoose: "Fayl seçin",
+      cvNone: "Fayl seçilməyib",
+      cvRequired: "Müraciət üçün CV yükləməlisiniz.",
+      cvUploadError: "CV yüklənə bilmədi. Zəhmət olmasa, yenidən cəhd edin.",},
     "expertiseLabels": {
       "legal": "Hüquqi",
       "medical": "Tibbi",
@@ -1451,7 +1449,6 @@ export const az: PartialDictionary = {
       "urgent": "Təcili",
       "sworn": "Andlı",
       "notary": "Notarial təsdiqli",
-      "apostille": "Apostil",
       "cargo": "Kargo çatdırılması",
       "digital": "Rəqəmsal çatdırılma",
       "claim": "Bu işi götür",
@@ -1550,6 +1547,7 @@ export const az: PartialDictionary = {
       "colExpertise": "İxtisas",
       "colLocation": "Şəhər / Ölkə",
       "swornBadge": "Andlı",
+      cvDownload: "CV-ni yüklə",
       "returningBadge": "Geri qayıdan tərcüməçi",
       "ibanVerified": "IBAN təsdiqlənib",
       "ibanNotVerified": "IBAN təsdiqlənməyib",

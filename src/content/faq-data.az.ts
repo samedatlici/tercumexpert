@@ -88,7 +88,7 @@ export const FAQ_ITEMS_AZ: FaqItem[] = [
     category: "order",
     priority: 8,
     q: "Sifariş prosesi necə gedir?",
-    a: "Sənədinizi yükləyib ilkin qiyməti təsdiqlədikdən sonra sifarişiniz yaradılır və müvafiq sahədə ixtisaslaşmış tərcüməçiyə təyin edilir. Tərcümə keyfiyyət nəzarətindən keçir; lazım gəldikdə notariat/apostil prosesi aparılır və sənədiniz rəqəmsal şəkildə, tələb olunduqda kuryerlə təhvil verilir.",
+    a: "Sənədinizi yükləyib ilkin qiyməti təsdiqlədikdən sonra sifarişiniz yaradılır və müvafiq sahədə ixtisaslaşmış tərcüməçiyə təyin edilir. Tərcümə keyfiyyət nəzarətindən keçir; lazım gəldikdə notariat təsdiqi aparılır və sənədiniz rəqəmsal şəkildə, tələb olunduqda kuryerlə təhvil verilir.",
     keywords: ["sifariş prosesi", "necə gedir", "mərhələlər", "proses"],
   },
   {
@@ -136,7 +136,7 @@ export const FAQ_ITEMS_AZ: FaqItem[] = [
     category: "notary",
     priority: 14,
     q: "Apostil prosesi necə aparılır?",
-    a: "Apostil, bir sənədin xaricdə etibarlı sayılması üçün səlahiyyətli orqan tərəfindən verilən təsdiqdir. Prosesi sizin adınıza aparıla bilərik; hansı sənədə apostil lazım olduğu və əməliyyat sırası sənədin istifadə olunacağı ölkəyə görə dəyişir. Haaqa Konvensiyasının tərəfi olmayan ölkələrdə apostil əvəzinə konsulluq təsdiqi tələb oluna bilər.",
+    a: "Apostil, bir sənədin xaricdə etibarlı sayılması üçün səlahiyyətli orqan tərəfindən verilən təsdiqdir. Apostil prosesini biz aparmırıq; apostili özünüz sənədin verildiyi ölkənin səlahiyyətli orqanından almalısınız. Biz yalnız apostilli sənədlərinizin andlı tərcüməsini təqdim edirik. Haaqa Konvensiyasının tərəfi olmayan ölkələrdə apostil əvəzinə konsulluq təsdiqi tələb oluna bilər.",
     keywords: ["apostil", "apostil prosesi", "apostil təsdiqi", "xaricdə etibarlı"],
   },
   {
@@ -202,7 +202,7 @@ export const FAQ_ITEMS_AZ: FaqItem[] = [
     category: "general",
     priority: 22,
     q: "TercümExpert hansı xidmətləri təqdim edir?",
-    a: "Andlı və notariat təsdiqli tərcümə, apostil prosesi dəstəyi, hüquqi, texniki, tibbi və akademik tərcümə ilə veb və mobil tətbiq lokalizasiyası təqdim edirik. Ehtiyacınıza uyğun xidməti Qiymət Hesabla ekranında seçə bilərsiniz.",
+    a: "Andlı və notariat təsdiqli tərcümə, apostilli sənədlərin tərcüməsi, hüquqi, texniki, tibbi və akademik tərcümə ilə veb və mobil tətbiq lokalizasiyası təqdim edirik. Ehtiyacınıza uyğun xidməti Qiymət Hesabla ekranında seçə bilərsiniz.",
     keywords: ["xidmətlər", "nə edir", "xidmət növləri", "hansı xidmət"],
   },
   {
@@ -218,7 +218,7 @@ export const FAQ_ITEMS_AZ: FaqItem[] = [
     category: "general",
     priority: 24,
     q: "Fiziki ofisə gəlmək lazımdırmı?",
-    a: "Xeyr. Bütün proses — qiymət almaq, sifariş, ödəniş və təhvil — onlayn aparıla bilər. Sənədlərinizi yükləməniz və təsdiqləməniz kifayətdir; heç bir yerə gəlmənizə ehtiyac yoxdur.",
+    a: "Fiziki ofisimiz yoxdur; xidmətlərimiz tam onlayn göstərilir. Sənədlərinizi təhlükəsiz yükləmə vasitəsilə göndərməyiniz kifayətdir, təhvil rəqəmsal şəkildə və lazım olduqda kuryer vasitəsilə həyata keçirilir. İstənilən sual üçün bizimlə WhatsApp və ya info@tercumexpert.com vasitəsilə əlaqə saxlaya bilərsiniz.",
     keywords: ["ofis", "ofisə gəlmə", "filial", "ünvan", "gəlmək məcburi"],
   },
   {
@@ -348,7 +348,7 @@ export const FAQ_ITEMS_AZ: FaqItem[] = [
     category: "order",
     priority: 40,
     q: "Ödənişdən sonra sifariş ləğv edilə bilərmi?",
-    a: "Tərcümə başlamayıbsa, ləğv və geri qaytarma ümumiyyətlə mümkündür. İş başlayıbsa, tamamlanan hissəyə görə qismən haqq tətbiq oluna bilər. Ləğv tələbinizi mümkün qədər tez çatdırmağınız prosesinizi asanlaşdırır.",
+    a: "Tərcümə hələ bir tərcüməçi tərəfindən icraya götürülməyibsə, sifarişi sifariş səhifənizdən və ya info@tercumexpert.com vasitəsilə ləğv edə bilərsiniz və ödəniş tam olaraq ilkin ödəniş üsuluna geri qaytarılır. Tərcümə bir tərcüməçi tərəfindən icraya götürüldükdən sonra isə işin şəxsə xas xarakteri səbəbilə heç bir geri ödəmə edilmir.",
     keywords: ["ödənişdən sonra ləğv", "geri qaytarma", "pul geri"],
   },
   {
@@ -438,7 +438,7 @@ export const FAQ_ITEMS_AZ: FaqItem[] = [
     category: "pricing",
     priority: 51,
     q: "Notariat təsdiqi və apostil haqqı qiymətə daxildirmi?",
-    a: "Notariat təsdiqi və apostil səlahiyyətli orqanlar tərəfindən aparılan ayrı əməliyyatlardır və rəsmi tarifə tabedir. Bu xərclər tərcümə haqqından ayrıca göstərilir; rəsmi tarifə bağlı olduğundan əvvəlcədən qəti olmaya bilər və faktiki məbləğ əməliyyatdan sonra bildirilir.",
+    a: "Notariat təsdiqi səlahiyyətli orqanlar tərəfindən aparılan ayrı əməliyyatdır və rəsmi tarifə tabedir; bu xərc tərcümə haqqından ayrıca göstərilir, rəsmi tarifə bağlı olduğundan əvvəlcədən qəti olmaya bilər və faktiki məbləğ əməliyyatdan sonra bildirilir. Apostil prosesini isə biz aparmırıq; apostili özünüz səlahiyyətli orqandan almalısınız, biz yalnız apostilli sənədinizi tərcümə edirik.",
     keywords: ["notariat haqqı", "apostil haqqı", "daxildir", "notariat xərci", "apostil xərci"],
   },
   {
@@ -510,7 +510,7 @@ export const FAQ_ITEMS_AZ: FaqItem[] = [
     category: "pricing",
     priority: 60,
     q: "Ləğv edilən sifarişlərdə haqq geri qaytarılırmı?",
-    a: "Tərcümə başlamazdan əvvəl ləğv edilən sifarişlərdə ödəniş geri qaytarılır. İş başlayıbsa, tamamlanan hissə çıxılaraq qalan məbləğ geri qaytarıla bilər. Təkrar çəkilmə kimi hallarda artıq məbləğ geri qaytarılır.",
+    a: "Sifariş bir tərcüməçi tərəfindən icraya götürülməzdən əvvəl ləğv edilərsə, ödəniş tam olaraq ilkin ödəniş üsuluna geri qaytarılır. Tərcümə bir tərcüməçi tərəfindən icraya götürüldükdən sonra isə işin şəxsə xas xarakteri səbəbilə heç bir geri ödəmə edilmir. Təkrar və ya səhv çəkilmə kimi hallarda artıq məbləğ geri qaytarılır.",
     keywords: ["geri qaytarma", "haqqın geri qaytarılması", "pul geri", "ləğv geri qaytarma"],
   },
 
@@ -1112,7 +1112,7 @@ export const FAQ_ITEMS_AZ: FaqItem[] = [
     category: "corporate",
     priority: 134,
     q: "Beynəlxalq şirkətlərə və çoxdilli layihələrə xidmət göstərilirmi?",
-    a: "Bəli. Bir neçə ölkə və dil əhatə edən layihələr koordinasiya olunaraq aparıla bilər; terminologiya uyğunluğu mərkəzi şəkildə təmin edilir. Korporativ layihələrdə andlı tərcümə, lazım gəldikdə notariat təsdiqi və apostil prosesləri də aparıla bilər.",
+    a: "Bəli. Bir neçə ölkə və dil əhatə edən layihələr koordinasiya olunaraq aparıla bilər; terminologiya uyğunluğu mərkəzi şəkildə təmin edilir. Korporativ layihələrdə andlı tərcümə, lazım gəldikdə notariat təsdiqi prosesləri də aparıla bilər.",
     keywords: ["beynəlxalq şirkət", "çoxdilli layihə", "korporativ notariat apostil"],
   },
 

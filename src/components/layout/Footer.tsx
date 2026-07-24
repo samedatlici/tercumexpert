@@ -26,7 +26,6 @@ export function Footer() {
   const serviceLinks: { label: string; routeId: RouteId }[] = [
     { label: dict.footer.serviceLinks.sworn, routeId: 'services' },
     { label: dict.footer.serviceLinks.notarized, routeId: 'services' },
-    { label: dict.footer.serviceLinks.apostille, routeId: 'services' },
     { label: dict.footer.serviceLinks.corporate, routeId: 'corporate' },
     // 'partnership' (İş Ortaklığı Programı) footer'dan kaldırıldı — sayfa gizli, yalnız doğrudan bağlantıyla.
   ]

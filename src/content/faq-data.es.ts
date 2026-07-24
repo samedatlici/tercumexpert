@@ -89,7 +89,7 @@ export const FAQ_ITEMS_ES: FaqItem[] = [
     category: "order",
     priority: 8,
     q: "¿Cómo funciona el proceso de pedido?",
-    a: "Una vez que sube su documento y aprueba el presupuesto preliminar, se crea su pedido y se asigna a un traductor especializado en el área correspondiente. La traducción pasa por un control de calidad; si es necesario, se gestiona el proceso de certificación notarial o apostilla, y su documento se entrega de forma digital y, cuando es preciso, por mensajería.",
+    a: "Una vez que sube su documento y aprueba el presupuesto preliminar, se crea su pedido y se asigna a un traductor especializado en el área correspondiente. La traducción pasa por un control de calidad; si es necesario, se gestiona la certificación notarial, y su documento se entrega de forma digital y, cuando es preciso, por mensajería.",
     keywords: ["proceso de pedido", "cómo funciona", "fases", "flujo de trabajo"],
   },
   {
@@ -137,7 +137,7 @@ export const FAQ_ITEMS_ES: FaqItem[] = [
     category: "notary",
     priority: 14,
     q: "¿Cómo se gestiona el trámite de apostilla?",
-    a: "La apostilla es una certificación emitida por la autoridad competente para que un documento se reconozca como válido en el extranjero. Podemos gestionar el trámite en su nombre; qué documento necesita apostilla y el orden de los pasos dependen del país donde se vaya a utilizar. En los países que no son parte del Convenio de La Haya, puede ser necesaria una legalización consular en lugar de la apostilla.",
+    a: "La apostilla es una certificación emitida por la autoridad competente para que un documento se reconozca como válido en el extranjero. No realizamos el trámite de apostilla; usted debe obtener la apostilla ante la autoridad competente del país en el que se emitió su documento. Nosotros nos encargamos únicamente de la traducción jurada de sus documentos apostillados. En los países que no son parte del Convenio de La Haya, puede ser necesaria una legalización consular en lugar de la apostilla.",
     keywords: ["apostilla", "trámite de apostilla", "legalización", "válido en el extranjero"],
   },
   {
@@ -203,7 +203,7 @@ export const FAQ_ITEMS_ES: FaqItem[] = [
     category: "general",
     priority: 22,
     q: "¿Qué servicios ofrece TercümExpert?",
-    a: "Ofrecemos traducción jurada y con certificación notarial, apoyo en el trámite de apostilla, traducción jurídica, técnica, médica y académica, y localización de sitios web y aplicaciones móviles. Puede elegir el servicio que se ajuste a sus necesidades en la pantalla Calcular presupuesto.",
+    a: "Ofrecemos traducción jurada y con certificación notarial, la traducción de documentos apostillados, traducción jurídica, técnica, médica y académica, y localización de sitios web y aplicaciones móviles. Puede elegir el servicio que se ajuste a sus necesidades en la pantalla Calcular presupuesto.",
     keywords: ["servicios", "qué ofrecen", "tipos de servicio", "qué servicios"],
   },
   {
@@ -219,7 +219,7 @@ export const FAQ_ITEMS_ES: FaqItem[] = [
     category: "general",
     priority: 24,
     q: "¿Es necesario acudir a una oficina en persona?",
-    a: "No. Todo el proceso —presupuesto, pedido, pago y entrega— puede gestionarse en línea. Solo tiene que subir y aprobar sus documentos; no necesita desplazarse a ningún sitio.",
+    a: "Nuestra empresa no dispone de oficina física; nuestros servicios se prestan íntegramente en línea. Solo tiene que enviarnos sus documentos mediante una carga segura; la entrega se realiza de forma digital y, cuando es preciso, por mensajería. Para cualquier consulta, puede contactarnos por WhatsApp o en info@tercumexpert.com.",
     keywords: ["oficina", "en persona", "sucursal", "dirección", "hay que acudir"],
   },
   {
@@ -349,7 +349,7 @@ export const FAQ_ITEMS_ES: FaqItem[] = [
     category: "order",
     priority: 40,
     q: "¿Puede cancelarse un pedido después del pago?",
-    a: "Si la traducción aún no ha comenzado, la cancelación y el reembolso suelen ser posibles. Si el trabajo ya ha empezado, puede aplicarse un cargo parcial en función de la parte completada. Comunicar su solicitud de cancelación cuanto antes agiliza el proceso.",
+    a: "Mientras su pedido aún no haya sido asumido por un traductor, puede cancelarlo desde su página de pedido o a través de info@tercumexpert.com, y su pago se reembolsa íntegramente al medio de pago original. Una vez que la traducción ha sido asumida por un traductor y puesta en curso, no se efectúa reembolso alguno, en razón del carácter personalizado de la prestación.",
     keywords: ["cancelar tras el pago", "reembolso", "devolución del dinero", "cancelar después de pagar"],
   },
   {
@@ -439,7 +439,7 @@ export const FAQ_ITEMS_ES: FaqItem[] = [
     category: "pricing",
     priority: 51,
     q: "¿Están incluidas en el precio las tasas de certificación notarial y apostilla?",
-    a: "La certificación notarial y la apostilla son trámites independientes que realizan las autoridades competentes y están sujetos a tarifas oficiales. Estos costes se muestran por separado del importe de la traducción; al depender de una tarifa oficial, pueden no ser exactos por adelantado, y el importe real se comunica una vez realizado el trámite.",
+    a: "La certificación notarial es un trámite independiente que realizan las autoridades competentes y está sujeto a tarifas oficiales; estos costes se muestran por separado del importe de la traducción y, al depender de una tarifa oficial, pueden no ser exactos por adelantado, comunicándose el importe real una vez realizado el trámite. El trámite de apostilla, en cambio, no lo realizamos nosotros; usted debe obtener la apostilla ante la autoridad competente, y nosotros únicamente traducimos su documento apostillado.",
     keywords: ["tasa notarial", "tasa de apostilla", "está incluido", "coste notario", "coste apostilla"],
   },
   {
@@ -511,7 +511,7 @@ export const FAQ_ITEMS_ES: FaqItem[] = [
     category: "pricing",
     priority: 60,
     q: "¿Se reembolsan los pedidos cancelados?",
-    a: "En los pedidos cancelados antes de que comience la traducción, se reembolsa el pago. Si el trabajo ya ha empezado, puede reembolsarse el importe restante tras descontar la parte completada. En casos como un cargo duplicado, se reembolsa el importe sobrante.",
+    a: "Si su pedido se cancela antes de haber sido asumido por un traductor, su pago se reembolsa íntegramente al medio de pago original. Una vez que la traducción ha sido asumida por un traductor y puesta en curso, no se efectúa reembolso alguno, en razón del carácter personalizado de la prestación. En casos como un cargo duplicado o erróneo, se reembolsa el importe sobrante.",
     keywords: ["reembolso", "devolución del dinero", "reembolso por cancelación", "devolución"],
   },
 
@@ -1113,7 +1113,7 @@ export const FAQ_ITEMS_ES: FaqItem[] = [
     category: "corporate",
     priority: 134,
     q: "¿Prestan servicio a empresas internacionales y proyectos multilingües?",
-    a: "Sí. Los proyectos que abarcan varios países e idiomas pueden coordinarse y ejecutarse de forma centralizada, garantizando la coherencia terminológica en su conjunto. En los proyectos corporativos también pueden gestionarse la traducción jurada y, cuando es necesario, los trámites de certificación notarial y apostilla.",
+    a: "Sí. Los proyectos que abarcan varios países e idiomas pueden coordinarse y ejecutarse de forma centralizada, garantizando la coherencia terminológica en su conjunto. En los proyectos corporativos también pueden gestionarse la traducción jurada y, cuando es necesario, los trámites de certificación notarial.",
     keywords: ["empresa internacional", "proyecto multilingüe", "notario y apostilla para empresas", "proyecto internacional"],
   },
 

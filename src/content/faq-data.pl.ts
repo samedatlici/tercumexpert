@@ -88,7 +88,7 @@ export const FAQ_ITEMS_PL: FaqItem[] = [
     category: "order",
     priority: 8,
     q: "Jak przebiega proces zamówienia?",
-    a: "Po przesłaniu dokumentu i zatwierdzeniu wstępnej wyceny tworzone jest Państwa zamówienie i przydzielane tłumaczowi specjalizującemu się w danej dziedzinie. Tłumaczenie przechodzi kontrolę jakości; w razie potrzeby realizowany jest proces poświadczenia notarialnego lub apostille, a dokument dostarczamy cyfrowo oraz, gdy jest to konieczne, kurierem.",
+    a: "Po przesłaniu dokumentu i zatwierdzeniu wstępnej wyceny tworzone jest Państwa zamówienie i przydzielane tłumaczowi specjalizującemu się w danej dziedzinie. Tłumaczenie przechodzi kontrolę jakości; w razie potrzeby realizowany jest proces poświadczenia notarialnego, a dokument dostarczamy cyfrowo oraz, gdy jest to konieczne, kurierem.",
     keywords: ["proces zamówienia", "jak przebiega", "etapy", "przebieg"],
   },
   {
@@ -136,7 +136,7 @@ export const FAQ_ITEMS_PL: FaqItem[] = [
     category: "notary",
     priority: 14,
     q: "Jak przebiega proces apostille?",
-    a: "Apostille to poświadczenie wydawane przez właściwy organ, dzięki któremu dokument jest uznawany za ważny za granicą. Możemy poprowadzić ten proces w Państwa imieniu; to, który dokument wymaga apostille i jaka jest kolejność czynności, zależy od kraju, w którym dokument będzie używany. W krajach, które nie są stroną konwencji haskiej, zamiast apostille może być wymagane poświadczenie konsularne.",
+    a: "Apostille to poświadczenie wydawane przez właściwy organ, dzięki któremu dokument jest uznawany za ważny za granicą. Nie przeprowadzamy procesu apostille; apostille należy uzyskać samodzielnie we właściwym organie w kraju, w którym dokument został wystawiony. Zapewniamy wyłącznie tłumaczenie przysięgłe Państwa dokumentów opatrzonych apostille. W krajach, które nie są stroną konwencji haskiej, zamiast apostille może być wymagane poświadczenie konsularne.",
     keywords: ["apostille", "proces apostille", "poświadczenie apostille", "ważny za granicą"],
   },
   {
@@ -202,7 +202,7 @@ export const FAQ_ITEMS_PL: FaqItem[] = [
     category: "general",
     priority: 22,
     q: "Jakie usługi oferuje TercümExpert?",
-    a: "Oferujemy tłumaczenia przysięgłe i z poświadczeniem notarialnym, wsparcie w procesie apostille, tłumaczenia prawnicze, techniczne, medyczne i akademickie oraz lokalizację stron internetowych i aplikacji mobilnych. Usługę odpowiadającą Państwa potrzebom można wybrać na ekranie Oblicz cenę.",
+    a: "Oferujemy tłumaczenia przysięgłe i z poświadczeniem notarialnym, tłumaczenie dokumentów opatrzonych apostille, tłumaczenia prawnicze, techniczne, medyczne i akademickie oraz lokalizację stron internetowych i aplikacji mobilnych. Usługę odpowiadającą Państwa potrzebom można wybrać na ekranie Oblicz cenę.",
     keywords: ["usługi", "co oferujecie", "rodzaje usług", "jakie usługi"],
   },
   {
@@ -218,7 +218,7 @@ export const FAQ_ITEMS_PL: FaqItem[] = [
     category: "general",
     priority: 24,
     q: "Czy trzeba osobiście odwiedzić biuro?",
-    a: "Nie. Cały proces — wycena, zamówienie, płatność i dostawa — można przeprowadzić online. Wystarczy przesłać i zatwierdzić dokumenty; nie ma potrzeby przychodzenia gdziekolwiek osobiście.",
+    a: "Nie. Nie mamy fizycznego biura; nasze usługi świadczone są w pełni online. Wystarczy przesłać dokumenty za pomocą bezpiecznego przesyłania, a dostawa realizowana jest cyfrowo oraz, w razie potrzeby, kurierem. W razie pytań mogą Państwo skontaktować się z nami przez WhatsApp lub pod adresem info@tercumexpert.com.",
     keywords: ["biuro", "osobiście", "oddział", "adres", "wizyta wymagana"],
   },
   {
@@ -348,7 +348,7 @@ export const FAQ_ITEMS_PL: FaqItem[] = [
     category: "order",
     priority: 40,
     q: "Czy zamówienie można anulować po dokonaniu płatności?",
-    a: "Jeśli tłumaczenie się nie rozpoczęło, anulowanie i zwrot są zwykle możliwe. Jeśli prace się rozpoczęły, może zostać naliczona częściowa opłata odpowiadająca wykonanej części. Jak najszybsze przesłanie prośby o anulowanie usprawnia cały proces.",
+    a: "Jeśli tłumaczenie nie zostało jeszcze podjęte przez tłumacza, mogą Państwo anulować zamówienie na stronie zamówienia lub pod adresem info@tercumexpert.com, a płatność zostanie zwrócona w całości na pierwotną metodę płatności. Po podjęciu tłumaczenia przez tłumacza zwrot nie jest dokonywany ze względu na zindywidualizowany charakter świadczenia.",
     keywords: ["anulowanie po płatności", "zwrot", "zwrot pieniędzy", "rezygnacja z zamówienia"],
   },
   {
@@ -438,7 +438,7 @@ export const FAQ_ITEMS_PL: FaqItem[] = [
     category: "pricing",
     priority: 51,
     q: "Czy opłaty za poświadczenie notarialne i apostille są wliczone w cenę?",
-    a: "Poświadczenie notarialne i apostille to odrębne procedury wykonywane przez właściwe organy i podlegają urzędowym taryfom. Koszty te są wykazywane oddzielnie od opłaty za tłumaczenie; ponieważ wynikają z urzędowej taryfy, mogą nie być z góry dokładne, a rzeczywista kwota jest potwierdzana po zakończeniu procedury.",
+    a: "Poświadczenie notarialne to odrębna procedura wykonywana przez właściwe organy i podlegająca urzędowym taryfom; koszt ten jest wykazywany oddzielnie od opłaty za tłumaczenie, a ponieważ wynika z urzędowej taryfy, może nie być z góry dokładny — rzeczywista kwota jest potwierdzana po zakończeniu procedury. Procesu apostille natomiast nie przeprowadzamy; apostille należy uzyskać samodzielnie we właściwym organie, a my jedynie tłumaczymy Państwa dokument opatrzony apostille.",
     keywords: ["opłata notarialna", "opłata za apostille", "czy wliczone", "koszt notariusza", "koszt apostille"],
   },
   {
@@ -510,7 +510,7 @@ export const FAQ_ITEMS_PL: FaqItem[] = [
     category: "pricing",
     priority: 60,
     q: "Czy w przypadku anulowanych zamówień dokonują Państwo zwrotów?",
-    a: "W przypadku zamówień anulowanych przed rozpoczęciem tłumaczenia płatność jest zwracana. Jeśli prace się rozpoczęły, pozostała kwota może zostać zwrócona po odliczeniu wykonanej części. W sytuacjach takich jak podwójne obciążenie zwracamy nadpłaconą kwotę.",
+    a: "W przypadku zamówień anulowanych, zanim tłumacz podjął tłumaczenie, płatność jest zwracana w całości na pierwotną metodę płatności. Po podjęciu tłumaczenia przez tłumacza zwrot nie jest dokonywany ze względu na zindywidualizowany charakter świadczenia. W sytuacjach takich jak podwójne lub błędne obciążenie zwracamy nadpłaconą kwotę.",
     keywords: ["zwrot", "zwrot pieniędzy", "zwrot za anulowanie", "rekompensata"],
   },
 
@@ -1112,7 +1112,7 @@ export const FAQ_ITEMS_PL: FaqItem[] = [
     category: "corporate",
     priority: 134,
     q: "Czy obsługują Państwo firmy międzynarodowe i projekty wielojęzyczne?",
-    a: "Tak. Projekty obejmujące wiele krajów i języków mogą być koordynowane i prowadzone centralnie, z zapewnieniem spójności terminologii na całym ich zakresie. W projektach firmowych możemy również przeprowadzić tłumaczenie przysięgłe oraz, w razie potrzeby, procesy poświadczenia notarialnego i apostille.",
+    a: "Tak. Projekty obejmujące wiele krajów i języków mogą być koordynowane i prowadzone centralnie, z zapewnieniem spójności terminologii na całym ich zakresie. W projektach firmowych możemy również wykonać tłumaczenie przysięgłe oraz, w razie potrzeby, przeprowadzić proces poświadczenia notarialnego.",
     keywords: ["firma międzynarodowa", "projekt wielojęzyczny", "notariusz apostille dla firm", "projekt międzynarodowy"],
   },
 

@@ -388,7 +388,7 @@ export const nl: PartialDictionary = {
         { title: "Documentbeoordeling", desc: "Het type en doel van het document worden beoordeeld." },
         { title: "Expertkoppeling", desc: "Een gespecialiseerde vertaler in het vakgebied wordt toegewezen." },
         { title: "Vertaling & redactie", desc: "Vertaling en een onafhankelijke eindcontrole." },
-        { title: "Goedkeuring & levering", desc: "Indien nodig notariële bekrachtiging/apostille, daarna levering." },
+        { title: "Goedkeuring & levering", desc: "Indien nodig notariële bekrachtiging, daarna levering." },
       ],
     },
     delivery: {
@@ -397,11 +397,11 @@ export const nl: PartialDictionary = {
     },
     notaryApostille: {
       title: "Verband tussen notariële bekrachtiging en apostille",
-      desc: "Indien vereist wordt een beëdigde vertaling geldig gemaakt voor officiële instanties via notariële bekrachtiging en het apostilleproces. De precieze vereiste hangt af van de instantie waar het document wordt ingediend.",
+      desc: "Indien vereist kan een beëdigde vertaling via notariële bekrachtiging geldig worden gemaakt voor officiële instanties, waarvan wij de afwikkeling voor u kunnen verzorgen. Het apostilleproces voeren wij niet uit; de apostille dient u zelf te verkrijgen bij de bevoegde autoriteit, en wij vertalen uitsluitend uw geapostilleerde/officiële documenten. De precieze vereiste hangt af van de instantie waar het document wordt ingediend.",
     },
     fullService: {
       title: "Kant-en-klaar, tot aan uw deur bezorgd",
-      note: "Stuur ons uw documenten en wij regelen het hele proces — vertaling, notariële bekrachtiging en apostille inbegrepen. Uw voltooide documenten worden per koerier bij u thuis bezorgd. Concentreer u op uw werk en laat de rest aan ons over.",
+      note: "Stuur ons uw documenten en wij verzorgen de vertaling en, indien nodig, de notariële bekrachtiging. Uw voltooide documenten worden per koerier bij u thuis bezorgd. Concentreer u op uw werk en laat de rest aan ons over.",
     },
     cta: {
       title: "Weet u niet zeker welke dienst u nodig heeft?",
@@ -420,11 +420,6 @@ export const nl: PartialDictionary = {
       name: "Notarieel bekrachtigde vertaling",
       short: "Notariële bekrachtiging van een beëdigde vertaling.",
       benefits: ["Notariële bekrachtiging", "Geschikt voor officiële aanvragen", "Wij regelen het proces"],
-    },
-    apostille: {
-      name: "Ondersteuning bij apostilleproces",
-      short: "Begeleiding door het apostilleproces voor rechtsgeldigheid in het buitenland.",
-      benefits: ["Internationale rechtsgeldigheid", "Procesadvies", "Begeleiding bij instanties"],
     },
     legal: {
       name: "Juridische vertaling",
@@ -609,7 +604,7 @@ export const nl: PartialDictionary = {
       items: [
         { key: 'law', icon: 'Scale', title: "Advocatenkantoren", desc: "Behoefte aan beëdigde vertaling van dossiers, contracten en juridische documenten." },
         { key: 'visa', icon: 'Plane', title: "Visumadvies", desc: "Documenten die een beëdigde vertaling vereisen, zoals paspoorten, diploma's en aktes uit de burgerlijke stand." },
-        { key: 'education', icon: 'GraduationCap', title: "Onderwijsadvies", desc: "Beëdigde vertaling van studentendocumenten en apostilleprocessen." },
+        { key: 'education', icon: 'GraduationCap', title: "Onderwijsadvies", desc: "Beëdigde vertaling van studentendocumenten en geapostilleerde documenten." },
         { key: 'health', icon: 'HeartPulse', title: "Gezondheidstoerisme", desc: "Vertaling van medische rapporten, patiëntendossiers en gezondheidsdocumenten." },
         { key: 'patent', icon: 'Building2', title: "Octrooi-/merkenbureaus", desc: "Technische vertaling van octrooi-, merkregistratie- en juridische documenten." },
         { key: 'realestate', icon: 'Home', title: "Makelaarskantoren", desc: "Vertaling van eigendomsakten, contracten en officiële documenten voor buitenlandse investeerders." },
@@ -694,6 +689,7 @@ export const nl: PartialDictionary = {
       "driver-license": "Rijbewijs",
       "criminal-record": "Verklaring omtrent het gedrag",
       "military-status": "Bewijs van militaire status",
+      apostille: "Apostilledocument",
       "medical-report": "Medisch rapport",
       "epicrisis": "Ontslagbrief (epicrise)",
       "prescription": "Recept",
@@ -776,7 +772,6 @@ export const nl: PartialDictionary = {
     },
     options: {
       "sworn": "Beëdigde (gecertificeerde) vertaling",
-      "apostille": "Ondersteuning bij de apostilleprocedure",
       "swornNotaryHint": "Notariële bekrachtiging omvat al de beëdigde vertaling; u hoeft alleen de ene optie te selecteren die bij uw behoefte past.",
       "physicalRequiredHint": "Beëdigde en notarieel bekrachtigde vertalingen worden geleverd als ondertekende/gestempelde originelen, dus fysieke bezorging wordt automatisch toegevoegd.",
       urgent: "Spoedlevering",
@@ -1110,7 +1105,7 @@ export const nl: PartialDictionary = {
       sections: [
         { heading: `Verwerkingsverantwoordelijke`, body: `In overeenstemming met de Turkse wet nr. 6698 inzake de bescherming van persoonsgegevens (“KVKK”) worden uw persoonsgegevens verwerkt door Samed Fazlı Atlıcı (“TercümExpert”), in de hoedanigheid van verwerkingsverantwoordelijke, binnen de hieronder beschreven reikwijdte. Adres: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya. E-mail: info@tercumexpert.com. Telefoon: [TELEFON].` },
         { heading: `Verwerkte persoonsgegevens`, body: `Verwerkt worden: uw identiteits- en contactgegevens (voornaam, achternaam, e-mailadres, telefoonnummer), uw bezorgadresgegevens, uw bestel- en transactiegegevens, de gegevens in de inhoud van de documenten die u ons ter vertaling toestuurt, alsmede transactieveiligheidsgegevens met betrekking tot uw gebruik van de website (IP-adres, sessie- en cookiegegevens).` },
-        { heading: `Doeleinden van de verwerking`, body: `Uw persoonsgegevens worden verwerkt met het oog op het verlenen van diensten in verband met vertaling, beëdigde vertaling en notariële en apostilleverklaringen, het opstellen van offertes en het beheer van bestellingen, het beheer van klantrelaties en van verzoeken en klachten, het nakomen van contractuele en wettelijke verplichtingen en het waarborgen van de veiligheid van de dienstverlening.` },
+        { heading: `Doeleinden van de verwerking`, body: `Uw persoonsgegevens worden verwerkt met het oog op het verlenen van diensten in verband met vertaling, beëdigde vertaling en notariële verklaringen, het opstellen van offertes en het beheer van bestellingen, het beheer van klantrelaties en van verzoeken en klachten, het nakomen van contractuele en wettelijke verplichtingen en het waarborgen van de veiligheid van de dienstverlening.` },
         { heading: `Rechtsgronden voor de verwerking`, body: `Uw gegevens worden verwerkt op grond van de volgende rechtsgronden: de noodzaak voor het sluiten of uitvoeren van een overeenkomst, het nakomen van onze wettelijke verplichtingen, de vaststelling en verdediging van een recht, alsmede onze gerechtvaardigde belangen, mits daarbij geen afbreuk wordt gedaan aan uw grondrechten en fundamentele vrijheden; waar nodig worden zij verwerkt op basis van uw uitdrukkelijke toestemming (KVKK m.5 en m.6).` },
         { heading: `Wijze van verzameling`, body: `Uw persoonsgegevens worden langs elektronische weg verzameld via de formulieren op de website, de registratie- en bestelprocessen, e-mail en andere communicatiekanalen.` },
         { heading: `Doorgifte van persoonsgegevens`, body: `Uw gegevens kunnen, voor zover de dienstverlening dit vereist, worden doorgegeven aan onze in binnen- en buitenland gevestigde leveranciers van wie wij hosting-, infrastructuur-, authenticatie-, e-mail- en analysediensten afnemen, alsmede aan bevoegde overheidsinstellingen en -organen, in overeenstemming met de voorwaarden van KVKK m.8 en m.9. Aangezien de servers van sommige door ons gebruikte infrastructuur- en dienstverleners zich in het buitenland bevinden, kunnen uw gegevens naar het buitenland worden doorgegeven binnen het kader van de in de regelgeving voorziene waarborgen.` },
@@ -1141,13 +1136,13 @@ export const nl: PartialDictionary = {
       title: `Overeenkomst op afstand`,
       sections: [
         { heading: `Partijen`, body: `Deze Overeenkomst op afstand (“Overeenkomst”) is langs elektronische weg tot stand gekomen tussen enerzijds Samed Fazlı Atlıcı (“Verkoper”; adres: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya, e-mail: info@tercumexpert.com, telefoon: [TELEFON]) en anderzijds de consument die de bestelling plaatst (“Koper”), in overeenstemming met de Turkse wet nr. 6502 inzake consumentenbescherming en de Mesafeli Sözleşmeler Yönetmeliği.` },
-        { heading: `Onderwerp van de Overeenkomst`, body: `Het onderwerp van de Overeenkomst is het verlenen van de diensten in verband met vertaling, beëdigde vertaling en notariële en apostilleverklaringen die de Koper langs elektronische weg via tercumexpert.com heeft besteld en waarvan de kenmerken en de verkoopprijs in het besteloverzicht zijn vermeld.` },
+        { heading: `Onderwerp van de Overeenkomst`, body: `Het onderwerp van de Overeenkomst is het verlenen van de diensten in verband met vertaling, beëdigde vertaling en notariële verklaringen die de Koper langs elektronische weg via tercumexpert.com heeft besteld en waarvan de kenmerken en de verkoopprijs in het besteloverzicht zijn vermeld.` },
         { heading: `Kenmerken en prijs van de dienst`, body: `De aard en de omvang van de bestelde dienst, de wijze van levering (digitaal of per koerier) en de totale prijs inclusief belastingen worden bij de bestelling duidelijk aan de Koper getoond en zijn opgenomen in de bevestiging van de bestelling. De prijsstelling wordt berekend op basis van de gekozen dienst en de kenmerken van het document.` },
         { heading: `Betaling`, body: `De betaling wordt verricht met de betaalmethoden die tijdens de bestelstap worden aangeboden. De bestelling wordt in behandeling genomen nadat de betaling is bevestigd.` },
         { heading: `Uitvoering en levering`, body: `Bij digitale leveringen wordt de vertaling na voltooiing aan de Koper toegezonden via zijn account of e-mail. Bij fysieke, nat ondertekende of beëdigde documenten vindt de levering per koerier plaats naar het door de Koper opgegeven adres. De geschatte levertermijnen worden bij de bestelling vermeld; deze kunnen variëren afhankelijk van de omvang van het document en de goedkeuringsprocessen.` },
         { heading: `Herroepingsrecht`, body: `De Koper heeft bij overeenkomsten inzake dienstverlening in beginsel het recht om de overeenkomst binnen veertien (14) dagen na de datum van totstandkoming zonder opgave van redenen te herroepen. De hieronder vermelde uitzonderingen blijven evenwel voorbehouden.` },
         { heading: `Uitzonderingen op het herroepingsrecht`, body: `Op grond van m.15 van de Mesafeli Sözleşmeler Yönetmeliği kan het herroepingsrecht niet worden uitgeoefend bij diensten waarvan met instemming van de Koper met de uitvoering is begonnen en die vóór het verstrijken van de herroepingstermijn zijn voltooid, alsmede bij goederen en diensten die speciaal zijn vervaardigd overeenkomstig de wensen of persoonlijke behoeften van de Koper (met inbegrip van vertaal- en goedkeuringsdiensten die op maat van de persoon of het document zijn opgesteld). Annuleringsverzoeken die worden ingediend voordat met het vertaalwerk is begonnen, worden afzonderlijk beoordeeld.` },
-        { heading: `Annulering en terugbetaling`, body: `Bestellingen die nog niet door een vertaler zijn aangenomen (dat wil zeggen nog niet in behandeling zijn genomen), kunnen rechtstreeks worden geannuleerd via de annuleringsoptie op uw bestelpagina; desgewenst kunt u uw annuleringsverzoek ook indienen via info@tercumexpert.com. Goedgekeurde terugbetalingen worden binnen een redelijke termijn verricht via dezelfde methode waarmee de betaling is verricht. Voor persoonsgebonden diensten waarvan de uitvoering reeds is aangevangen (door een vertaler is aangenomen) of is voltooid, is terugbetaling mogelijk niet haalbaar gezien de aard van de werkzaamheden.` },
+        { heading: `Annulering en terugbetaling`, body: `Bestellingen die nog niet door een vertaler zijn aangenomen (dat wil zeggen nog niet in behandeling zijn genomen), kunnen rechtstreeks worden geannuleerd via de annuleringsoptie op uw bestelpagina; desgewenst kunt u uw annuleringsverzoek ook indienen via info@tercumexpert.com. Goedgekeurde terugbetalingen worden binnen een redelijke termijn verricht via dezelfde methode waarmee de betaling is verricht. Zodra de vertaling door een vertaler in behandeling is genomen, vindt gezien de persoonsgebonden aard van de dienst geen terugbetaling plaats.` },
         { heading: `Beslechting van geschillen`, body: `Bij geschillen die uit deze Overeenkomst kunnen voortvloeien zijn, binnen de door de Ticaret Bakanlığı jaarlijks bekendgemaakte financiële grenzen, de Tüketici Hakem Heyetleri en de consumentenrechtbanken van de woonplaats van de Koper of van de plaats waar de transactie is verricht, bevoegd.` },
         { heading: `Inwerkingtreding`, body: `Door de bestelling te bevestigen verklaart de Koper alle voorwaarden van deze Overeenkomst te hebben gelezen en te aanvaarden. De Overeenkomst treedt in werking met de bevestiging van de bestelling.` },
       ],
@@ -1172,7 +1167,7 @@ export const nl: PartialDictionary = {
         { heading: "Partijen en onderwerp", body: "Deze Partnerovereenkomst wordt gesloten tussen [BEDRIJFSNAAM] (“TercümExpert”) enerzijds en de zakelijke partner die zich aanmeldt voor het programma en wordt goedgekeurd (“Partner”) anderzijds, ter regeling van de voorwaarden van het verwijzingsprogramma (partnerprogramma) van TercümExpert." },
         { heading: "Aanmelding en goedkeuring", body: "De partnerstatus wordt verkregen door het aanmeldformulier op de partnerpagina in te vullen en door TercümExpert te worden goedgekeurd. Goedkeuring is ter beoordeling van TercümExpert en een aanmelding kan worden afgewezen. De Partner verifieert zijn e-mailadres in het kader van het programma; er worden geen aansluitkosten in rekening gebracht." },
         { heading: "Uitnodigingslink en klanttoewijzing", body: "Aan elke goedgekeurde Partner worden een unieke, persoonlijke uitnodigingslink en een bijbehorende QR-code toegewezen. Een klant die via deze link of QR-code op de website komt en zich voor het eerst registreert, wordt permanent aan die Partner gekoppeld; de toewijzing vindt plaats op het moment van de eerste registratie en kan daarna niet worden gewijzigd. Commissie ontstaat uitsluitend uit de bestellingen van op deze wijze aan de Partner gekoppelde klanten." },
-        { heading: "Commissiestructuur", body: "Het aandeel van de Partner wordt berekend exclusief belasting over de toegevoegde waarde (btw) en exclusief verschillen voor aanvullende diensten, als volgt: 20% van het basisvertaaltarief; bij spoedlevering 20% van het spoedleveringsverschil; bij beëdigde vertaling 10% van het verschil voor de beëdigde vertaling. Uit vergoedingen voor notariële bekrachtiging, apostilleondersteuning en fysieke (koeriers)levering wordt aan de Partner geen aandeel uitgekeerd, en de btw wordt niet als grondslag voor de commissie genomen. Deze percentages liggen vast; de tarieven blijven geldig, ook als de prijzen wijzigen. TercümExpert kan de tarieven en voorwaarden met voorafgaande kennisgeving bijwerken." },
+        { heading: "Commissiestructuur", body: "Het aandeel van de Partner wordt berekend exclusief belasting over de toegevoegde waarde (btw) en exclusief verschillen voor aanvullende diensten, als volgt: 20% van het basisvertaaltarief; bij spoedlevering 20% van het spoedleveringsverschil; bij beëdigde vertaling 10% van het verschil voor de beëdigde vertaling. Uit vergoedingen voor notariële bekrachtiging en fysieke (koeriers)levering wordt aan de Partner geen aandeel uitgekeerd, en de btw wordt niet als grondslag voor de commissie genomen. Deze percentages liggen vast; de tarieven blijven geldig, ook als de prijzen wijzigen. TercümExpert kan de tarieven en voorwaarden met voorafgaande kennisgeving bijwerken." },
         { heading: "Opbouw en portemonnee", body: "De commissie wordt aan de portemonnee van de Partner toegevoegd wanneer de bestelling van de verwezen klant is voltooid en blijft vanaf het moment van toevoeging zeven (7) dagen geblokkeerd; na afloop van deze periode wordt zij opneembaar. Geannuleerde, terugbetaalde of onbetaalde bestellingen worden niet als grondslag voor de commissie genomen." },
         { heading: "Betalingen", body: "Opneembare saldi worden op de 2e en 17e van elke maand uitbetaald op de door de Partner opgegeven IBAN. Om een betaling te kunnen doen, moeten de verplichte velden in het profiel van de Partner volledig zijn ingevuld en moeten de IBAN en de gegevens van de rekeninghouder door TercümExpert zijn goedgekeurd. Fiscale verplichtingen met betrekking tot betalingen zijn onderworpen aan de toepasselijke wetgeving." },
         { heading: "Verplichtingen van de Partner", body: "De Partner stemt ermee in in zijn promotie juiste en niet-misleidende informatie te gebruiken, zich te onthouden van gedrag dat het merk en de reputatie van TercümExpert schaadt, zijn contact- en betaalgegevens actueel te houden en de toepasselijke wetgeving na te leven." },
@@ -1229,7 +1224,6 @@ export const nl: PartialDictionary = {
     serviceLinks: {
       sworn: "Beëdigde vertaling",
       notarized: "Notarieel bekrachtigde vertaling",
-      apostille: "Apostilleproces",
       corporate: "Zakelijke oplossingen",
       partnership: "Partnerprogramma",
     },
@@ -1278,7 +1272,7 @@ export const nl: PartialDictionary = {
     send: "Verzenden",
     typing: "Aan het typen…",
     welcome:
-      "Hallo en welkom bij TercümExpert. Ik kan u helpen met vertaling, prijzen, notariële bekrachtiging, apostille of zakelijke diensten.",
+      "Hallo en welkom bij TercümExpert. Ik kan u helpen met vertaling, prijzen, notariële bekrachtiging of zakelijke diensten.",
     quickQuestions: [
       "Hoe wordt de prijs berekend?",
       "Wat is een beëdigde vertaling?",
@@ -1293,7 +1287,7 @@ export const nl: PartialDictionary = {
     sensitiveWarning:
       "Deel geen gevoelige persoonsgegevens via deze chat. U kunt uw documenten versturen via het beveiligde uploadgebied.",
     answers: [
-      `De prijs wordt berekend op basis van het aantal woorden in uw document, de talencombinatie, het type dienst (beëdigd, notarieel gewaarmerkt, apostille) en de gewenste levertijd. Voor een directe prijsindicatie kunt u uw document uploaden of de gegevens invoeren op de pagina Prijs Berekenen.`,
+      `De prijs wordt berekend op basis van het aantal woorden in uw document, de talencombinatie, het type dienst (beëdigd, notarieel gewaarmerkt) en de gewenste levertijd. Voor een directe prijsindicatie kunt u uw document uploaden of de gegevens invoeren op de pagina Prijs Berekenen.`,
       `Een beëdigde vertaling is een officiële vertaling die door een beëdigd vertaler wordt gemaakt en met diens handtekening en stempel wordt gewaarmerkt. Officiële instanties vragen meestal om een beëdigde vertaling; indien nodig kan hier ook een notariële waarmerking aan worden toegevoegd.`,
       `U kunt uw document veilig aanleveren via de beveiligde uploadfunctie op de pagina Prijs Berekenen. Direct na het uploaden ziet u de geschatte prijs en kunt u uw bestelling afronden.`,
       `Voor uw zakelijke behoeften bieden wij bij regelmatige en grootschalige vertalingen speciale tarieven en levering met voorrang. Voor meer informatie kunt u onze pagina voor Zakelijke Klanten raadplegen of contact met ons opnemen.`,
@@ -1364,8 +1358,12 @@ export const nl: PartialDictionary = {
       "saved": "Uw gegevens zijn opgeslagen.",
       "saveError": "Opslaan is niet gelukt. Probeer het opnieuw.",
       "required": "Vul de verplichte velden in.",
-      "atLeastOnePair": "Voeg ten minste één talenpaar toe."
-    },
+      "atLeastOnePair": "Voeg ten minste één talenpaar toe.",cv: "Cv",
+      cvHint: "Upload een PDF- of Word-bestand (verplicht).",
+      cvChoose: "Bestand kiezen",
+      cvNone: "Geen bestand geselecteerd",
+      cvRequired: "U moet een cv uploaden om te solliciteren.",
+      cvUploadError: "Het cv kon niet worden geüpload. Probeer het opnieuw.",},
     "expertiseLabels": {
       "legal": "Juridisch",
       "medical": "Medisch",
@@ -1457,7 +1455,6 @@ export const nl: PartialDictionary = {
       "urgent": "Spoed",
       "sworn": "Beëdigd",
       "notary": "Notarieel bekrachtigd",
-      "apostille": "Apostille",
       "cargo": "Bezorging per koerier",
       "digital": "Digitale levering",
       "claim": "Deze opdracht aannemen",
@@ -1556,6 +1553,7 @@ export const nl: PartialDictionary = {
       "colExpertise": "Vakgebied",
       "colLocation": "Stad / land",
       "swornBadge": "Beëdigd",
+      cvDownload: "Cv downloaden",
       "returningBadge": "Terugkerende vertaler",
       "ibanVerified": "IBAN geverifieerd",
       "ibanNotVerified": "IBAN niet geverifieerd",

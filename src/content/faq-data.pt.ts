@@ -89,7 +89,7 @@ export const FAQ_ITEMS_PT: FaqItem[] = [
     category: "order",
     priority: 8,
     q: "Como funciona o processo de encomenda?",
-    a: "Assim que carregar o seu documento e aprovar o orçamento preliminar, a sua encomenda é criada e atribuída a um tradutor especializado na área relevante. A tradução passa por controlo de qualidade; se necessário, tratamos do processo de certificação notarial/apostila e o seu documento é entregue digitalmente e, quando necessário, por correio.",
+    a: "Assim que carregar o seu documento e aprovar o orçamento preliminar, a sua encomenda é criada e atribuída a um tradutor especializado na área relevante. A tradução passa por controlo de qualidade; se necessário, tratamos do processo de certificação notarial e o seu documento é entregue digitalmente e, quando necessário, por correio.",
     keywords: ["processo de encomenda", "como funciona", "etapas", "fluxo de trabalho"],
   },
   {
@@ -137,7 +137,7 @@ export const FAQ_ITEMS_PT: FaqItem[] = [
     category: "notary",
     priority: 14,
     q: "Como decorre o processo de apostila?",
-    a: "A apostila é uma certificação emitida pela autoridade competente para que um documento seja reconhecido como válido no estrangeiro. Podemos tratar do processo em seu nome; o documento que necessita de apostila e a ordem dos passos dependem do país onde o documento será utilizado. Nos países que não são parte na Convenção de Haia, poderá ser necessária a certificação consular em vez da apostila.",
+    a: "A apostila é uma certificação emitida pela autoridade competente para que um documento seja reconhecido como válido no estrangeiro. Não realizamos o processo de apostila; a apostila deve ser obtida por si junto da autoridade competente do país onde o seu documento foi emitido. Apenas fornecemos a tradução ajuramentada dos seus documentos apostilados. Nos países que não são parte na Convenção de Haia, poderá ser necessária a certificação consular em vez da apostila.",
     keywords: ["apostila", "processo de apostila", "certificação apostila", "válido no estrangeiro"],
   },
   {
@@ -203,7 +203,7 @@ export const FAQ_ITEMS_PT: FaqItem[] = [
     category: "general",
     priority: 22,
     q: "Que serviços oferece a TercümExpert?",
-    a: "Oferecemos tradução ajuramentada e com certificação notarial, apoio no processo de apostila, tradução jurídica, técnica, médica e académica, bem como localização de sites e de aplicações móveis. Pode escolher o serviço adequado às suas necessidades no ecrã Calcular Preço.",
+    a: "Oferecemos tradução ajuramentada e com certificação notarial, tradução de documentos apostilados, tradução jurídica, técnica, médica e académica, bem como localização de sites e de aplicações móveis. Pode escolher o serviço adequado às suas necessidades no ecrã Calcular Preço.",
     keywords: ["serviços", "o que oferecem", "tipos de serviço", "que serviços"],
   },
   {
@@ -219,7 +219,7 @@ export const FAQ_ITEMS_PT: FaqItem[] = [
     category: "general",
     priority: 24,
     q: "É necessário deslocar-me a um escritório?",
-    a: "Não. Todo o processo — obter orçamento, encomendar, pagar e receber — pode ser tratado em linha. Basta carregar e aprovar os seus documentos; não é necessário deslocar-se a qualquer lugar.",
+    a: "Não dispomos de um escritório físico; os nossos serviços são prestados inteiramente em linha. Basta enviar-nos os seus documentos através de carregamento seguro, e a entrega é feita digitalmente e, quando necessário, por correio. Para qualquer questão, pode contactar-nos via WhatsApp ou através de info@tercumexpert.com.",
     keywords: ["escritório", "presencial", "sucursal", "morada", "deslocação necessária"],
   },
   {
@@ -349,7 +349,7 @@ export const FAQ_ITEMS_PT: FaqItem[] = [
     category: "order",
     priority: 40,
     q: "Uma encomenda pode ser cancelada após o pagamento?",
-    a: "Se a tradução ainda não tiver começado, o cancelamento e o reembolso são geralmente possíveis. Se o trabalho já tiver começado, poderá ser aplicada uma cobrança parcial correspondente à parte concluída. Enviar o seu pedido de cancelamento o mais cedo possível torna o processo mais simples.",
+    a: "Se a sua encomenda ainda não tiver sido assumida por um tradutor para processamento, pode cancelá-la a partir da sua página de encomenda ou através de info@tercumexpert.com, e o seu pagamento é reembolsado na íntegra através do mesmo meio de pagamento. Uma vez que a tradução tenha sido assumida por um tradutor para processamento, não é efetuado qualquer reembolso, em virtude da natureza pessoal do trabalho.",
     keywords: ["cancelar após pagamento", "reembolso", "devolução do dinheiro"],
   },
   {
@@ -439,7 +439,7 @@ export const FAQ_ITEMS_PT: FaqItem[] = [
     category: "pricing",
     priority: 51,
     q: "As taxas de certificação notarial e de apostila estão incluídas no preço?",
-    a: "A certificação notarial e a apostila são procedimentos distintos realizados pelas autoridades competentes e sujeitos a tarifas oficiais. Estes custos são apresentados em separado do valor da tradução; por seguirem uma tarifa oficial, podem não ser exatos à partida, sendo o valor efetivo confirmado após o procedimento.",
+    a: "A certificação notarial é um procedimento distinto, realizado pelas autoridades competentes e sujeito a tarifas oficiais; este custo é apresentado em separado do valor da tradução e, por seguir uma tarifa oficial, pode não ser exato à partida, sendo o valor efetivo confirmado após o procedimento. O processo de apostila, por sua vez, não é realizado por nós; a apostila deve ser obtida por si junto da autoridade competente, e nós apenas traduzimos o seu documento apostilado.",
     keywords: ["taxa notarial", "taxa de apostila", "está incluído", "custo notarial", "custo da apostila"],
   },
   {
@@ -511,7 +511,7 @@ export const FAQ_ITEMS_PT: FaqItem[] = [
     category: "pricing",
     priority: 60,
     q: "São feitos reembolsos em encomendas canceladas?",
-    a: "Nas encomendas canceladas antes de a tradução começar, o pagamento é reembolsado. Se o trabalho já tiver começado, o valor restante pode ser reembolsado após dedução da parte concluída. Em situações como uma cobrança em duplicado, o valor excedente é reembolsado.",
+    a: "Se a sua encomenda for cancelada antes de ser assumida por um tradutor para processamento, o seu pagamento é reembolsado na íntegra através do mesmo meio de pagamento. Uma vez que a tradução tenha sido assumida por um tradutor para processamento, não é efetuado qualquer reembolso, em virtude da natureza pessoal do trabalho. Em situações como uma cobrança em duplicado ou incorreta, o valor excedente é reembolsado.",
     keywords: ["reembolso", "devolução do dinheiro", "reembolso por cancelamento", "restituição"],
   },
 
@@ -1113,7 +1113,7 @@ export const FAQ_ITEMS_PT: FaqItem[] = [
     category: "corporate",
     priority: 134,
     q: "Prestam serviços a empresas internacionais e a projetos multilingues?",
-    a: "Sim. Os projetos que abrangem vários países e línguas podem ser coordenados e conduzidos de forma centralizada, assegurando a coerência terminológica em toda a linha. Nos projetos empresariais, podem também ser tratados a tradução ajuramentada e, quando necessário, os processos de certificação notarial e de apostila.",
+    a: "Sim. Os projetos que abrangem vários países e línguas podem ser coordenados e conduzidos de forma centralizada, assegurando a coerência terminológica em toda a linha. Nos projetos empresariais, podem também ser tratados a tradução ajuramentada e, quando necessário, os processos de certificação notarial.",
     keywords: ["empresa internacional", "projeto multilingue", "notarial e apostila empresarial"],
   },
 

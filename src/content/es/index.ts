@@ -388,7 +388,7 @@ export const es: PartialDictionary = {
         { title: 'Revisión del documento', desc: 'Se evalúan el tipo de documento y su finalidad.' },
         { title: 'Asignación del experto', desc: 'Se asigna un traductor especializado en el campo.' },
         { title: 'Traducción y edición', desc: 'Traducción y una revisión final independiente.' },
-        { title: 'Aprobación y entrega', desc: 'Certificación notarial o apostilla si es necesario, y luego la entrega.' },
+        { title: 'Aprobación y entrega', desc: 'Certificación notarial si es necesario, y luego la entrega.' },
       ],
     },
     delivery: {
@@ -397,11 +397,11 @@ export const es: PartialDictionary = {
     },
     notaryApostille: {
       title: 'Relación entre certificación notarial y apostilla',
-      desc: 'Cuando es necesario, la traducción jurada adquiere validez ante instituciones oficiales mediante la certificación notarial y el proceso de apostilla. El requisito exacto depende de la institución ante la que se presente el documento.',
+      desc: 'Cuando es necesario, la traducción jurada puede adquirir validez ante instituciones oficiales mediante la certificación notarial, de cuya gestión podemos encargarnos en su nombre. No realizamos el proceso de apostilla; usted debe obtener la apostilla ante la autoridad competente, y nosotros únicamente traducimos sus documentos apostillados/oficiales. El requisito exacto depende de la institución ante la que se presente el documento.',
     },
     fullService: {
       title: 'Servicio integral, entregado en su puerta',
-      note: 'Envíenos sus documentos y nosotros gestionamos todo el proceso, incluidas la traducción, la certificación notarial y la apostilla. Sus documentos terminados llegan a su puerta por mensajería. Céntrese en su trabajo y déjenos el resto a nosotros.',
+      note: 'Envíenos sus documentos y nosotros nos encargamos de la traducción y, cuando sea necesario, de la certificación notarial. Sus documentos terminados llegan a su puerta por mensajería. Céntrese en su trabajo y déjenos el resto a nosotros.',
     },
     cta: {
       title: '¿No está seguro de qué servicio necesita?',
@@ -420,11 +420,6 @@ export const es: PartialDictionary = {
       name: 'Traducción con certificación notarial',
       short: 'Certificación notarial de una traducción jurada.',
       benefits: ['Certificación notarial', 'Apta para trámites oficiales', 'Nos encargamos del proceso'],
-    },
-    apostille: {
-      name: 'Apoyo en el proceso de apostilla',
-      short: 'Orientación durante el proceso de apostilla para su validez en el extranjero.',
-      benefits: ['Validez internacional', 'Asesoramiento sobre el proceso', 'Orientación institucional'],
     },
     legal: {
       name: 'Traducción jurídica',
@@ -609,7 +604,7 @@ export const es: PartialDictionary = {
       items: [
         { key: 'law', icon: 'Scale', title: 'Bufetes de abogados', desc: 'Necesidad de traducción jurada de expedientes, contratos y documentos legales.' },
         { key: 'visa', icon: 'Plane', title: 'Asesorías de visados', desc: 'Documentos que requieren traducción jurada, como pasaportes, diplomas y registros civiles.' },
-        { key: 'education', icon: 'GraduationCap', title: 'Asesorías educativas', desc: 'Traducción jurada de documentos de estudiantes y procesos de apostilla.' },
+        { key: 'education', icon: 'GraduationCap', title: 'Asesorías educativas', desc: 'Traducción jurada de documentos de estudiantes y documentos apostillados.' },
         { key: 'health', icon: 'HeartPulse', title: 'Turismo sanitario', desc: 'Traducción de informes médicos, historiales de pacientes y documentos sanitarios.' },
         { key: 'patent', icon: 'Building2', title: 'Oficinas de patentes/marcas', desc: 'Traducción técnica de patentes, registros de marcas y documentos legales.' },
         { key: 'realestate', icon: 'Home', title: 'Agencias inmobiliarias', desc: 'Traducción de escrituras, contratos y documentos oficiales para inversores extranjeros.' },
@@ -694,6 +689,7 @@ export const es: PartialDictionary = {
       "driver-license": "Permiso de conducir",
       "criminal-record": "Antecedentes penales",
       "military-status": "Certificado de situación militar",
+      apostille: "Documento con apostilla",
       "medical-report": "Informe médico",
       "epicrisis": "Informe de alta (epicrisis)",
       "prescription": "Receta médica",
@@ -776,7 +772,6 @@ export const es: PartialDictionary = {
     },
     options: {
       "sworn": "Traducción jurada (certificada)",
-      "apostille": "Asistencia en el trámite de apostilla",
       "swornNotaryHint": "La certificación notarial ya incluye la traducción jurada; solo tiene que seleccionar la única opción que se ajuste a su necesidad.",
       "physicalRequiredHint": "Las traducciones juradas y notariadas se entregan como originales firmados y sellados, por lo que el envío físico se añade automáticamente.",
       urgent: 'Entrega urgente',
@@ -1110,7 +1105,7 @@ export const es: PartialDictionary = {
       sections: [
         { heading: `Responsable del Tratamiento`, body: `De conformidad con la Ley n.º 6698 de Protección de Datos Personales (“KVKK”), sus datos personales son tratados por Samed Fazlı Atlıcı (“TercümExpert”), en calidad de responsable del tratamiento, con el alcance que se describe a continuación. Dirección: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya. Correo electrónico: info@tercumexpert.com. Teléfono: [TELEFON].` },
         { heading: `Datos Personales Tratados`, body: `Se tratan sus datos de identidad y de contacto (nombre, apellidos, dirección de correo electrónico, número de teléfono), sus datos de dirección de entrega, sus datos de pedidos y transacciones, los datos contenidos en los documentos que nos remite con fines de traducción, así como los datos de seguridad de las transacciones relativos a su uso del sitio (dirección IP, registros de sesión y de cookies).` },
-        { heading: `Finalidades del Tratamiento`, body: `Sus datos personales se tratan con el fin de prestar los servicios relacionados con la traducción, la traducción jurada y la certificación notarial y de apostilla, elaborar presupuestos y gestionar los pedidos, mantener las relaciones con los clientes y gestionar las solicitudes y reclamaciones, cumplir las obligaciones contractuales y legales, y garantizar la seguridad del servicio.` },
+        { heading: `Finalidades del Tratamiento`, body: `Sus datos personales se tratan con el fin de prestar los servicios relacionados con la traducción, la traducción jurada y la certificación notarial, elaborar presupuestos y gestionar los pedidos, mantener las relaciones con los clientes y gestionar las solicitudes y reclamaciones, cumplir las obligaciones contractuales y legales, y garantizar la seguridad del servicio.` },
         { heading: `Fundamentos Jurídicos del Tratamiento`, body: `Sus datos se tratan sobre la base de los siguientes fundamentos jurídicos: la necesidad para la celebración o ejecución de un contrato, el cumplimiento de nuestras obligaciones legales, el establecimiento y la defensa de un derecho, y nuestros intereses legítimos, siempre que no se lesionen sus derechos y libertades fundamentales; y, cuando resulte necesario, sobre la base de su consentimiento expreso (KVKK m.5 y m.6).` },
         { heading: `Método de Recogida`, body: `Sus datos personales se recogen por medios electrónicos a través de los formularios del sitio web, los procesos de registro y de pedido, el correo electrónico y otros canales de comunicación.` },
         { heading: `Transferencia de los Datos Personales`, body: `En la medida en que lo exija el servicio, sus datos podrán transferirse a nuestros proveedores situados en el territorio nacional y en el extranjero de los que recibimos servicios de alojamiento, infraestructura, autenticación, correo electrónico y analítica, así como a los organismos e instituciones públicas competentes, con arreglo a las condiciones establecidas en los artículos KVKK m.8 y m.9. Dado que los servidores de algunos de los proveedores de infraestructura y de servicios que utilizamos se encuentran en el extranjero, sus datos podrán transferirse al exterior en el marco de las garantías previstas por la legislación.` },
@@ -1141,13 +1136,13 @@ export const es: PartialDictionary = {
       title: `Contrato de Venta a Distancia`,
       sections: [
         { heading: `Partes`, body: `El presente Contrato de Venta a Distancia (“Contrato”) se celebra por medios electrónicos entre, de una parte, Samed Fazlı Atlıcı (“Vendedor”; dirección: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya, correo electrónico: info@tercumexpert.com, teléfono: [TELEFON]) y, de otra parte, el consumidor que realiza el pedido (“Comprador”), de conformidad con la Ley n.º 6502 de Protección del Consumidor y con el Mesafeli Sözleşmeler Yönetmeliği.` },
-        { heading: `Objeto del Contrato`, body: `El objeto del Contrato es la prestación de los servicios relacionados con la traducción, la traducción jurada y la certificación notarial y de apostilla que el Comprador ha pedido por medios electrónicos a través de tercumexpert.com, cuyas características y precio de venta se indican en el resumen del pedido.` },
+        { heading: `Objeto del Contrato`, body: `El objeto del Contrato es la prestación de los servicios relacionados con la traducción, la traducción jurada y la certificación notarial que el Comprador ha pedido por medios electrónicos a través de tercumexpert.com, cuyas características y precio de venta se indican en el resumen del pedido.` },
         { heading: `Características y Precio del Servicio`, body: `El tipo, el alcance, la forma de entrega (digital o por mensajería) y el precio total, impuestos incluidos, del servicio pedido se muestran claramente al Comprador durante la realización del pedido y constan en la confirmación del pedido. El precio se calcula en función del servicio seleccionado y de las características del documento.` },
         { heading: `Pago`, body: `El pago se efectúa mediante los métodos de pago ofrecidos en el paso del pedido. El pedido se tramita tras la confirmación del pago.` },
         { heading: `Ejecución y Entrega`, body: `En las entregas digitales, la traducción se remite, una vez finalizada, a través de la cuenta o del correo electrónico del Comprador. En el caso de documentos físicos, con firma manuscrita o jurados, la entrega se realiza por mensajería a la dirección indicada por el Comprador. Los plazos estimados de entrega se indican durante la realización del pedido; pueden variar en función del volumen de documentación y de los procesos de certificación.` },
         { heading: `Derecho de Desistimiento`, body: `Por regla general, en los contratos relativos a la prestación de servicios, el Comprador dispone del derecho a desistir, sin necesidad de justificación alguna, en el plazo de catorce (14) días contados desde la fecha de celebración del contrato. No obstante, quedan a salvo las excepciones que se indican a continuación.` },
         { heading: `Excepciones al Derecho de Desistimiento`, body: `De conformidad con el artículo m.15 del Mesafeli Sözleşmeler Yönetmeliği, no podrá ejercerse el derecho de desistimiento en el caso de los servicios cuya ejecución se haya iniciado con el consentimiento del Comprador y hayan finalizado antes de que expire el plazo de desistimiento, así como en el caso de los bienes y servicios preparados especialmente conforme a las solicitudes o necesidades personales del Comprador (incluidos los servicios de traducción y certificación preparados a medida de la persona o del documento). Las solicitudes de cancelación remitidas antes de iniciarse el trabajo de traducción se valorarán de forma independiente.` },
-        { heading: `Cancelación y Devolución`, body: `Los pedidos que aún no hayan sido asumidos por un traductor (es decir, que todavía no se encuentren en curso) pueden cancelarse directamente mediante la opción de cancelación disponible en su página de pedido; si lo desea, también puede remitir su solicitud de cancelación a través de info@tercumexpert.com. Los reembolsos aprobados se efectúan en un plazo razonable a través del mismo medio con el que se realizó el pago. En los servicios personalizados cuya ejecución ya se haya iniciado (por haber sido asumidos por un traductor) o se haya completado, el reembolso podría no ser posible en razón de la naturaleza del trabajo.` },
+        { heading: `Cancelación y Devolución`, body: `Los pedidos que aún no hayan sido asumidos por un traductor (es decir, que todavía no se encuentren en curso) pueden cancelarse directamente mediante la opción de cancelación disponible en su página de pedido; si lo desea, también puede remitir su solicitud de cancelación a través de info@tercumexpert.com. Los reembolsos aprobados se efectúan en un plazo razonable a través del mismo medio con el que se realizó el pago. Una vez que la traducción ha sido asumida por un traductor y puesta en curso, no se efectúa reembolso alguno, en razón del carácter personalizado de la prestación.` },
         { heading: `Resolución de Controversias`, body: `En las controversias que puedan derivarse del presente Contrato, son competentes, dentro de los límites cuantitativos anunciados cada año por el Ticaret Bakanlığı, los Tüketici Hakem Heyetleri y los Juzgados de Consumo del lugar de residencia del Comprador o del lugar en que se haya realizado la transacción.` },
         { heading: `Entrada en Vigor`, body: `Al confirmar el pedido, el Comprador declara haber leído y aceptado todas las condiciones del presente Contrato. El Contrato entra en vigor con la confirmación del pedido.` },
       ],
@@ -1172,7 +1167,7 @@ export const es: PartialDictionary = {
         { heading: "Partes y objeto", body: "El presente Acuerdo de colaboración se celebra entre [RAZÓN SOCIAL] («TercümExpert»), por una parte, y el socio comercial que solicita el programa y es aprobado («Socio»), por la otra, con el fin de regular los términos y condiciones del programa de referidos (colaboración) de TercümExpert." },
         { heading: "Solicitud y aprobación", body: "La condición de Socio se obtiene cumplimentando el formulario de solicitud en la página de colaboración y siendo aprobado por TercümExpert. La aprobación queda a discreción de TercümExpert y una solicitud puede ser rechazada. El Socio verifica su dirección de correo electrónico en el marco del programa; no se cobra ninguna cuota de alta." },
         { heading: "Enlace de invitación y atribución de clientes", body: "A cada Socio aprobado se le asigna un enlace de invitación personal y único, así como un código QR asociado. El cliente que llega a través de este enlace o código QR y se registra por primera vez queda vinculado de forma permanente a ese Socio; la atribución se produce en el momento del primer registro y no puede modificarse posteriormente. La comisión solo se genera a partir de los pedidos de los clientes vinculados de este modo al Socio." },
-        { heading: "Estructura de la comisión", body: "La parte del Socio se calcula excluyendo el impuesto sobre el valor añadido (IVA) y las diferencias por servicios adicionales, del siguiente modo: 20 % del importe base de la traducción; si se selecciona la entrega urgente, 20 % de la diferencia de entrega urgente; si se selecciona la traducción jurada, 10 % de la diferencia de la traducción jurada. No se paga al Socio parte alguna sobre los importes de certificación notarial, apostilla o entrega física (por mensajería), y el IVA no se toma como base de la comisión. Estos porcentajes son fijos; las tasas siguen siendo válidas aunque cambien los precios. TercümExpert puede actualizar las tasas y condiciones con previo aviso." },
+        { heading: "Estructura de la comisión", body: "La parte del Socio se calcula excluyendo el impuesto sobre el valor añadido (IVA) y las diferencias por servicios adicionales, del siguiente modo: 20 % del importe base de la traducción; si se selecciona la entrega urgente, 20 % de la diferencia de entrega urgente; si se selecciona la traducción jurada, 10 % de la diferencia de la traducción jurada. No se paga al Socio parte alguna sobre los importes de certificación notarial o entrega física (por mensajería), y el IVA no se toma como base de la comisión. Estos porcentajes son fijos; las tasas siguen siendo válidas aunque cambien los precios. TercümExpert puede actualizar las tasas y condiciones con previo aviso." },
         { heading: "Devengo y monedero", body: "La comisión se añade al monedero del Socio cuando se completa el pedido del cliente referido y permanece bloqueada durante siete (7) días desde su adición; se vuelve retirable una vez vencido este plazo. Los pedidos cancelados, reembolsados o no pagados no se toman como base de la comisión." },
         { heading: "Pagos", body: "Los saldos disponibles se abonan en el IBAN indicado por el Socio los días 2 y 17 de cada mes. Para poder realizar un pago, los campos obligatorios del perfil del Socio deben estar totalmente cumplimentados y el IBAN y los datos del titular deben estar aprobados por TercümExpert. Las obligaciones fiscales relativas a los pagos están sujetas a la legislación aplicable." },
         { heading: "Obligaciones del Socio", body: "El Socio se compromete a utilizar información veraz y no engañosa en su promoción, a abstenerse de conductas que perjudiquen la marca y la reputación de TercümExpert, a mantener actualizados sus datos de contacto y de pago, y a cumplir la legislación aplicable." },
@@ -1229,7 +1224,6 @@ export const es: PartialDictionary = {
     serviceLinks: {
       sworn: 'Traducción jurada',
       notarized: 'Traducción con certificación notarial',
-      apostille: 'Proceso de apostilla',
       corporate: 'Soluciones para empresas',
       partnership: 'Programa de colaboración',
     },
@@ -1278,7 +1272,7 @@ export const es: PartialDictionary = {
     send: 'Enviar',
     typing: 'Escribiendo…',
     welcome:
-      'Hola y bienvenido a TercümExpert. Puedo ayudarle con traducción, precios, certificación notarial, apostilla o servicios para empresas.',
+      'Hola y bienvenido a TercümExpert. Puedo ayudarle con traducción, precios, certificación notarial o servicios para empresas.',
     quickQuestions: [
       '¿Cómo se calcula el precio?',
       '¿Qué es la traducción jurada?',
@@ -1293,7 +1287,7 @@ export const es: PartialDictionary = {
     sensitiveWarning:
       'No comparta datos personales sensibles a través de este chat. Puede enviar sus documentos mediante la zona de carga segura.',
     answers: [
-      `El precio se calcula en función del número de palabras del documento, la combinación de idiomas, el tipo de servicio (traducción jurada, certificación notarial, apostilla) y el plazo de entrega. Para obtener un presupuesto estimado al instante, puede subir su documento o introducir los datos en la página Calcular Precio.`,
+      `El precio se calcula en función del número de palabras del documento, la combinación de idiomas, el tipo de servicio (traducción jurada, certificación notarial) y el plazo de entrega. Para obtener un presupuesto estimado al instante, puede subir su documento o introducir los datos en la página Calcular Precio.`,
       `La traducción jurada es una traducción oficial realizada por un traductor jurado y validada con su firma y sello. Las entidades oficiales suelen exigir traducciones juradas; cuando sea necesario, también puede añadirse la certificación notarial.`,
       `Puede enviarnos su documento a través del área de carga segura de la página Calcular Precio. Una vez subido, verá el presupuesto estimado al instante y podrá completar su pedido.`,
       `Para sus necesidades corporativas, ofrecemos precios especiales y entrega prioritaria en traducciones periódicas y de gran volumen. Para más detalles, puede consultar nuestra página Corporativa o ponerse en contacto con nosotros.`,
@@ -1364,8 +1358,12 @@ export const es: PartialDictionary = {
       "saved": "Sus datos se han guardado.",
       "saveError": "No se pudo guardar. Inténtelo de nuevo.",
       "required": "Complete los campos obligatorios.",
-      "atLeastOnePair": "Añada al menos un par de idiomas."
-    },
+      "atLeastOnePair": "Añada al menos un par de idiomas.",cv: "CV / Currículum",
+      cvHint: "Suba un archivo PDF o Word (obligatorio).",
+      cvChoose: "Elegir archivo",
+      cvNone: "Ningún archivo seleccionado",
+      cvRequired: "Debe subir un CV para presentar la solicitud.",
+      cvUploadError: "No se pudo subir el CV. Inténtelo de nuevo.",},
     "expertiseLabels": {
       "legal": "Jurídica",
       "medical": "Médica",
@@ -1457,7 +1455,6 @@ export const es: PartialDictionary = {
       "urgent": "Urgente",
       "sworn": "Jurada",
       "notary": "Notariada",
-      "apostille": "Apostilla",
       "cargo": "Entrega por mensajería",
       "digital": "Entrega digital",
       "claim": "Aceptar este trabajo",
@@ -1556,6 +1553,7 @@ export const es: PartialDictionary = {
       "colExpertise": "Especialización",
       "colLocation": "Ciudad / País",
       "swornBadge": "Jurado",
+      cvDownload: "Descargar CV",
       "returningBadge": "Traductor recurrente",
       "ibanVerified": "IBAN verificado",
       "ibanNotVerified": "IBAN no verificado",

@@ -387,7 +387,7 @@ export const pt: PartialDictionary = {
         { title: 'Análise do documento', desc: 'Avaliam-se o tipo e a finalidade do documento.' },
         { title: 'Atribuição de especialista', desc: 'É atribuído um tradutor especializado na área.' },
         { title: 'Tradução e edição', desc: 'Tradução e revisão final independente.' },
-        { title: 'Aprovação e entrega', desc: 'Certificação notarial/apostila, se necessário, e depois entrega.' },
+        { title: 'Aprovação e entrega', desc: 'Certificação notarial, se necessário, e depois entrega.' },
       ],
     },
     delivery: {
@@ -396,11 +396,11 @@ export const pt: PartialDictionary = {
     },
     notaryApostille: {
       title: 'Relação entre certificação notarial e apostila',
-      desc: 'Quando necessário, a tradução ajuramentada torna-se válida para instituições oficiais através da certificação notarial e do processo de apostila. O requisito exato depende da instituição à qual o documento será apresentado.',
+      desc: 'Quando necessário, a tradução ajuramentada pode ser validada para instituições oficiais através da certificação notarial, e podemos tratar do processo de certificação notarial em seu nome. Não realizamos o processo de apostila; a apostila deve ser obtida por si junto da autoridade competente, e nós apenas traduzimos os seus documentos apostilados/oficiais. O requisito exato depende da instituição à qual o documento será apresentado.',
     },
     fullService: {
       title: 'Chave na mão, entregue à sua porta',
-      note: 'Envie-nos os seus documentos e nós tratamos de todo o processo — tradução, certificação notarial e apostila incluídas. Os seus documentos finalizados chegam à sua porta por correio expresso. Concentre-se no seu trabalho e deixe o resto connosco.',
+      note: 'Envie-nos os seus documentos e nós tratamos da tradução e, quando necessário, do processo de certificação notarial. Os seus documentos finalizados chegam à sua porta por correio expresso. Concentre-se no seu trabalho e deixe o resto connosco.',
     },
     cta: {
       title: 'Não tem a certeza de qual serviço precisa?',
@@ -419,11 +419,6 @@ export const pt: PartialDictionary = {
       name: 'Tradução com certificação notarial',
       short: 'Certificação notarial de uma tradução ajuramentada.',
       benefits: ['Certificação notarial', 'Adequada a processos oficiais', 'Tratamos do processo'],
-    },
-    apostille: {
-      name: 'Apoio ao processo de apostila',
-      short: 'Orientação no processo de apostila para validade no estrangeiro.',
-      benefits: ['Validade internacional', 'Consultoria no processo', 'Orientação institucional'],
     },
     legal: {
       name: 'Tradução jurídica',
@@ -608,7 +603,7 @@ export const pt: PartialDictionary = {
       items: [
         { key: 'law', icon: 'Scale', title: 'Escritórios de advogados', desc: 'Necessidade de tradução ajuramentada de processos, contratos e documentos jurídicos.' },
         { key: 'visa', icon: 'Plane', title: 'Consultoria de vistos', desc: 'Documentos que exigem tradução ajuramentada, como passaportes, diplomas e registos civis.' },
-        { key: 'education', icon: 'GraduationCap', title: 'Consultoria educativa', desc: 'Tradução ajuramentada de documentos de estudantes e processos de apostila.' },
+        { key: 'education', icon: 'GraduationCap', title: 'Consultoria educativa', desc: 'Tradução ajuramentada de documentos de estudantes e documentos apostilados.' },
         { key: 'health', icon: 'HeartPulse', title: 'Turismo de saúde', desc: 'Tradução de relatórios médicos, processos de doentes e documentos de saúde.' },
         { key: 'patent', icon: 'Building2', title: 'Gabinetes de patentes/marcas', desc: 'Tradução técnica de patentes, registos de marcas e documentos jurídicos.' },
         { key: 'realestate', icon: 'Home', title: 'Agências imobiliárias', desc: 'Tradução de títulos de propriedade, contratos e documentos oficiais para investidores estrangeiros.' },
@@ -693,6 +688,7 @@ export const pt: PartialDictionary = {
       "driver-license": "Carta de condução",
       "criminal-record": "Registo criminal",
       "military-status": "Documento de situação militar",
+      apostille: "Documento com apostila",
       "medical-report": "Relatório médico",
       "epicrisis": "Epícrise (relatório de alta)",
       "prescription": "Receita médica",
@@ -775,7 +771,6 @@ export const pt: PartialDictionary = {
     },
     options: {
       "sworn": "Tradução ajuramentada (certificada)",
-      "apostille": "Apoio no processo de apostila",
       "swornNotaryHint": "A certificação notarial já abrange a tradução ajuramentada; basta selecionar a única opção que se adequa à sua necessidade.",
       "physicalRequiredHint": "As traduções ajuramentadas e notariais são entregues como originais assinados/carimbados, pelo que a entrega física é adicionada automaticamente.",
       urgent: 'Entrega urgente',
@@ -1109,7 +1104,7 @@ export const pt: PartialDictionary = {
       sections: [
         { heading: `Responsável pelo Tratamento`, body: `Nos termos da Lei n.º 6698 sobre a Proteção de Dados Pessoais (“KVKK”), os seus dados pessoais são tratados, na qualidade de responsável pelo tratamento, por Samed Fazlı Atlıcı (“TercümExpert”), no âmbito adiante descrito. Morada: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya. Correio eletrónico: info@tercumexpert.com. Telefone: [TELEFON].` },
         { heading: `Dados Pessoais Tratados`, body: `São tratados os seus dados de identificação e de contacto (nome, apelido, endereço de correio eletrónico, número de telefone), os dados da morada de entrega, os dados de encomendas e transações, os dados contidos nos documentos que nos remete para efeitos de tradução, bem como os dados de segurança das operações relativos à sua utilização do sítio (endereço IP, registos de sessão e de cookies).` },
-        { heading: `Finalidades do Tratamento`, body: `Os seus dados pessoais são tratados para as seguintes finalidades: a prestação de serviços de tradução, tradução ajuramentada, reconhecimento notarial e apostila; a elaboração de orçamentos e a gestão de encomendas; a gestão das relações com os clientes e o tratamento de pedidos e reclamações; o cumprimento de obrigações contratuais e legais; e a garantia da segurança do serviço.` },
+        { heading: `Finalidades do Tratamento`, body: `Os seus dados pessoais são tratados para as seguintes finalidades: a prestação de serviços de tradução, tradução ajuramentada e reconhecimento notarial; a elaboração de orçamentos e a gestão de encomendas; a gestão das relações com os clientes e o tratamento de pedidos e reclamações; o cumprimento de obrigações contratuais e legais; e a garantia da segurança do serviço.` },
         { heading: `Fundamentos Jurídicos do Tratamento`, body: `Os seus dados são tratados com base nos seguintes fundamentos jurídicos: a necessidade para a celebração ou execução de um contrato, o cumprimento das nossas obrigações legais, o exercício e a defesa de um direito e os nossos interesses legítimos, desde que não prejudiquem os seus direitos e liberdades fundamentais; e, nos casos em que tal seja necessário, com base no seu consentimento expresso (KVKK m.5 e m.6).` },
         { heading: `Método de Recolha`, body: `Os seus dados pessoais são recolhidos por meios eletrónicos, através dos formulários do sítio Web, dos processos de registo e de encomenda, do correio eletrónico e de outros canais de comunicação.` },
         { heading: `Transferência de Dados Pessoais`, body: `Na medida exigida pela prestação do serviço, os seus dados podem ser transferidos para os nossos fornecedores situados no país e no estrangeiro dos quais recebemos serviços de alojamento, infraestrutura, autenticação, correio eletrónico e análise, bem como para as autoridades e organismos públicos competentes, em conformidade com os requisitos previstos nos artigos m.8 e m.9 da KVKK. Uma vez que os servidores de alguns dos fornecedores de infraestrutura e de serviços que utilizamos se encontram no estrangeiro, os seus dados podem ser transferidos para fora do país no quadro das garantias previstas na legislação.` },
@@ -1140,13 +1135,13 @@ export const pt: PartialDictionary = {
       title: `Contrato de Venda à Distância`,
       sections: [
         { heading: `Partes`, body: `O presente Contrato de Venda à Distância (“Contrato”) é celebrado por meios eletrónicos entre, por um lado, Samed Fazlı Atlıcı (“Vendedor”; morada: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya, correio eletrónico: info@tercumexpert.com, telefone: [TELEFON]) e, por outro, o consumidor que efetua a encomenda (“Comprador”), nos termos da Lei n.º 6502 sobre a Proteção do Consumidor e do Mesafeli Sözleşmeler Yönetmeliği.` },
-        { heading: `Objeto do Contrato`, body: `O objeto do Contrato é a prestação dos serviços de tradução, tradução ajuramentada, reconhecimento notarial e apostila que o Comprador encomenda por meios eletrónicos através de tercumexpert.com, cujas características e preço de venda constam do resumo da encomenda.` },
+        { heading: `Objeto do Contrato`, body: `O objeto do Contrato é a prestação dos serviços de tradução, tradução ajuramentada e reconhecimento notarial que o Comprador encomenda por meios eletrónicos através de tercumexpert.com, cujas características e preço de venda constam do resumo da encomenda.` },
         { heading: `Características e Preço do Serviço`, body: `O tipo e o âmbito do serviço encomendado, a forma de entrega (digital ou por transportadora) e o preço total, incluindo impostos, são apresentados de forma clara ao Comprador durante a encomenda e constam da confirmação da encomenda. O preço é calculado em função do serviço selecionado e das características dos documentos.` },
         { heading: `Pagamento`, body: `O pagamento é efetuado através dos métodos de pagamento disponibilizados na fase de encomenda. A encomenda é processada após a confirmação do pagamento.` },
         { heading: `Execução e Entrega`, body: `Nas entregas digitais, a tradução é disponibilizada, após a sua conclusão, através da conta ou do endereço de correio eletrónico do Comprador. Nos documentos físicos, com assinatura autógrafa ou ajuramentados, a entrega é efetuada por transportadora para a morada indicada pelo Comprador. Os prazos estimados de entrega são indicados no momento da encomenda e podem variar em função do volume dos documentos e dos processos de reconhecimento.` },
         { heading: `Direito de Livre Resolução`, body: `Em regra, nos contratos relativos à prestação de serviços, o Comprador dispõe do direito de livre resolução no prazo de catorze (14) dias a contar da data de celebração do contrato, sem necessidade de indicar qualquer motivo. Ressalvam-se, contudo, as exceções adiante indicadas.` },
         { heading: `Exceções ao Direito de Livre Resolução`, body: `Nos termos do artigo m.15 do Mesafeli Sözleşmeler Yönetmeliği, o direito de livre resolução não pode ser exercido nos serviços cuja execução se tenha iniciado com o consentimento do Comprador e que sejam concluídos antes do termo do prazo de resolução, bem como nos bens e serviços preparados por medida em função dos pedidos ou das necessidades pessoais do Comprador (incluindo os serviços de tradução e de reconhecimento preparados especificamente para uma pessoa ou um documento). Os pedidos de cancelamento apresentados antes do início do trabalho de tradução são objeto de apreciação autónoma.` },
-        { heading: `Cancelamento e Reembolso`, body: `As encomendas que ainda não tenham sido assumidas por um tradutor (ou seja, cuja execução ainda não tenha tido início) podem ser canceladas diretamente através da opção de cancelamento disponível na sua página de encomenda; caso prefira, poderá igualmente enviar o seu pedido de cancelamento através de info@tercumexpert.com. Os reembolsos aprovados são efetuados num prazo razoável através do mesmo meio pelo qual foi efetuado o pagamento. Nos serviços de caráter personalizado cuja execução já se tenha iniciado (por terem sido assumidos por um tradutor) ou tenha sido concluída, o reembolso poderá não ser possível em virtude da natureza do trabalho.` },
+        { heading: `Cancelamento e Reembolso`, body: `As encomendas que ainda não tenham sido assumidas por um tradutor (ou seja, cuja execução ainda não tenha tido início) podem ser canceladas diretamente através da opção de cancelamento disponível na sua página de encomenda; caso prefira, poderá igualmente enviar o seu pedido de cancelamento através de info@tercumexpert.com. Os reembolsos aprovados são efetuados num prazo razoável através do mesmo meio pelo qual foi efetuado o pagamento. Uma vez que a tradução tenha sido assumida por um tradutor para processamento, não é efetuado qualquer reembolso, em virtude da natureza pessoal do trabalho.` },
         { heading: `Resolução de Litígios`, body: `Nos litígios que possam decorrer do presente Contrato, são competentes, dentro dos limites monetários anualmente divulgados pelo Ticaret Bakanlığı, os Tüketici Hakem Heyetleri e os Tribunais do Consumidor do local de residência do Comprador ou do local onde a transação foi realizada.` },
         { heading: `Entrada em Vigor`, body: `Ao confirmar a encomenda, o Comprador declara ter lido e aceite todas as condições do presente Contrato. O Contrato entra em vigor com a confirmação da encomenda.` },
       ],
@@ -1171,7 +1166,7 @@ export const pt: PartialDictionary = {
         { heading: "Partes e objeto", body: "O presente Contrato de parceria é celebrado entre [DENOMINAÇÃO SOCIAL] («TercümExpert»), por um lado, e o parceiro comercial que se candidata ao programa e é aprovado («Parceiro»), por outro, com o objetivo de regular os termos e condições do programa de indicação (parceria) da TercümExpert." },
         { heading: "Candidatura e aprovação", body: "O estatuto de Parceiro obtém-se preenchendo o formulário de candidatura na página de parceria e sendo aprovado pela TercümExpert. A aprovação fica ao critério da TercümExpert e uma candidatura pode ser recusada. O Parceiro verifica o seu endereço de e-mail no âmbito do programa; não é cobrada qualquer taxa de adesão." },
         { heading: "Ligação de convite e atribuição de clientes", body: "A cada Parceiro aprovado é atribuída uma ligação de convite pessoal e única, bem como um código QR associado. O cliente que chega através desta ligação ou código QR e se regista pela primeira vez fica ligado de forma permanente a esse Parceiro; a atribuição ocorre no momento do primeiro registo e não pode ser alterada posteriormente. A comissão só se gera a partir das encomendas de clientes ligados ao Parceiro desta forma." },
-        { heading: "Estrutura da comissão", body: "A parte do Parceiro é calculada excluindo o imposto sobre o valor acrescentado (IVA) e as diferenças de serviços adicionais, do seguinte modo: 20% do valor base da tradução; se for selecionada a entrega urgente, 20% da diferença de entrega urgente; se for selecionada a tradução ajuramentada, 10% da diferença da tradução ajuramentada. Dos valores de certificação notarial, apoio de apostila e entrega física (por transportadora) não é paga ao Parceiro qualquer parte, e o IVA não é tomado como base da comissão. Estas percentagens são fixas; as taxas mantêm-se válidas mesmo que os preços se alterem. A TercümExpert pode atualizar as taxas e condições mediante aviso prévio." },
+        { heading: "Estrutura da comissão", body: "A parte do Parceiro é calculada excluindo o imposto sobre o valor acrescentado (IVA) e as diferenças de serviços adicionais, do seguinte modo: 20% do valor base da tradução; se for selecionada a entrega urgente, 20% da diferença de entrega urgente; se for selecionada a tradução ajuramentada, 10% da diferença da tradução ajuramentada. Dos valores de certificação notarial e entrega física (por transportadora) não é paga ao Parceiro qualquer parte, e o IVA não é tomado como base da comissão. Estas percentagens são fixas; as taxas mantêm-se válidas mesmo que os preços se alterem. A TercümExpert pode atualizar as taxas e condições mediante aviso prévio." },
         { heading: "Vencimento e carteira", body: "A comissão é adicionada à carteira do Parceiro quando a encomenda do cliente indicado é concluída e permanece bloqueada durante sete (7) dias a contar da data de adição; torna-se levantável após o termo deste prazo. Encomendas canceladas, reembolsadas ou não pagas não são tomadas como base da comissão." },
         { heading: "Pagamentos", body: "Os saldos disponíveis para levantamento são pagos no IBAN indicado pelo Parceiro nos dias 2 e 17 de cada mês. Para que um pagamento seja efetuado, os campos obrigatórios do perfil do Parceiro devem estar totalmente preenchidos e o IBAN e os dados do titular devem estar aprovados pela TercümExpert. As obrigações fiscais relativas aos pagamentos estão sujeitas à legislação aplicável." },
         { heading: "Obrigações do Parceiro", body: "O Parceiro compromete-se a utilizar informações corretas e não enganosas na sua promoção, a abster-se de condutas que prejudiquem a marca e a reputação da TercümExpert, a manter atualizados os seus dados de contacto e de pagamento e a cumprir a legislação aplicável." },
@@ -1228,7 +1223,6 @@ export const pt: PartialDictionary = {
     serviceLinks: {
       sworn: 'Tradução ajuramentada',
       notarized: 'Tradução com certificação notarial',
-      apostille: 'Processo de apostila',
       corporate: 'Soluções para empresas',
       partnership: 'Programa de parcerias',
     },
@@ -1277,7 +1271,7 @@ export const pt: PartialDictionary = {
     send: 'Enviar',
     typing: 'A escrever…',
     welcome:
-      'Olá e bem-vindo à TercümExpert. Posso ajudá-lo com tradução, preços, certificação notarial, apostila ou serviços para empresas.',
+      'Olá e bem-vindo à TercümExpert. Posso ajudá-lo com tradução, preços, certificação notarial ou serviços para empresas.',
     quickQuestions: [
       'Como é calculado o preço?',
       'O que é a tradução ajuramentada?',
@@ -1292,7 +1286,7 @@ export const pt: PartialDictionary = {
     sensitiveWarning:
       'Não partilhe dados pessoais sensíveis através desta conversa. Pode enviar os seus documentos através da área de carregamento segura.',
     answers: [
-      `O preço é calculado com base no número de palavras do seu documento, no par de idiomas, no tipo de serviço (tradução ajuramentada, reconhecimento notarial, apostila) e no prazo de entrega. Para obter uma estimativa imediata, pode carregar o seu documento ou introduzir os dados na página Calcular Preço.`,
+      `O preço é calculado com base no número de palavras do seu documento, no par de idiomas, no tipo de serviço (tradução ajuramentada, reconhecimento notarial) e no prazo de entrega. Para obter uma estimativa imediata, pode carregar o seu documento ou introduzir os dados na página Calcular Preço.`,
       `A tradução ajuramentada é uma tradução oficial realizada por um tradutor ajuramentado e validada com a sua assinatura e carimbo. As entidades oficiais exigem, na maioria dos casos, uma tradução ajuramentada; sempre que necessário, pode ainda acrescentar-se o reconhecimento notarial.`,
       `Pode enviar o seu documento através da área de carregamento segura disponível na página Calcular Preço. Após o carregamento, verá de imediato uma estimativa de preço e poderá concluir a sua encomenda.`,
       `Para as necessidades da sua empresa, oferecemos preços especiais e entrega prioritária em traduções regulares e de grande volume. Para mais informações, consulte a nossa página Empresas ou entre em contacto connosco.`,
@@ -1363,8 +1357,12 @@ export const pt: PartialDictionary = {
       "saved": "Os seus dados foram guardados.",
       "saveError": "Não foi possível guardar. Tente novamente.",
       "required": "Preencha os campos obrigatórios.",
-      "atLeastOnePair": "Adicione pelo menos um par de idiomas."
-    },
+      "atLeastOnePair": "Adicione pelo menos um par de idiomas.",cv: "CV / Currículo",
+      cvHint: "Carregue um ficheiro PDF ou Word (obrigatório).",
+      cvChoose: "Escolher ficheiro",
+      cvNone: "Nenhum ficheiro selecionado",
+      cvRequired: "Para se candidatar, tem de carregar um CV.",
+      cvUploadError: "Não foi possível carregar o CV. Tente novamente.",},
     "expertiseLabels": {
       "legal": "Jurídica",
       "medical": "Médica",
@@ -1456,7 +1454,6 @@ export const pt: PartialDictionary = {
       "urgent": "Urgente",
       "sworn": "Ajuramentada",
       "notary": "Reconhecimento notarial",
-      "apostille": "Apostila",
       "cargo": "Entrega por transportadora",
       "digital": "Entrega digital",
       "claim": "Aceitar este trabalho",
@@ -1555,6 +1552,7 @@ export const pt: PartialDictionary = {
       "colExpertise": "Especialização",
       "colLocation": "Cidade / País",
       "swornBadge": "Ajuramentada",
+      cvDownload: "Descarregar CV",
       "returningBadge": "Tradutor recorrente",
       "ibanVerified": "IBAN verificado",
       "ibanNotVerified": "IBAN não verificado",

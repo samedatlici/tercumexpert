@@ -382,7 +382,7 @@ export const pl: PartialDictionary = {
         { title: 'Analiza dokumentu', desc: 'Oceniamy rodzaj i przeznaczenie dokumentu.' },
         { title: 'Dobór specjalisty', desc: 'Przydzielany jest tłumacz specjalizujący się w danej dziedzinie.' },
         { title: 'Tłumaczenie i redakcja', desc: 'Tłumaczenie oraz niezależna korekta końcowa.' },
-        { title: 'Poświadczenie i dostawa', desc: 'W razie potrzeby poświadczenie notarialne/apostille, a następnie dostawa.' },
+        { title: 'Poświadczenie i dostawa', desc: 'W razie potrzeby poświadczenie notarialne, a następnie dostawa.' },
       ],
     },
     delivery: {
@@ -391,11 +391,11 @@ export const pl: PartialDictionary = {
     },
     notaryApostille: {
       title: 'Powiązanie poświadczenia notarialnego i apostille',
-      desc: 'W razie potrzeby tłumaczenie przysięgłe uzyskuje ważność dla instytucji urzędowych poprzez poświadczenie notarialne i proces apostille. Dokładny wymóg zależy od instytucji, do której dokument zostanie złożony.',
+      desc: 'W razie potrzeby tłumaczenie przysięgłe może uzyskać ważność dla instytucji urzędowych poprzez poświadczenie notarialne, którego dopełnienie możemy przeprowadzić w Państwa imieniu. Nie przeprowadzamy procesu apostille; apostille należy uzyskać samodzielnie we właściwym organie, a my jedynie tłumaczymy Państwa dokumenty opatrzone apostille / dokumenty urzędowe. Dokładny wymóg zależy od instytucji, do której dokument zostanie złożony.',
     },
     fullService: {
       title: 'Kompleksowo, z dostawą pod drzwi',
-      note: 'Prześlij nam swoje dokumenty, a my zajmiemy się całym procesem — obejmującym tłumaczenie, poświadczenie notarialne i apostille. Gotowe dokumenty dotrą pod Państwa drzwi kurierem. Skup się na swojej pracy, a resztę zostaw nam.',
+      note: 'Prześlij nam swoje dokumenty, a my zajmiemy się tłumaczeniem oraz, w razie potrzeby, poświadczeniem notarialnym. Gotowe dokumenty dotrą pod Państwa drzwi kurierem. Skup się na swojej pracy, a resztę zostaw nam.',
     },
     cta: {
       title: 'Nie wiesz, której usługi potrzebujesz?',
@@ -414,11 +414,6 @@ export const pl: PartialDictionary = {
       name: 'Tłumaczenie z poświadczeniem notarialnym',
       short: 'Poświadczenie notarialne tłumaczenia przysięgłego.',
       benefits: ['Poświadczenie notarialne', 'Odpowiednie do wniosków urzędowych', 'Zajmujemy się całym procesem'],
-    },
-    apostille: {
-      name: 'Wsparcie w procesie apostille',
-      short: 'Wsparcie w procesie apostille zapewniającym ważność za granicą.',
-      benefits: ['Ważność międzynarodowa', 'Doradztwo w procesie', 'Wskazówki dotyczące instytucji'],
     },
     legal: {
       name: 'Tłumaczenie prawnicze',
@@ -603,7 +598,7 @@ export const pl: PartialDictionary = {
       items: [
         { key: 'law', icon: 'Scale', title: 'Kancelarie prawne', desc: 'Potrzeba tłumaczeń przysięgłych akt spraw, umów i dokumentów prawnych.' },
         { key: 'visa', icon: 'Plane', title: 'Doradztwo wizowe', desc: 'Dokumenty wymagające tłumaczenia przysięgłego, takie jak paszporty, dyplomy i akty stanu cywilnego.' },
-        { key: 'education', icon: 'GraduationCap', title: 'Doradztwo edukacyjne', desc: 'Tłumaczenia przysięgłe dokumentów uczniów i procesy apostille.' },
+        { key: 'education', icon: 'GraduationCap', title: 'Doradztwo edukacyjne', desc: 'Tłumaczenia przysięgłe dokumentów uczniów i dokumentów opatrzonych apostille.' },
         { key: 'health', icon: 'HeartPulse', title: 'Turystyka medyczna', desc: 'Tłumaczenie raportów medycznych, akt pacjentów i dokumentów zdrowotnych.' },
         { key: 'patent', icon: 'Building2', title: 'Kancelarie patentowe/rzecznicze', desc: 'Tłumaczenie techniczne patentów, dokumentów rejestracji znaków towarowych i dokumentów prawnych.' },
         { key: 'realestate', icon: 'Home', title: 'Biura nieruchomości', desc: 'Tłumaczenie aktów własności, umów i dokumentów urzędowych dla inwestorów zagranicznych.' },
@@ -688,6 +683,7 @@ export const pl: PartialDictionary = {
       "driver-license": "Prawo jazdy",
       "criminal-record": "Zaświadczenie o niekaralności",
       "military-status": "Dokument o statusie wojskowym",
+      apostille: "Dokument z apostille",
       "medical-report": "Raport medyczny",
       "epicrisis": "Epikryza (karta wypisowa)",
       "prescription": "Recepta",
@@ -770,7 +766,6 @@ export const pl: PartialDictionary = {
     },
     options: {
       "sworn": "Tłumaczenie przysięgłe (uwierzytelnione)",
-      "apostille": "Wsparcie w procesie apostille",
       "swornNotaryHint": "Poświadczenie notarialne obejmuje już tłumaczenie przysięgłe; wystarczy wybrać jedną opcję odpowiadającą Twoim potrzebom.",
       "physicalRequiredHint": "Tłumaczenia przysięgłe i notarialne są dostarczane jako podpisane i opieczętowane oryginały, dlatego dostawa fizyczna jest dodawana automatycznie.",
       urgent: 'Dostawa ekspresowa',
@@ -1104,7 +1099,7 @@ export const pl: PartialDictionary = {
       sections: [
         { heading: `Administrator danych`, body: `Zgodnie z ustawą nr 6698 o ochronie danych osobowych („KVKK”) Państwa dane osobowe są przetwarzane przez Samed Fazlı Atlıcı („TercümExpert”), występującą w charakterze administratora danych, w zakresie opisanym poniżej. Adres: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya. E-mail: info@tercumexpert.com. Telefon: [TELEFON].` },
         { heading: `Przetwarzane dane osobowe`, body: `Przetwarzane są Państwa dane identyfikacyjne i kontaktowe (imię, nazwisko, adres e-mail, numer telefonu), dane adresu dostawy, dane dotyczące zamówień i transakcji, dane zawarte w treści dokumentów przekazanych nam w celu tłumaczenia, a także dane dotyczące bezpieczeństwa transakcji związane z korzystaniem z witryny (adres IP, zapisy sesji i plików cookie).` },
-        { heading: `Cele przetwarzania`, body: `Państwa dane osobowe są przetwarzane w celu: świadczenia usług związanych z tłumaczeniem, tłumaczeniem przysięgłym oraz poświadczeniem notarialnym i apostille, przygotowywania ofert i zarządzania zamówieniami, obsługi relacji z klientami oraz rozpatrywania zapytań i reklamacji, wypełniania obowiązków umownych i prawnych, a także zapewnienia bezpieczeństwa usług.` },
+        { heading: `Cele przetwarzania`, body: `Państwa dane osobowe są przetwarzane w celu: świadczenia usług związanych z tłumaczeniem, tłumaczeniem przysięgłym oraz poświadczeniem notarialnym, przygotowywania ofert i zarządzania zamówieniami, obsługi relacji z klientami oraz rozpatrywania zapytań i reklamacji, wypełniania obowiązków umownych i prawnych, a także zapewnienia bezpieczeństwa usług.` },
         { heading: `Podstawy prawne przetwarzania`, body: `Państwa dane są przetwarzane na podstawie tego, że jest to niezbędne do zawarcia lub wykonania umowy, w celu wypełnienia naszych obowiązków prawnych, ustalenia i ochrony przysługującego prawa oraz w oparciu o nasz prawnie uzasadniony interes, pod warunkiem nienaruszania Państwa podstawowych praw i wolności; w wymaganych przypadkach zaś na podstawie Państwa wyraźnej zgody (KVKK m.5 i m.6).` },
         { heading: `Sposób zbierania`, body: `Państwa dane osobowe są zbierane w formie elektronicznej za pośrednictwem formularzy w witrynie internetowej, procesów rejestracji i składania zamówień, poczty elektronicznej oraz innych kanałów komunikacji.` },
         { heading: `Przekazywanie danych osobowych`, body: `Państwa dane mogą być przekazywane, w zakresie niezbędnym do świadczenia usługi, naszym dostawcom mającym siedzibę w kraju i za granicą, od których korzystamy z usług hostingu, infrastruktury, uwierzytelniania, poczty elektronicznej i analityki, a także uprawnionym organom i instytucjom publicznym, zgodnie z warunkami określonymi w KVKK m.8 i m.9. Ponieważ serwery niektórych wykorzystywanych przez nas dostawców infrastruktury i usług znajdują się za granicą, Państwa dane mogą być przekazywane poza granice kraju w ramach zabezpieczeń przewidzianych w przepisach.` },
@@ -1135,13 +1130,13 @@ export const pl: PartialDictionary = {
       title: `Umowa sprzedaży na odległość`,
       sections: [
         { heading: `Strony`, body: `Niniejsza Umowa sprzedaży na odległość („Umowa”) została zawarta w formie elektronicznej, z jednej strony przez Samed Fazlı Atlıcı („Sprzedawca”; adres: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya, e-mail: info@tercumexpert.com, telefon: [TELEFON]), a z drugiej strony przez konsumenta składającego zamówienie („Kupujący”), zgodnie z ustawą nr 6502 o ochronie konsumentów oraz Mesafeli Sözleşmeler Yönetmeliği.` },
-        { heading: `Przedmiot umowy`, body: `Przedmiotem Umowy jest świadczenie usług związanych z tłumaczeniem, tłumaczeniem przysięgłym oraz poświadczeniem notarialnym i apostille, zamówionych przez Kupującego w formie elektronicznej za pośrednictwem tercumexpert.com, których właściwości i cena sprzedaży zostały określone w podsumowaniu zamówienia.` },
+        { heading: `Przedmiot umowy`, body: `Przedmiotem Umowy jest świadczenie usług związanych z tłumaczeniem, tłumaczeniem przysięgłym oraz poświadczeniem notarialnym, zamówionych przez Kupującego w formie elektronicznej za pośrednictwem tercumexpert.com, których właściwości i cena sprzedaży zostały określone w podsumowaniu zamówienia.` },
         { heading: `Właściwości i cena usługi`, body: `Rodzaj, zakres, sposób dostarczenia (cyfrowy lub kurierski) oraz łączna cena zamówionej usługi, wraz z podatkami, są wyraźnie prezentowane Kupującemu w trakcie składania zamówienia i zawarte w potwierdzeniu zamówienia. Cena obliczana jest w zależności od wybranej usługi i właściwości dokumentów.` },
         { heading: `Płatność`, body: `Płatność jest realizowana za pomocą metod płatności udostępnionych na etapie składania zamówienia. Zamówienie jest przyjmowane do realizacji po potwierdzeniu płatności.` },
         { heading: `Wykonanie i dostawa`, body: `W przypadku dostaw cyfrowych tłumaczenie, po jego ukończeniu, jest przekazywane za pośrednictwem konta lub adresu e-mail Kupującego. W przypadku dokumentów fizycznych, z podpisem odręcznym lub poświadczonych przysięgle, dostawa jest realizowana kurierem na adres wskazany przez Kupującego. Szacowane terminy dostawy są podawane w trakcie składania zamówienia; mogą one ulec zmianie w zależności od objętości dokumentów i procesów poświadczania.` },
         { heading: `Prawo odstąpienia`, body: `Co do zasady w umowach dotyczących świadczenia usług Kupującemu przysługuje prawo odstąpienia od umowy w terminie czternastu (14) dni od dnia jej zawarcia, bez podawania jakiejkolwiek przyczyny. Zastrzega się jednak wyjątki wskazane poniżej.` },
         { heading: `Wyjątki od prawa odstąpienia`, body: `Zgodnie z Mesafeli Sözleşmeler Yönetmeliği m.15 prawo odstąpienia nie przysługuje w odniesieniu do usług, których wykonanie rozpoczęto za zgodą Kupującego i ukończono przed upływem terminu odstąpienia, a także w odniesieniu do towarów i usług przygotowanych specjalnie zgodnie z życzeniami lub indywidualnymi potrzebami Kupującego (w tym usług tłumaczenia i poświadczenia przygotowanych indywidualnie dla osoby lub dokumentu). Wnioski o anulowanie złożone przed rozpoczęciem prac tłumaczeniowych są rozpatrywane odrębnie.` },
-        { heading: `Anulowanie i zwrot`, body: `Zamówienia, które nie zostały jeszcze podjęte przez tłumacza (to znaczy nie znajdują się jeszcze w realizacji), mogą zostać anulowane bezpośrednio za pomocą opcji anulowania dostępnej na Państwa stronie zamówienia; w razie potrzeby mogą Państwo również przesłać żądanie anulowania na adres info@tercumexpert.com. Zatwierdzone zwroty są dokonywane w rozsądnym terminie przy użyciu tej samej metody, którą dokonano płatności. W przypadku usług o charakterze zindywidualizowanym, których wykonywanie już się rozpoczęło (zostały podjęte przez tłumacza) lub zostało zakończone, zwrot może nie być możliwy ze względu na charakter świadczenia.` },
+        { heading: `Anulowanie i zwrot`, body: `Zamówienia, które nie zostały jeszcze podjęte przez tłumacza (to znaczy nie znajdują się jeszcze w realizacji), mogą zostać anulowane bezpośrednio za pomocą opcji anulowania dostępnej na Państwa stronie zamówienia; w razie potrzeby mogą Państwo również przesłać żądanie anulowania na adres info@tercumexpert.com. Zatwierdzone zwroty są dokonywane w rozsądnym terminie przy użyciu tej samej metody, którą dokonano płatności. Po podjęciu tłumaczenia przez tłumacza zwrot nie jest dokonywany ze względu na zindywidualizowany charakter świadczenia.` },
         { heading: `Rozstrzyganie sporów`, body: `W przypadku sporów mogących wyniknąć z niniejszej Umowy właściwe są Tüketici Hakem Heyetleri oraz sądy konsumenckie w miejscu zamieszkania Kupującego lub w miejscu dokonania transakcji, w granicach progów pieniężnych ogłaszanych corocznie przez Ticaret Bakanlığı.` },
         { heading: `Wejście w życie`, body: `Zatwierdzając zamówienie, Kupujący oświadcza, że zapoznał się ze wszystkimi warunkami niniejszej Umowy i je akceptuje. Umowa wchodzi w życie z chwilą zatwierdzenia zamówienia.` },
       ],
@@ -1166,7 +1161,7 @@ export const pl: PartialDictionary = {
         { heading: "Strony i przedmiot", body: "Niniejsza Umowa partnerska zostaje zawarta pomiędzy [NAZWA FIRMY] („TercümExpert”) z jednej strony a partnerem biznesowym, który składa wniosek do programu i zostaje zatwierdzony („Partner”), z drugiej strony, w celu uregulowania warunków programu poleceń (partnerskiego) TercümExpert." },
         { heading: "Wniosek i zatwierdzenie", body: "Status Partnera uzyskuje się poprzez wypełnienie formularza wniosku na stronie partnerskiej i uzyskanie zatwierdzenia przez TercümExpert. Zatwierdzenie zależy od uznania TercümExpert, a wniosek może zostać odrzucony. Partner weryfikuje swój adres e-mail w ramach programu; za przystąpienie nie pobiera się opłaty początkowej." },
         { heading: "Link z zaproszeniem i przypisanie klientów", body: "Każdemu zatwierdzonemu Partnerowi przydzielany jest unikalny, osobisty link z zaproszeniem oraz powiązany z nim kod QR. Klient, który wejdzie za pośrednictwem tego linku lub kodu QR i zarejestruje się po raz pierwszy, zostaje trwale przypisany do tego Partnera; przypisanie następuje w chwili pierwszej rejestracji i nie może być później zmienione. Prowizja powstaje wyłącznie z zamówień klientów przypisanych do Partnera w ten sposób." },
-        { heading: "Struktura prowizji", body: "Udział Partnera oblicza się z wyłączeniem podatku od towarów i usług (VAT) oraz różnic za usługi dodatkowe, w następujący sposób: 20% podstawowej kwoty tłumaczenia; jeśli wybrano dostawę ekspresową, 20% różnicy za dostawę ekspresową; jeśli wybrano tłumaczenie przysięgłe, 10% różnicy za tłumaczenie przysięgłe. Z opłat za poświadczenie notarialne, wsparcie apostille oraz dostawę fizyczną (kurierską) Partnerowi nie wypłaca się żadnego udziału, a VAT nie stanowi podstawy prowizji. Te procenty są stałe; stawki pozostają w mocy nawet w przypadku zmiany cen. TercümExpert może aktualizować stawki i warunki za uprzednim powiadomieniem." },
+        { heading: "Struktura prowizji", body: "Udział Partnera oblicza się z wyłączeniem podatku od towarów i usług (VAT) oraz różnic za usługi dodatkowe, w następujący sposób: 20% podstawowej kwoty tłumaczenia; jeśli wybrano dostawę ekspresową, 20% różnicy za dostawę ekspresową; jeśli wybrano tłumaczenie przysięgłe, 10% różnicy za tłumaczenie przysięgłe. Z opłat za poświadczenie notarialne oraz dostawę fizyczną (kurierską) Partnerowi nie wypłaca się żadnego udziału, a VAT nie stanowi podstawy prowizji. Te procenty są stałe; stawki pozostają w mocy nawet w przypadku zmiany cen. TercümExpert może aktualizować stawki i warunki za uprzednim powiadomieniem." },
         { heading: "Naliczanie i portfel", body: "Prowizja jest dodawana do portfela Partnera po zakończeniu zamówienia poleconego klienta i pozostaje zablokowana przez siedem (7) dni od daty dodania; po upływie tego okresu staje się dostępna do wypłaty. Zamówienia anulowane, zwrócone lub nieopłacone nie stanowią podstawy prowizji." },
         { heading: "Płatności", body: "Salda dostępne do wypłaty są wypłacane na podany przez Partnera numer IBAN 2. i 17. dnia każdego miesiąca. Aby dokonać płatności, obowiązkowe pola w profilu Partnera muszą być w pełni wypełnione, a numer IBAN i dane właściciela rachunku muszą być zatwierdzone przez TercümExpert. Obowiązki podatkowe związane z płatnościami podlegają obowiązującym przepisom." },
         { heading: "Obowiązki Partnera", body: "Partner zobowiązuje się do stosowania w swojej promocji rzetelnych i niewprowadzających w błąd informacji, do powstrzymania się od działań szkodzących marce i reputacji TercümExpert, do aktualizowania swoich danych kontaktowych i płatniczych oraz do przestrzegania obowiązujących przepisów." },
@@ -1223,7 +1218,6 @@ export const pl: PartialDictionary = {
     serviceLinks: {
       sworn: 'Tłumaczenie przysięgłe',
       notarized: 'Tłumaczenie z poświadczeniem notarialnym',
-      apostille: 'Proces apostille',
       corporate: 'Rozwiązania dla firm',
       partnership: 'Program partnerski',
     },
@@ -1272,7 +1266,7 @@ export const pl: PartialDictionary = {
     send: 'Wyślij',
     typing: 'Pisze…',
     welcome:
-      'Witamy w TercümExpert. Mogę pomóc w kwestiach tłumaczenia, cennika, poświadczenia notarialnego, apostille lub usług dla firm.',
+      'Witamy w TercümExpert. Mogę pomóc w kwestiach tłumaczenia, cennika, poświadczenia notarialnego lub usług dla firm.',
     quickQuestions: [
       'Jak obliczana jest cena?',
       'Czym jest tłumaczenie przysięgłe?',
@@ -1287,7 +1281,7 @@ export const pl: PartialDictionary = {
     sensitiveWarning:
       'Prosimy nie udostępniać wrażliwych danych osobowych za pośrednictwem tego czatu. Swoje dokumenty można przesłać przez bezpieczny obszar przesyłania.',
     answers: [
-      `Cena jest ustalana na podstawie liczby słów w dokumencie, pary językowej, rodzaju usługi (tłumaczenie przysięgłe, poświadczenie notarialne, apostille) oraz terminu realizacji. Aby natychmiast otrzymać orientacyjną wycenę, mogą Państwo przesłać dokument lub wprowadzić dane na stronie Oblicz Cenę.`,
+      `Cena jest ustalana na podstawie liczby słów w dokumencie, pary językowej, rodzaju usługi (tłumaczenie przysięgłe, poświadczenie notarialne) oraz terminu realizacji. Aby natychmiast otrzymać orientacyjną wycenę, mogą Państwo przesłać dokument lub wprowadzić dane na stronie Oblicz Cenę.`,
       `Tłumaczenie przysięgłe to tłumaczenie urzędowe wykonane przez tłumacza przysięgłego i poświadczone jego podpisem oraz pieczęcią. Instytucje urzędowe najczęściej wymagają tłumaczenia przysięgłego; w razie potrzeby można dodatkowo uzyskać poświadczenie notarialne.`,
       `Dokument mogą Państwo przesłać za pośrednictwem bezpiecznego formularza przesyłania plików na stronie Oblicz Cenę. Po przesłaniu od razu zobaczą Państwo orientacyjną wycenę i będą mogli sfinalizować zamówienie.`,
       `Na potrzeby firm oferujemy specjalne warunki cenowe oraz priorytetową realizację przy regularnych i obszernych zleceniach tłumaczeniowych. Szczegóły znajdą Państwo na naszej stronie dla Klientów Biznesowych lub mogą Państwo skontaktować się z nami bezpośrednio.`,
@@ -1358,8 +1352,12 @@ export const pl: PartialDictionary = {
       "saved": "Twoje dane zostały zapisane.",
       "saveError": "Nie udało się zapisać. Spróbuj ponownie.",
       "required": "Uzupełnij wymagane pola.",
-      "atLeastOnePair": "Dodaj co najmniej jedną parę językową."
-    },
+      "atLeastOnePair": "Dodaj co najmniej jedną parę językową.",cv: "CV",
+      cvHint: "Prześlij plik PDF lub Word (wymagane).",
+      cvChoose: "Wybierz plik",
+      cvNone: "Nie wybrano pliku",
+      cvRequired: "Aby złożyć wniosek, musisz przesłać CV.",
+      cvUploadError: "Nie udało się przesłać CV. Spróbuj ponownie.",},
     "expertiseLabels": {
       "legal": "Prawne",
       "medical": "Medyczne",
@@ -1451,7 +1449,6 @@ export const pl: PartialDictionary = {
       "urgent": "Pilne",
       "sworn": "Przysięgłe",
       "notary": "Notarialne",
-      "apostille": "Apostille",
       "cargo": "Dostawa kurierska",
       "digital": "Dostawa cyfrowa",
       "claim": "Podejmij to zlecenie",
@@ -1550,6 +1547,7 @@ export const pl: PartialDictionary = {
       "colExpertise": "Specjalizacja",
       "colLocation": "Miasto / Kraj",
       "swornBadge": "Przysięgły",
+      cvDownload: "Pobierz CV",
       "returningBadge": "Powracający tłumacz",
       "ibanVerified": "IBAN zweryfikowany",
       "ibanNotVerified": "IBAN niezweryfikowany",

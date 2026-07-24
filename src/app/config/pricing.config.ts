@@ -50,8 +50,6 @@ export interface PricingConfig {
   notarizationFee: number
   /** Yeminli tercüme onayı ek ücreti (add-on). */
   swornFee: number
-  /** Apostil süreci desteği ek ücreti (add-on). */
-  apostilleFee: number
   physicalDeliveryFee: number
   /** KDV oranı (%). Vergi gösterimi gerekiyorsa kullanılır. */
   taxRatePercent: number
@@ -69,7 +67,6 @@ export const PRICING: PricingConfig = {
   serviceBasePrice: {
     sworn: 150,
     notarized: 200,
-    apostille: 250,
     legal: 180,
     technical: 160,
     medical: 180,
@@ -94,7 +91,6 @@ export const PRICING: PricingConfig = {
   urgencyMultiplier: 1.5,
   notarizationFee: 250,
   swornFee: 150,
-  apostilleFee: 300,
   physicalDeliveryFee: 120,
   taxRatePercent: 20,
 }

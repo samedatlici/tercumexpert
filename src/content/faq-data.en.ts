@@ -87,7 +87,7 @@ export const FAQ_ITEMS_EN: FaqItem[] = [
     category: 'order',
     priority: 8,
     q: 'How does the order process work?',
-    a: 'Once you upload your document and approve the preliminary quote, your order is created and assigned to a translator who specializes in the relevant field. The translation goes through quality control; if needed, the notarization/apostille process is handled, and your document is delivered digitally and, when required, by courier.',
+    a: 'Once you upload your document and approve the preliminary quote, your order is created and assigned to a translator who specializes in the relevant field. The translation goes through quality control; if needed, the notarization process is handled, and your document is delivered digitally and, when required, by courier.',
     keywords: ['order process', 'how it works', 'steps', 'workflow'],
   },
   {
@@ -135,7 +135,7 @@ export const FAQ_ITEMS_EN: FaqItem[] = [
     category: 'notary',
     priority: 14,
     q: 'How does the apostille process work?',
-    a: "An apostille is a certification issued by the competent authority so that a document is recognized as valid abroad. We can handle the process on your behalf; which document needs an apostille and the order of steps depend on the country where the document will be used. In countries that are not party to the Hague Convention, consular certification may be required instead of an apostille.",
+    a: "An apostille is a certification issued by the competent authority so that a document is recognized as valid abroad. We do not carry out the apostille process; you must obtain the apostille yourself from the competent authority in the country where your document was issued. We only provide the sworn translation of your apostilled documents. In countries that are not party to the Hague Convention, consular certification may be required instead of an apostille.",
     keywords: ['apostille', 'apostille process', 'apostille certification', 'valid abroad'],
   },
   {
@@ -201,7 +201,7 @@ export const FAQ_ITEMS_EN: FaqItem[] = [
     category: 'general',
     priority: 22,
     q: 'What services does TercümExpert offer?',
-    a: 'We offer sworn and notarized translation, apostille process support, legal, technical, medical, and academic translation, and website and mobile app localization. You can choose the service that fits your needs on the Get a Quote screen.',
+    a: 'We offer sworn and notarized translation, translation of apostilled documents, legal, technical, medical, and academic translation, and website and mobile app localization. You can choose the service that fits your needs on the Get a Quote screen.',
     keywords: ['services', 'what you offer', 'service types', 'which services'],
   },
   {
@@ -217,7 +217,7 @@ export const FAQ_ITEMS_EN: FaqItem[] = [
     category: 'general',
     priority: 24,
     q: 'Do I need to visit an office in person?',
-    a: 'No. The entire process — getting a quote, ordering, payment, and delivery — can be handled online. You just upload and approve your documents; there is no need to come anywhere in person.',
+    a: 'We do not have a physical office; our services are provided entirely online. You simply send your documents via secure upload, and delivery is made digitally and, where needed, by courier. For any questions you can reach us via WhatsApp or at info@tercumexpert.com.',
     keywords: ['office', 'in person', 'branch', 'address', 'visit required'],
   },
   {
@@ -347,7 +347,7 @@ export const FAQ_ITEMS_EN: FaqItem[] = [
     category: 'order',
     priority: 40,
     q: 'Can an order be canceled after payment?',
-    a: 'If translation has not started, cancellation and a refund are generally possible. If work has begun, a partial charge may apply based on the portion completed. Sending your cancellation request as soon as possible makes the process smoother.',
+    a: 'If your order has not yet been taken into processing by a translator, you can cancel it from your order page or via info@tercumexpert.com, and your payment is refunded in full to the original payment method. Once the translation has been taken into processing by a translator, no refund is made, owing to the person-specific nature of the work.',
     keywords: ['cancel after payment', 'refund', 'money back'],
   },
   {
@@ -437,7 +437,7 @@ export const FAQ_ITEMS_EN: FaqItem[] = [
     category: 'pricing',
     priority: 51,
     q: 'Are notarization and apostille fees included in the price?',
-    a: 'Notarization and apostille are separate procedures carried out by the relevant authorities and are subject to official tariffs. These costs are shown separately from the translation fee; because they follow an official tariff, they may not be exact in advance, and the actual amount is confirmed after the procedure.',
+    a: 'Notarization is a separate procedure carried out by the relevant authorities and is subject to official tariffs; this cost is shown separately from the translation fee, and because it follows an official tariff it may not be exact in advance, with the actual amount confirmed after the procedure. The apostille process, however, is not carried out by us; you must obtain the apostille yourself from the competent authority, and we only translate your apostilled document.',
     keywords: ['notary fee', 'apostille fee', 'is it included', 'notary cost', 'apostille cost'],
   },
   {
@@ -509,7 +509,7 @@ export const FAQ_ITEMS_EN: FaqItem[] = [
     category: 'pricing',
     priority: 60,
     q: 'Are refunds issued for canceled orders?',
-    a: 'For orders canceled before translation begins, the payment is refunded. If work has started, the remaining amount can be refunded after deducting the portion completed. In cases such as a duplicate charge, the excess amount is refunded.',
+    a: 'If your order is canceled before it has been taken into processing by a translator, your payment is refunded in full to the original payment method. Once the translation has been taken into processing by a translator, no refund is made, owing to the person-specific nature of the work. In cases such as a duplicate or erroneous charge, the excess amount is refunded.',
     keywords: ['refund', 'money back', 'cancellation refund', 'reimbursement'],
   },
 
@@ -1111,7 +1111,7 @@ export const FAQ_ITEMS_EN: FaqItem[] = [
     category: 'corporate',
     priority: 134,
     q: 'Do you serve international companies and multilingual projects?',
-    a: 'Yes. Projects spanning multiple countries and languages can be coordinated and run centrally, with terminology consistency ensured across the board. For corporate projects, sworn translation and, where needed, notarization and apostille processes can also be handled.',
+    a: 'Yes. Projects spanning multiple countries and languages can be coordinated and run centrally, with terminology consistency ensured across the board. For corporate projects, sworn translation and, where needed, notarization processes can also be handled.',
     keywords: ['international company', 'multilingual project', 'corporate notary apostille'],
   },
 

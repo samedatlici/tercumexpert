@@ -89,7 +89,7 @@ export const FAQ_ITEMS_FR: FaqItem[] = [
     category: "order",
     priority: 8,
     q: "Comment se déroule le processus de commande ?",
-    a: "Une fois votre document téléversé et le devis préliminaire validé, votre commande est créée et confiée à un traducteur spécialisé dans le domaine concerné. La traduction passe par un contrôle qualité ; si nécessaire, la certification notariée ou l'apostille est prise en charge, puis votre document vous est livré au format numérique et, au besoin, par voie postale.",
+    a: "Une fois votre document téléversé et le devis préliminaire validé, votre commande est créée et confiée à un traducteur spécialisé dans le domaine concerné. La traduction passe par un contrôle qualité ; si nécessaire, la certification notariée est prise en charge, puis votre document vous est livré au format numérique et, au besoin, par voie postale.",
     keywords: ["processus de commande", "comment ça marche", "étapes", "déroulement"],
   },
   {
@@ -137,7 +137,7 @@ export const FAQ_ITEMS_FR: FaqItem[] = [
     category: "notary",
     priority: 14,
     q: "Comment se déroule la procédure d'apostille ?",
-    a: "L'apostille est une certification délivrée par l'autorité compétente afin qu'un document soit reconnu valable à l'étranger. Nous pouvons suivre la procédure en votre nom ; le document à apostiller et l'ordre des étapes dépendent du pays où le document sera utilisé. Dans les pays non parties à la Convention de La Haye, une légalisation consulaire peut être exigée à la place de l'apostille.",
+    a: "L'apostille est une certification délivrée par l'autorité compétente afin qu'un document soit reconnu valable à l'étranger. Nous n'effectuons pas la procédure d'apostille ; vous devez obtenir l'apostille vous-même auprès de l'autorité compétente du pays où votre document a été établi. Nous réalisons uniquement la traduction assermentée de vos documents apostillés. Dans les pays non parties à la Convention de La Haye, une légalisation consulaire peut être exigée à la place de l'apostille.",
     keywords: ["apostille", "procédure d'apostille", "légalisation", "valable à l'étranger"],
   },
   {
@@ -203,7 +203,7 @@ export const FAQ_ITEMS_FR: FaqItem[] = [
     category: "general",
     priority: 22,
     q: "Quels services propose TercümExpert ?",
-    a: "Nous proposons la traduction assermentée et avec certification notariée, l'accompagnement à la procédure d'apostille, la traduction juridique, technique, médicale et académique, ainsi que la localisation de sites web et d'applications mobiles. Vous pouvez choisir le service adapté à vos besoins sur l'écran Calculer le prix.",
+    a: "Nous proposons la traduction assermentée et avec certification notariée, la traduction de documents apostillés, la traduction juridique, technique, médicale et académique, ainsi que la localisation de sites web et d'applications mobiles. Vous pouvez choisir le service adapté à vos besoins sur l'écran Calculer le prix.",
     keywords: ["services", "ce que vous proposez", "types de services", "quels services"],
   },
   {
@@ -219,7 +219,7 @@ export const FAQ_ITEMS_FR: FaqItem[] = [
     category: "general",
     priority: 24,
     q: "Faut-il se rendre dans un bureau en personne ?",
-    a: "Non. L'ensemble du processus — devis, commande, paiement et livraison — peut être réalisé en ligne. Il vous suffit de téléverser et de valider vos documents ; vous n'avez à vous déplacer nulle part.",
+    a: "Notre société ne dispose pas de bureau physique ; nos services sont entièrement fournis en ligne. Il vous suffit de nous transmettre vos documents via un téléversement sécurisé ; la livraison s'effectue au format numérique et, au besoin, par voie postale. Pour toute question, vous pouvez nous joindre via WhatsApp ou à l'adresse info@tercumexpert.com.",
     keywords: ["bureau", "en personne", "agence", "adresse", "déplacement nécessaire"],
   },
   {
@@ -349,7 +349,7 @@ export const FAQ_ITEMS_FR: FaqItem[] = [
     category: "order",
     priority: 40,
     q: "Une commande peut-elle être annulée après le paiement ?",
-    a: "Si la traduction n'a pas commencé, l'annulation et le remboursement sont généralement possibles. Si le travail a débuté, un montant partiel peut être facturé au prorata de la partie réalisée. Transmettre votre demande d'annulation dès que possible facilite le traitement.",
+    a: "Si votre commande n'a pas encore été prise en charge par un traducteur, vous pouvez l'annuler depuis votre page de commande ou à l'adresse info@tercumexpert.com, et votre paiement est intégralement remboursé sur le moyen de paiement d'origine. Une fois que la traduction a été prise en charge par un traducteur, aucun remboursement n'est effectué, en raison de la nature personnalisée de la prestation.",
     keywords: ["annulation après paiement", "remboursement", "remboursé"],
   },
   {
@@ -439,7 +439,7 @@ export const FAQ_ITEMS_FR: FaqItem[] = [
     category: "pricing",
     priority: 51,
     q: "Les frais de certification notariée et d'apostille sont-ils inclus dans le prix ?",
-    a: "La certification notariée et l'apostille sont des démarches distinctes effectuées par les autorités compétentes et soumises à des tarifs officiels. Ces frais sont indiqués séparément du tarif de traduction ; comme ils suivent un tarif officiel, ils peuvent ne pas être exacts à l'avance, et le montant réel est communiqué après la démarche.",
+    a: "La certification notariée est une démarche distincte effectuée par les autorités compétentes et soumise à des tarifs officiels ; ces frais sont indiqués séparément du tarif de traduction et, comme ils suivent un tarif officiel, ils peuvent ne pas être exacts à l'avance, le montant réel étant communiqué après la démarche. La procédure d'apostille, en revanche, n'est pas effectuée par nos soins ; vous devez obtenir l'apostille vous-même auprès de l'autorité compétente, et nous traduisons uniquement votre document apostillé.",
     keywords: ["frais de notaire", "frais d'apostille", "est-ce inclus", "coût notaire", "coût apostille"],
   },
   {
@@ -511,7 +511,7 @@ export const FAQ_ITEMS_FR: FaqItem[] = [
     category: "pricing",
     priority: 60,
     q: "Les commandes annulées donnent-elles lieu à un remboursement ?",
-    a: "Pour les commandes annulées avant le début de la traduction, le paiement est remboursé. Si le travail a commencé, le montant restant peut être remboursé après déduction de la partie réalisée. En cas de double débit par exemple, le montant excédentaire est remboursé.",
+    a: "Si votre commande est annulée avant d'avoir été prise en charge par un traducteur, votre paiement est intégralement remboursé sur le moyen de paiement d'origine. Une fois que la traduction a été prise en charge par un traducteur, aucun remboursement n'est effectué, en raison de la nature personnalisée de la prestation. En cas de double débit ou de débit erroné, le montant excédentaire est remboursé.",
     keywords: ["remboursement", "remboursé", "remboursement annulation", "restitution"],
   },
 
@@ -1113,7 +1113,7 @@ export const FAQ_ITEMS_FR: FaqItem[] = [
     category: "corporate",
     priority: 134,
     q: "Servez-vous les entreprises internationales et les projets multilingues ?",
-    a: "Oui. Les projets couvrant plusieurs pays et plusieurs langues peuvent être coordonnés et pilotés de manière centralisée, avec une cohérence terminologique assurée sur l'ensemble. Pour les projets d'entreprise, la traduction assermentée et, au besoin, les procédures de certification notariée et d'apostille peuvent également être prises en charge.",
+    a: "Oui. Les projets couvrant plusieurs pays et plusieurs langues peuvent être coordonnés et pilotés de manière centralisée, avec une cohérence terminologique assurée sur l'ensemble. Pour les projets d'entreprise, la traduction assermentée et, au besoin, les procédures de certification notariée peuvent également être prises en charge.",
     keywords: ["entreprise internationale", "projet multilingue", "notaire apostille entreprise"],
   },
 

@@ -25,7 +25,7 @@ export interface Area {
 export const AREAS: Area[] = [
   { id: 'academic', docs: ['diploma', 'transcript', 'student-certificate', 'diploma-supplement', 'thesis', 'reference-letter', 'academic-article', 'other'] },
   { id: 'legal', docs: ['contract', 'court-decision', 'power-of-attorney', 'petition', 'consent-statement', 'warning-notice', 'litigation-doc', 'other'] },
-  { id: 'official', docs: ['passport', 'id-card', 'civil-registry', 'birth-certificate', 'marriage-certificate', 'driver-license', 'criminal-record', 'military-status', 'other'] },
+  { id: 'official', docs: ['passport', 'id-card', 'civil-registry', 'birth-certificate', 'marriage-certificate', 'driver-license', 'criminal-record', 'military-status', 'apostille', 'other'] },
   { id: 'medical', docs: ['medical-report', 'epicrisis', 'prescription', 'lab-result', 'medical-article', 'patient-consent', 'other'] },
   { id: 'technical', docs: ['user-manual', 'technical-spec', 'patent', 'product-catalog', 'datasheet', 'installation-guide', 'safety-data-sheet', 'other'] },
   { id: 'commercial', docs: ['invoice', 'balance-sheet', 'commercial-contract', 'financial-report', 'tax-document', 'activity-certificate', 'bank-statement', 'other'] },

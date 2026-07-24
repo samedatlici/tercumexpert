@@ -388,7 +388,7 @@ export const de: PartialDictionary = {
         { title: 'Dokumentenprüfung', desc: 'Dokumententyp und Verwendungszweck werden beurteilt.' },
         { title: 'Fachliche Zuordnung', desc: 'Ein auf das Fachgebiet spezialisierter Übersetzer wird zugewiesen.' },
         { title: 'Übersetzung & Lektorat', desc: 'Übersetzung und eine unabhängige Endkontrolle.' },
-        { title: 'Beglaubigung & Lieferung', desc: 'Bei Bedarf notarielle Beglaubigung/Apostille, anschließend Lieferung.' },
+        { title: 'Beglaubigung & Lieferung', desc: 'Bei Bedarf notarielle Beglaubigung, anschließend Lieferung.' },
       ],
     },
     delivery: {
@@ -397,11 +397,11 @@ export const de: PartialDictionary = {
     },
     notaryApostille: {
       title: 'Zusammenhang zwischen notarieller Beglaubigung und Apostille',
-      desc: 'Bei Bedarf wird eine beglaubigte Übersetzung durch notarielle Beglaubigung und das Apostille-Verfahren für offizielle Institutionen gültig gemacht. Die genaue Anforderung hängt von der Institution ab, bei der das Dokument eingereicht wird.',
+      desc: 'Bei Bedarf kann eine beglaubigte Übersetzung durch notarielle Beglaubigung für offizielle Institutionen gültig gemacht werden, deren Abwicklung wir für Sie übernehmen können. Das Apostille-Verfahren führen wir nicht durch; die Apostille müssen Sie selbst bei der zuständigen Behörde einholen, und wir übersetzen lediglich Ihre apostillierten/offiziellen Dokumente. Die genaue Anforderung hängt von der Institution ab, bei der das Dokument eingereicht wird.',
     },
     fullService: {
       title: 'Schlüsselfertig, bis zu Ihrer Haustür geliefert',
-      note: 'Senden Sie uns Ihre Dokumente und wir übernehmen den gesamten Prozess — Übersetzung, notarielle Beglaubigung und Apostille inklusive. Ihre fertigen Dokumente kommen per Kurier bis an Ihre Haustür. Konzentrieren Sie sich auf Ihre Arbeit und überlassen Sie den Rest uns.',
+      note: 'Senden Sie uns Ihre Dokumente und wir übernehmen die Übersetzung und, sofern erforderlich, die notarielle Beglaubigung. Ihre fertigen Dokumente kommen per Kurier bis an Ihre Haustür. Konzentrieren Sie sich auf Ihre Arbeit und überlassen Sie den Rest uns.',
     },
     cta: {
       title: 'Nicht sicher, welche Leistung Sie benötigen?',
@@ -420,11 +420,6 @@ export const de: PartialDictionary = {
       name: 'Notariell beglaubigte Übersetzung',
       short: 'Notarielle Beglaubigung einer beglaubigten Übersetzung.',
       benefits: ['Notarielle Beurkundung', 'Geeignet für offizielle Anträge', 'Wir übernehmen den Prozess'],
-    },
-    apostille: {
-      name: 'Unterstützung beim Apostille-Verfahren',
-      short: 'Begleitung durch das Apostille-Verfahren für die Gültigkeit im Ausland.',
-      benefits: ['Internationale Gültigkeit', 'Verfahrensberatung', 'Behördenführung'],
     },
     legal: {
       name: 'Juristische Übersetzung',
@@ -609,7 +604,7 @@ export const de: PartialDictionary = {
       items: [
         { key: 'law', icon: 'Scale', title: 'Anwaltskanzleien', desc: 'Bedarf an beglaubigter Übersetzung von Akten, Verträgen und juristischen Dokumenten.' },
         { key: 'visa', icon: 'Plane', title: 'Visa-Beratung', desc: 'Dokumente, die eine beglaubigte Übersetzung erfordern, wie Reisepässe, Diplome und Personenstandsurkunden.' },
-        { key: 'education', icon: 'GraduationCap', title: 'Bildungsberatung', desc: 'Beglaubigte Übersetzung von Studierendendokumenten und Apostille-Verfahren.' },
+        { key: 'education', icon: 'GraduationCap', title: 'Bildungsberatung', desc: 'Beglaubigte Übersetzung von Studierendendokumenten und apostillierten Dokumenten.' },
         { key: 'health', icon: 'HeartPulse', title: 'Gesundheitstourismus', desc: 'Übersetzung von medizinischen Befunden, Patientenakten und Gesundheitsdokumenten.' },
         { key: 'patent', icon: 'Building2', title: 'Patent-/Markenämter', desc: 'Technische Übersetzung von Patent-, Markenanmeldungs- und Rechtsdokumenten.' },
         { key: 'realestate', icon: 'Home', title: 'Immobilienbüros', desc: 'Übersetzung von Grundbuchauszügen, Verträgen und amtlichen Dokumenten für ausländische Investoren.' },
@@ -694,6 +689,7 @@ export const de: PartialDictionary = {
       "driver-license": "Führerschein",
       "criminal-record": "Führungszeugnis",
       "military-status": "Wehrdienstbescheinigung",
+      apostille: "Apostille-Dokument",
       "medical-report": "Ärztlicher Befund",
       "epicrisis": "Entlassungsbericht (Epikrise)",
       "prescription": "Rezept",
@@ -776,7 +772,6 @@ export const de: PartialDictionary = {
     },
     options: {
       "sworn": "Beeidigte (beglaubigte) Übersetzung",
-      "apostille": "Unterstützung beim Apostille-Verfahren",
       "swornNotaryHint": "Die notarielle Beglaubigung umfasst bereits die beeidigte Übersetzung; Sie müssen nur die eine Option auswählen, die Ihrem Bedarf entspricht.",
       "physicalRequiredHint": "Beeidigte und notariell beglaubigte Übersetzungen werden als unterschriebene/gestempelte Originale geliefert, daher wird der Postversand automatisch hinzugefügt.",
       urgent: 'Eillieferung',
@@ -1110,7 +1105,7 @@ export const de: PartialDictionary = {
       sections: [
         { heading: `Verantwortlicher`, body: `Gemäß dem Gesetz über den Schutz personenbezogener Daten Nr. 6698 (“KVKK”) werden Ihre personenbezogenen Daten in der Eigenschaft als Verantwortlicher durch Samed Fazlı Atlıcı (“TercümExpert”) in dem nachstehend erläuterten Umfang verarbeitet. Anschrift: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya. E-Mail: info@tercumexpert.com. Telefon: [TELEFON].` },
         { heading: `Verarbeitete personenbezogene Daten`, body: `Verarbeitet werden Ihre Identitäts- und Kontaktdaten (Vorname, Nachname, E-Mail-Adresse, Telefonnummer), Ihre Lieferadressdaten, Ihre Bestell- und Transaktionsdaten, die in den zu Übersetzungszwecken an uns übermittelten Dokumenten enthaltenen Daten sowie die Daten zur Transaktionssicherheit im Zusammenhang mit Ihrer Nutzung der Website (IP-Adresse, Sitzungs- und Cookie-Protokolle).` },
-        { heading: `Zwecke der Verarbeitung`, body: `Ihre personenbezogenen Daten werden zu folgenden Zwecken verarbeitet: Erbringung von Leistungen im Zusammenhang mit Übersetzung, beeidigter Übersetzung, notarieller Beglaubigung und Apostille, Erstellung von Angeboten und Verwaltung von Bestellungen, Pflege der Kundenbeziehungen sowie Bearbeitung von Anfragen und Beschwerden, Erfüllung vertraglicher und gesetzlicher Verpflichtungen sowie Gewährleistung der Sicherheit der Leistungen.` },
+        { heading: `Zwecke der Verarbeitung`, body: `Ihre personenbezogenen Daten werden zu folgenden Zwecken verarbeitet: Erbringung von Leistungen im Zusammenhang mit Übersetzung, beeidigter Übersetzung, notarieller Beglaubigung, Erstellung von Angeboten und Verwaltung von Bestellungen, Pflege der Kundenbeziehungen sowie Bearbeitung von Anfragen und Beschwerden, Erfüllung vertraglicher und gesetzlicher Verpflichtungen sowie Gewährleistung der Sicherheit der Leistungen.` },
         { heading: `Rechtsgrundlagen der Verarbeitung`, body: `Ihre Daten werden auf folgenden Rechtsgrundlagen verarbeitet: Erforderlichkeit für den Abschluss oder die Erfüllung eines Vertrags, Erfüllung unserer rechtlichen Verpflichtungen, Begründung und Wahrung eines Rechts sowie unsere berechtigten Interessen, sofern Ihre Grundrechte und Grundfreiheiten dadurch nicht beeinträchtigt werden; erforderlichenfalls erfolgt die Verarbeitung auf Grundlage Ihrer ausdrücklichen Einwilligung (KVKK m.5 und m.6).` },
         { heading: `Erhebungsmethode`, body: `Ihre personenbezogenen Daten werden auf elektronischem Wege über die Formulare auf der Website, die Registrierungs- und Bestellprozesse, per E-Mail sowie über sonstige Kommunikationskanäle erhoben.` },
         { heading: `Übermittlung personenbezogener Daten`, body: `Ihre Daten können im für die Leistungserbringung erforderlichen Umfang an unsere im In- und Ausland ansässigen Dienstleister, von denen wir Hosting-, Infrastruktur-, Authentifizierungs-, E-Mail- und Analysedienste beziehen, sowie an die zuständigen öffentlichen Stellen und Einrichtungen im Einklang mit den Voraussetzungen der KVKK m.8 und m.9 übermittelt werden. Da sich die Server einiger von uns genutzter Infrastruktur- und Dienstleister im Ausland befinden, können Ihre Daten im Rahmen der gesetzlich vorgesehenen Garantien ins Ausland übermittelt werden.` },
@@ -1141,13 +1136,13 @@ export const de: PartialDictionary = {
       title: `Fernabsatzvertrag`,
       sections: [
         { heading: `Vertragsparteien`, body: `Der vorliegende Fernabsatzvertrag (“Vertrag”) wird auf elektronischem Wege gemäß dem Gesetz zum Schutz der Verbraucher Nr. 6502 und der Mesafeli Sözleşmeler Yönetmeliği zwischen Samed Fazlı Atlıcı (“Verkäufer”; Anschrift: Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya, E-Mail: info@tercumexpert.com, Telefon: [TELEFON]) einerseits und dem bestellenden Verbraucher (“Käufer”) andererseits geschlossen.` },
-        { heading: `Gegenstand des Vertrags`, body: `Gegenstand des Vertrags ist die Erbringung der vom Käufer über tercumexpert.com auf elektronischem Wege bestellten Leistungen im Zusammenhang mit Übersetzung, beeidigter Übersetzung, notarieller Beglaubigung und Apostille, deren Eigenschaften und Verkaufspreis in der Bestellübersicht angegeben sind.` },
+        { heading: `Gegenstand des Vertrags`, body: `Gegenstand des Vertrags ist die Erbringung der vom Käufer über tercumexpert.com auf elektronischem Wege bestellten Leistungen im Zusammenhang mit Übersetzung, beeidigter Übersetzung, notarieller Beglaubigung, deren Eigenschaften und Verkaufspreis in der Bestellübersicht angegeben sind.` },
         { heading: `Eigenschaften und Preis der Leistung`, body: `Die Art und der Umfang der bestellten Leistung, die Art der Lieferung (digital oder per Versand) sowie der Gesamtpreis einschließlich Steuern werden dem Käufer bei der Bestellung deutlich angezeigt und in der Bestellbestätigung ausgewiesen. Die Preisgestaltung richtet sich nach der gewählten Leistung und den Eigenschaften des Dokuments.` },
         { heading: `Zahlung`, body: `Die Zahlung erfolgt über die im Bestellschritt angebotenen Zahlungsmethoden. Die Bestellung wird nach Bestätigung der Zahlung bearbeitet.` },
         { heading: `Erfüllung und Lieferung`, body: `Bei digitalen Lieferungen wird die Übersetzung nach ihrer Fertigstellung über das Konto oder die E-Mail-Adresse des Käufers übermittelt. Bei physischen, im Original unterzeichneten oder beeidigten Dokumenten erfolgt die Lieferung per Versand an die vom Käufer angegebene Anschrift. Die voraussichtlichen Lieferzeiten werden bei der Bestellung angegeben; sie können sich je nach Umfang der Dokumente und den Beglaubigungsprozessen ändern.` },
         { heading: `Widerrufsrecht`, body: `Bei Verträgen über die Erbringung von Dienstleistungen steht dem Käufer grundsätzlich das Recht zu, innerhalb von vierzehn (14) Tagen ab dem Tag des Vertragsschlusses ohne Angabe von Gründen zu widerrufen. Die nachstehend genannten Ausnahmen bleiben jedoch vorbehalten.` },
         { heading: `Ausnahmen vom Widerrufsrecht`, body: `Gemäß der Mesafeli Sözleşmeler Yönetmeliği m.15 kann das Widerrufsrecht nicht ausgeübt werden bei Dienstleistungen, mit deren Erbringung mit Zustimmung des Käufers begonnen wurde und die vor Ablauf der Widerrufsfrist vollständig erbracht wurden, sowie bei Waren und Dienstleistungen, die nach den Wünschen oder den persönlichen Bedürfnissen des Käufers eigens angefertigt werden (einschließlich personen- oder dokumentenbezogen erstellter Übersetzungs- und Beglaubigungsleistungen). Vor Beginn der Übersetzungsarbeit übermittelte Stornierungsanträge werden gesondert geprüft.` },
-        { heading: `Stornierung und Rückerstattung`, body: `Aufträge, die noch von keinem Übersetzer übernommen wurden (das heißt noch nicht in Bearbeitung sind), können unmittelbar über die Stornierungsoption auf Ihrer Bestellseite storniert werden; auf Wunsch können Sie Ihr Stornierungsersuchen auch an info@tercumexpert.com richten. Genehmigte Rückerstattungen werden innerhalb einer angemessenen Frist über dasselbe Zahlungsmittel vorgenommen, mit dem die Zahlung erfolgt ist. Bei personenbezogenen Leistungen, deren Ausführung bereits begonnen hat (von einem Übersetzer übernommen wurde) oder abgeschlossen ist, kann eine Rückerstattung aufgrund der Art der Leistung unter Umständen nicht möglich sein.` },
+        { heading: `Stornierung und Rückerstattung`, body: `Aufträge, die noch von keinem Übersetzer übernommen wurden (das heißt noch nicht in Bearbeitung sind), können unmittelbar über die Stornierungsoption auf Ihrer Bestellseite storniert werden; auf Wunsch können Sie Ihr Stornierungsersuchen auch an info@tercumexpert.com richten. Genehmigte Rückerstattungen werden innerhalb einer angemessenen Frist über dasselbe Zahlungsmittel vorgenommen, mit dem die Zahlung erfolgt ist. Sobald die Übersetzung von einem Übersetzer in Bearbeitung genommen wurde, wird aufgrund der personenbezogenen Art der Leistung keine Rückerstattung vorgenommen.` },
         { heading: `Beilegung von Streitigkeiten`, body: `Bei Streitigkeiten, die sich aus diesem Vertrag ergeben können, sind im Rahmen der vom Ticaret Bakanlığı jährlich bekannt gegebenen Wertgrenzen die Tüketici Hakem Heyetleri sowie die Verbrauchergerichte am Wohnort des Käufers oder am Ort der Transaktion zuständig.` },
         { heading: `Inkrafttreten`, body: `Mit der Bestätigung der Bestellung erklärt der Käufer, sämtliche Bedingungen dieses Vertrags gelesen und akzeptiert zu haben. Der Vertrag tritt mit der Bestätigung der Bestellung in Kraft.` },
       ],
@@ -1172,7 +1167,7 @@ export const de: PartialDictionary = {
         { heading: "Parteien und Gegenstand", body: "Diese Partnervereinbarung wird zwischen [FIRMENNAME] („TercümExpert“) einerseits und dem Geschäftspartner, der sich für das Programm bewirbt und zugelassen wird („Partner“), andererseits geschlossen, um die Bedingungen des TercümExpert-Empfehlungsprogramms (Partnerprogramms) zu regeln." },
         { heading: "Bewerbung und Genehmigung", body: "Der Partnerstatus wird durch das Ausfüllen des Bewerbungsformulars auf der Partnerseite und die Genehmigung durch TercümExpert erlangt. Die Genehmigung liegt im Ermessen von TercümExpert und eine Bewerbung kann abgelehnt werden. Der Partner bestätigt im Rahmen des Programms seine E-Mail-Adresse; für die Teilnahme wird keine Startgebühr erhoben." },
         { heading: "Einladungslink und Kundenzuordnung", body: "Jedem genehmigten Partner werden ein eindeutiger, persönlicher Einladungslink sowie ein zugehöriger QR-Code zugewiesen. Ein Kunde, der über diesen Link oder QR-Code auf die Website gelangt und sich zum ersten Mal registriert, wird dauerhaft diesem Partner zugeordnet; die Zuordnung erfolgt im Moment der ersten Registrierung und kann nachträglich nicht geändert werden. Eine Provision entsteht nur aus den Bestellungen der auf diese Weise dem Partner zugeordneten Kunden." },
-        { heading: "Provisionsstruktur", body: "Der Anteil des Partners wird ohne Mehrwertsteuer (MwSt.) und ohne Zusatzleistungsdifferenzen wie folgt berechnet: 20 % des Grundübersetzungsentgelts; bei gewählter Eillieferung 20 % der Eillieferungsdifferenz; bei gewählter beglaubigter (vereidigter) Übersetzung 10 % der Differenz der vereidigten Übersetzung. Aus Entgelten für notarielle Beglaubigung, Apostille-Unterstützung und physischen (Kurier-)Versand wird dem Partner kein Anteil gezahlt, und die MwSt. wird nicht als Grundlage für die Provision herangezogen. Diese Prozentsätze sind fest; die Sätze bleiben auch bei Preisänderungen gültig. TercümExpert kann Sätze und Bedingungen unter vorheriger Ankündigung aktualisieren." },
+        { heading: "Provisionsstruktur", body: "Der Anteil des Partners wird ohne Mehrwertsteuer (MwSt.) und ohne Zusatzleistungsdifferenzen wie folgt berechnet: 20 % des Grundübersetzungsentgelts; bei gewählter Eillieferung 20 % der Eillieferungsdifferenz; bei gewählter beglaubigter (vereidigter) Übersetzung 10 % der Differenz der vereidigten Übersetzung. Aus Entgelten für notarielle Beglaubigung und physischen (Kurier-)Versand wird dem Partner kein Anteil gezahlt, und die MwSt. wird nicht als Grundlage für die Provision herangezogen. Diese Prozentsätze sind fest; die Sätze bleiben auch bei Preisänderungen gültig. TercümExpert kann Sätze und Bedingungen unter vorheriger Ankündigung aktualisieren." },
         { heading: "Anspruch und Guthaben", body: "Die Provision wird dem Guthaben des Partners gutgeschrieben, wenn die Bestellung des vermittelten Kunden abgeschlossen ist, und bleibt ab dem Zeitpunkt der Gutschrift sieben (7) Tage gesperrt; nach Ablauf dieser Frist wird sie auszahlbar. Stornierte, erstattete oder nicht bezahlte Bestellungen werden nicht als Grundlage für die Provision herangezogen." },
         { heading: "Zahlungen", body: "Auszahlbare Guthaben werden am 2. und 17. jedes Monats auf die vom Partner angegebene IBAN ausgezahlt. Damit eine Zahlung erfolgen kann, müssen die Pflichtfelder im Profil des Partners vollständig ausgefüllt und die IBAN sowie die Angaben zum Kontoinhaber von TercümExpert freigegeben sein. Steuerliche Verpflichtungen im Zusammenhang mit Zahlungen unterliegen den geltenden Rechtsvorschriften." },
         { heading: "Pflichten des Partners", body: "Der Partner verpflichtet sich, in seiner Werbung zutreffende und nicht irreführende Angaben zu verwenden, Verhaltensweisen zu unterlassen, die der Marke und dem Ruf von TercümExpert schaden, seine Kontakt- und Zahlungsdaten aktuell zu halten und die geltenden Rechtsvorschriften einzuhalten." },
@@ -1229,7 +1224,6 @@ export const de: PartialDictionary = {
     serviceLinks: {
       sworn: 'Beglaubigte Übersetzung',
       notarized: 'Notariell beglaubigte Übersetzung',
-      apostille: 'Apostille-Verfahren',
       corporate: 'Lösungen für Unternehmen',
       partnership: 'Partnerprogramm',
     },
@@ -1278,7 +1272,7 @@ export const de: PartialDictionary = {
     send: 'Senden',
     typing: 'Schreibt…',
     welcome:
-      'Hallo und herzlich willkommen bei TercümExpert. Ich kann Ihnen bei Übersetzung, Preisgestaltung, notarieller Beglaubigung, Apostille oder Firmenleistungen helfen.',
+      'Hallo und herzlich willkommen bei TercümExpert. Ich kann Ihnen bei Übersetzung, Preisgestaltung, notarieller Beglaubigung oder Firmenleistungen helfen.',
     quickQuestions: [
       'Wie wird der Preis berechnet?',
       'Was ist eine beglaubigte Übersetzung?',
@@ -1293,7 +1287,7 @@ export const de: PartialDictionary = {
     sensitiveWarning:
       'Bitte teilen Sie keine sensiblen personenbezogenen Daten über diesen Chat mit. Ihre Dokumente können Sie über den sicheren Upload-Bereich senden.',
     answers: [
-      `Der Preis richtet sich nach der Wortzahl Ihres Dokuments, der Sprachkombination, der Art der Leistung (beglaubigt, notariell beglaubigt, Apostille) sowie der Lieferzeit. Für einen sofortigen Preisvorschlag können Sie Ihr Dokument auf der Seite Preis berechnen hochladen oder die entsprechenden Angaben eingeben.`,
+      `Der Preis richtet sich nach der Wortzahl Ihres Dokuments, der Sprachkombination, der Art der Leistung (beglaubigt, notariell beglaubigt) sowie der Lieferzeit. Für einen sofortigen Preisvorschlag können Sie Ihr Dokument auf der Seite Preis berechnen hochladen oder die entsprechenden Angaben eingeben.`,
       `Eine beglaubigte Übersetzung ist eine offizielle Übersetzung, die von einem vereidigten Übersetzer angefertigt und mit dessen Unterschrift und Stempel bestätigt wird. Behörden verlangen in der Regel beglaubigte Übersetzungen; bei Bedarf kann zusätzlich eine notarielle Beglaubigung hinzugefügt werden.`,
       `Sie können Ihr Dokument über den sicheren Upload-Bereich auf der Seite Preis berechnen an uns übermitteln. Direkt nach dem Hochladen sehen Sie den voraussichtlichen Preis und können Ihre Bestellung abschließen.`,
       `Für Ihren geschäftlichen Bedarf bieten wir bei regelmäßigen und umfangreichen Übersetzungen individuelle Preise und eine bevorzugte Lieferung an. Weitere Einzelheiten finden Sie auf unserer Seite für Geschäftskunden, oder Sie nehmen einfach Kontakt mit uns auf.`,
@@ -1364,8 +1358,12 @@ export const de: PartialDictionary = {
       "saved": "Ihre Angaben wurden gespeichert.",
       "saveError": "Speichern fehlgeschlagen. Bitte versuchen Sie es erneut.",
       "required": "Bitte füllen Sie die Pflichtfelder aus.",
-      "atLeastOnePair": "Fügen Sie mindestens ein Sprachpaar hinzu."
-    },
+      "atLeastOnePair": "Fügen Sie mindestens ein Sprachpaar hinzu.",cv: "Lebenslauf (CV)",
+      cvHint: "Laden Sie eine PDF- oder Word-Datei hoch (erforderlich).",
+      cvChoose: "Datei auswählen",
+      cvNone: "Keine Datei ausgewählt",
+      cvRequired: "Für die Bewerbung müssen Sie einen Lebenslauf hochladen.",
+      cvUploadError: "Der Lebenslauf konnte nicht hochgeladen werden. Bitte versuchen Sie es erneut.",},
     "expertiseLabels": {
       "legal": "Recht",
       "medical": "Medizin",
@@ -1457,7 +1455,6 @@ export const de: PartialDictionary = {
       "urgent": "Dringend",
       "sworn": "Beglaubigt",
       "notary": "Notariell beglaubigt",
-      "apostille": "Apostille",
       "cargo": "Kurierzustellung",
       "digital": "Digitale Zustellung",
       "claim": "Diesen Auftrag übernehmen",
@@ -1556,6 +1553,7 @@ export const de: PartialDictionary = {
       "colExpertise": "Fachgebiete",
       "colLocation": "Stadt / Land",
       "swornBadge": "Beglaubigt",
+      cvDownload: "Lebenslauf herunterladen",
       "returningBadge": "Wiederkehrender Übersetzer",
       "ibanVerified": "IBAN verifiziert",
       "ibanNotVerified": "IBAN nicht verifiziert",

@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from 'react'
-import { Navigate, Outlet, useParams } from 'react-router-dom'
+import { Navigate, Outlet, useParams, useLocation } from 'react-router-dom'
 import { I18nProvider } from '@/app/providers/I18nProvider'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -24,12 +24,19 @@ function PageFallback() {
  */
 export function LocaleLayout() {
   const { lang } = useParams()
+  const { pathname } = useLocation()
 
   // Aktif dili kaydet: bir sonraki kök (/) ziyaretinde otomatik olarak
   // bu dile yönlendirilir (manuel dil seçimi de böylece hatırlanır).
   useEffect(() => {
     if (isLocale(lang)) saveLocale(lang)
   }, [lang])
+
+  // Sayfa/rota geçişlerinde HER ZAMAN en üstten aç (14 dilin hepsinde). Bir sayfada
+  // aşağı kaydırıp başka sayfaya geçince, yeni sayfa aşağıda açık kalmasın.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   if (!isLocale(lang)) {
     return <Navigate to={`/${DEFAULT_LOCALE}`} replace />

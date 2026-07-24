@@ -90,7 +90,7 @@ export const FAQ_ITEMS_DE: FaqItem[] = [
     category: 'order',
     priority: 8,
     q: 'Wie läuft der Bestellprozess ab?',
-    a: 'Sobald Sie Ihr Dokument hochgeladen und das unverbindliche Angebot bestätigt haben, wird Ihre Bestellung angelegt und einem auf das jeweilige Fachgebiet spezialisierten Übersetzer zugewiesen. Die Übersetzung durchläuft eine Qualitätskontrolle; bei Bedarf wird die notarielle Beglaubigung bzw. Apostille veranlasst, und Ihr Dokument wird digital sowie bei Bedarf per Kurier geliefert.',
+    a: 'Sobald Sie Ihr Dokument hochgeladen und das unverbindliche Angebot bestätigt haben, wird Ihre Bestellung angelegt und einem auf das jeweilige Fachgebiet spezialisierten Übersetzer zugewiesen. Die Übersetzung durchläuft eine Qualitätskontrolle; bei Bedarf wird die notarielle Beglaubigung veranlasst, und Ihr Dokument wird digital sowie bei Bedarf per Kurier geliefert.',
     keywords: ['bestellablauf', 'ablauf', 'wie funktioniert', 'schritte', 'prozess'],
   },
   {
@@ -138,7 +138,7 @@ export const FAQ_ITEMS_DE: FaqItem[] = [
     category: 'notary',
     priority: 14,
     q: 'Wie läuft das Apostille-Verfahren ab?',
-    a: 'Eine Apostille ist eine von der zuständigen Behörde ausgestellte Bestätigung, damit ein Dokument im Ausland als gültig anerkannt wird. Wir können das Verfahren in Ihrem Namen abwickeln; welches Dokument eine Apostille benötigt und in welcher Reihenfolge die Schritte erfolgen, hängt vom Verwendungsland ab. In Ländern, die dem Haager Übereinkommen nicht beigetreten sind, kann anstelle der Apostille eine konsularische Beglaubigung erforderlich sein.',
+    a: 'Eine Apostille ist eine von der zuständigen Behörde ausgestellte Bestätigung, damit ein Dokument im Ausland als gültig anerkannt wird. Das Apostille-Verfahren führen wir nicht durch; die Apostille müssen Sie selbst bei der zuständigen Behörde des Landes einholen, in dem Ihr Dokument ausgestellt wurde. Wir übernehmen ausschließlich die beglaubigte Übersetzung Ihrer apostillierten Dokumente. In Ländern, die dem Haager Übereinkommen nicht beigetreten sind, kann anstelle der Apostille eine konsularische Beglaubigung erforderlich sein.',
     keywords: ['apostille', 'apostille verfahren', 'beglaubigung ausland', 'im ausland gültig'],
   },
   {
@@ -204,7 +204,7 @@ export const FAQ_ITEMS_DE: FaqItem[] = [
     category: 'general',
     priority: 22,
     q: 'Welche Leistungen bietet TercümExpert an?',
-    a: 'Wir bieten beglaubigte und notariell beglaubigte Übersetzungen, Unterstützung beim Apostille-Verfahren, juristische, technische, medizinische und akademische Übersetzungen sowie die Lokalisierung von Websites und mobilen Apps an. Die für Ihren Bedarf passende Leistung wählen Sie im Preisrechner aus.',
+    a: 'Wir bieten beglaubigte und notariell beglaubigte Übersetzungen, die Übersetzung apostillierter Dokumente, juristische, technische, medizinische und akademische Übersetzungen sowie die Lokalisierung von Websites und mobilen Apps an. Die für Ihren Bedarf passende Leistung wählen Sie im Preisrechner aus.',
     keywords: ['leistungen', 'angebot', 'leistungsarten', 'welche leistungen'],
   },
   {
@@ -220,7 +220,7 @@ export const FAQ_ITEMS_DE: FaqItem[] = [
     category: 'general',
     priority: 24,
     q: 'Muss ich persönlich in ein Büro kommen?',
-    a: 'Nein. Der gesamte Ablauf – Angebot einholen, Bestellung, Zahlung und Lieferung – lässt sich online abwickeln. Sie laden Ihre Dokumente lediglich hoch und bestätigen sie; Sie müssen nirgendwo persönlich erscheinen.',
+    a: 'Unser Unternehmen verfügt über kein physisches Büro; unsere Leistungen werden vollständig online erbracht. Sie übermitteln uns Ihre Dokumente lediglich über einen sicheren Upload; die Lieferung erfolgt digital sowie bei Bedarf per Kurier. Bei Fragen erreichen Sie uns über WhatsApp oder unter info@tercumexpert.com.',
     keywords: ['büro', 'persönlich', 'filiale', 'adresse', 'vor ort'],
   },
   {
@@ -350,7 +350,7 @@ export const FAQ_ITEMS_DE: FaqItem[] = [
     category: 'order',
     priority: 40,
     q: 'Kann eine Bestellung nach der Zahlung storniert werden?',
-    a: 'Wenn die Übersetzung noch nicht begonnen hat, sind Stornierung und Rückerstattung in der Regel möglich. Hat die Arbeit bereits begonnen, kann für den abgeschlossenen Teil eine anteilige Gebühr anfallen. Ihre Stornierungsanfrage möglichst früh zu senden, erleichtert den Ablauf.',
+    a: 'Solange Ihre Bestellung noch von keinem Übersetzer übernommen wurde, können Sie sie über Ihre Bestellseite oder unter info@tercumexpert.com stornieren, und Ihre Zahlung wird vollständig auf das ursprüngliche Zahlungsmittel erstattet. Sobald die Übersetzung von einem Übersetzer in Bearbeitung genommen wurde, wird aufgrund der personenbezogenen Art der Leistung keine Rückerstattung vorgenommen.',
     keywords: ['stornierung nach zahlung', 'rückerstattung', 'geld zurück'],
   },
   {
@@ -440,7 +440,7 @@ export const FAQ_ITEMS_DE: FaqItem[] = [
     category: 'pricing',
     priority: 51,
     q: 'Sind die Gebühren für notarielle Beglaubigung und Apostille im Preis enthalten?',
-    a: 'Notarielle Beglaubigung und Apostille sind gesonderte Vorgänge, die von den zuständigen Behörden durchgeführt werden und amtlichen Gebührenordnungen unterliegen. Diese Kosten werden getrennt von der Übersetzungsgebühr ausgewiesen; da sie einer amtlichen Gebührenordnung folgen, stehen sie vorab möglicherweise nicht exakt fest, und der tatsächliche Betrag wird nach dem Vorgang mitgeteilt.',
+    a: 'Die notarielle Beglaubigung ist ein gesonderter Vorgang, der von den zuständigen Behörden durchgeführt wird und amtlichen Gebührenordnungen unterliegt; diese Kosten werden getrennt von der Übersetzungsgebühr ausgewiesen, und da sie einer amtlichen Gebührenordnung folgen, stehen sie vorab möglicherweise nicht exakt fest, wobei der tatsächliche Betrag nach dem Vorgang mitgeteilt wird. Das Apostille-Verfahren führen wir hingegen nicht durch; die Apostille müssen Sie selbst bei der zuständigen Behörde einholen, und wir übersetzen lediglich Ihr apostilliertes Dokument.',
     keywords: ['notargebühr', 'apostille gebühr', 'inbegriffen', 'notarkosten', 'apostille kosten'],
   },
   {
@@ -512,7 +512,7 @@ export const FAQ_ITEMS_DE: FaqItem[] = [
     category: 'pricing',
     priority: 60,
     q: 'Werden bei stornierten Bestellungen Rückerstattungen gewährt?',
-    a: 'Bei Bestellungen, die vor Beginn der Übersetzung storniert werden, wird die Zahlung erstattet. Hat die Arbeit bereits begonnen, kann der Restbetrag nach Abzug des abgeschlossenen Teils erstattet werden. In Fällen wie einer Doppelbelastung wird der überschüssige Betrag erstattet.',
+    a: 'Wird Ihre Bestellung storniert, bevor sie von einem Übersetzer übernommen wurde, wird Ihre Zahlung vollständig auf das ursprüngliche Zahlungsmittel erstattet. Sobald die Übersetzung von einem Übersetzer in Bearbeitung genommen wurde, wird aufgrund der personenbezogenen Art der Leistung keine Rückerstattung vorgenommen. In Fällen wie einer Doppelbelastung oder einer fehlerhaften Belastung wird der überschüssige Betrag erstattet.',
     keywords: ['rückerstattung', 'geld zurück', 'stornierung erstattung', 'erstattung'],
   },
 
@@ -1114,7 +1114,7 @@ export const FAQ_ITEMS_DE: FaqItem[] = [
     category: 'corporate',
     priority: 134,
     q: 'Betreuen Sie internationale Unternehmen und mehrsprachige Projekte?',
-    a: 'Ja. Projekte über mehrere Länder und Sprachen hinweg können zentral koordiniert und durchgeführt werden, wobei die Terminologiekonsistenz durchgängig gewährleistet wird. Bei Unternehmensprojekten können auch beglaubigte Übersetzung sowie bei Bedarf notarielle Beglaubigung und Apostille abgewickelt werden.',
+    a: 'Ja. Projekte über mehrere Länder und Sprachen hinweg können zentral koordiniert und durchgeführt werden, wobei die Terminologiekonsistenz durchgängig gewährleistet wird. Bei Unternehmensprojekten können auch beglaubigte Übersetzung sowie bei Bedarf notarielle Beglaubigung abgewickelt werden.',
     keywords: ['internationales unternehmen', 'mehrsprachiges projekt', 'unternehmen notar apostille'],
   },
 
