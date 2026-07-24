@@ -11,7 +11,7 @@ export function marketForLocale(locale: string): 'tr' | 'global' {
   return locale === 'tr' ? 'tr' : 'global'
 }
 
-const LIST_COLS = 'id,market,locale,slug,title,excerpt,image_path,service_key,category,published_at'
+const LIST_COLS = 'id,market,locale,slug,title,excerpt,image_path,service_key,category,published_at,views'
 const FULL_COLS = `${LIST_COLS},body`
 
 /** Yayınlanmış yazılar, en yeni önce. limit verilirse ilk N (anasayfa için 3). */
@@ -49,4 +49,21 @@ export async function fetchPostBySlug(locale: string, slug: string): Promise<Blo
 export function blogImageUrl(path: string | null | undefined): string | null {
   if (!path) return null
   return supabase.storage.from('blog-images').getPublicUrl(path).data.publicUrl
+}
+
+/**
+ * Okunma sayacını +1 yapar (SECURITY DEFINER RPC). Oturum başına yazı başına yalnız bir
+ * kez çağrılır (yenilemede şişmesin diye sessionStorage ile tekilleştirilir).
+ */
+export async function incrementViews(id: string, slug: string): Promise<void> {
+  try {
+    const key = `bv_${slug}`
+    if (typeof sessionStorage !== 'undefined') {
+      if (sessionStorage.getItem(key)) return
+      sessionStorage.setItem(key, '1')
+    }
+    await supabase.rpc('increment_blog_views', { p_id: id })
+  } catch {
+    // sessiz geç — sayaç kritik değil
+  }
 }

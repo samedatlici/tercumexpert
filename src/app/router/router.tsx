@@ -24,7 +24,7 @@ function SplatElement() {
   const splat = location.pathname.replace(new RegExp(`^/${locale}/?`), '')
   const resolved = resolveRouteId(locale, splat)
 
-  if (!resolved || resolved.routeId === 'blogPost') {
+  if (!resolved) {
     const Cmp = NotFound
     return <Cmp />
   }

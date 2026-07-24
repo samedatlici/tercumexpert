@@ -17,6 +17,7 @@ export function BlogCard({ post }: { post: BlogListItem }) {
   const date = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(
     new Date(post.published_at),
   )
+  const views = new Intl.NumberFormat(locale).format(post.views ?? 0)
 
   return (
     <Link
@@ -43,7 +44,13 @@ export function BlogCard({ post }: { post: BlogListItem }) {
           {post.title}
         </h3>
         {post.excerpt && <p className="mt-3 line-clamp-3 flex-1 text-sm text-text-secondary">{post.excerpt}</p>}
-        <div className="mt-5 border-t border-border pt-4 text-xs text-text-secondary">{date}</div>
+        <div className="mt-5 flex items-center justify-between border-t border-border pt-4 text-xs text-text-secondary">
+          <span>{date}</span>
+          <span className="inline-flex items-center gap-1.5">
+            <Icon name="Eye" className="size-4" />
+            {views}
+          </span>
+        </div>
       </div>
     </Link>
   )

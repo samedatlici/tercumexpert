@@ -14,6 +14,7 @@ export interface BlogPost {
   service_key: string | null
   category: string | null
   published_at: string // ISO — sıralama: en yeni önce
+  views: number // okunma sayısı (kartta göz + sayı)
 }
 
 /** Kart/liste için gövde hariç alanlar (daha hafif select). */
