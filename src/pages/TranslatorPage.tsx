@@ -26,13 +26,15 @@ export default function TranslatorPage() {
   const [canceling, setCanceling] = useState(false)
 
   // Başvuran kişi bekleyen/reddedilmiş başvurusunu iptal edebilir (kaydı siler → sıfırdan başvurabilir).
+  // Sunucu (service-role) FK bağımlılıklarını çözer: devam eden siparişleri havuza geri bırakır,
+  // tamamlanmışların geçmişini korur. İstemci doğrudan silemez (FK kısıtı hatası verirdi).
   const cancelApplication = async () => {
     if (!translator) return
     if (!window.confirm(t.cancelConfirm)) return
     setCanceling(true)
-    const { error: delErr } = await supabase.from('translators').delete().eq('id', translator.id)
+    const res = await translatorApi<{ ok?: boolean; error?: string }>('cancelApplication')
     setCanceling(false)
-    if (delErr) {
+    if (!res?.ok) {
       alert(t.form.saveError)
       return
     }

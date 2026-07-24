@@ -100,18 +100,30 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
   }
 
   // Dosyaları yükle (hata olursa sipariş yine kaydolur; dosya eksik kalırsa ekip iletişime geçer).
+  // ÖNEMLİ: Dosya, fiyat sayfasında yüklenip giriş için sayfadan ayrıldıktan sonra IndexedDB'den
+  // geri yüklenmiş olabilir. Bazı tarayıcılarda IndexedDB'den gelen File nesnesi doğrudan Storage'a
+  // yüklenirken içeriği "boşalmış" gibi davranabiliyordu → dosya tercüman havuzunda görünmüyordu.
+  // Bunu önlemek için baytları okuyup TAZE bir Blob oluşturup onu yüklüyoruz.
+  let fileIndex = 0
   for (const { file, words } of input.files) {
-    const path = `${input.userId}/${order.id}/${Date.now()}-${safeName(file.name)}`
-    const { error: upErr } = await supabase.storage
-      .from('order-files')
-      .upload(path, file, { upsert: true, contentType: file.type || undefined })
-    if (!upErr) {
-      await supabase.from('order_files').insert({
-        order_id: order.id,
-        file_name: file.name,
-        storage_path: path,
-        words,
-      })
+    fileIndex += 1
+    const path = `${input.userId}/${order.id}/${Date.now()}-${fileIndex}-${safeName(file.name)}`
+    try {
+      const buf = await file.arrayBuffer()
+      const blob = new Blob([buf], { type: file.type || 'application/octet-stream' })
+      const { error: upErr } = await supabase.storage
+        .from('order-files')
+        .upload(path, blob, { upsert: true, contentType: file.type || 'application/octet-stream' })
+      if (!upErr) {
+        await supabase.from('order_files').insert({
+          order_id: order.id,
+          file_name: file.name,
+          storage_path: path,
+          words,
+        })
+      }
+    } catch {
+      /* tek dosya yüklenemese de sipariş bozulmaz */
     }
   }
 

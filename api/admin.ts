@@ -241,9 +241,63 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   // ——— Hesabı sil ———
+  // Auth kullanıcısını silmeden ÖNCE, silmeyi engelleyen yabancı-anahtar (FK) bağımlılıklarını
+  // çözer. Aksi halde Supabase 'update or delete violates foreign key constraint' verir ve
+  // hesap silinmez (yaşanan hata buydu). Geçmiş kayıtlar (ledger) KORUNUR: yalnızca order
+  // bağlantısı (order_id) boşaltılır, tutar/tarih silinmez.
   if (action === 'deleteUser') {
     const uid = String(body.userId || '')
     if (!uid) return json({ error: 'no_user' }, 400)
+
+    // 1) Bu kullanıcının kendi siparişlerinin id'leri.
+    const ordRes = await fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=eq.${uid}&select=id`, {
+      headers: svcHeaders(),
+    })
+    const ownOrders = ordRes.ok ? ((await ordRes.json()) as Array<{ id: string }>) : []
+    const orderIds = ownOrders.map((o) => o.id).filter(Boolean)
+
+    if (orderIds.length) {
+      const inList = `in.(${orderIds.join(',')})`
+      // a) Bu siparişlere bağlı ledger kayıtlarının order bağlantısını boşalt (geçmiş korunur).
+      await fetch(`${SUPABASE_URL}/rest/v1/translator_ledger?order_id=${inList}`, {
+        method: 'PATCH',
+        headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+        body: JSON.stringify({ order_id: null }),
+      })
+      await fetch(`${SUPABASE_URL}/rest/v1/partner_ledger?order_id=${inList}`, {
+        method: 'PATCH',
+        headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+        body: JSON.stringify({ order_id: null }),
+      })
+      // b) Sipariş dosyalarını sil (order_files → orders FK'sini çözer).
+      await fetch(`${SUPABASE_URL}/rest/v1/order_files?order_id=${inList}`, {
+        method: 'DELETE',
+        headers: svcHeaders({ Prefer: 'return=minimal' }),
+      })
+      // c) Siparişleri sil.
+      await fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=eq.${uid}`, {
+        method: 'DELETE',
+        headers: svcHeaders({ Prefer: 'return=minimal' }),
+      })
+    }
+
+    // 2) Kullanıcı aynı zamanda TERCÜMANSA: başka müşterilerin siparişlerindeki translator_id
+    // bağlantısını boşalt (orders.translator_id NO cascade → tercüman kaydının cascade silinmesini
+    // engellerdi). translator_ledger tercüman silinince cascade ile temizlenir.
+    const trRes = await fetch(`${SUPABASE_URL}/rest/v1/translators?user_id=eq.${uid}&select=id`, {
+      headers: svcHeaders(),
+    })
+    const trRows = trRes.ok ? ((await trRes.json()) as Array<{ id: string }>) : []
+    for (const tr of trRows) {
+      await fetch(`${SUPABASE_URL}/rest/v1/orders?translator_id=eq.${tr.id}`, {
+        method: 'PATCH',
+        headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+        body: JSON.stringify({ translator_id: null }),
+      })
+    }
+
+    // 3) Auth kullanıcısını sil (translators / partners / partner_referrals ON DELETE CASCADE,
+    // quote_uploads.user_id ON DELETE SET NULL ile otomatik temizlenir).
     const res = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${uid}`, { method: 'DELETE', headers: svcHeaders() })
     return json({ ok: res.ok })
   }

@@ -146,15 +146,75 @@ interface TranslatorRow {
   expertise: string[]
   language_pairs: { source: string; target: string }[]
   iban_verified: boolean
+  country: string | null
+  city: string | null
 }
 async function getApprovedTranslator(userId: string): Promise<TranslatorRow | null> {
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/translators?user_id=eq.${userId}&status=eq.approved&select=id,expertise,language_pairs,iban_verified`,
+    `${SUPABASE_URL}/rest/v1/translators?user_id=eq.${userId}&status=eq.approved&select=id,expertise,language_pairs,iban_verified,country,city`,
     { headers: svcHeaders() },
   )
   if (!res.ok) return null
   const rows = (await res.json()) as TranslatorRow[]
   return rows[0] ?? null
+}
+
+/** Kullanıcının tercüman kaydı (durumdan BAĞIMSIZ) — başvuru iptali için gerekir (pending de dahil). */
+async function getTranslatorByUser(userId: string): Promise<{ id: string } | null> {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/translators?user_id=eq.${userId}&select=id`,
+    { headers: svcHeaders() },
+  )
+  if (!res.ok) return null
+  const rows = (await res.json()) as Array<{ id: string }>
+  return rows[0] ?? null
+}
+
+/** Konum karşılaştırması için normalize (büyük/küçük, boşluk, Türkçe karakter toleransı). */
+function normLoc(v: unknown): string {
+  return String(v ?? '')
+    .trim()
+    .toLocaleLowerCase('tr')
+    .replace(/i̇/g, 'i')
+    .replace(/\s+/g, ' ')
+}
+
+// Uygulamanın desteklediği 14 dil. Tercümanın ülkesi ISO kodu (ör. 'tr') olarak;
+// siparişin teslimat ülkesi ise müşterinin dilinde GÖRÜNEN ad (ör. 'Türkiye'/'Turkey')
+// olarak saklanır. Karşılaştırmayı dil-bağımsız yapmak için ISO kodunu tüm dillerdeki
+// görünen adlara açar ve herhangi biriyle eşleşiyorsa doğru kabul ederiz.
+const LOC_LOCALES = ['tr', 'en', 'fr', 'de', 'nl', 'es', 'ar', 'ru', 'az', 'pl', 'bg', 'pt', 'da', 'it']
+
+/** Tercümanın ISO ülke kodunun, siparişteki görünen ülke adıyla (herhangi bir dilde) eşleşmesi. */
+function countryMatches(orderCountry: unknown, translatorIso: unknown): boolean {
+  const oc = normLoc(orderCountry)
+  const iso = String(translatorIso ?? '').trim()
+  if (!oc || !iso) return false
+  // Görünen ad Intl ile üretilemezse ISO kodunun kendisi saklanmış olabilir → doğrudan kıyas.
+  if (normLoc(iso) === oc) return true
+  for (const lc of LOC_LOCALES) {
+    try {
+      const name = new Intl.DisplayNames([lc], { type: 'region' }).of(iso.toUpperCase())
+      if (name && normLoc(name) === oc) return true
+    } catch {
+      /* bu dil için atla */
+    }
+  }
+  return false
+}
+
+/**
+ * ACİL + FİZİKSEL teslimat siparişleri: yalnızca teslimat adresiyle AYNI ülke ve
+ * şehirde ikamet eden tercüman görebilir/üstlenebilir. Acil ama fiziksel değilse
+ * (dijital) konum filtresi UYGULANMAZ — her yerdeki tercüman alabilir.
+ * Şehir her iki tarafta da aynı bölge listesinden seçildiği için doğrudan; ülke ise
+ * ISO↔görünen-ad farkı nedeniyle countryMatches ile kıyaslanır.
+ */
+function urgentPhysicalOk(order: Record<string, unknown>, tr: TranslatorRow): boolean {
+  if (!(order.urgent && order.physical_delivery)) return true
+  const ocity = normLoc(order.delivery_city)
+  if (!ocity) return false // teslimat şehri eksikse eşleşme yok (güvenli varsayılan)
+  return countryMatches(order.delivery_country, tr.country) && normLoc(tr.city) === ocity
 }
 
 async function signedUrl(bucket: string, path: string, expiresIn = 3600): Promise<string | null> {
@@ -260,9 +320,51 @@ export default async function handler(req: Request): Promise<Response> {
 
   const isAdmin = user.email === ADMIN_EMAIL
   const translator = await getApprovedTranslator(user.id)
-  if (!isAdmin && !translator) return json({ error: 'not_translator' }, 403)
 
   const action = body.action
+
+  // -------- Başvuruyu iptal et (tercüman; ONAY DURUMUNDAN BAĞIMSIZ) --------
+  // Profilinde değişiklik yaptığı için onayı düşen (pending) tercüman da başvurusunu
+  // iptal edebilmeli. Bu yüzden 'onaylı tercüman' kapısından ÖNCE ele alınır.
+  if (action === 'cancelApplication') {
+    const own = await getTranslatorByUser(user.id)
+    if (!own) return json({ error: 'not_translator' }, 403)
+    // Bu tercümana bağlı siparişleri çöz: devam edenleri havuza geri bırak, geçmişi koru.
+    // 1) Üstlenilmiş/işlemdeki siparişleri tekrar 'available' yap (müşteri mağdur olmasın).
+    await fetch(
+      `${SUPABASE_URL}/rest/v1/orders?translator_id=eq.${own.id}&work_status=in.(claimed,submitted,approved)`,
+      {
+        method: 'PATCH',
+        headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+        body: JSON.stringify({
+          translator_id: null,
+          work_status: 'available',
+          status: 'pending',
+          translator_payout: null,
+          claimed_at: null,
+          submitted_at: null,
+          approved_at: null,
+          translation_files: null,
+          rejection_reason: null,
+        }),
+      },
+    )
+    // 2) Tamamlanmış (completed) siparişlerde FK'yi çöz ama kaydı SİLME (geçmiş korunur).
+    await fetch(`${SUPABASE_URL}/rest/v1/orders?translator_id=eq.${own.id}`, {
+      method: 'PATCH',
+      headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+      body: JSON.stringify({ translator_id: null }),
+    })
+    // 3) Tercüman kaydını sil (translator_ledger ON DELETE CASCADE ile temizlenir).
+    const del = await fetch(`${SUPABASE_URL}/rest/v1/translators?id=eq.${own.id}`, {
+      method: 'DELETE',
+      headers: svcHeaders({ Prefer: 'return=minimal' }),
+    })
+    if (!del.ok) return json({ error: 'delete_failed' }, 500)
+    return json({ ok: true })
+  }
+
+  if (!isAdmin && !translator) return json({ error: 'not_translator' }, 403)
 
   // -------- Havuz: uyan available siparişler + dosya/metin + kazanç --------
   if (action === 'pool') {
@@ -273,8 +375,10 @@ export default async function handler(req: Request): Promise<Response> {
     )
     if (!res.ok) return json({ error: 'load' }, 200)
     const orders = (await res.json()) as Array<Record<string, unknown>>
-    const matched = orders.filter((o) =>
-      matchesTranslator(o as unknown as Parameters<typeof matchesTranslator>[0], translator),
+    const matched = orders.filter(
+      (o) =>
+        matchesTranslator(o as unknown as Parameters<typeof matchesTranslator>[0], translator) &&
+        urgentPhysicalOk(o, translator),
     )
     const out = []
     for (const o of matched) {
@@ -311,6 +415,10 @@ export default async function handler(req: Request): Promise<Response> {
     if (!order) return json({ error: 'not_found' }, 404)
     if (order.work_status !== 'available') return json({ error: 'unavailable' }, 409)
     if (!matchesTranslator(order as unknown as Parameters<typeof matchesTranslator>[0], translator)) {
+      return json({ error: 'not_allowed' }, 403)
+    }
+    // Acil + fiziksel teslimat: yalnızca aynı ülke-şehirdeki tercüman üstlenebilir.
+    if (!urgentPhysicalOk(order, translator)) {
       return json({ error: 'not_allowed' }, 403)
     }
     const payout = computePayout(order as unknown as Parameters<typeof computePayout>[0])
