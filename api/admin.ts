@@ -118,6 +118,24 @@ function phoneOf(u: AuthUser): string {
   return (m.phone as string) || u.phone || ''
 }
 
+interface DeletedRow { deleted_at: string; email: string | null; phone: string | null; name: string | null }
+/** Kaydı silinen (soft-delete) hesapların haritası: user_id → arşiv anlık görüntüsü. */
+async function getDeletedMap(): Promise<Map<string, DeletedRow>> {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/deleted_accounts?select=user_id,deleted_at,email,phone,name`, { headers: svcHeaders() })
+  if (!r.ok) return new Map()
+  const rows = (await r.json()) as Array<{ user_id: string } & DeletedRow>
+  return new Map(rows.map((d) => [d.user_id, { deleted_at: d.deleted_at, email: d.email, phone: d.phone, name: d.name }]))
+}
+/** Bir kullanıcının rol bayrakları (canlı türetme). */
+function roleFlagsOf(id: string, roles: RoleMaps): { isCustomer: boolean; isTranslator: boolean; isPartner: boolean; referredByPartner: boolean } {
+  return {
+    isCustomer: (roles.orders.get(id)?.count || 0) > 0,
+    isTranslator: roles.translators.has(id),
+    isPartner: roles.partners.has(id),
+    referredByPartner: roles.referred.has(id),
+  }
+}
+
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') return json({ error: 'method' }, 405)
   if (!SERVICE_KEY) return json({ error: 'server_config' }, 200)
@@ -137,12 +155,15 @@ export default async function handler(req: Request): Promise<Response> {
   const action = body.action
 
   // ——— Müşteri listesi: EN AZ 1 sipariş vermiş HERKES (tercümanlar dâhil) ———
+  // NOT: Bu bir LOG panelidir. Kaydı silinen / yasaklanan müşteriler de burada KALIR
+  // (sipariş geçmişleri korunur) ve 'deleted'/'banned' bayraklarıyla rozetlenir.
   if (action === 'customers') {
-    const [users, roles] = await Promise.all([listAuthUsers(), gatherRoles()])
+    const [users, roles, deleted] = await Promise.all([listAuthUsers(), gatherRoles(), getDeletedMap()])
     const customers = users
       .filter((u) => (u.email || '').toLowerCase() !== ADMIN_EMAIL && (roles.orders.get(u.id)?.count || 0) > 0)
       .map((u) => {
         const a = roles.orders.get(u.id)
+        const rf = roleFlagsOf(u.id, roles)
         return {
           id: u.id,
           name: nameOf(u),
@@ -152,78 +173,101 @@ export default async function handler(req: Request): Promise<Response> {
           orderCount: a?.count || 0,
           orderTotal: a?.total || 0,
           lastOrder: a?.last || '',
-          isTranslator: roles.translators.has(u.id),
-          referredByPartner: roles.referred.has(u.id),
+          isTranslator: rf.isTranslator,
+          isPartner: rf.isPartner,
+          referredByPartner: rf.referredByPartner,
+          banned: isBanned(u),
+          deleted: deleted.has(u.id),
         }
       })
       .sort((x, y) => (y.lastOrder || '').localeCompare(x.lastOrder || ''))
     return json({ customers })
   }
 
-  // ——— Üyeler: admin hariç TÜM hesaplar (sipariş şartı yok) + rol/ban bayrakları ———
+  // ——— Üyeler: admin hariç TÜM hesaplar (sipariş şartı yok) + rol/ban/silinme bayrakları ———
+  // Frontend, "Üyeler" görünümünde silinen+yasaklıyı gizler; "Üyeleri Yönet"te yalnızca
+  // silineni gizler (yasaklıyı gösterir ki admin yasağı kaldırabilsin).
   if (action === 'members') {
-    const [users, roles] = await Promise.all([listAuthUsers(), gatherRoles()])
+    const [users, roles, deleted] = await Promise.all([listAuthUsers(), gatherRoles(), getDeletedMap()])
     const members = users
       .filter((u) => (u.email || '').toLowerCase() !== ADMIN_EMAIL)
-      .map((u) => ({
-        id: u.id,
-        name: nameOf(u),
-        email: u.email || '',
-        phone: phoneOf(u),
-        createdAt: u.created_at || '',
-        isTranslator: roles.translators.has(u.id),
-        isPartner: roles.partners.has(u.id),
-        isCustomer: (roles.orders.get(u.id)?.count || 0) > 0,
-        referredByPartner: roles.referred.has(u.id),
-        banned: isBanned(u),
-      }))
+      .map((u) => {
+        const rf = roleFlagsOf(u.id, roles)
+        return {
+          id: u.id,
+          name: nameOf(u),
+          email: u.email || '',
+          phone: phoneOf(u),
+          createdAt: u.created_at || '',
+          isTranslator: rf.isTranslator,
+          isPartner: rf.isPartner,
+          isCustomer: rf.isCustomer,
+          referredByPartner: rf.referredByPartner,
+          banned: isBanned(u),
+          deleted: deleted.has(u.id),
+        }
+      })
       .sort((x, y) => (y.createdAt || '').localeCompare(x.createdAt || ''))
     return json({ members })
   }
 
-  // ——— Tercümanlar dizini ———
+  // ——— Tercümanlar dizini (AKTİF): kaydı silinen + yasaklı tercümanlar HARİÇ ———
+  // (Onlar "Kaydı silinen" / "Yasaklanan" sayfalarında görünür; tercüme kayıtları korunur.)
   if (action === 'translators') {
-    const [users, tRes] = await Promise.all([
+    const [users, tRes, deleted] = await Promise.all([
       listAuthUsers(),
       fetch(`${SUPABASE_URL}/rest/v1/translators?select=user_id,full_name,phone,created_at&order=created_at.desc`, { headers: svcHeaders() }),
+      getDeletedMap(),
     ])
     const umap = new Map(users.map((u) => [u.id, u]))
     const rows = tRes.ok ? ((await tRes.json()) as Array<{ user_id: string; full_name: string | null; phone: string | null; created_at: string }>) : []
-    const translators = rows.map((t) => {
-      const u = umap.get(t.user_id)
-      return {
-        userId: t.user_id,
-        name: t.full_name || (u ? nameOf(u) : ''),
-        email: u?.email || '',
-        phone: t.phone || (u ? phoneOf(u) : ''),
-        createdAt: u?.created_at || '',
-        roleCreatedAt: t.created_at || '',
-      }
-    })
+    const translators = rows
+      .filter((t) => {
+        const u = umap.get(t.user_id)
+        return !deleted.has(t.user_id) && !(u && isBanned(u))
+      })
+      .map((t) => {
+        const u = umap.get(t.user_id)
+        return {
+          userId: t.user_id,
+          name: t.full_name || (u ? nameOf(u) : ''),
+          email: u?.email || '',
+          phone: t.phone || (u ? phoneOf(u) : ''),
+          createdAt: u?.created_at || '',
+          roleCreatedAt: t.created_at || '',
+        }
+      })
     return json({ translators })
   }
 
-  // ——— Partnerler dizini ———
+  // ——— Partnerler dizini (AKTİF): kaydı silinen + yasaklı partnerler HARİÇ ———
+  // (Onlar "Kaydı silinen" / "Yasaklanan" sayfalarında görünür; getirdiği müşteri/ciro kayıtları korunur.)
   if (action === 'partners') {
-    const [users, pRes] = await Promise.all([
+    const [users, pRes, deleted] = await Promise.all([
       listAuthUsers(),
       fetch(`${SUPABASE_URL}/rest/v1/partners?select=user_id,contact_name,company,email,phone,created_at,status&order=created_at.desc`, { headers: svcHeaders() }),
+      getDeletedMap(),
     ])
     const umap = new Map(users.map((u) => [u.id, u]))
     const rows = pRes.ok ? ((await pRes.json()) as Array<Record<string, unknown>>) : []
-    const partners = rows.map((p) => {
-      const u = umap.get(p.user_id as string)
-      return {
-        userId: p.user_id,
-        name: (p.contact_name as string) || '',
-        company: (p.company as string) || '',
-        email: (p.email as string) || u?.email || '',
-        phone: (p.phone as string) || '',
-        siteCreatedAt: u?.created_at || '',
-        roleCreatedAt: (p.created_at as string) || '',
-        status: (p.status as string) || '',
-      }
-    })
+    const partners = rows
+      .filter((p) => {
+        const u = umap.get(p.user_id as string)
+        return !deleted.has(p.user_id as string) && !(u && isBanned(u))
+      })
+      .map((p) => {
+        const u = umap.get(p.user_id as string)
+        return {
+          userId: p.user_id,
+          name: (p.contact_name as string) || '',
+          company: (p.company as string) || '',
+          email: (p.email as string) || u?.email || '',
+          phone: (p.phone as string) || '',
+          siteCreatedAt: u?.created_at || '',
+          roleCreatedAt: (p.created_at as string) || '',
+          status: (p.status as string) || '',
+        }
+      })
     return json({ partners })
   }
 
@@ -240,66 +284,80 @@ export default async function handler(req: Request): Promise<Response> {
     return json({ ok: res.ok })
   }
 
-  // ——— Hesabı sil ———
-  // Auth kullanıcısını silmeden ÖNCE, silmeyi engelleyen yabancı-anahtar (FK) bağımlılıklarını
-  // çözer. Aksi halde Supabase 'update or delete violates foreign key constraint' verir ve
-  // hesap silinmez (yaşanan hata buydu). Geçmiş kayıtlar (ledger) KORUNUR: yalnızca order
-  // bağlantısı (order_id) boşaltılır, tutar/tarih silinmez.
+  // ——— Hesabı sil (SOFT-DELETE: arşivle + girişi kalıcı kapat) ———
+  // Loglar ASLA silinmez: siparişler, tercüme kayıtları, partner/ciro kayıtları ve
+  // kişisel bilgi (e-posta/telefon) KORUNUR — admin geçmişi sonsuza dek gözlemleyebilsin.
+  // Hesap yalnızca "kaydı silindi" olarak arşivlenir (deleted_accounts) ve auth girişi
+  // kalıcı olarak kapatılır. Kullanıcı bir daha giriş yapamaz; tüm kayıtları yerinde kalır.
   if (action === 'deleteUser') {
     const uid = String(body.userId || '')
     if (!uid) return json({ error: 'no_user' }, 400)
 
-    // 1) Bu kullanıcının kendi siparişlerinin id'leri.
-    const ordRes = await fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=eq.${uid}&select=id`, {
-      headers: svcHeaders(),
+    // 1) Kişisel bilgi anlık görüntüsü (ileride ihtiyaç için korunur).
+    const uRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${uid}`, { headers: svcHeaders() })
+    const u = uRes.ok ? ((await uRes.json()) as AuthUser) : null
+
+    // 2) Arşive işle (idempotent upsert; user_id benzersiz PK).
+    const arch = await fetch(`${SUPABASE_URL}/rest/v1/deleted_accounts`, {
+      method: 'POST',
+      headers: svcHeaders({ Prefer: 'resolution=merge-duplicates,return=minimal' }),
+      body: JSON.stringify({
+        user_id: uid,
+        email: u?.email || null,
+        phone: u ? phoneOf(u) : null,
+        name: u ? nameOf(u) : null,
+      }),
     })
-    const ownOrders = ordRes.ok ? ((await ordRes.json()) as Array<{ id: string }>) : []
-    const orderIds = ownOrders.map((o) => o.id).filter(Boolean)
+    if (!arch.ok) return json({ ok: false, error: 'archive_failed' }, 200)
 
-    if (orderIds.length) {
-      const inList = `in.(${orderIds.join(',')})`
-      // a) Bu siparişlere bağlı ledger kayıtlarının order bağlantısını boşalt (geçmiş korunur).
-      await fetch(`${SUPABASE_URL}/rest/v1/translator_ledger?order_id=${inList}`, {
-        method: 'PATCH',
-        headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
-        body: JSON.stringify({ order_id: null }),
-      })
-      await fetch(`${SUPABASE_URL}/rest/v1/partner_ledger?order_id=${inList}`, {
-        method: 'PATCH',
-        headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
-        body: JSON.stringify({ order_id: null }),
-      })
-      // b) Sipariş dosyalarını sil (order_files → orders FK'sini çözer).
-      await fetch(`${SUPABASE_URL}/rest/v1/order_files?order_id=${inList}`, {
-        method: 'DELETE',
-        headers: svcHeaders({ Prefer: 'return=minimal' }),
-      })
-      // c) Siparişleri sil.
-      await fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=eq.${uid}`, {
-        method: 'DELETE',
-        headers: svcHeaders({ Prefer: 'return=minimal' }),
-      })
-    }
-
-    // 2) Kullanıcı aynı zamanda TERCÜMANSA: başka müşterilerin siparişlerindeki translator_id
-    // bağlantısını boşalt (orders.translator_id NO cascade → tercüman kaydının cascade silinmesini
-    // engellerdi). translator_ledger tercüman silinince cascade ile temizlenir.
-    const trRes = await fetch(`${SUPABASE_URL}/rest/v1/translators?user_id=eq.${uid}&select=id`, {
+    // 3) Girişi kalıcı kapat (ban). Loglar/roller/siparişler DOKUNULMAZ.
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${uid}`, {
+      method: 'PUT',
       headers: svcHeaders(),
+      body: JSON.stringify({ ban_duration: '876000h' }),
     })
-    const trRows = trRes.ok ? ((await trRes.json()) as Array<{ id: string }>) : []
-    for (const tr of trRows) {
-      await fetch(`${SUPABASE_URL}/rest/v1/orders?translator_id=eq.${tr.id}`, {
-        method: 'PATCH',
-        headers: svcHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
-        body: JSON.stringify({ translator_id: null }),
-      })
-    }
-
-    // 3) Auth kullanıcısını sil (translators / partners / partner_referrals ON DELETE CASCADE,
-    // quote_uploads.user_id ON DELETE SET NULL ile otomatik temizlenir).
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${uid}`, { method: 'DELETE', headers: svcHeaders() })
     return json({ ok: res.ok })
+  }
+
+  // ——— Kaydı silinen kullanıcılar (arşiv) + roller (canlı) ———
+  if (action === 'deletedUsers') {
+    const [users, roles, deleted] = await Promise.all([listAuthUsers(), gatherRoles(), getDeletedMap()])
+    const umap = new Map(users.map((u) => [u.id, u]))
+    const out = Array.from(deleted.entries()).map(([id, d]) => {
+      const u = umap.get(id)
+      const rf = roleFlagsOf(id, roles)
+      return {
+        id,
+        // Kişisel bilgi arşivden; hesap hâlâ dursa auth'tan tazele.
+        name: (u ? nameOf(u) : '') || d.name || '',
+        email: (u?.email || '') || d.email || '',
+        phone: (u ? phoneOf(u) : '') || d.phone || '',
+        deletedAt: d.deleted_at || '',
+        ...rf,
+      }
+    })
+    out.sort((x, y) => (y.deletedAt || '').localeCompare(x.deletedAt || ''))
+    return json({ users: out })
+  }
+
+  // ——— Yasaklanan kullanıcılar (auth ban'lı, ama kaydı silinmemiş) + roller (canlı) ———
+  if (action === 'bannedUsers') {
+    const [users, roles, deleted] = await Promise.all([listAuthUsers(), gatherRoles(), getDeletedMap()])
+    const out = users
+      .filter((u) => (u.email || '').toLowerCase() !== ADMIN_EMAIL && isBanned(u) && !deleted.has(u.id))
+      .map((u) => {
+        const rf = roleFlagsOf(u.id, roles)
+        return {
+          id: u.id,
+          name: nameOf(u),
+          email: u.email || '',
+          phone: phoneOf(u),
+          bannedAt: u.banned_until || '',
+          ...rf,
+        }
+      })
+      .sort((x, y) => (x.name || '').localeCompare(y.name || ''))
+    return json({ users: out })
   }
 
   // ——— Müşteri detayı ———

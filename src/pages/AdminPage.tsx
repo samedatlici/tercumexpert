@@ -57,7 +57,7 @@ async function adminPost<T>(action: string, body?: Record<string, unknown>): Pro
 /* ------------------------------------------------------------------ */
 /* Sayfa                                                               */
 /* ------------------------------------------------------------------ */
-type Tab = 'chats' | 'members' | 'customers' | 'translators' | 'partners' | 'manage' | 'uploads'
+type Tab = 'chats' | 'members' | 'customers' | 'translators' | 'partners' | 'deleted' | 'banned' | 'manage' | 'uploads'
 
 /* Rozetler — marka paleti (yeşil/mavi/siyah/nötr; yasaklı=kırmızı). */
 const BADGE: Record<string, string> = {
@@ -86,6 +86,20 @@ function roleBadges(f: RoleFlags, h: any, opts?: { includeCustomer?: boolean; in
 function BadgeRow({ items }: { items: { tone: string; label: string }[] }) {
   if (items.length === 0) return null
   return <span className="inline-flex flex-wrap gap-1">{items.map((b, i) => <Badge key={i} tone={b.tone}>{b.label}</Badge>)}</span>
+}
+/** Durum rozetleri: kaydı silinen / yasaklanan kullanıcı için, sahip olduğu her role göre
+ *  bileşik etiket ("Kaydı silinmiş müşteri", "Yasaklı tercüman" vb.). Rol yoksa "…üye". */
+function statusBadges(f: RoleFlags, status: 'deleted' | 'banned', h: any): { tone: string; label: string }[] {
+  const labels = status === 'deleted'
+    ? { member: h.delMember, customer: h.delCustomer, translator: h.delTranslator, partner: h.delPartner }
+    : { member: h.banMember, customer: h.banCustomer, translator: h.banTranslator, partner: h.banPartner }
+  const tone = status === 'deleted' ? 'dark' : 'red'
+  const out: { tone: string; label: string }[] = []
+  if (f.isCustomer) out.push({ tone, label: labels.customer })
+  if (f.isTranslator) out.push({ tone, label: labels.translator })
+  if (f.isPartner) out.push({ tone, label: labels.partner })
+  if (out.length === 0) out.push({ tone, label: labels.member })
+  return out
 }
 
 export default function AdminPage() {
@@ -129,6 +143,8 @@ export default function AdminPage() {
     { key: 'customers', label: h.tabCustomers },
     { key: 'translators', label: h.tabTranslators },
     { key: 'partners', label: h.tabPartners },
+    { key: 'deleted', label: h.tabDeleted },
+    { key: 'banned', label: h.tabBanned },
     { key: 'manage', label: h.tabManage },
     { key: 'uploads', label: h.tabUploads },
   ]
@@ -157,6 +173,8 @@ export default function AdminPage() {
       {tab === 'customers' && <CustomersSection h={h} />}
       {tab === 'translators' && <TranslatorsSection h={h} />}
       {tab === 'partners' && <PartnersSection h={h} />}
+      {tab === 'deleted' && <StatusUsersSection h={h} status="deleted" />}
+      {tab === 'banned' && <StatusUsersSection h={h} status="banned" />}
       {tab === 'manage' && <ManageSection h={h} />}
       {tab === 'uploads' && <UploadsSection h={h} />}
     </Shell>
@@ -296,7 +314,8 @@ function ChatbotSection({ a, dict }: { a: any; dict: any }) {
 interface Customer {
   id: string; name: string; email: string; phone: string
   createdAt: string; orderCount: number; orderTotal: number; lastOrder: string
-  isTranslator?: boolean; referredByPartner?: boolean
+  isTranslator?: boolean; isPartner?: boolean; referredByPartner?: boolean
+  banned?: boolean; deleted?: boolean
 }
 interface CustOrder {
   order_no: number; created_at: string; status: string; service: string
@@ -444,7 +463,13 @@ function CustomersSection({ h }: { h: any }) {
                   <td className="px-3 py-2 font-medium">
                     <span className="flex flex-wrap items-center gap-1.5">
                       {c.name || h.upGuest}
-                      <BadgeRow items={roleBadges({ isTranslator: c.isTranslator, referredByPartner: c.referredByPartner }, h)} />
+                      {c.deleted ? (
+                        <BadgeRow items={statusBadges({ isCustomer: true, isTranslator: c.isTranslator, isPartner: c.isPartner }, 'deleted', h)} />
+                      ) : c.banned ? (
+                        <BadgeRow items={statusBadges({ isCustomer: true, isTranslator: c.isTranslator, isPartner: c.isPartner }, 'banned', h)} />
+                      ) : (
+                        <BadgeRow items={roleBadges({ isTranslator: c.isTranslator, referredByPartner: c.referredByPartner }, h)} />
+                      )}
                     </span>
                   </td>
                   <td className="px-3 py-2 text-text-secondary">{c.email || '—'}</td>
@@ -574,7 +599,7 @@ function FilterBar({
 /* ------------------------------------------------------------------ */
 interface Member {
   id: string; name: string; email: string; phone: string; createdAt: string
-  isTranslator: boolean; isPartner: boolean; isCustomer: boolean; referredByPartner: boolean; banned: boolean
+  isTranslator: boolean; isPartner: boolean; isCustomer: boolean; referredByPartner: boolean; banned: boolean; deleted: boolean
 }
 function useMembers(): { rows: Member[]; state: 'loading' | 'idle' | 'error'; setRows: React.Dispatch<React.SetStateAction<Member[]>> } {
   const [rows, setRows] = useState<Member[]>([])
@@ -608,7 +633,9 @@ function MembersSection({ h }: { h: any }) {
   const { rows, state } = useMembers()
   const [q, setQ] = useState('')
   const [role, setRole] = useState('')
-  const list = useMemo(() => filterMembers(rows, q, role), [rows, q, role])
+  // "Üyeler" AKTİF üye görünümüdür: kaydı silinen ve yasaklananlar burada gösterilmez
+  // (kendi özel sayfalarında görünürler).
+  const list = useMemo(() => filterMembers(rows.filter((r) => !r.deleted && !r.banned), q, role), [rows, q, role])
   const roleOptions = [
     { value: '', label: h.filterAll }, { value: 'customer', label: h.bCustomer },
     { value: 'translator', label: h.bTranslator }, { value: 'partner', label: h.bPartner }, { value: 'referred', label: h.bReferred },
@@ -781,7 +808,8 @@ function ManageSection({ h }: { h: any }) {
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
   const [confirm, setConfirm] = useState<{ kind: 'ban' | 'unban' | 'delete'; member: Member } | null>(null)
-  const list = useMemo(() => filterMembers(rows, q, role), [rows, q, role])
+  // "Üyeleri Yönet": kaydı silinenler gizli (arşivlendi); yasaklılar görünür ki yasak kaldırılabilsin.
+  const list = useMemo(() => filterMembers(rows.filter((r) => !r.deleted), q, role), [rows, q, role])
   const roleOptions = [
     { value: '', label: h.filterAll }, { value: 'customer', label: h.bCustomer }, { value: 'translator', label: h.bTranslator },
     { value: 'partner', label: h.bPartner }, { value: 'referred', label: h.bReferred }, { value: 'banned', label: h.bBanned },
@@ -836,6 +864,87 @@ function ManageSection({ h }: { h: any }) {
         </div>
       )}
       {confirm && <ConfirmDialog message={confirmMsg} h={h} busy={busy} onYes={run} onNo={() => setConfirm(null)} />}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Sekme: Kaydı silinen kullanıcılar / Yasaklanan kullanıcılar         */
+/* Aynı bileşen iki sayfayı da render eder (status ile). Loglar korunur;*/
+/* burada yalnızca kişisel bilgi + rol rozetleri gösterilir.            */
+/* ------------------------------------------------------------------ */
+interface StatusUser {
+  id: string; name: string; email: string; phone: string
+  deletedAt?: string; bannedAt?: string
+  isCustomer: boolean; isTranslator: boolean; isPartner: boolean; referredByPartner: boolean
+}
+function StatusUsersSection({ h, status }: { h: any; status: 'deleted' | 'banned' }) {
+  const [rows, setRows] = useState<StatusUser[]>([])
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const [q, setQ] = useState('')
+  const [role, setRole] = useState('')
+  useEffect(() => {
+    let active = true
+    setState('loading')
+    adminPost<{ users: StatusUser[] }>(status === 'deleted' ? 'deletedUsers' : 'bannedUsers').then((d) => {
+      if (!active) return
+      if (!d) return setState('error')
+      setRows(d.users || [])
+      setState('idle')
+    })
+    return () => { active = false }
+  }, [status])
+
+  const list = useMemo(() => {
+    const s = q.trim().toLowerCase()
+    return rows.filter((r) => {
+      if (s && !(r.name + ' ' + r.email + ' ' + r.phone).toLowerCase().includes(s)) return false
+      if (role === 'customer' && !r.isCustomer) return false
+      if (role === 'translator' && !r.isTranslator) return false
+      if (role === 'partner' && !r.isPartner) return false
+      if (role === 'member' && (r.isCustomer || r.isTranslator || r.isPartner)) return false
+      return true
+    })
+  }, [rows, q, role])
+
+  const roleOptions = [
+    { value: '', label: h.filterAll }, { value: 'member', label: h.bMember }, { value: 'customer', label: h.bCustomer },
+    { value: 'translator', label: h.bTranslator }, { value: 'partner', label: h.bPartner },
+  ]
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{h.loading}</p>
+  if (state === 'error') return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{h.loadError}</p>
+  const hint = status === 'deleted' ? h.delHint : h.banHint
+  const none = status === 'deleted' ? h.delNone : h.banNone
+  return (
+    <div>
+      <FilterBar hint={hint} q={q} setQ={setQ} placeholder={h.custSearch} role={role} setRole={setRole} roleOptions={roleOptions} />
+      {list.length === 0 ? <p className="py-10 text-center text-sm text-text-secondary">{none}</p> : (
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full min-w-[680px] text-sm">
+            <thead className="bg-surface-muted text-text-secondary"><tr>
+              <th className="px-3 py-2 text-start font-medium">{h.custName}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custEmail}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custPhone}</th>
+              {status === 'deleted' && <th className="px-3 py-2 text-start font-medium">{h.delAt}</th>}
+            </tr></thead>
+            <tbody>
+              {list.map((r) => (
+                <tr key={r.id} className="border-t border-border">
+                  <td className="px-3 py-2 font-medium">
+                    <span className="flex flex-wrap items-center gap-1.5">
+                      {r.name || h.upGuest}
+                      <BadgeRow items={statusBadges({ isCustomer: r.isCustomer, isTranslator: r.isTranslator, isPartner: r.isPartner }, status, h)} />
+                    </span>
+                  </td>
+                  <td className="px-3 py-2 text-text-secondary">{r.email || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary" dir="ltr">{r.phone || '—'}</td>
+                  {status === 'deleted' && <td className="px-3 py-2 text-text-secondary">{r.deletedAt ? fmtDate(r.deletedAt) : '—'}</td>}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
