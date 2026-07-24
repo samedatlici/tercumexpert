@@ -9,6 +9,16 @@ export const bg: PartialDictionary = {
   },
 
   partnerPanel: {
+    adminTitle: "Управление на партньори",
+    tabApplications: "Заявки",
+    tabIban: "Одобрения на IBAN",
+    tabPartners: "Партньори",
+    colPartner: "Партньор",
+    colCompany: "Фирма",
+    partnerShareLabel: "Дял на партньора",
+    adminNet: "Остатък (фирма)",
+    fltPartner: "Име на партньор",
+    fltCompany: "Фирма",
     yourEarning: "Вашата печалба",
     tabAllOrders: "Всички поръчки",
     fltOrderNo: "№ на поръчка",

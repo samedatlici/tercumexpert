@@ -15,6 +15,16 @@ export const it: PartialDictionary = {
   },
 
   partnerPanel: {
+    adminTitle: "Gestione partner",
+    tabApplications: "Candidature",
+    tabIban: "Approvazioni IBAN",
+    tabPartners: "Partner",
+    colPartner: "Partner",
+    colCompany: "Azienda",
+    partnerShareLabel: "Quota partner",
+    adminNet: "Rimanente (azienda)",
+    fltPartner: "Nome partner",
+    fltCompany: "Azienda",
     yourEarning: "Il Suo guadagno",
     tabAllOrders: "Tutti gli ordini",
     fltOrderNo: "N. ordine",

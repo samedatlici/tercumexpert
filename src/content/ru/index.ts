@@ -14,6 +14,16 @@ export const ru: PartialDictionary = {
   },
 
   partnerPanel: {
+    adminTitle: "Управление партнёрами",
+    tabApplications: "Заявки",
+    tabIban: "Подтверждения IBAN",
+    tabPartners: "Партнёры",
+    colPartner: "Партнёр",
+    colCompany: "Компания",
+    partnerShareLabel: "Доля партнёра",
+    adminNet: "Остаток (компания)",
+    fltPartner: "Имя партнёра",
+    fltCompany: "Компания",
     yourEarning: "Ваш доход",
     tabAllOrders: "Все заказы",
     fltOrderNo: "№ заказа",

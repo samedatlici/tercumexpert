@@ -15,6 +15,7 @@ export const config = { runtime: 'edge' }
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xtqymenxaozzwmqfssod.supabase.co'
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'admin@tercumexpert.com').toLowerCase()
 const CODE_TTL_MS = 15 * 60 * 1000
 
 function svcHeaders(extra?: Record<string, string>): Record<string, string> {
@@ -279,6 +280,43 @@ export default async function handler(req: Request): Promise<Response> {
     )
     const rows = r.ok ? ((await r.json()) as LedgerRow[]) : []
     return json({ wallet: computeWallet(rows) })
+  }
+
+  // ---------- ADMIN: partnerlik sistemiyle gelen TÜM siparişler (müşteri + partner) ----------
+  if (action === 'adminOrders') {
+    if (user.email !== ADMIN_EMAIL) return json({ error: 'forbidden' }, 403)
+    // Tüm atıflar (user_id → partner_id) + tüm partnerler (id → ad/şirket).
+    const [refRes, parRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/partner_referrals?select=user_id,partner_id`, { headers: svcHeaders() }),
+      fetch(`${SUPABASE_URL}/rest/v1/partners?select=id,contact_name,company`, { headers: svcHeaders() }),
+    ])
+    const refs = refRes.ok ? ((await refRes.json()) as Array<{ user_id: string; partner_id: string }>) : []
+    const partners = parRes.ok ? ((await parRes.json()) as Array<{ id: string; contact_name: string | null; company: string | null }>) : []
+    if (refs.length === 0) return json({ orders: [] })
+    const userToPartner = new Map(refs.map((r) => [r.user_id, r.partner_id]))
+    const partnerMap = new Map(partners.map((p) => [p.id, p]))
+    const ids = [...new Set(refs.map((r) => r.user_id))]
+    const cols = 'order_no,created_at,status,work_status,service,source_lang,target_lang,word_count,urgent,sworn,apostille,total,user_id'
+    const [oRes, users] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=in.(${ids.join(',')})&select=${cols}&order=created_at.desc`, { headers: svcHeaders() }),
+      listAuthUsers(),
+    ])
+    const rows = oRes.ok ? ((await oRes.json()) as Array<Record<string, unknown>>) : []
+    const umap = new Map(users.map((u) => [u.id, u]))
+    const orders = rows.map((o) => {
+      const uid = o.user_id as string
+      const u = umap.get(uid)
+      const p = partnerMap.get(userToPartner.get(uid) || '')
+      return {
+        order_no: o.order_no, created_at: o.created_at, status: o.status,
+        work_status: o.work_status || 'available', service: o.service,
+        source_lang: o.source_lang, target_lang: o.target_lang, total: o.total,
+        partnerShare: computePartnerShare(o as unknown as Parameters<typeof computePartnerShare>[0]),
+        customerName: u ? nameOf(u) : '', customerEmail: u?.email || '', customerPhone: u ? phoneOf(u) : '',
+        partnerName: p?.contact_name || '', partnerCompany: p?.company || '',
+      }
+    })
+    return json({ orders })
   }
 
   return json({ error: 'unknown_action' }, 400)

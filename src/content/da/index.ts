@@ -15,6 +15,16 @@ export const da: PartialDictionary = {
   },
 
   partnerPanel: {
+    adminTitle: "Partneradministration",
+    tabApplications: "Ansøgninger",
+    tabIban: "IBAN-godkendelser",
+    tabPartners: "Partnere",
+    colPartner: "Partner",
+    colCompany: "Virksomhed",
+    partnerShareLabel: "Partnerandel",
+    adminNet: "Resterende (firma)",
+    fltPartner: "Partnernavn",
+    fltCompany: "Virksomhed",
     yourEarning: "Din indtjening",
     tabAllOrders: "Alle ordrer",
     fltOrderNo: "Ordrenr.",

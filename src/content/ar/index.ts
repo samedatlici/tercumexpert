@@ -15,6 +15,16 @@ export const ar: PartialDictionary = {
   },
 
   partnerPanel: {
+    adminTitle: "إدارة الشركاء",
+    tabApplications: "الطلبات",
+    tabIban: "موافقات الآيبان",
+    tabPartners: "الشركاء",
+    colPartner: "الشريك",
+    colCompany: "الشركة",
+    partnerShareLabel: "حصة الشريك",
+    adminNet: "المتبقي (الشركة)",
+    fltPartner: "اسم الشريك",
+    fltCompany: "الشركة",
     yourEarning: "ربحك",
     tabAllOrders: "جميع الطلبات",
     fltOrderNo: "رقم الطلب",

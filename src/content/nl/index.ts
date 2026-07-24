@@ -15,6 +15,16 @@ export const nl: PartialDictionary = {
   },
 
   partnerPanel: {
+    adminTitle: "Partnerbeheer",
+    tabApplications: "Aanvragen",
+    tabIban: "IBAN-goedkeuringen",
+    tabPartners: "Partners",
+    colPartner: "Partner",
+    colCompany: "Bedrijf",
+    partnerShareLabel: "Partneraandeel",
+    adminNet: "Resterend (bedrijf)",
+    fltPartner: "Partnernaam",
+    fltCompany: "Bedrijf",
     yourEarning: "Uw commissie",
     tabAllOrders: "Alle bestellingen",
     fltOrderNo: "Bestelnr.",

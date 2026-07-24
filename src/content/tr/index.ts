@@ -1372,6 +1372,16 @@ export const tr = {
   },
 
   partnerPanel: {
+    adminTitle: "Partner Yönetimi",
+    tabApplications: "Başvurular",
+    tabIban: "IBAN Onayları",
+    tabPartners: "Partnerler",
+    colPartner: "Partner",
+    colCompany: "Şirket/Kurum",
+    partnerShareLabel: "Partner payı",
+    adminNet: "Kalan (firma)",
+    fltPartner: "Partner adı",
+    fltCompany: "Şirket/kurum",
     yourEarning: "Sizin kazancınız",
     tabAllOrders: "Tüm Siparişler",
     fltOrderNo: "Sipariş no",

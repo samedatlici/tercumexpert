@@ -9,6 +9,16 @@ export const az: PartialDictionary = {
   },
 
   partnerPanel: {
+    adminTitle: "Partnyor idarəetməsi",
+    tabApplications: "Müraciətlər",
+    tabIban: "IBAN təsdiqləri",
+    tabPartners: "Partnyorlar",
+    colPartner: "Partnyor",
+    colCompany: "Şirkət",
+    partnerShareLabel: "Partnyor payı",
+    adminNet: "Qalıq (şirkət)",
+    fltPartner: "Partnyor adı",
+    fltCompany: "Şirkət",
     yourEarning: "Sizin qazancınız",
     tabAllOrders: "Bütün sifarişlər",
     fltOrderNo: "Sifariş nömrəsi",
