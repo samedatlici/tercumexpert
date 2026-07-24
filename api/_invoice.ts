@@ -1,19 +1,21 @@
 // =====================================================================
 // TercümExpert — Fatura (PDF) HTML şablonu. 14 dil. Arapça RTL.
 // Bu belge ÖNİZLEME/PROFORMA niteliğindedir — yasal e-Fatura DEĞİLDİR.
-// Satıcı bilgileri şimdilik DEMO'dur; şirket kurulunca güncellenecek.
+// Satıcı kimlik bilgileri vergi levhasından gerçektir (şahıs işletmesi). Marka öne
+// çıkar (başlık: TercümExpert); yasal ad minimum düzeyde satıcı bloğunda yer alır.
 // HTML üretilir; PDF'e çevirme api/order-invoice.ts (Node, chromium) içindedir.
 // =====================================================================
 
-/** DEMO satıcı bilgileri — şirket kurulunca gerçek bilgilerle değiştirilecek. */
+/** Satıcı bilgileri (vergi levhası). Marka: TercümExpert; yasal ad: Samed Fazlı Atlıcı (şahıs).
+ *  Telefon henüz eklenmedi (ertelendi) → boş; boş satırlar faturada gösterilmez. */
 export const DEMO_SELLER = {
-  name: 'TercümExpert (DEMO)',
-  legal: 'TercümExpert Çeviri Hizmetleri (Demo Ünvan)',
-  address: 'Beşiktaş, İstanbul, Türkiye',
-  taxOffice: 'Beşiktaş V.D. (Demo)',
-  taxNo: '0000000000',
+  name: 'TercümExpert',
+  legal: 'Samed Fazlı Atlıcı',
+  address: 'Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya',
+  taxOffice: 'Meram V.D.',
+  taxNo: '1030833272',
   email: 'info@tercumexpert.com',
-  phone: '+90 555 123 45 67',
+  phone: '',
 }
 
 const LOCALES = ['tr', 'en', 'fr', 'de', 'nl', 'es', 'ar', 'ru', 'az', 'pl', 'bg', 'pt', 'da', 'it']
@@ -150,6 +152,7 @@ export function buildInvoiceHtml(opts: {
     </div>`
     : ''
   const sellerLines = [seller.legal, seller.address, `${seller.taxOffice} · ${seller.taxNo}`, seller.email, seller.phone]
+    .filter(Boolean) // boş alanları (ör. henüz eklenmemiş telefon) atla
     .map((x) => esc(x))
     .join('<br>')
   const dateStr = (() => {

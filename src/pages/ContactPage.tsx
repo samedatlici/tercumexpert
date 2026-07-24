@@ -71,9 +71,7 @@ export default function ContactPage() {
               {wa && (
                 <li><a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-primary"><WhatsAppIcon className="size-4" />{c.labels.whatsapp}</a></li>
               )}
-              {!isPlaceholder(company.address.value) && (
-                <li className="flex items-start gap-2"><Icon name="MapPin" className="mt-0.5 size-4" />{company.address.value}</li>
-              )}
+              {/* Açık adres pazarlama sayfalarında GÖSTERİLMEZ (home office) — yalnız hukuki metin + faturada. */}
               <li className="text-text-secondary">{c.labels.hours}: {dict.common.topbar.workingHours}</li>
             </ul>
           </div>
@@ -146,12 +144,7 @@ export default function ContactPage() {
               </span>
               <p className="text-lg font-semibold">{c.map.placeholder}</p>
               <p className="max-w-md text-sm text-text-secondary">{c.map.note}</p>
-              {!isPlaceholder(company.address.value) && (
-                <p className="mt-1 inline-flex items-center gap-2 text-sm text-text-secondary">
-                  <Icon name="MapPin" className="size-4" />
-                  {company.address.value}
-                </p>
-              )}
+              {/* Açık adres GÖSTERİLMEZ. Harita Google Maps'e bağlanacak (karar ertelendi — takip listesi). */}
             </div>
           </div>
         </div>

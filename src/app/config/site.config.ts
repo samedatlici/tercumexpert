@@ -8,33 +8,35 @@ import { verifiable, type Verifiable } from '@/types/verification'
  */
 export interface CompanyInfo {
   legalName: Verifiable<string>
-  mersis: Verifiable<string>
   taxOffice: Verifiable<string>
+  taxNo: Verifiable<string>
   address: Verifiable<string>
   phone: Verifiable<string>
   email: Verifiable<string>
   workingHours: Verifiable<string>
 }
 
-// NOT: Aşağıdaki iletişim değerleri DEMO/placeholder'dır (referanstaki gibi görünmesi
-// için). Hiçbiri doğrulanmış gerçek bilgi DEĞİLDİR; yayından önce değiştirilmelidir
-// (PROJECT_CHECKLIST.md). Adres doğrulanmadan harita embed EDİLMEZ.
+// Kimlik/vergi bilgileri vergi levhasından doğrulanmıştır (şahıs işletmesi — ticaret
+// unvanı yok, MERSİS yok). GİZLİLİK: yasal ad + adres YALNIZCA hukuki metin ve faturada
+// kullanılır; pazarlama sayfalarında (footer/header/iletişim) GÖSTERİLMEZ. Site genelinde
+// marka "TercümExpert" öne çıkar. Telefon/WhatsApp henüz eklenmedi (ertelendi — takip listesi).
 export const company: CompanyInfo = {
-  legalName: verifiable('[ŞİRKET UNVANI EKLENECEK]', 'requires-legal-review', 'Resmî ticaret unvanı.'),
-  mersis: verifiable('[MERSİS NO EKLENECEK]', 'requires-legal-review'),
-  taxOffice: verifiable('[VERGİ DAİRESİ / NO EKLENECEK]', 'requires-legal-review'),
-  address: verifiable('Beşiktaş, İstanbul, Türkiye', 'unverified', 'DEMO adres — doğrulanmadan harita embed edilmez.'),
-  phone: verifiable('+90 555 123 45 67', 'unverified', 'DEMO numara — gerçek numarayla değiştirilecek.'),
-  email: verifiable('info@tercumexpert.com', 'unverified', 'DEMO e-posta — doğrulanacak.'),
-  workingHours: verifiable('Hafta İçi 09:00 - 18:00 | Mesai Dışı Hizmet Mevcuttur', 'unverified'),
+  legalName: verifiable('Samed Fazlı Atlıcı', 'verified', 'Şahıs işletmesi — yasal satıcı adı (marka: TercümExpert). Yalnız hukuki/fatura.'),
+  taxOffice: verifiable('Meram Vergi Dairesi', 'verified'),
+  taxNo: verifiable('1030833272', 'verified', 'Vergi Kimlik No (VKN).'),
+  address: verifiable('Şeyh Şamil Mah. Eylül Sk. No: 2/D, Selçuklu, Konya', 'verified', 'Kayıtlı adres — YALNIZCA hukuki metin/faturada; pazarlama sayfalarında gösterilmez.'),
+  phone: verifiable('+90 555 123 45 67', 'unverified', 'GEÇİCİ placeholder — gerçek numara gelince değiştirilecek (takip: COMPANY_INFO_PENDING.md). Gizlenmez.'),
+  email: verifiable('info@tercumexpert.com', 'verified', 'Google Workspace — şu an alias; ayrı hesaba geçilecek (hatırlatma).'),
+  workingHours: verifiable('Hafta İçi 09:00 - 18:00 | Mesai Dışı Hizmet Mevcuttur', 'verified'),
 }
 
 export const siteConfig = {
   name: env.VITE_APP_NAME,
   url: env.VITE_APP_URL,
-  // env doldurulmazsa DEMO numaraya düşer (referans görünümü için). Gerçek numara env'den.
+  // GEÇİCİ placeholder numara — gerçek numara/env gelince değiştirilecek (COMPANY_INFO_PENDING.md).
   whatsappNumber: env.VITE_WHATSAPP_NUMBER || '905551234567',
-  // DEMO sosyal linkler — gerçek hesaplarla değiştirilecek (checklist).
+  // GEÇİCİ sosyal linkler — 4 platform da (Instagram, Facebook, X, LinkedIn) gerçek
+  // linklerle değiştirilecek (ertelendi). İkonlar GİZLENMEZ.
   social: {
     facebook: 'https://facebook.com',
     x: 'https://x.com',
