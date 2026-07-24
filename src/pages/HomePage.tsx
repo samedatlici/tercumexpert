@@ -8,7 +8,8 @@ import { buildPath } from '@/app/router/routes'
 import { SERVICES } from '@/app/config/services'
 import { STATISTICS, CORPORATE_STATS, statDisplay } from '@/app/config/statistics'
 import { whatsappLink } from '@/app/config/site.config'
-import { publishedPosts } from '@/content/blog'
+import { useBlogPosts } from '@/features/blog/model/useBlogPosts'
+import { BlogCard } from '@/features/blog/ui/BlogCard'
 
 const HOW_ICONS: Record<string, IconName> = {
   upload: 'Upload',
@@ -30,7 +31,7 @@ export default function HomePage() {
   const { locale, dict } = useI18n()
   const home = dict.home
   const wa = whatsappLink(home.whatsappMsg)
-  const latestPosts = publishedPosts().slice(0, 3)
+  const { posts: latestPosts, loading: blogLoading } = useBlogPosts(locale, 3)
 
   return (
     <>
@@ -192,27 +193,26 @@ export default function HomePage() {
       <section className="section bg-surface-muted">
         <div className="container-wide">
           <SectionHead title={home.blogTeaser.title} subtitle={home.blogTeaser.subtitle} />
-          {latestPosts.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {blogLoading ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="animate-pulse overflow-hidden rounded-xl border border-border bg-surface">
+                  <div className="aspect-[16/9] w-full bg-surface-muted" />
+                  <div className="space-y-3 p-6">
+                    <div className="h-5 w-3/4 rounded bg-surface-muted" />
+                    <div className="h-4 w-full rounded bg-surface-muted" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : latestPosts.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {latestPosts.map((post) => (
-                <Link
-                  key={post.slug}
-                  to={buildPath(locale, 'blogPost', { slug: post.slug })}
-                  className="group flex flex-col rounded-lg border border-border bg-surface p-6 transition-colors hover:border-primary"
-                >
-                  <Icon name={post.icon} className="size-10 text-primary" />
-                  <span className="mt-4 text-xs font-semibold uppercase tracking-wide text-primary">{post.category}</span>
-                  <h3 className="mt-2 text-lg font-bold group-hover:text-primary">{post.title}</h3>
-                  <p className="mt-2 flex-1 text-sm text-text-secondary">{post.excerpt}</p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                    {dict.common.actions.learnMore}
-                    <Icon name="ArrowRight" className="size-4 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </Link>
+                <BlogCard key={post.id} post={post} />
               ))}
             </div>
           ) : (
-            <div className="rounded-lg border border-dashed border-border bg-surface p-10 text-center text-text-secondary">
+            <div className="rounded-xl border border-dashed border-border bg-surface p-10 text-center text-text-secondary">
               {home.blogTeaser.empty}
             </div>
           )}

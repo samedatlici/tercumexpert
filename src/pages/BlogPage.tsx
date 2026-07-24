@@ -1,50 +1,80 @@
-import { Link } from 'react-router-dom'
+import { useMemo, useState } from 'react'
 import { PageHero } from '@/components/common/PageHero'
 import { Icon } from '@/components/common/Icon'
 import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
-import { buildPath } from '@/app/router/routes'
-import { publishedPosts } from '@/content/blog'
+import { useBlogPosts } from '@/features/blog/model/useBlogPosts'
+import { BlogCard } from '@/features/blog/ui/BlogCard'
 
 /**
- * Blog listesi. Yayında yazılar en yeni tarih önce sıralanır; henüz yayında yazı
- * yoksa dürüst boş durum gösterilir (§17: sahte yazı üretilmez). Yeni blog girişi
- * eklendiğinde (blog.ts) hem bu liste hem anasayfa otomatik güncellenir. Tek tek
- * yazı detay sayfaları sonraki aşamada.
+ * Blog listesi. Üstte "Blog / Çeviri dünyasından rehberler." + arama kutusu + önden seçili
+ * "Tümü" filtresi (şimdilik başka filtre YOK — Samet kendi kategorilerini sonra ekleyecek).
+ * Tüm yayınlanmış yazılar 3'lü grid; DB'den (locale/pazar) çekilir; yeni blog eklenince otomatik.
+ * Marka renkleri (mavi/siyah), turuncu YOK. Tek tek yazı detay sayfaları Faz 2.
  */
 export default function BlogPage() {
-  const { locale, dict } = useI18n()
+  const { dict, locale } = useI18n()
   const b = dict.blog
-  const posts = publishedPosts()
+  const { posts, loading } = useBlogPosts(locale)
+  const [query, setQuery] = useState('')
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return posts
+    return posts.filter(
+      (p) => p.title.toLowerCase().includes(q) || (p.excerpt ?? '').toLowerCase().includes(q),
+    )
+  }, [posts, query])
 
   return (
     <>
       <Seo title={b.seo.title} description={b.seo.description} routeId="blog" />
       <PageHero title={b.hero.title} subtitle={b.hero.subtitle} />
+
       <section className="section">
         <div className="container-wide">
-          {posts.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((post) => (
-                <Link
-                  key={post.slug}
-                  to={buildPath(locale, 'blogPost', { slug: post.slug })}
-                  className="group flex flex-col rounded-lg border border-border bg-surface p-6 transition-colors hover:border-primary"
-                >
-                  <Icon name={post.icon} className="size-10 text-primary" />
-                  <span className="mt-4 text-xs font-semibold uppercase tracking-wide text-primary">{post.category}</span>
-                  <h3 className="mt-2 text-lg font-bold group-hover:text-primary">{post.title}</h3>
-                  <p className="mt-2 flex-1 text-sm text-text-secondary">{post.excerpt}</p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                    {dict.common.actions.learnMore}
-                    <Icon name="ArrowRight" className="size-4 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </Link>
+          {/* Arama + "Tümü" filtresi (şimdilik tek, seçili) */}
+          <div className="mb-10 flex flex-col gap-4">
+            <div className="relative w-full max-w-md">
+              <Icon name="Search" className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-text-secondary" />
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={b.searchPlaceholder}
+                className="w-full rounded-full border border-border bg-surface py-3 pl-12 pr-4 text-sm text-text-primary outline-none transition-colors focus:border-primary"
+                aria-label={b.searchPlaceholder}
+              />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <span className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">
+                {b.allCategories}
+              </span>
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="animate-pulse overflow-hidden rounded-xl border border-border bg-surface">
+                  <div className="aspect-[16/9] w-full bg-surface-muted" />
+                  <div className="space-y-3 p-6">
+                    <div className="h-5 w-3/4 rounded bg-surface-muted" />
+                    <div className="h-4 w-full rounded bg-surface-muted" />
+                    <div className="h-4 w-2/3 rounded bg-surface-muted" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filtered.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((p) => (
+                <BlogCard key={p.id} post={p} />
               ))}
             </div>
           ) : (
-            <div className="container-base rounded-lg border border-dashed border-border p-10 text-center text-text-secondary">
-              {b.empty}
+            <div className="rounded-xl border border-dashed border-border p-12 text-center text-text-secondary">
+              {posts.length === 0 ? dict.home.blogTeaser.empty : b.empty}
             </div>
           )}
         </div>
