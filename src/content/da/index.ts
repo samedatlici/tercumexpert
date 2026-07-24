@@ -1095,6 +1095,19 @@ export const da: PartialDictionary = {
     relatedTitle: "Relaterede indlæg",
     allCategories: "Alle",
     empty: "Ingen indlæg matchede dette kriterium.",
+    cta: {
+      needService: "Har du brug for denne ydelse?",
+      quickPrice: "Beregn din pris på få sekunder.",
+      button: "Beregn pris nu",
+      genericTitle: "Har du brug for en oversættelse?",
+      genericHeading: "Professionel oversættelse inden for alle områder",
+      genericDesc: "Vores eksperter i oversættelse står til rådighed døgnet rundt!",
+    },
+    share: {
+      title: "Del",
+      copy: "Kopiér link",
+      copied: "Kopieret",
+    },
   },
 
   legal: {

@@ -1094,6 +1094,19 @@ export const ru: PartialDictionary = {
     relatedTitle: "Похожие статьи",
     allCategories: "Все",
     empty: "По этому критерию статьи не найдены.",
+    cta: {
+      needService: "Нужна эта услуга?",
+      quickPrice: "Рассчитайте стоимость за считанные секунды.",
+      button: "Рассчитать стоимость",
+      genericTitle: "Нужен перевод?",
+      genericHeading: "Профессиональный перевод в любой сфере",
+      genericDesc: "Наши опытные переводчики к вашим услугам круглосуточно!",
+    },
+    share: {
+      title: "Поделиться",
+      copy: "Копировать ссылку",
+      copied: "Скопировано",
+    },
   },
 
   legal: {

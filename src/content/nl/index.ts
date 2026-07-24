@@ -1095,6 +1095,19 @@ export const nl: PartialDictionary = {
     relatedTitle: "Gerelateerde berichten",
     allCategories: "Alle",
     empty: "Geen berichten kwamen overeen met dit criterium.",
+    cta: {
+      needService: "Heeft u deze dienst nodig?",
+      quickPrice: "Bereken uw prijs in enkele seconden.",
+      button: "Bereken direct de prijs",
+      genericTitle: "Een vertaling nodig?",
+      genericHeading: "Professionele vertaling in elk vakgebied",
+      genericDesc: "Onze deskundige vertalers staan 24/7 voor u klaar!",
+    },
+    share: {
+      title: "Delen",
+      copy: "Link kopiëren",
+      copied: "Gekopieerd",
+    },
   },
 
   legal: {

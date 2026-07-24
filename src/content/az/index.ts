@@ -1089,6 +1089,19 @@ export const az: PartialDictionary = {
     relatedTitle: 'Əlaqəli yazılar',
     allCategories: 'Hamısı',
     empty: 'Bu meyara uyğun yazı tapılmadı.',
+    cta: {
+      needService: 'Bu xidmətə ehtiyacınız var?',
+      quickPrice: 'Qiymətinizi saniyələr içində hesablayın.',
+      button: 'Dərhal Qiymət Hesabla',
+      genericTitle: 'Tərcüməyə ehtiyacınız var?',
+      genericHeading: 'Hər sahədə peşəkar tərcümə',
+      genericDesc: 'Sahəsində uzman tərcüməçilərimiz 7/24 xidmətinizdədir!',
+    },
+    share: {
+      title: 'Paylaş',
+      copy: 'Linki Kopyala',
+      copied: 'Kopyalandı',
+    },
   },
 
   legal: {

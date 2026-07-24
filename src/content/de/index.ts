@@ -1095,6 +1095,19 @@ export const de: PartialDictionary = {
     relatedTitle: 'Ähnliche Beiträge',
     allCategories: 'Alle',
     empty: 'Keine Beiträge entsprachen diesem Kriterium.',
+    cta: {
+      needService: 'Benötigen Sie diese Leistung?',
+      quickPrice: 'Berechnen Sie Ihren Preis in Sekunden.',
+      button: 'Jetzt Preis berechnen',
+      genericTitle: 'Brauchen Sie eine Übersetzung?',
+      genericHeading: 'Professionelle Übersetzung in jedem Bereich',
+      genericDesc: 'Unsere Fachübersetzer stehen Ihnen rund um die Uhr zur Verfügung!',
+    },
+    share: {
+      title: 'Teilen',
+      copy: 'Link kopieren',
+      copied: 'Kopiert',
+    },
   },
 
   legal: {

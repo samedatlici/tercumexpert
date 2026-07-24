@@ -1095,6 +1095,19 @@ export const ar: PartialDictionary = {
     relatedTitle: "مقالات ذات صلة",
     allCategories: "الكل",
     empty: "لم تطابق أي مقالات هذا المعيار.",
+    cta: {
+      needService: "هل تحتاج إلى هذه الخدمة؟",
+      quickPrice: "احسب سعرك في ثوانٍ.",
+      button: "احسب السعر الآن",
+      genericTitle: "هل تحتاج إلى ترجمة؟",
+      genericHeading: "ترجمة احترافية في كل المجالات",
+      genericDesc: "مترجمونا الخبراء في خدمتك على مدار الساعة طوال أيام الأسبوع!",
+    },
+    share: {
+      title: "مشاركة",
+      copy: "نسخ الرابط",
+      copied: "تم النسخ",
+    },
   },
 
   legal: {

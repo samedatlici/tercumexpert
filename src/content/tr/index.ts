@@ -876,6 +876,19 @@ export const tr = {
     relatedTitle: 'İlgili yazılar',
     allCategories: 'Tümü',
     empty: 'Bu kritere uygun yazı bulunamadı.',
+    cta: {
+      needService: 'Bu hizmete mi ihtiyacınız var?',
+      quickPrice: 'Saniyeler içinde fiyatınızı hesaplayın.',
+      button: 'Hemen Fiyat Hesapla',
+      genericTitle: 'Çeviri İhtiyacınız Mı Var?',
+      genericHeading: 'Her Alanda Profesyonel Çeviri',
+      genericDesc: 'Alanında uzman tercümanlarımız 7/24 hizmetinizde!',
+    },
+    share: {
+      title: 'Paylaş',
+      copy: 'Linki Kopyala',
+      copied: 'Kopyalandı',
+    },
   },
 
   legal: {

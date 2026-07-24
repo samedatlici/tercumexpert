@@ -7,6 +7,8 @@ import { useI18n } from '@/hooks/useI18n'
 import { buildPath } from '@/app/router/routes'
 import { fetchPostBySlug, blogImageUrl, incrementViews } from '@/features/blog/model/api'
 import { Markdown } from '@/features/blog/ui/Markdown'
+import { ServiceCta } from '@/features/blog/ui/ServiceCta'
+import { ShareCard } from '@/features/blog/ui/ShareCard'
 import type { BlogPost } from '@/features/blog/model/types'
 
 /**
@@ -91,38 +93,42 @@ export default function BlogPostPage() {
         jsonLd={jsonLd}
       />
       <article className="section">
-        <div className="container-base">
-          {post.category && (
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">{post.category}</p>
-          )}
-          <h1 className="text-4xl font-extrabold leading-tight tracking-tight md:text-5xl">{post.title}</h1>
-
-          <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-text-secondary">
-            <span>{date}</span>
-            <span className="inline-flex items-center gap-1.5">
-              <Icon name="Eye" className="size-4" />
-              {views}
-            </span>
+        <div className="container-wide">
+          {/* Başlık + görsel: tam genişlik (sidebar görselin ALTINDA başlasın diye) */}
+          <div className="mx-auto max-w-4xl">
+            {post.category && (
+              <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">{post.category}</p>
+            )}
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight md:text-5xl">{post.title}</h1>
+            <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-text-secondary">
+              <span>{date}</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Icon name="Eye" className="size-4" />
+                {views}
+              </span>
+            </div>
+            {img && (
+              <img src={img} alt={post.title} className="mt-8 aspect-[16/9] w-full rounded-xl object-cover" />
+            )}
           </div>
 
-          {img && (
-            <img
-              src={img}
-              alt={post.title}
-              className="mt-8 aspect-[16/9] w-full rounded-xl object-cover"
-            />
-          )}
+          {/* İçerik (sol) + sağ sticky panel. Sticky, grid bittiğinde (footer'dan önce) durur. */}
+          <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12">
+            <div className="min-w-0">
+              <Markdown source={post.body} />
+              <div className="mt-12 border-t border-border pt-8">
+                <Link to={buildPath(locale, 'blog')}>
+                  <Button intent="secondary">
+                    <Icon name="ArrowLeft" className="size-4" /> {dict.blog.hero.title}
+                  </Button>
+                </Link>
+              </div>
+            </div>
 
-          <div className="mt-8 max-w-prose">
-            <Markdown source={post.body} />
-          </div>
-
-          <div className="mt-12 border-t border-border pt-8">
-            <Link to={buildPath(locale, 'blog')}>
-              <Button intent="secondary">
-                <Icon name="ArrowLeft" className="size-4" /> {dict.blog.hero.title}
-              </Button>
-            </Link>
+            <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+              <ServiceCta post={post} />
+              <ShareCard title={post.title} />
+            </aside>
           </div>
         </div>
       </article>

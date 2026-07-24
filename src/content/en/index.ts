@@ -883,6 +883,19 @@ export const en: PartialDictionary = {
     relatedTitle: 'Related posts',
     allCategories: 'All',
     empty: 'No posts matched this criterion.',
+    cta: {
+      needService: 'Do you need this service?',
+      quickPrice: 'Calculate your price in seconds.',
+      button: 'Calculate Price Now',
+      genericTitle: 'Need a Translation?',
+      genericHeading: 'Professional Translation in Every Field',
+      genericDesc: 'Our expert translators are at your service 24/7!',
+    },
+    share: {
+      title: 'Share',
+      copy: 'Copy Link',
+      copied: 'Copied',
+    },
   },
 
   legal: {

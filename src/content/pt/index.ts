@@ -1094,6 +1094,19 @@ export const pt: PartialDictionary = {
     relatedTitle: 'Artigos relacionados',
     allCategories: 'Todas',
     empty: 'Nenhum artigo corresponde a este critério.',
+    cta: {
+      needService: 'Precisa deste serviço?',
+      quickPrice: 'Calcule o seu preço em segundos.',
+      button: 'Calcular preço',
+      genericTitle: 'Precisa de uma tradução?',
+      genericHeading: 'Tradução profissional em todas as áreas',
+      genericDesc: 'Os nossos tradutores especializados estão ao seu dispor 24 horas por dia, 7 dias por semana!',
+    },
+    share: {
+      title: 'Partilhar',
+      copy: 'Copiar link',
+      copied: 'Copiado',
+    },
   },
 
   legal: {
