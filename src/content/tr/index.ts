@@ -1372,6 +1372,12 @@ export const tr = {
   },
 
   partnerPanel: {
+    qrDownload: "QR kodunu indir",
+    qrAlt: "Davet QR kodu",
+    colMembers: "Üye",
+    sectorAll: "Tüm sektörler",
+    back: "Geri",
+    noPartners: "Henüz partner yok.",
     tabPayments: "Ödemeler",
     payHint: "Ödemeler her ayın 2’si ve 17’sinde yapılır. Ödeme gününde ödemesini gerçekleştirdiğiniz her partnerin dekontunu yükleyip “Ödendi”ye basın; dekont yüklenmeden buton çalışmaz. Yalnızca çekilebilir (7 günü dolmuş) bakiyeler listelenir; bakiyesi 0 olan partnerler görünmez.",
     noPayments: "Ödeme bekleyen (bakiyesi olan) partner yok.",

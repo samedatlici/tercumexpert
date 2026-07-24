@@ -9,6 +9,12 @@ export const az: PartialDictionary = {
   },
 
   partnerPanel: {
+    qrDownload: "QR kodu yüklə",
+    qrAlt: "Dəvət QR kodu",
+    colMembers: "Üzvlər",
+    sectorAll: "Bütün sektorlar",
+    back: "Geri",
+    noPartners: "Hələ partnyor yoxdur.",
     tabPayments: "Ödənişlər",
     payHint: "Ödənişlər hər ayın 2-si və 17-də edilir. Ödəniş günü hər partnyorun qəbzini yükləyib “Ödənildi”yə basın; qəbz yüklənmədən düymə işləməz. Yalnız çıxarıla bilən (7 günü dolmuş) balanslar siyahılanır; balansı 0 olan partnyorlar görünmür.",
     noPayments: "Ödəniş gözləyən partnyor yoxdur.",

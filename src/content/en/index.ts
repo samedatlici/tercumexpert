@@ -1379,6 +1379,12 @@ export const en: PartialDictionary = {
   },
 
   partnerPanel: {
+    qrDownload: "Download QR code",
+    qrAlt: "Invitation QR code",
+    colMembers: "Members",
+    sectorAll: "All sectors",
+    back: "Back",
+    noPartners: "No partners yet.",
     tabPayments: "Payments",
     payHint: "Payments are made on the 2nd and 17th of each month. On payment day, upload each partner’s receipt and press “Paid”; the button will not work until a receipt is uploaded. Only withdrawable balances (past the 7-day hold) are listed; partners with a 0 balance are not shown.",
     noPayments: "No partners awaiting payment.",

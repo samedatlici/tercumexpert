@@ -194,15 +194,34 @@ function PartnerPanel({ partner, onSaved }: { partner: Partner; onSaved: () => v
   )
 }
 
-/* Davet bağlantısı — kopyalanabilir, düzenlenemez (kaybolmasın). QR Faz 2b. */
+/* Davet bağlantısı + QR — kopyalanabilir/indirilebilir, düzenlenemez (kaybolmasın). */
 function InviteBox({ partner }: { partner: Partner }) {
   const { locale, dict } = useI18n()
   const pp = dict.partnerPanel
   const [copied, setCopied] = useState(false)
+  const [qr, setQr] = useState<string | null>(null)
 
   const origin = typeof window !== 'undefined' ? window.location.origin : ''
   const homePath = buildPath(locale, 'home')
   const link = `${origin}${homePath}${homePath.endsWith('/') ? '' : '/'}?ref=${partner.ref_code}`.replace(/\/\?/, '?')
+
+  // QR'ı yalnız bu sayfada, dinamik import ile üret (kod bölme; baskı için yüksek çözünürlük).
+  useEffect(() => {
+    let active = true
+    import('qrcode')
+      .then((m) => {
+        const QR = (m as { default?: unknown }).default ?? m
+        return (QR as { toDataURL: (t: string, o: object) => Promise<string> }).toDataURL(link, {
+          width: 640,
+          margin: 2,
+          errorCorrectionLevel: 'M',
+          color: { dark: '#0f172a', light: '#ffffff' },
+        })
+      })
+      .then((url) => active && setQr(url))
+      .catch(() => { /* QR üretilemezse link yine var */ })
+    return () => { active = false }
+  }, [link])
 
   const copy = async () => {
     try {
@@ -213,22 +232,39 @@ function InviteBox({ partner }: { partner: Partner }) {
       /* pano yoksa yok say */
     }
   }
+  const downloadQr = () => {
+    if (!qr) return
+    const a = document.createElement('a')
+    a.href = qr
+    a.download = `tercumexpert-davet-${partner.ref_code}.png`
+    a.click()
+  }
 
   return (
     <div className="rounded-lg border border-border bg-surface p-6">
-      <h2 className="text-base font-semibold">{pp.refTitle}</h2>
-      <p className="mt-1 text-sm text-text-secondary">{pp.refDesc}</p>
-      <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-        <input
-          readOnly
-          value={link}
-          onFocus={(e) => e.currentTarget.select()}
-          className={`${inputClass} font-mono text-sm`}
-          aria-label={pp.refTitle}
-        />
-        <Button type="button" intent="secondary" onClick={copy} className="shrink-0">
-          {copied ? pp.refCopied : pp.refCopy}
-        </Button>
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-base font-semibold">{pp.refTitle}</h2>
+          <p className="mt-1 text-sm text-text-secondary">{pp.refDesc}</p>
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+            <input
+              readOnly
+              value={link}
+              onFocus={(e) => e.currentTarget.select()}
+              className={`${inputClass} font-mono text-sm`}
+              aria-label={pp.refTitle}
+            />
+            <Button type="button" intent="secondary" onClick={copy} className="shrink-0">
+              {copied ? pp.refCopied : pp.refCopy}
+            </Button>
+          </div>
+        </div>
+        {qr && (
+          <div className="flex shrink-0 flex-col items-center gap-2">
+            <img src={qr} alt={pp.qrAlt} width={128} height={128} className="size-32 rounded-md border border-border bg-white p-1.5" />
+            <Button type="button" intent="outline" size="sm" onClick={downloadQr}>{pp.qrDownload}</Button>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -1098,7 +1134,6 @@ function PartnerAdminSection() {
     wallet: pp.tabWallet,
     payments: pp.tabPayments,
   }
-  const soon = tab === 'partners'
   return (
     <div>
       <h1 className="mb-5 text-2xl font-bold">{pp.adminTitle}</h1>
@@ -1117,10 +1152,8 @@ function PartnerAdminSection() {
           </button>
         ))}
       </div>
-      {soon ? (
-        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
-          <p className="text-sm text-text-secondary">{pp.soon}</p>
-        </div>
+      {tab === 'partners' ? (
+        <PartnersTab />
       ) : tab === 'applications' ? (
         <ApplicationsTab />
       ) : tab === 'iban' ? (
@@ -1484,6 +1517,215 @@ function PartnerAdminPayments() {
             </div>
           </article>
         ))
+      )}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Faz 3c: Partnerler (liste + profil detay: davet kodu, müşteriler)   */
+/* ------------------------------------------------------------------ */
+interface AdminPartner {
+  id: string
+  name: string
+  company: string
+  sector: string
+  sector_other: string
+  country: string
+  city: string
+  ref_code: string
+  iban_verified: boolean
+  memberCount: number
+  orderCount: number
+  orderTotal: number
+}
+
+function useSectorLabel() {
+  const { dict } = useI18n()
+  const items = dict.partnership.sectors.items
+  const otherLabel = dict.partnership.form.sectorOptions[dict.partnership.form.sectorOptions.length - 1]
+  return (sector: string, sectorOther: string) =>
+    sector === 'other' ? (sectorOther || otherLabel) : (items.find((s) => s.key === sector)?.title || sector || '—')
+}
+
+function PartnersTab() {
+  const { locale, dict, formatCurrency } = useI18n()
+  const pp = dict.partnerPanel
+  const sectors = dict.partnership.sectors.items
+  const otherLabel = dict.partnership.form.sectorOptions[dict.partnership.form.sectorOptions.length - 1]
+  const sectorLabel = useSectorLabel()
+  const [rows, setRows] = useState<AdminPartner[]>([])
+  const [state, setState] = useState<LoadState>('loading')
+  const [q, setQ] = useState('')
+  const [sec, setSec] = useState('')
+  const [openId, setOpenId] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+    partnerApi<{ partners?: AdminPartner[]; error?: string }>('adminPartners')
+      .then((r) => {
+        if (!active) return
+        if (r.error) { setState('error'); return }
+        setRows(r.partners ?? [])
+        setState('idle')
+      })
+      .catch(() => active && setState('error'))
+    return () => { active = false }
+  }, [])
+
+  if (openId) return <PartnerDetail partnerId={openId} onBack={() => setOpenId(null)} />
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{pp.loading}</p>
+  if (state === 'error') return <AdminLoadErr />
+
+  const filtered = rows.filter((p) => {
+    const nq = q.trim().toLowerCase()
+    if (nq && !(`${p.name} ${p.company}`.toLowerCase().includes(nq))) return false
+    if (sec && p.sector !== sec) return false
+    return true
+  })
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={pp.custFilter} className={`${inputClass} w-auto max-w-[13rem]`} />
+        <select value={sec} onChange={(e) => setSec(e.target.value)} className={`${inputClass} w-auto`}>
+          <option value="">{pp.sectorAll}</option>
+          {sectors.map((s) => <option key={s.key} value={s.key}>{s.title}</option>)}
+          <option value="other">{otherLabel}</option>
+        </select>
+      </div>
+      {filtered.length === 0 ? (
+        <AdminEmpty text={pp.noPartners} />
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full text-sm">
+            <thead className="bg-surface-muted text-text-secondary">
+              <tr>
+                <th className="px-3 py-2 text-start font-medium">{pp.colName}</th>
+                <th className="px-3 py-2 text-start font-medium">{pp.colCompany}</th>
+                <th className="px-3 py-2 text-start font-medium">{dict.translator.form.city}</th>
+                <th className="px-3 py-2 text-end font-medium">{pp.colMembers}</th>
+                <th className="px-3 py-2 text-end font-medium">{pp.custOrderCount}</th>
+                <th className="px-3 py-2 text-end font-medium">{pp.custTotal}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {filtered.map((p) => (
+                <tr key={p.id} className="cursor-pointer bg-surface hover:bg-surface-muted" onClick={() => setOpenId(p.id)}>
+                  <td className="whitespace-nowrap px-3 py-2 font-medium">
+                    {p.name || '—'}
+                    <span className="ms-2 rounded border border-border px-1.5 py-0.5 text-xs text-text-secondary">{sectorLabel(p.sector, p.sector_other)}</span>
+                  </td>
+                  <td className="px-3 py-2 text-text-secondary">{p.company || '—'}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-text-secondary">{[p.city, countryDisplayName(p.country, locale, p.country)].filter(Boolean).join(' · ') || '—'}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-end">{p.memberCount}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-end">{p.orderCount}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-end font-semibold">{formatCurrency(p.orderTotal)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  )
+}
+
+interface AdminPartnerDetailData {
+  partner: Partner
+  customers: Array<{ id: string; name: string; email: string; phone: string; orderCount: number; orderTotal: number }>
+}
+function PartnerDetail({ partnerId, onBack }: { partnerId: string; onBack: () => void }) {
+  const { locale, dict, formatCurrency } = useI18n()
+  const pp = dict.partnerPanel
+  const tf = dict.translator.form
+  const sectorLabel = useSectorLabel()
+  const [data, setData] = useState<AdminPartnerDetailData | null>(null)
+  const [state, setState] = useState<LoadState>('loading')
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    let active = true
+    partnerApi<AdminPartnerDetailData & { error?: string }>('adminPartnerDetail', { partnerId })
+      .then((r) => {
+        if (!active) return
+        if (r.error || !r.partner) { setState('error'); return }
+        setData({ partner: r.partner, customers: r.customers ?? [] })
+        setState('idle')
+      })
+      .catch(() => active && setState('error'))
+    return () => { active = false }
+  }, [partnerId])
+
+  const copyCode = async (code: string) => {
+    try { await navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 2000) } catch { /* yok say */ }
+  }
+
+  return (
+    <div className="space-y-4">
+      <Button type="button" intent="outline" size="sm" onClick={onBack}>{pp.back}</Button>
+      {state === 'loading' ? (
+        <p className="py-10 text-center text-sm text-text-secondary">{pp.loading}</p>
+      ) : state === 'error' || !data ? (
+        <AdminLoadErr />
+      ) : (
+        <>
+          <div className="rounded-lg border border-border bg-surface p-6">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-bold">{data.partner.contact_name || data.partner.company || '—'}</h2>
+                <p className="text-sm text-text-secondary">
+                  {[data.partner.company, sectorLabel(data.partner.sector ?? '', data.partner.sector_other ?? '')].filter(Boolean).join(' · ')}
+                </p>
+                <p className="mt-0.5 text-sm text-text-secondary">
+                  {[data.partner.city, countryDisplayName(data.partner.country ?? '', locale, data.partner.country ?? '')].filter(Boolean).join(' · ')}
+                </p>
+                <dl className="mt-2 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
+                  <Field2 label={pp.colEmail}><span dir="ltr">{data.partner.email || '—'}</span></Field2>
+                  <Field2 label={pp.colPhone}><span dir="ltr">{data.partner.phone || '—'}</span></Field2>
+                  <Field2 label={tf.iban}><span dir="ltr" className="font-mono">{data.partner.iban || '—'}</span></Field2>
+                  {data.partner.iban_name && <Field2 label={tf.ibanName}>{data.partner.iban_name}</Field2>}
+                </dl>
+              </div>
+              <div className="text-end">
+                <p className="text-xs text-text-secondary">{pp.refCodeLabel}</p>
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="rounded-md border border-border bg-surface-muted px-2.5 py-1 font-mono font-bold tracking-[0.12em]">{data.partner.ref_code}</span>
+                  <Button type="button" intent="outline" size="sm" onClick={() => copyCode(data.partner.ref_code)}>{copied ? pp.refCopied : pp.refCopy}</Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {data.customers.length === 0 ? (
+            <AdminEmpty text={pp.custEmpty} />
+          ) : (
+            <div className="overflow-x-auto rounded-lg border border-border">
+              <table className="w-full text-sm">
+                <thead className="bg-surface-muted text-text-secondary">
+                  <tr>
+                    <th className="px-3 py-2 text-start font-medium">{pp.colName}</th>
+                    <th className="px-3 py-2 text-start font-medium">{pp.colEmail}</th>
+                    <th className="px-3 py-2 text-start font-medium">{pp.colPhone}</th>
+                    <th className="px-3 py-2 text-end font-medium">{pp.custOrderCount}</th>
+                    <th className="px-3 py-2 text-end font-medium">{pp.custTotal}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {data.customers.map((c) => (
+                    <tr key={c.id} className="bg-surface">
+                      <td className="whitespace-nowrap px-3 py-2 font-medium">{c.name || '—'}</td>
+                      <td className="px-3 py-2 text-text-secondary" dir="ltr">{c.email || '—'}</td>
+                      <td className="whitespace-nowrap px-3 py-2 text-text-secondary" dir="ltr">{c.phone || '—'}</td>
+                      <td className="whitespace-nowrap px-3 py-2 text-end">{c.orderCount}</td>
+                      <td className="whitespace-nowrap px-3 py-2 text-end font-semibold">{formatCurrency(c.orderTotal)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
       )}
     </div>
   )

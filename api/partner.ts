@@ -407,5 +407,76 @@ export default async function handler(req: Request): Promise<Response> {
     return json({ ok: true })
   }
 
+  // ---------- ADMIN: Partnerler listesi (üye/sipariş/tutar özetiyle) ----------
+  if (action === 'adminPartners') {
+    if (user.email !== ADMIN_EMAIL) return json({ error: 'forbidden' }, 403)
+    const [parRes, refRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/partners?status=eq.approved&select=id,contact_name,company,sector,sector_other,country,city,ref_code,iban_verified&order=created_at.desc`, { headers: svcHeaders() }),
+      fetch(`${SUPABASE_URL}/rest/v1/partner_referrals?select=user_id,partner_id`, { headers: svcHeaders() }),
+    ])
+    const partners = parRes.ok ? ((await parRes.json()) as Array<Record<string, unknown>>) : []
+    const refs = refRes.ok ? ((await refRes.json()) as Array<{ user_id: string; partner_id: string }>) : []
+    const userToPartner = new Map(refs.map((r) => [r.user_id, r.partner_id]))
+    const memberCount: Record<string, number> = {}
+    for (const r of refs) memberCount[r.partner_id] = (memberCount[r.partner_id] ?? 0) + 1
+    const ids = [...userToPartner.keys()]
+    const orderAgg: Record<string, { count: number; total: number }> = {}
+    if (ids.length) {
+      const oRes = await fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=in.(${ids.join(',')})&select=user_id,total`, { headers: svcHeaders() })
+      const orders = oRes.ok ? ((await oRes.json()) as Array<{ user_id: string; total: number }>) : []
+      for (const o of orders) {
+        const pid = userToPartner.get(o.user_id)
+        if (!pid) continue
+        const a = orderAgg[pid] || { count: 0, total: 0 }
+        a.count += 1
+        a.total += Number(o.total) || 0
+        orderAgg[pid] = a
+      }
+    }
+    const out = partners.map((p) => ({
+      id: p.id, name: p.contact_name || '', company: p.company || '', sector: p.sector || '',
+      sector_other: p.sector_other || '', country: p.country || '', city: p.city || '',
+      ref_code: p.ref_code || '', iban_verified: !!p.iban_verified,
+      memberCount: memberCount[p.id as string] || 0,
+      orderCount: orderAgg[p.id as string]?.count || 0,
+      orderTotal: orderAgg[p.id as string]?.total || 0,
+    }))
+    return json({ partners: out })
+  }
+
+  // ---------- ADMIN: tek partner profili + müşteri kayıtları ----------
+  if (action === 'adminPartnerDetail') {
+    if (user.email !== ADMIN_EMAIL) return json({ error: 'forbidden' }, 403)
+    const pid = String(body.partnerId || '')
+    if (!pid) return json({ error: 'no_id' }, 400)
+    const pRes = await fetch(`${SUPABASE_URL}/rest/v1/partners?id=eq.${pid}&select=*`, { headers: svcHeaders() })
+    const partner = pRes.ok ? ((await pRes.json()) as Array<Record<string, unknown>>)[0] : null
+    if (!partner) return json({ error: 'not_found' }, 404)
+    delete partner.user_id
+    const refs = await referredUserIds(pid)
+    const ids = refs.map((r) => r.user_id)
+    let customers: Array<Record<string, unknown>> = []
+    if (ids.length) {
+      const [users, oRes] = await Promise.all([
+        listAuthUsers(),
+        fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=in.(${ids.join(',')})&select=user_id,total`, { headers: svcHeaders() }),
+      ])
+      const orders = oRes.ok ? ((await oRes.json()) as Array<{ user_id: string; total: number }>) : []
+      const agg: Record<string, { count: number; total: number }> = {}
+      for (const o of orders) {
+        const a = agg[o.user_id] || { count: 0, total: 0 }
+        a.count += 1
+        a.total += Number(o.total) || 0
+        agg[o.user_id] = a
+      }
+      const idset = new Set(ids)
+      customers = users.filter((u) => idset.has(u.id)).map((u) => ({
+        id: u.id, name: nameOf(u), email: u.email || '', phone: phoneOf(u),
+        orderCount: agg[u.id]?.count || 0, orderTotal: agg[u.id]?.total || 0,
+      }))
+    }
+    return json({ partner, customers })
+  }
+
   return json({ error: 'unknown_action' }, 400)
 }

@@ -15,6 +15,12 @@ export const da: PartialDictionary = {
   },
 
   partnerPanel: {
+    qrDownload: "Download QR-kode",
+    qrAlt: "Invitations-QR-kode",
+    colMembers: "Medlemmer",
+    sectorAll: "Alle brancher",
+    back: "Tilbage",
+    noPartners: "Ingen partnere endnu.",
     tabPayments: "Betalinger",
     payHint: "Betalinger foretages den 2. og 17. i hver måned. På betalingsdagen skal du uploade hver partners kvittering og trykke på “Betalt”; knappen virker ikke, før en kvittering er uploadet. Kun saldi til rådighed for udbetaling (efter 7-dages spærringen) vises; partnere med en saldo på 0 vises ikke.",
     noPayments: "Ingen partnere afventer betaling.",

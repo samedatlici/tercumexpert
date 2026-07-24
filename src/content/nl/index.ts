@@ -15,6 +15,12 @@ export const nl: PartialDictionary = {
   },
 
   partnerPanel: {
+    qrDownload: "QR-code downloaden",
+    qrAlt: "Uitnodigings-QR-code",
+    colMembers: "Leden",
+    sectorAll: "Alle sectoren",
+    back: "Terug",
+    noPartners: "Nog geen partners.",
     tabPayments: "Betalingen",
     payHint: "Betalingen worden gedaan op de 2e en 17e van elke maand. Upload op de betaaldag het betalingsbewijs van elke partner en druk op “Betaald”; de knop werkt pas nadat een bewijs is geüpload. Alleen opneembare saldi (na de wachttijd van 7 dagen) worden weergegeven; partners met een saldo van 0 verschijnen niet.",
     noPayments: "Geen partners die op betaling wachten.",

@@ -9,6 +9,12 @@ export const pl: PartialDictionary = {
   },
 
   partnerPanel: {
+    qrDownload: "Pobierz kod QR",
+    qrAlt: "Kod QR zaproszenia",
+    colMembers: "Członkowie",
+    sectorAll: "Wszystkie branże",
+    back: "Wstecz",
+    noPartners: "Brak partnerów.",
     tabPayments: "Płatności",
     payHint: "Płatności są realizowane 2. i 17. dnia każdego miesiąca. W dniu płatności prosimy przesłać potwierdzenie każdego partnera i nacisnąć „Opłacono”; przycisk nie działa, dopóki nie przesłano potwierdzenia. Wyświetlane są tylko salda dostępne do wypłaty (po 7-dniowej blokadzie); partnerzy z saldem 0 nie są pokazywani.",
     noPayments: "Brak partnerów oczekujących na płatność.",

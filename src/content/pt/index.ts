@@ -14,6 +14,12 @@ export const pt: PartialDictionary = {
   },
 
   partnerPanel: {
+    qrDownload: "Descarregar código QR",
+    qrAlt: "Código QR de convite",
+    colMembers: "Membros",
+    sectorAll: "Todos os setores",
+    back: "Voltar",
+    noPartners: "Ainda não há parceiros.",
     tabPayments: "Pagamentos",
     payHint: "Os pagamentos são efetuados no dia 2 e no dia 17 de cada mês. No dia de pagamento, carregue o comprovativo de cada parceiro e prima «Pago»; o botão não funciona enquanto não for carregado um comprovativo. Apenas os saldos disponíveis para levantamento (após a retenção de 7 dias) são listados; os parceiros com saldo 0 não aparecem.",
     noPayments: "Não há parceiros a aguardar pagamento.",
