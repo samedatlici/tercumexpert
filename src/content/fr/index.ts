@@ -620,6 +620,7 @@ export const fr: PartialDictionary = {
   },
 
   quote: {
+    cancelPolicy: "À noter : votre commande peut être annulée depuis votre page de commande tant qu’un traducteur n’a pas commencé à travailler dessus, et votre paiement sera remboursé. Une fois qu’un traducteur a pris en charge la mission, l’annulation n’est plus possible.",
     "areas": {
       "academic": "Traduction académique",
       "legal": "Traduction juridique",
@@ -841,6 +842,16 @@ export const fr: PartialDictionary = {
   },
 
   order: {
+    cancel: {
+      eligible: "Votre commande est encore dans le pool ; vous pouvez l’annuler et être remboursé tant qu’un traducteur ne l’a pas prise en charge.",
+      button: "Annuler la commande",
+      error: "La commande n’a pas pu être annulée. Un traducteur l’a peut-être prise en charge entre-temps. Veuillez actualiser la page.",
+      confirmTitle: "Annuler la commande",
+      confirmDesc: "Voulez-vous vraiment annuler cette commande ? Cette action est irréversible ; votre paiement sera remboursé.",
+      keep: "Conserver",
+      confirmYes: "Oui, annuler",
+      canceling: "Annulation…",
+    },
       "trackingCodeLabel": "Numéro de suivi",
     seo: {
       title: "Suivi de commande",

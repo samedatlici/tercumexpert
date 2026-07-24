@@ -7,7 +7,7 @@ import { Seo } from '@/components/seo/Seo'
 import { useI18n } from '@/hooks/useI18n'
 import { useAuth } from '@/app/providers/AuthProvider'
 import { buildPath } from '@/app/router/routes'
-import { getOrderByNo, type OrderDetail } from '@/features/orders/model/get-order'
+import { getOrderByNo, cancelOrder, type OrderDetail } from '@/features/orders/model/get-order'
 import { QUOTE_LANGUAGES, DOCUMENT_TYPES } from '@/app/config/pricing.config'
 import { whatsappLink } from '@/app/config/site.config'
 
@@ -32,6 +32,10 @@ export default function OrderDetailPage() {
 
   const [order, setOrder] = useState<OrderDetail | null>(null)
   const [state, setState] = useState<'loading' | 'ok' | 'notfound' | 'error'>('loading')
+  const [tick, setTick] = useState(0)
+  const [confirming, setConfirming] = useState(false)
+  const [canceling, setCanceling] = useState(false)
+  const [cancelErr, setCancelErr] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -53,7 +57,17 @@ export default function OrderDetailPage() {
     return () => {
       active = false
     }
-  }, [user, orderNo])
+  }, [user, orderNo, tick])
+
+  const doCancel = async () => {
+    setCanceling(true)
+    setCancelErr(false)
+    const r = await cancelOrder(orderNo)
+    setCanceling(false)
+    setConfirming(false)
+    if (r.ok) setTick((t) => t + 1)
+    else setCancelErr(true)
+  }
 
   const home = buildPath(locale, 'home')
   const wa = whatsappLink(
@@ -107,6 +121,19 @@ export default function OrderDetailPage() {
       <Seo title={o.seo.title} description={o.seo.description} routeId="order" />
       <Shell>
         <OrderView order={order} />
+        {order.cancellable && (
+          <div className="mt-6 rounded-lg border border-border bg-surface-muted/40 p-4 text-center">
+            <p className="text-sm text-text-secondary">{o.cancel.eligible}</p>
+            <button
+              type="button"
+              onClick={() => { setCancelErr(false); setConfirming(true) }}
+              className="mt-3 inline-flex items-center justify-center rounded-md border border-danger px-4 py-2 text-sm font-semibold text-danger hover:bg-danger/10"
+            >
+              {o.cancel.button}
+            </button>
+            {cancelErr && <p className="mt-2 text-sm text-danger">{o.cancel.error}</p>}
+          </div>
+        )}
         <div className="mt-6 space-y-2">
           <Link to={buildPath(locale, 'auth')}>
             <Button intent="secondary" block>{o.myOrders}</Button>
@@ -121,6 +148,21 @@ export default function OrderDetailPage() {
           </Link>
         </div>
       </Shell>
+      {confirming && (
+        <div className="fixed inset-0 z-drawer flex items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true" onClick={() => !canceling && setConfirming(false)}>
+          <div className="w-full max-w-sm rounded-2xl bg-surface p-6 shadow-lg" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-base font-bold">{o.cancel.confirmTitle}</h2>
+            <p className="mt-2 text-sm text-text-secondary">{o.cancel.confirmDesc}</p>
+            <div className="mt-5 flex justify-end gap-2">
+              <Button type="button" intent="outline" size="sm" onClick={() => setConfirming(false)} disabled={canceling}>{o.cancel.keep}</Button>
+              <button type="button" onClick={doCancel} disabled={canceling}
+                className="inline-flex items-center justify-center rounded-md border border-danger bg-danger px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60">
+                {canceling ? o.cancel.canceling : o.cancel.confirmYes}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 

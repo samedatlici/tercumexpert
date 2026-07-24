@@ -620,6 +620,7 @@ export const it: PartialDictionary = {
   },
 
   quote: {
+    cancelPolicy: "Nota: il Suo ordine può essere annullato dalla Sua pagina dell’ordine finché un traduttore non inizia a lavorarci, e il Suo pagamento verrà rimborsato. Una volta che un traduttore ha preso in carico il lavoro, l’annullamento non è più possibile.",
     "areas": {
       "academic": "Traduzione accademica",
       "legal": "Traduzione legale",
@@ -841,6 +842,16 @@ export const it: PartialDictionary = {
   },
 
   order: {
+    cancel: {
+      eligible: "Il Suo ordine è ancora nel pool; può annullarlo e ricevere un rimborso finché un traduttore non lo prende in carico.",
+      button: "Annulla ordine",
+      error: "Non è stato possibile annullare l’ordine. Nel frattempo un traduttore potrebbe averlo preso in carico. La preghiamo di aggiornare la pagina.",
+      confirmTitle: "Annulla ordine",
+      confirmDesc: "È sicuro di voler annullare questo ordine? L’operazione è irreversibile; il Suo pagamento verrà rimborsato.",
+      keep: "Mantieni",
+      confirmYes: "Sì, annulla",
+      canceling: "Annullamento…",
+    },
       "trackingCodeLabel": "Numero di tracciamento",
     seo: {
       title: "Monitoraggio dell'ordine",

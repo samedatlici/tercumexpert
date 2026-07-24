@@ -12,7 +12,7 @@ const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 const COLS =
   'id,order_no,created_at,status,service,source_lang,target_lang,document_type,word_count,urgent,' +
   'notarization,physical_delivery,total,delivery_days,input_mode,note,tracking_url,carrier,contact_phone,' +
-  'delivery_address,delivery_city,delivery_postal_code,delivery_country,translation_files,user_id'
+  'delivery_address,delivery_city,delivery_postal_code,delivery_country,translation_files,work_status,user_id'
 
 function json(obj: unknown, status = 200): Response {
   return new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json' } })
@@ -52,7 +52,7 @@ export default async function handler(req: Request): Promise<Response> {
   const token = (req.headers.get('authorization') || '').replace(/^Bearer\s+/i, '').trim()
   if (!token) return json({}, 200) // giriş yok → bulunamadı gibi davran
 
-  let body: { orderNo?: unknown }
+  let body: { orderNo?: unknown; action?: unknown }
   try {
     body = await req.json()
   } catch {
@@ -72,6 +72,27 @@ export default async function handler(req: Request): Promise<Response> {
   // Sahiplik kontrolü: sipariş yoksa VEYA başkasına aitse → boş (bulunamadı).
   if (!ord || ord.user_id !== userId) return json({}, 200)
   delete ord.user_id // istemciye sızdırma
+
+  // Sipariş yalnızca HAVUZDA (bir tercüman üstlenmeden) iken iptal edilebilir.
+  const cancellable = ord.work_status === 'available' && ord.status !== 'cancelled'
+
+  // ---- Sipariş iptali (müşteri) ----
+  if (body.action === 'cancel') {
+    if (!cancellable) return json({ error: 'not_cancellable' }, 409)
+    // Koşullu güncelleme: yalnızca hâlâ 'available' ise (tercüman aynı anda üstlenmesin — yarış önlenir).
+    const up = await fetch(`${SUPABASE_URL}/rest/v1/orders?order_no=eq.${orderNo}&work_status=eq.available`, {
+      method: 'PATCH',
+      headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, 'content-type': 'application/json', Prefer: 'return=representation' },
+      body: JSON.stringify({ status: 'cancelled', work_status: 'cancelled' }),
+    })
+    const rows = up.ok ? ((await up.json()) as unknown[]) : []
+    if (!Array.isArray(rows) || rows.length === 0) return json({ error: 'not_cancellable' }, 409)
+    return json({ ok: true })
+    // NOT: Ödeme entegrasyonu eklendiğinde para iadesi burada tetiklenecek.
+  }
+
+  delete ord.work_status // istemciye ham iş-durumunu sızdırma
+  ord.cancellable = cancellable
 
   // Dijital teslim + "teslim edildi" ise çeviri dosyalarını indirilebilir yap.
   // Kargo teslimde ASLA gönderilmez (tercüman fiziksel kargolar).

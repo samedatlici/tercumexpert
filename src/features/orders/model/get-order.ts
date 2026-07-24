@@ -26,6 +26,28 @@ export interface OrderDetail {
   delivery_country: string | null
   /** Dijital teslim + "teslim edildi" ise: müşterinin indirebileceği çeviri dosyaları. */
   translations?: Array<{ name: string; url: string | null }>
+  /** Sipariş henüz bir tercüman tarafından üstlenilmediyse (havuzda) müşteri iptal edebilir. */
+  cancellable?: boolean
+}
+
+/** Müşteri kendi siparişini iptal eder (yalnızca havuzda / üstlenilmeden önce). */
+export async function cancelOrder(orderNo: number): Promise<{ ok?: boolean; error?: string }> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  const token = session?.access_token
+  if (!token) return { error: 'auth' }
+  try {
+    const res = await fetch('/api/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ orderNo, action: 'cancel' }),
+    })
+    const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string }
+    return data
+  } catch {
+    return { error: 'load' }
+  }
 }
 
 /**

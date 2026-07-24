@@ -424,6 +424,7 @@ export const tr = {
   },
 
   quote: {
+    cancelPolicy: "Bilgilendirme: Siparişiniz, bir tercüman tarafından işleme alınana kadar sipariş sayfanızdan iptal edilebilir ve ödemeniz iade edilir. Bir tercüman işi üstlendikten sonra iptal mümkün değildir.",
     seo: {
       title: 'Anında Fiyat Hesaplama',
       description: 'Belgenizi yükleyin veya detayları girin, anında ön fiyat teklifinizi alın.',
@@ -644,6 +645,16 @@ export const tr = {
   },
 
   order: {
+    cancel: {
+      eligible: "Siparişiniz henüz havuzda; bir tercüman işi üstlenene kadar iptal edebilir ve ödemenizin iadesini alabilirsiniz.",
+      button: "Siparişi iptal et",
+      error: "Sipariş iptal edilemedi. Muhtemelen bir tercüman işi bu sırada üstlendi. Lütfen sayfayı yenileyin.",
+      confirmTitle: "Siparişi iptal et",
+      confirmDesc: "Bu siparişi iptal etmek istediğinize emin misiniz? Bu işlem geri alınamaz; ödemeniz iade edilir.",
+      keep: "Vazgeç",
+      confirmYes: "Evet, iptal et",
+      canceling: "İptal ediliyor…",
+    },
     seo: {
       title: 'Sipariş Takibi',
       description: 'Siparişinizin durumunu takip edin.',

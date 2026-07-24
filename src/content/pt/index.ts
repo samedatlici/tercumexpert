@@ -619,6 +619,7 @@ export const pt: PartialDictionary = {
   },
 
   quote: {
+    cancelPolicy: "Nota: a sua encomenda pode ser cancelada a partir da sua página de encomenda enquanto um tradutor não começar a trabalhar nela, e o seu pagamento será reembolsado. Assim que um tradutor assumir o trabalho, o cancelamento deixa de ser possível.",
     "areas": {
       "academic": "Tradução académica",
       "legal": "Tradução jurídica",
@@ -840,6 +841,16 @@ export const pt: PartialDictionary = {
   },
 
   order: {
+    cancel: {
+      eligible: "A sua encomenda ainda está no pool; pode cancelá-la e receber um reembolso enquanto um tradutor não a assumir.",
+      button: "Cancelar encomenda",
+      error: "Não foi possível cancelar a encomenda. É possível que um tradutor a tenha assumido entretanto. Atualize a página.",
+      confirmTitle: "Cancelar encomenda",
+      confirmDesc: "Tem a certeza de que pretende cancelar esta encomenda? Esta ação é irreversível; o seu pagamento será reembolsado.",
+      keep: "Manter",
+      confirmYes: "Sim, cancelar",
+      canceling: "A cancelar…",
+    },
       "trackingCodeLabel": "Número de seguimento",
     seo: {
       title: 'Acompanhamento da encomenda',

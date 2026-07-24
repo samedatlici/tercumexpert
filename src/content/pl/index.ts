@@ -614,6 +614,7 @@ export const pl: PartialDictionary = {
   },
 
   quote: {
+    cancelPolicy: "Uwaga: zamówienie można anulować ze strony zamówienia, dopóki tłumacz nie rozpocznie nad nim pracy, a płatność zostanie zwrócona. Po przyjęciu zlecenia przez tłumacza anulowanie nie jest już możliwe.",
     "areas": {
       "academic": "Tłumaczenie akademickie",
       "legal": "Tłumaczenie prawnicze",
@@ -835,6 +836,16 @@ export const pl: PartialDictionary = {
   },
 
   order: {
+    cancel: {
+      eligible: "Twoje zamówienie jest wciąż w puli; możesz je anulować i otrzymać zwrot środków, dopóki tłumacz go nie przyjmie.",
+      button: "Anuluj zamówienie",
+      error: "Nie udało się anulować zamówienia. Prawdopodobnie w międzyczasie przyjął je tłumacz. Prosimy odświeżyć stronę.",
+      confirmTitle: "Anuluj zamówienie",
+      confirmDesc: "Czy na pewno chcesz anulować to zamówienie? Tej operacji nie można cofnąć; płatność zostanie zwrócona.",
+      keep: "Zachowaj",
+      confirmYes: "Tak, anuluj",
+      canceling: "Anulowanie…",
+    },
       "trackingCodeLabel": "Numer przesyłki",
     seo: {
       title: 'Śledzenie zamówienia',

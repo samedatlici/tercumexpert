@@ -620,6 +620,7 @@ export const da: PartialDictionary = {
   },
 
   quote: {
+    cancelPolicy: "Bemærk: din ordre kan annulleres fra din ordreside, indtil en oversætter begynder at arbejde på den, og din betaling refunderes. Når en oversætter har påtaget sig opgaven, er annullering ikke længere mulig.",
     "areas": {
       "academic": "Akademisk oversættelse",
       "legal": "Juridisk oversættelse",
@@ -841,6 +842,16 @@ export const da: PartialDictionary = {
   },
 
   order: {
+    cancel: {
+      eligible: "Din ordre er stadig i puljen; du kan annullere den og få pengene tilbage, indtil en oversætter påtager sig opgaven.",
+      button: "Annuller ordre",
+      error: "Ordren kunne ikke annulleres. En oversætter har muligvis påtaget sig den i mellemtiden. Opdater venligst siden.",
+      confirmTitle: "Annuller ordre",
+      confirmDesc: "Er du sikker på, at du vil annullere denne ordre? Dette kan ikke fortrydes; din betaling refunderes.",
+      keep: "Behold",
+      confirmYes: "Ja, annuller",
+      canceling: "Annullerer…",
+    },
       "trackingCodeLabel": "Sporingsnummer",
     seo: {
       title: "Ordresporing",

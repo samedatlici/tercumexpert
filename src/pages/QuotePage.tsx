@@ -624,6 +624,12 @@ export default function QuotePage() {
                   />
                 </div>
 
+                {/* İptal politikası bilgilendirmesi (kurumsal) */}
+                <div className="mt-4 flex items-start gap-2 rounded-md border border-border bg-surface-muted/50 p-3 text-xs leading-relaxed text-text-secondary">
+                  <Icon name="ShieldCheck" className="mt-0.5 size-4 shrink-0 text-text-muted" />
+                  <p>{q.cancelPolicy}</p>
+                </div>
+
                 {orderError && <p className="mt-3 text-sm text-danger">{orderError}</p>}
                 <div className="mt-4 space-y-2">
                   <Button intent="secondary" block onClick={onPlaceOrder} disabled={ordering}>

@@ -620,6 +620,7 @@ export const de: PartialDictionary = {
   },
 
   quote: {
+    cancelPolicy: "Hinweis: Ihre Bestellung kann über Ihre Bestellseite storniert werden, solange kein Übersetzer mit der Bearbeitung begonnen hat, und Ihre Zahlung wird erstattet. Sobald ein Übersetzer den Auftrag übernommen hat, ist eine Stornierung nicht mehr möglich.",
     "areas": {
       "academic": "Wissenschaftliche Übersetzung",
       "legal": "Juristische Übersetzung",
@@ -841,6 +842,16 @@ export const de: PartialDictionary = {
   },
 
   order: {
+    cancel: {
+      eligible: "Ihre Bestellung befindet sich noch im Pool; Sie können sie stornieren und erhalten eine Rückerstattung, solange kein Übersetzer sie übernommen hat.",
+      button: "Bestellung stornieren",
+      error: "Die Bestellung konnte nicht storniert werden. Möglicherweise hat ein Übersetzer sie inzwischen übernommen. Bitte aktualisieren Sie die Seite.",
+      confirmTitle: "Bestellung stornieren",
+      confirmDesc: "Möchten Sie diese Bestellung wirklich stornieren? Dies kann nicht rückgängig gemacht werden; Ihre Zahlung wird erstattet.",
+      keep: "Behalten",
+      confirmYes: "Ja, stornieren",
+      canceling: "Wird storniert…",
+    },
       "trackingCodeLabel": "Sendungsnummer",
     seo: {
       title: 'Bestellverfolgung',

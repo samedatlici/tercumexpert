@@ -620,6 +620,7 @@ export const nl: PartialDictionary = {
   },
 
   quote: {
+    cancelPolicy: "Let op: uw bestelling kan via uw bestelpagina worden geannuleerd totdat een vertaler eraan begint te werken, en uw betaling wordt terugbetaald. Zodra een vertaler de opdracht heeft aangenomen, is annuleren niet meer mogelijk.",
     "areas": {
       "academic": "Academische vertaling",
       "legal": "Juridische vertaling",
@@ -841,6 +842,16 @@ export const nl: PartialDictionary = {
   },
 
   order: {
+    cancel: {
+      eligible: "Uw bestelling zit nog in de pool; u kunt deze annuleren en een terugbetaling ontvangen totdat een vertaler de opdracht aanneemt.",
+      button: "Bestelling annuleren",
+      error: "De bestelling kon niet worden geannuleerd. Mogelijk heeft een vertaler deze inmiddels aangenomen. Vernieuw de pagina.",
+      confirmTitle: "Bestelling annuleren",
+      confirmDesc: "Weet u zeker dat u deze bestelling wilt annuleren? Dit kan niet ongedaan worden gemaakt; uw betaling wordt terugbetaald.",
+      keep: "Behouden",
+      confirmYes: "Ja, annuleren",
+      canceling: "Annuleren…",
+    },
       "trackingCodeLabel": "Trackingnummer",
     seo: {
       title: "Bestelling volgen",

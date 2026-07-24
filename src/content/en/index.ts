@@ -427,6 +427,7 @@ export const en: PartialDictionary = {
   },
 
   quote: {
+    cancelPolicy: "Please note: your order can be cancelled from your order page until a translator begins working on it, and your payment will be refunded. Once a translator has claimed the job, cancellation is no longer possible.",
     seo: {
       title: 'Instant Price Calculation',
       description: 'Upload your document or enter the details and get your instant preliminary quote.',
@@ -647,6 +648,16 @@ export const en: PartialDictionary = {
   },
 
   order: {
+    cancel: {
+      eligible: "Your order is still in the pool; you can cancel it and receive a refund until a translator claims it.",
+      button: "Cancel order",
+      error: "The order could not be cancelled. A translator may have claimed it in the meantime. Please refresh the page.",
+      confirmTitle: "Cancel order",
+      confirmDesc: "Are you sure you want to cancel this order? This cannot be undone; your payment will be refunded.",
+      keep: "Keep order",
+      confirmYes: "Yes, cancel",
+      canceling: "Cancelling…",
+    },
     seo: {
       title: 'Order Tracking',
       description: 'Track the status of your order.',

@@ -614,6 +614,7 @@ export const az: PartialDictionary = {
   },
 
   quote: {
+    cancelPolicy: "Qeyd: Sifarişiniz bir tərcüməçi üzərində işə başlayana qədər sifariş səhifənizdən ləğv edilə bilər və ödənişiniz geri qaytarılar. Bir tərcüməçi işi üstləndikdən sonra ləğv mümkün deyil.",
     "areas": {
       "academic": "Akademik tərcümə",
       "legal": "Hüquqi tərcümə",
@@ -835,6 +836,16 @@ export const az: PartialDictionary = {
   },
 
   order: {
+    cancel: {
+      eligible: "Sifarişiniz hələ hovuzdadır; bir tərcüməçi işi üstlənənə qədər onu ləğv edib ödənişin geri qaytarılmasını ala bilərsiniz.",
+      button: "Sifarişi ləğv et",
+      error: "Sifariş ləğv edilə bilmədi. Ehtimal ki, bu arada bir tərcüməçi işi üstləndi. Zəhmət olmasa, səhifəni yeniləyin.",
+      confirmTitle: "Sifarişi ləğv et",
+      confirmDesc: "Bu sifarişi ləğv etmək istədiyinizə əminsiniz? Bu əməliyyat geri qaytarıla bilməz; ödənişiniz geri qaytarılacaq.",
+      keep: "Saxla",
+      confirmYes: "Bəli, ləğv et",
+      canceling: "Ləğv edilir…",
+    },
       "trackingCodeLabel": "İzləmə nömrəsi",
     seo: {
       title: 'Sifariş İzləmə',
