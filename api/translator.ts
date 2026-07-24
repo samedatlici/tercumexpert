@@ -1,5 +1,5 @@
 import { matchesTranslator, computePayout, computePartnerShare, estimatePages } from './_pool-logic'
-import { sendOrderEmail, buildEmail, sendEmail, orderUrl, deliverLabel, type EmailAttachment } from './_email'
+import { sendOrderEmail, buildEmail, sendEmail, orderUrl, deliverLabel, paymentStrings, type EmailAttachment } from './_email'
 
 /**
  * Tercüman paneli SUNUCU uç noktası (Edge). GÜVENLİK: tercümanlara doğrudan yazma
@@ -803,22 +803,23 @@ export default async function handler(req: Request): Promise<Response> {
 
     // Tercümana ödeme maili + dekont eki (best-effort).
     try {
-      const tr = await fetch(`${SUPABASE_URL}/rest/v1/translators?id=eq.${id}&select=user_id,full_name`, {
+      const tr = await fetch(`${SUPABASE_URL}/rest/v1/translators?id=eq.${id}&select=user_id,full_name,locale`, {
         headers: svcHeaders(),
       })
-      const trow = tr.ok ? ((await tr.json()) as Array<{ user_id: string; full_name: string | null }>)[0] : null
+      const trow = tr.ok ? ((await tr.json()) as Array<{ user_id: string; full_name: string | null; locale: string | null }>)[0] : null
       if (trow) {
         const email = await getUserEmail(trow.user_id)
         if (email) {
           const pdf = await downloadReceipt(receiptPath)
           const att: EmailAttachment[] = pdf ? [{ filename: 'dekont.pdf', content: pdf }] : []
+          const loc = trow.locale || 'tr' // tercümanın kayıt dili (yoksa TR)
           const mail = buildEmail({
             event: 'payment',
-            locale: 'tr',
+            locale: loc,
             name: trow.full_name || '',
             orderNo: '',
             orderUrl: '',
-            details: [{ label: 'Ödenen tutar', value: `${Math.round(total)} TL` }],
+            details: [{ label: paymentStrings(loc).amountLabel, value: `${Math.round(total)} ₺` }],
           })
           await sendEmail(email, mail.subject, mail.html, att)
         }

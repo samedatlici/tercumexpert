@@ -39,6 +39,10 @@ export const tr = {
       login: 'Giriş Yap',
       logout: 'Çıkış Yap',
       account: 'Hesabım',
+      mainMenu: "Ana menü",
+      menu: "Menü",
+      mobileMenu: "Mobil menü",
+      countryCode: "Ülke kodu",
     },
     states: {
       loading: 'Yükleniyor…',
@@ -57,6 +61,8 @@ export const tr = {
   },
 
   home: {
+
+    whatsappMsg: "Merhaba, çeviri hizmeti hakkında bilgi almak istiyorum.",
     seo: {
       title: 'TercümExpert — Profesyonel Çeviri Hizmetleri',
       description:
@@ -235,6 +241,20 @@ export const tr = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "Şirket adı zorunludur.",
+
+      contactName: "Yetkili adı zorunludur.",
+
+      email: "Geçerli bir e-posta girin.",
+
+      need: "Lütfen ihtiyacınızı kısaca açıklayın (en az 10 karakter).",
+
+      consent: "Devam etmek için onay gereklidir.",
+
+    },
     statsLabels: {
       corporate: 'Kurumsal müşteri',
       discount: 'Toplu sipariş indirimi',
@@ -424,6 +444,8 @@ export const tr = {
   },
 
   quote: {
+
+    whatsappMsg: "Merhaba, fiyat teklifi hakkında bilgi almak istiyorum.",
     cancelPolicy: "Bilgilendirme: Siparişiniz, bir tercüman tarafından işleme alınana kadar sipariş sayfanızdan iptal edilebilir ve ödemeniz iade edilir. Bir tercüman işi üstlendikten sonra iptal mümkün değildir.",
     seo: {
       title: 'Anında Fiyat Hesaplama',
@@ -645,6 +667,8 @@ export const tr = {
   },
 
   order: {
+
+    whatsappMsg: "Merhaba, #{no} numaralı siparişim hakkında bilgi almak istiyorum.",
     cancel: {
       eligible: "Siparişiniz henüz havuzda; bir tercüman işi üstlenene kadar iptal edebilir ve ödemenizin iadesini alabilirsiniz.",
       button: "Siparişi iptal et",
@@ -714,6 +738,8 @@ export const tr = {
   },
 
   faq: {
+
+    whatsappMsg: "Merhaba, bir sorum var.",
     seo: {
       title: 'Sık Sorulan Sorular',
       description: 'Yeminli tercüme, teslim süresi, fiyatlandırma, noter onayı ve kurumsal şartlar hakkında sık sorulan sorular.',
@@ -732,6 +758,20 @@ export const tr = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "Ad Soyad zorunludur.",
+
+      email: "Geçerli bir e-posta girin.",
+
+      subject: "Konu zorunludur.",
+
+      message: "Mesaj en az 10 karakter olmalıdır.",
+
+      consent: "Devam etmek için onay gereklidir.",
+
+    },
     seo: {
       title: 'İletişim',
       description: 'TercümExpert ile iletişime geçin: telefon, e-posta, WhatsApp ve iletişim formu.',

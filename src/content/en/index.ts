@@ -43,6 +43,10 @@ export const en: PartialDictionary = {
       login: 'Log In',
       logout: 'Log Out',
       account: 'My Account',
+      mainMenu: "Main menu",
+      menu: "Menu",
+      mobileMenu: "Mobile menu",
+      countryCode: "Country code",
     },
     states: {
       loading: 'Loading…',
@@ -61,6 +65,8 @@ export const en: PartialDictionary = {
   },
 
   home: {
+
+    whatsappMsg: "Hello, I would like information about your translation service.",
     seo: {
       title: 'TercümExpert — Professional Translation Services',
       description:
@@ -238,6 +244,20 @@ export const en: PartialDictionary = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "Company name is required.",
+
+      contactName: "The contact person's name is required.",
+
+      email: "Enter a valid email address.",
+
+      need: "Please briefly describe your needs (at least 10 characters).",
+
+      consent: "Consent is required to continue.",
+
+    },
     statsLabels: {
       corporate: 'Corporate clients',
       discount: 'Bulk order discount',
@@ -427,6 +447,8 @@ export const en: PartialDictionary = {
   },
 
   quote: {
+
+    whatsappMsg: "Hello, I would like information about a price quote.",
     cancelPolicy: "Please note: your order can be cancelled from your order page until a translator begins working on it, and your payment will be refunded. Once a translator has claimed the job, cancellation is no longer possible.",
     seo: {
       title: 'Instant Price Calculation',
@@ -648,6 +670,8 @@ export const en: PartialDictionary = {
   },
 
   order: {
+
+    whatsappMsg: "Hello, I would like information about my order #{no}.",
     cancel: {
       eligible: "Your order is still in the pool; you can cancel it and receive a refund until a translator claims it.",
       button: "Cancel order",
@@ -717,6 +741,8 @@ export const en: PartialDictionary = {
   },
 
   faq: {
+
+    whatsappMsg: "Hello, I have a question.",
     seo: {
       title: 'Frequently Asked Questions',
       description: 'Frequently asked questions about sworn translation, delivery time, pricing, notary approval and corporate terms.',
@@ -735,6 +761,20 @@ export const en: PartialDictionary = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "Full name is required.",
+
+      email: "Enter a valid email address.",
+
+      subject: "Subject is required.",
+
+      message: "Message must be at least 10 characters.",
+
+      consent: "Consent is required to continue.",
+
+    },
       introTitle: `Welcome`,
       introDesc: `Before we begin, may I kindly have your name and email address so that I can assist you more effectively?`,
       start: `Start Chat`,

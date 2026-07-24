@@ -23,20 +23,24 @@ const INK = '#0f172a'
 
 export type EmailEvent = 'received' | 'in_progress' | 'translated' | 'shipped' | 'delivered' | 'review' | 'admin_new_order' | 'payment' | 'password_reset'
 
-// Ödeme maili metinleri (tr+en; diğer diller tr'ye düşer — çoğu tercüman TR).
-const PAYMENT: Record<string, { subject: string; heading: string; body: string }> = {
-  tr: {
-    subject: 'Ödemeniz gerçekleştirildi',
-    heading: 'Ödemeniz yapıldı',
-    body: 'Cüzdanınızdaki çekilebilir bakiye banka hesabınıza gönderildi. Ödeme dekontu bu e-postaya PDF olarak eklenmiştir. Tutar cüzdanınızda “Ödenen” bölümünde görünür.',
-  },
-  en: {
-    subject: 'Your payment has been made',
-    heading: 'Your payment has been made',
-    body: 'Your withdrawable wallet balance has been sent to your bank account. The payment receipt is attached to this email as a PDF. The amount now appears under “Paid out” in your wallet.',
-  },
+// Ödeme (ödeme/çekim) maili metinleri — 14 dil.
+const PAYMENT: Record<string, { subject: string; heading: string; body: string; amountLabel: string }> = {
+  tr: { subject: "Ödemeniz gerçekleştirildi", heading: "Ödemeniz yapıldı", body: "Cüzdanınızdaki çekilebilir bakiye banka hesabınıza gönderildi. Ödeme dekontu bu e-postaya PDF olarak eklenmiştir. Tutar cüzdanınızda 'Ödenen' bölümünde görünür.", amountLabel: "Ödenen tutar" },
+  en: { subject: "Your payment has been made", heading: "Your payment has been made", body: "Your withdrawable wallet balance has been sent to your bank account. The payment receipt is attached to this email as a PDF. The amount now appears under 'Paid out' in your wallet.", amountLabel: "Amount paid" },
+  fr: { subject: "Votre paiement a été effectué", heading: "Votre paiement a été effectué", body: "Le solde disponible de votre portefeuille a été envoyé sur votre compte bancaire. Le reçu de paiement est joint à cet e-mail au format PDF. Le montant apparaît désormais sous « Versé » dans votre portefeuille.", amountLabel: "Montant versé" },
+  de: { subject: "Ihre Zahlung wurde ausgeführt", heading: "Ihre Zahlung wurde ausgeführt", body: "Ihr auszahlbares Guthaben aus Ihrem Wallet wurde auf Ihr Bankkonto überwiesen. Der Zahlungsbeleg ist dieser E-Mail als PDF beigefügt. Der Betrag wird nun in Ihrem Wallet unter „Ausgezahlt“ angezeigt.", amountLabel: "Ausgezahlter Betrag" },
+  nl: { subject: "Uw betaling is uitgevoerd", heading: "Uw betaling is uitgevoerd", body: "Het opneembare saldo uit uw wallet is naar uw bankrekening overgemaakt. De betalingsbevestiging is als PDF aan deze e-mail toegevoegd. Het bedrag verschijnt nu onder 'Uitbetaald' in uw wallet.", amountLabel: "Uitbetaald bedrag" },
+  es: { subject: "Su pago se ha realizado", heading: "Su pago se ha realizado", body: "El saldo disponible de su monedero se ha enviado a su cuenta bancaria. El recibo del pago se adjunta a este correo electrónico en formato PDF. El importe aparece ahora en su monedero bajo «Pagado».", amountLabel: "Importe pagado" },
+  ar: { subject: "تم إجراء الدفعة الخاصة بكم", heading: "تم إجراء الدفعة الخاصة بكم", body: "تم إرسال الرصيد القابل للسحب من محفظتكم إلى حسابكم المصرفي. إيصال الدفع مرفق بهذا البريد الإلكتروني بصيغة PDF. ويظهر المبلغ الآن ضمن قسم «المدفوع» في محفظتكم.", amountLabel: "المبلغ المدفوع" },
+  ru: { subject: "Ваш платёж выполнен", heading: "Ваш платёж выполнен", body: "Доступный для вывода баланс вашего кошелька перечислен на ваш банковский счёт. Квитанция об оплате прилагается к этому письму в формате PDF. Сумма теперь отображается в вашем кошельке в разделе «Выплачено».", amountLabel: "Выплаченная сумма" },
+  az: { subject: "Ödənişiniz həyata keçirildi", heading: "Ödənişiniz həyata keçirildi", body: "Pul kisənizdəki çıxarıla bilən balans bank hesabınıza göndərildi. Ödəniş qəbzi bu e-poçta PDF formatında əlavə edilmişdir. Məbləğ artıq pul kisənizdə 'Ödənilmiş' bölməsində görünür.", amountLabel: "Ödənilən məbləğ" },
+  pl: { subject: "Państwa płatność została zrealizowana", heading: "Państwa płatność została zrealizowana", body: "Dostępne do wypłaty saldo z Państwa portfela zostało przesłane na Państwa rachunek bankowy. Potwierdzenie płatności zostało dołączone do tej wiadomości w formacie PDF. Kwota jest teraz widoczna w Państwa portfelu w sekcji „Wypłacone”.", amountLabel: "Wypłacona kwota" },
+  bg: { subject: "Вашето плащане беше извършено", heading: "Вашето плащане беше извършено", body: "Наличният за теглене баланс от вашия портфейл беше изпратен по банковата ви сметка. Разписката за плащане е приложена към този имейл във формат PDF. Сумата вече се показва във вашия портфейл в раздел „Изплатено“.", amountLabel: "Изплатена сума" },
+  pt: { subject: "O seu pagamento foi efetuado", heading: "O seu pagamento foi efetuado", body: "O saldo disponível para levantamento da sua carteira foi enviado para a sua conta bancária. O comprovativo de pagamento segue anexado a este e-mail em formato PDF. O montante aparece agora na sua carteira em «Pago».", amountLabel: "Montante pago" },
+  da: { subject: "Din betaling er gennemført", heading: "Din betaling er gennemført", body: "Din udbetalingsklare saldo fra din wallet er sendt til din bankkonto. Betalingskvitteringen er vedhæftet denne e-mail som PDF. Beløbet vises nu under 'Udbetalt' i din wallet.", amountLabel: "Udbetalt beløb" },
+  it: { subject: "Il Suo pagamento è stato effettuato", heading: "Il Suo pagamento è stato effettuato", body: "Il saldo prelevabile del Suo portafoglio è stato inviato sul Suo conto bancario. La ricevuta di pagamento è allegata a questa e-mail in formato PDF. L'importo compare ora nel Suo portafoglio nella sezione «Pagato».", amountLabel: "Importo pagato" },
 }
-function paymentStrings(locale: string): { subject: string; heading: string; body: string } {
+export function paymentStrings(locale: string): { subject: string; heading: string; body: string; amountLabel: string } {
   return PAYMENT[normalizeLocale(locale)] ?? PAYMENT.tr
 }
 

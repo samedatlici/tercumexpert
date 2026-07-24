@@ -25,7 +25,7 @@ export function PhoneInput({
   /** 'dark' → koyu zeminli formlar (Kurumsal sayfası) için beyaz metinli stil. */
   variant?: 'default' | 'dark'
 }) {
-  const { locale } = useI18n()
+  const { locale, dict } = useI18n()
   const [country, setCountry] = useState(() => defaultCountry ?? defaultCountryForLocale(locale))
   const [num, setNum] = useState('')
 
@@ -50,7 +50,7 @@ export function PhoneInput({
           setCountry(e.target.value)
           emit(e.target.value, num)
         }}
-        aria-label="Ülke kodu"
+        aria-label={dict.common.actions.countryCode}
         className={selectClass}
       >
         {COUNTRIES.map((x) => (

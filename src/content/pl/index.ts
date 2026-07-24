@@ -247,6 +247,10 @@ export const pl: PartialDictionary = {
       login: 'Zaloguj się',
       logout: 'Wyloguj się',
       account: 'Moje konto',
+      mainMenu: "Menu główne",
+      menu: "Menu",
+      mobileMenu: "Menu mobilne",
+      countryCode: "Kod kraju",
     },
     states: {
       loading: 'Ładowanie…',
@@ -265,6 +269,8 @@ export const pl: PartialDictionary = {
   },
 
   home: {
+
+    whatsappMsg: "Dzień dobry, chciałbym uzyskać informacje na temat Państwa usługi tłumaczeniowej.",
     seo: {
       title: 'TercümExpert — Profesjonalne usługi tłumaczeniowe',
       description:
@@ -442,6 +448,20 @@ export const pl: PartialDictionary = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "Nazwa firmy jest wymagana.",
+
+      contactName: "Imię i nazwisko osoby kontaktowej jest wymagane.",
+
+      email: "Podaj prawidłowy adres e-mail.",
+
+      need: "Prosimy krótko opisać swoje potrzeby (co najmniej 10 znaków).",
+
+      consent: "Aby kontynuować, wymagana jest zgoda.",
+
+    },
     statsLabels: {
       corporate: 'Klienci firmowi',
       discount: 'Rabat na zamówienia hurtowe',
@@ -631,6 +651,8 @@ export const pl: PartialDictionary = {
   },
 
   quote: {
+
+    whatsappMsg: "Dzień dobry, chciałbym uzyskać informacje na temat wyceny.",
     cancelPolicy: "Uwaga: zamówienie można anulować ze strony zamówienia, dopóki tłumacz nie rozpocznie nad nim pracy, a płatność zostanie zwrócona. Po przyjęciu zlecenia przez tłumacza anulowanie nie jest już możliwe.",
     "areas": {
       "academic": "Tłumaczenie akademickie",
@@ -853,6 +875,8 @@ export const pl: PartialDictionary = {
   },
 
   order: {
+
+    whatsappMsg: "Dzień dobry, chciałbym uzyskać informacje na temat mojego zamówienia #{no}.",
     cancel: {
       eligible: "Twoje zamówienie jest wciąż w puli; możesz je anulować i otrzymać zwrot środków, dopóki tłumacz go nie przyjmie.",
       button: "Anuluj zamówienie",
@@ -923,6 +947,8 @@ export const pl: PartialDictionary = {
   },
 
   faq: {
+
+    whatsappMsg: "Dzień dobry, mam pytanie.",
     seo: {
       title: 'Najczęściej zadawane pytania',
       description: 'Najczęściej zadawane pytania dotyczące tłumaczeń przysięgłych, czasu realizacji, cennika, poświadczenia notarialnego i płatności odroczonych dla firm.',
@@ -941,6 +967,20 @@ export const pl: PartialDictionary = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "Imię i nazwisko jest wymagane.",
+
+      email: "Podaj prawidłowy adres e-mail.",
+
+      subject: "Temat jest wymagany.",
+
+      message: "Wiadomość musi zawierać co najmniej 10 znaków.",
+
+      consent: "Aby kontynuować, wymagana jest zgoda.",
+
+    },
       introTitle: `Witamy`,
       introDesc: `Zanim rozpoczniemy, czy mogę prosić o podanie Państwa imienia oraz adresu e-mail, abym mógł lepiej Państwu pomóc?`,
       start: `Rozpocznij rozmowę`,

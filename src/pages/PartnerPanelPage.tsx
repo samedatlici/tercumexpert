@@ -615,7 +615,7 @@ function ApplicationForm({
     }
     const { error } = existingId
       ? await supabase.from('partners').update({ ...payload, status: 'pending' }).eq('id', existingId)
-      : await supabase.from('partners').insert({ user_id: userId, ...payload })
+      : await supabase.from('partners').insert({ user_id: userId, locale, ...payload })
     setBusy(false)
     if (error) {
       setErr(pp.saveError)

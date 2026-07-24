@@ -253,6 +253,10 @@ export const it: PartialDictionary = {
       login: "Accedi",
       logout: "Esci",
       account: "Il mio account",
+      mainMenu: "Menu principale",
+      menu: "Menu",
+      mobileMenu: "Menu mobile",
+      countryCode: "Prefisso internazionale",
     },
     states: {
       loading: "Caricamento…",
@@ -271,6 +275,8 @@ export const it: PartialDictionary = {
   },
 
   home: {
+
+    whatsappMsg: "Salve, vorrei ricevere informazioni sul vostro servizio di traduzione.",
     seo: {
       title: "TercümExpert — Servizi di traduzione professionale",
       description:
@@ -448,6 +454,20 @@ export const it: PartialDictionary = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "Il nome dell'azienda è obbligatorio.",
+
+      contactName: "Il nome della persona di contatto è obbligatorio.",
+
+      email: "Inserisca un indirizzo e-mail valido.",
+
+      need: "La preghiamo di descrivere brevemente le Sue esigenze (almeno 10 caratteri).",
+
+      consent: "Per continuare è necessario il Suo consenso.",
+
+    },
     statsLabels: {
       corporate: "Clienti aziendali",
       discount: "Sconto su ordini in volume",
@@ -637,6 +657,8 @@ export const it: PartialDictionary = {
   },
 
   quote: {
+
+    whatsappMsg: "Salve, vorrei ricevere informazioni su un preventivo.",
     cancelPolicy: "Nota: il Suo ordine può essere annullato dalla Sua pagina dell’ordine finché un traduttore non inizia a lavorarci, e il Suo pagamento verrà rimborsato. Una volta che un traduttore ha preso in carico il lavoro, l’annullamento non è più possibile.",
     "areas": {
       "academic": "Traduzione accademica",
@@ -859,6 +881,8 @@ export const it: PartialDictionary = {
   },
 
   order: {
+
+    whatsappMsg: "Salve, vorrei ricevere informazioni sul mio ordine #{no}.",
     cancel: {
       eligible: "Il Suo ordine è ancora nel pool; può annullarlo e ricevere un rimborso finché un traduttore non lo prende in carico.",
       button: "Annulla ordine",
@@ -929,6 +953,8 @@ export const it: PartialDictionary = {
   },
 
   faq: {
+
+    whatsappMsg: "Salve, ho una domanda.",
     seo: {
       title: "Domande frequenti",
       description: "Domande frequenti su traduzione giurata, tempi di consegna, prezzi, autenticazione notarile e pagamento dilazionato per aziende.",
@@ -947,6 +973,20 @@ export const it: PartialDictionary = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "Il nome completo è obbligatorio.",
+
+      email: "Inserisca un indirizzo e-mail valido.",
+
+      subject: "L'oggetto è obbligatorio.",
+
+      message: "Il messaggio deve contenere almeno 10 caratteri.",
+
+      consent: "Per continuare è necessario il Suo consenso.",
+
+    },
       introTitle: `Benvenuto`,
       introDesc: `Prima di iniziare, posso avere il Suo nome e il Suo indirizzo e-mail per poterLa assistere al meglio?`,
       start: `Inizia la chat`,

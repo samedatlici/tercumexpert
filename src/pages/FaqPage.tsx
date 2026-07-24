@@ -65,7 +65,7 @@ export default function FaqPage() {
       return next
     })
 
-  const wa = whatsappLink('Merhaba, bir sorum var.')
+  const wa = whatsappLink(f.whatsappMsg)
 
   return (
     <>

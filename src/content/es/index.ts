@@ -253,6 +253,10 @@ export const es: PartialDictionary = {
       login: 'Iniciar sesión',
       logout: 'Cerrar sesión',
       account: 'Mi cuenta',
+      mainMenu: "Menú principal",
+      menu: "Menú",
+      mobileMenu: "Menú móvil",
+      countryCode: "Código de país",
     },
     states: {
       loading: 'Cargando…',
@@ -271,6 +275,8 @@ export const es: PartialDictionary = {
   },
 
   home: {
+
+    whatsappMsg: "Hola, me gustaría recibir información sobre su servicio de traducción.",
     seo: {
       title: 'TercümExpert — Servicios profesionales de traducción',
       description:
@@ -448,6 +454,20 @@ export const es: PartialDictionary = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "El nombre de la empresa es obligatorio.",
+
+      contactName: "El nombre de la persona de contacto es obligatorio.",
+
+      email: "Introduzca una dirección de correo electrónico válida.",
+
+      need: "Describa brevemente sus necesidades (al menos 10 caracteres).",
+
+      consent: "Es necesario su consentimiento para continuar.",
+
+    },
     statsLabels: {
       corporate: 'Clientes corporativos',
       discount: 'Descuento por pedidos al por mayor',
@@ -637,6 +657,8 @@ export const es: PartialDictionary = {
   },
 
   quote: {
+
+    whatsappMsg: "Hola, me gustaría recibir información sobre un presupuesto.",
     cancelPolicy: "Aviso: su pedido puede cancelarse desde su página de pedido hasta que un traductor comience a trabajar en él, y su pago será reembolsado. Una vez que un traductor haya tomado el trabajo, la cancelación ya no es posible.",
     "areas": {
       "academic": "Traducción académica",
@@ -859,6 +881,8 @@ export const es: PartialDictionary = {
   },
 
   order: {
+
+    whatsappMsg: "Hola, me gustaría recibir información sobre mi pedido #{no}.",
     cancel: {
       eligible: "Su pedido aún está en el pool; puede cancelarlo y recibir un reembolso hasta que un traductor lo tome.",
       button: "Cancelar pedido",
@@ -929,6 +953,8 @@ export const es: PartialDictionary = {
   },
 
   faq: {
+
+    whatsappMsg: "Hola, tengo una pregunta.",
     seo: {
       title: 'Preguntas frecuentes',
       description: 'Preguntas frecuentes sobre traducción jurada, plazo de entrega, precios, certificación notarial y condiciones para empresas.',
@@ -947,6 +973,20 @@ export const es: PartialDictionary = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "El nombre completo es obligatorio.",
+
+      email: "Introduzca una dirección de correo electrónico válida.",
+
+      subject: "El asunto es obligatorio.",
+
+      message: "El mensaje debe tener al menos 10 caracteres.",
+
+      consent: "Es necesario su consentimiento para continuar.",
+
+    },
       introTitle: `Bienvenido`,
       introDesc: `Antes de comenzar, ¿podría facilitarme su nombre y su dirección de correo electrónico para poder ayudarle mejor?`,
       start: `Iniciar chat`,

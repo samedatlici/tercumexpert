@@ -1,4 +1,4 @@
-import { buildPartnerVerify, buildEmail, sendEmail, type EmailAttachment } from './_email'
+import { buildPartnerVerify, buildEmail, sendEmail, paymentStrings, type EmailAttachment } from './_email'
 import { computePartnerShare } from './_pool-logic'
 
 /**
@@ -415,13 +415,21 @@ export default async function handler(req: Request): Promise<Response> {
     if (!res.ok) return json({ error: 'update_failed' }, 200)
     // Partnere ödeme maili + dekont eki (best-effort).
     try {
-      const pr = await fetch(`${SUPABASE_URL}/rest/v1/partners?id=eq.${id}&select=contact_name,email`, { headers: svcHeaders() })
-      const prow = pr.ok ? ((await pr.json()) as Array<{ contact_name: string | null; email: string | null }>)[0] : null
+      const pr = await fetch(`${SUPABASE_URL}/rest/v1/partners?id=eq.${id}&select=contact_name,email,locale`, { headers: svcHeaders() })
+      const prow = pr.ok ? ((await pr.json()) as Array<{ contact_name: string | null; email: string | null; locale: string | null }>)[0] : null
       const to = (prow?.email || '').trim()
       if (to) {
         const pdf = await downloadReceipt(receiptPath)
         const att: EmailAttachment[] = pdf ? [{ filename: 'dekont.pdf', content: pdf }] : []
-        const mail = buildEmail({ event: 'payment', locale: 'tr', name: prow?.contact_name || '', orderNo: '', orderUrl: '' })
+        const loc = prow?.locale || 'tr' // partnerin kayıt dili (yoksa TR)
+        const mail = buildEmail({
+          event: 'payment',
+          locale: loc,
+          name: prow?.contact_name || '',
+          orderNo: '',
+          orderUrl: '',
+          details: [{ label: paymentStrings(loc).amountLabel, value: `${Math.round(total)} ₺` }],
+        })
         await sendEmail(to, mail.subject, mail.html, att)
       }
     } catch { /* yut */ }

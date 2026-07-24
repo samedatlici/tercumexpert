@@ -253,6 +253,10 @@ export const da: PartialDictionary = {
       login: "Log ind",
       logout: "Log ud",
       account: "Min konto",
+      mainMenu: "Hovedmenu",
+      menu: "Menu",
+      mobileMenu: "Mobilmenu",
+      countryCode: "Landekode",
     },
     states: {
       loading: "Indlæser…",
@@ -271,6 +275,8 @@ export const da: PartialDictionary = {
   },
 
   home: {
+
+    whatsappMsg: "Hej, jeg vil gerne have information om jeres oversættelsestjeneste.",
     seo: {
       title: "TercümExpert — Professionelle oversættelsestjenester",
       description:
@@ -448,6 +454,20 @@ export const da: PartialDictionary = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "Firmanavn er påkrævet.",
+
+      contactName: "Navnet på kontaktpersonen er påkrævet.",
+
+      email: "Indtast en gyldig e-mailadresse.",
+
+      need: "Beskriv venligst kort dine behov (mindst 10 tegn).",
+
+      consent: "Samtykke er påkrævet for at fortsætte.",
+
+    },
     statsLabels: {
       corporate: "Erhvervskunder",
       discount: "Mængderabat",
@@ -637,6 +657,8 @@ export const da: PartialDictionary = {
   },
 
   quote: {
+
+    whatsappMsg: "Hej, jeg vil gerne have information om et pristilbud.",
     cancelPolicy: "Bemærk: din ordre kan annulleres fra din ordreside, indtil en oversætter begynder at arbejde på den, og din betaling refunderes. Når en oversætter har påtaget sig opgaven, er annullering ikke længere mulig.",
     "areas": {
       "academic": "Akademisk oversættelse",
@@ -859,6 +881,8 @@ export const da: PartialDictionary = {
   },
 
   order: {
+
+    whatsappMsg: "Hej, jeg vil gerne have information om min ordre #{no}.",
     cancel: {
       eligible: "Din ordre er stadig i puljen; du kan annullere den og få pengene tilbage, indtil en oversætter påtager sig opgaven.",
       button: "Annuller ordre",
@@ -929,6 +953,8 @@ export const da: PartialDictionary = {
   },
 
   faq: {
+
+    whatsappMsg: "Hej, jeg har et spørgsmål.",
     seo: {
       title: "Ofte stillede spørgsmål",
       description: "Ofte stillede spørgsmål om autoriseret oversættelse, leveringstid, priser, notarpåtegning og erhvervskredit.",
@@ -947,6 +973,20 @@ export const da: PartialDictionary = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "Fulde navn er påkrævet.",
+
+      email: "Indtast en gyldig e-mailadresse.",
+
+      subject: "Emne er påkrævet.",
+
+      message: "Beskeden skal indeholde mindst 10 tegn.",
+
+      consent: "Samtykke er påkrævet for at fortsætte.",
+
+    },
       introTitle: `Velkommen`,
       introDesc: `Før vi begynder, må jeg da bede om Deres navn og e-mailadresse, så jeg bedre kan hjælpe Dem?`,
       start: `Start chat`,

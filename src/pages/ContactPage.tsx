@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -14,17 +14,20 @@ import { ConsentText } from '@/features/legal/ConsentText'
 
 const isPlaceholder = (v: string) => v.trim().startsWith('[')
 
-const schema = z.object({
-  name: z.string().min(2, 'Ad Soyad zorunludur.'),
-  email: z.string().email('Geçerli bir e-posta girin.'),
-  phone: z.string().optional(),
-  subject: z.string().min(2, 'Konu zorunludur.'),
-  message: z.string().min(10, 'Mesaj en az 10 karakter olmalıdır.'),
-  consent: z.boolean().refine((v) => v === true, { message: 'Devam etmek için onay gereklidir.' }),
-  // Honeypot (bot koruması §29): boş kalmalı
-  company_website: z.string().max(0).optional(),
-})
-type ContactForm = z.infer<typeof schema>
+interface FormErrs { name: string; email: string; subject: string; message: string; consent: string }
+// Doğrulama mesajları 14 dilden (dict.contact.formErrors) gelir; şema bileşende kurulur.
+const makeSchema = (e: FormErrs) =>
+  z.object({
+    name: z.string().min(2, e.name),
+    email: z.string().email(e.email),
+    phone: z.string().optional(),
+    subject: z.string().min(2, e.subject),
+    message: z.string().min(10, e.message),
+    consent: z.boolean().refine((v) => v === true, { message: e.consent }),
+    // Honeypot (bot koruması §29): boş kalmalı
+    company_website: z.string().max(0).optional(),
+  })
+type ContactForm = z.infer<ReturnType<typeof makeSchema>>
 
 const fieldClass =
   'min-h-[44px] w-full rounded-md border border-border bg-surface px-3 py-2 text-base focus-visible:outline-none'
@@ -33,6 +36,7 @@ export default function ContactPage() {
   const { dict } = useI18n()
   const c = dict.contact
   const [sent, setSent] = useState(false)
+  const schema = useMemo(() => makeSchema(c.formErrors), [c])
   const {
     register,
     control,

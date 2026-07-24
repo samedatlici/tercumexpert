@@ -253,6 +253,10 @@ export const de: PartialDictionary = {
       login: 'Anmelden',
       logout: 'Abmelden',
       account: 'Mein Konto',
+      mainMenu: "Hauptmenü",
+      menu: "Menü",
+      mobileMenu: "Mobiles Menü",
+      countryCode: "Ländervorwahl",
     },
     states: {
       loading: 'Wird geladen…',
@@ -271,6 +275,8 @@ export const de: PartialDictionary = {
   },
 
   home: {
+
+    whatsappMsg: "Guten Tag, ich hätte gerne Informationen zu Ihrem Übersetzungsservice.",
     seo: {
       title: 'TercümExpert — Professionelle Übersetzungsdienstleistungen',
       description:
@@ -448,6 +454,20 @@ export const de: PartialDictionary = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "Der Firmenname ist erforderlich.",
+
+      contactName: "Der Name der Ansprechperson ist erforderlich.",
+
+      email: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+
+      need: "Bitte beschreiben Sie kurz Ihren Bedarf (mindestens 10 Zeichen).",
+
+      consent: "Zum Fortfahren ist Ihre Einwilligung erforderlich.",
+
+    },
     statsLabels: {
       corporate: 'Firmenkunden',
       discount: 'Rabatt bei Sammelaufträgen',
@@ -637,6 +657,8 @@ export const de: PartialDictionary = {
   },
 
   quote: {
+
+    whatsappMsg: "Guten Tag, ich hätte gerne Informationen zu einem Preisangebot.",
     cancelPolicy: "Hinweis: Ihre Bestellung kann über Ihre Bestellseite storniert werden, solange kein Übersetzer mit der Bearbeitung begonnen hat, und Ihre Zahlung wird erstattet. Sobald ein Übersetzer den Auftrag übernommen hat, ist eine Stornierung nicht mehr möglich.",
     "areas": {
       "academic": "Wissenschaftliche Übersetzung",
@@ -859,6 +881,8 @@ export const de: PartialDictionary = {
   },
 
   order: {
+
+    whatsappMsg: "Guten Tag, ich hätte gerne Informationen zu meiner Bestellung #{no}.",
     cancel: {
       eligible: "Ihre Bestellung befindet sich noch im Pool; Sie können sie stornieren und erhalten eine Rückerstattung, solange kein Übersetzer sie übernommen hat.",
       button: "Bestellung stornieren",
@@ -929,6 +953,8 @@ export const de: PartialDictionary = {
   },
 
   faq: {
+
+    whatsappMsg: "Guten Tag, ich habe eine Frage.",
     seo: {
       title: 'Häufig gestellte Fragen',
       description: 'Häufig gestellte Fragen zu beglaubigter Übersetzung, Lieferzeit, Preisgestaltung, notarieller Beglaubigung und Firmenkonditionen.',
@@ -947,6 +973,20 @@ export const de: PartialDictionary = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "Der vollständige Name ist erforderlich.",
+
+      email: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+
+      subject: "Der Betreff ist erforderlich.",
+
+      message: "Die Nachricht muss mindestens 10 Zeichen umfassen.",
+
+      consent: "Zum Fortfahren ist Ihre Einwilligung erforderlich.",
+
+    },
       introTitle: `Willkommen`,
       introDesc: `Bevor wir beginnen, dürfte ich Ihren Namen und Ihre E-Mail-Adresse erfahren, damit ich Ihnen besser helfen kann?`,
       start: `Chat starten`,

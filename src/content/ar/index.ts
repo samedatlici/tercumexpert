@@ -253,6 +253,10 @@ export const ar: PartialDictionary = {
       login: "تسجيل الدخول",
       logout: "تسجيل الخروج",
       account: "حسابي",
+      mainMenu: "القائمة الرئيسية",
+      menu: "القائمة",
+      mobileMenu: "قائمة الهاتف المحمول",
+      countryCode: "رمز الدولة",
     },
     states: {
       loading: "جارٍ التحميل…",
@@ -271,6 +275,8 @@ export const ar: PartialDictionary = {
   },
 
   home: {
+
+    whatsappMsg: "مرحبًا، أود الحصول على معلومات حول خدمة الترجمة لديكم.",
     seo: {
       title: "TercümExpert — خدمات ترجمة احترافية",
       description:
@@ -448,6 +454,20 @@ export const ar: PartialDictionary = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "اسم الشركة مطلوب.",
+
+      contactName: "اسم الشخص المسؤول للتواصل مطلوب.",
+
+      email: "أدخل عنوان بريد إلكتروني صالحًا.",
+
+      need: "يُرجى وصف احتياجاتكم بإيجاز (10 أحرف على الأقل).",
+
+      consent: "الموافقة مطلوبة للمتابعة.",
+
+    },
     statsLabels: {
       corporate: "العملاء من الشركات",
       discount: "خصم الطلبات بالجملة",
@@ -637,6 +657,8 @@ export const ar: PartialDictionary = {
   },
 
   quote: {
+
+    whatsappMsg: "مرحبًا، أود الحصول على معلومات حول عرض سعر.",
     cancelPolicy: "ملاحظة: يمكن إلغاء طلبك من صفحة الطلب ما لم يبدأ أحد المترجمين العمل عليه، وسيُسترد المبلغ المدفوع. وبمجرد استلام أحد المترجمين للعمل، لن يعد الإلغاء ممكنًا.",
     "areas": {
       "academic": "ترجمة أكاديمية",
@@ -859,6 +881,8 @@ export const ar: PartialDictionary = {
   },
 
   order: {
+
+    whatsappMsg: "مرحبًا، أود الحصول على معلومات حول طلبي رقم #{no}.",
     cancel: {
       eligible: "طلبك لا يزال في قائمة العمل؛ يمكنك إلغاؤه واسترداد المبلغ ما لم يستلمه أحد المترجمين بعد.",
       button: "إلغاء الطلب",
@@ -929,6 +953,8 @@ export const ar: PartialDictionary = {
   },
 
   faq: {
+
+    whatsappMsg: "مرحبًا، لديّ سؤال.",
     seo: {
       title: "الأسئلة الشائعة",
       description: "الأسئلة الشائعة حول الترجمة المحلّفة ومدة التسليم والتسعير والتصديق من كاتب العدل والدفع الآجل للشركات.",
@@ -947,6 +973,20 @@ export const ar: PartialDictionary = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "الاسم الكامل مطلوب.",
+
+      email: "أدخل عنوان بريد إلكتروني صالحًا.",
+
+      subject: "الموضوع مطلوب.",
+
+      message: "يجب ألا تقل الرسالة عن 10 أحرف.",
+
+      consent: "الموافقة مطلوبة للمتابعة.",
+
+    },
       introTitle: `مرحبًا بك`,
       introDesc: `قبل أن نبدأ، هل يمكنني الحصول على اسمك وبريدك الإلكتروني حتى أتمكن من مساعدتك على نحو أفضل؟`,
       start: `ابدأ المحادثة`,

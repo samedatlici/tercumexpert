@@ -82,7 +82,7 @@ export function Header() {
             {dict.common.brand}
           </Link>
 
-          <nav aria-label="Ana menü" className="hidden flex-1 items-center justify-center gap-1 lg:flex">
+          <nav aria-label={dict.common.actions.mainMenu} className="hidden flex-1 items-center justify-center gap-1 lg:flex">
             {navItems.map((item) => (
               <Link
                 key={item.key}
@@ -137,7 +137,7 @@ export function Header() {
             ref={drawerRef}
             role="dialog"
             aria-modal="true"
-            aria-label="Menü"
+            aria-label={dict.common.actions.menu}
             className="absolute inset-y-0 end-0 flex w-[min(88%,20rem)] flex-col bg-surface shadow-lg animate-fade-in-up"
           >
             <div className="flex h-[72px] items-center justify-between border-b border-border px-4">
@@ -151,7 +151,7 @@ export function Header() {
                 <Icon name="X" className="size-6" />
               </button>
             </div>
-            <nav aria-label="Mobil menü" className="flex-1 overflow-y-auto px-2 py-3">
+            <nav aria-label={dict.common.actions.mobileMenu} className="flex-1 overflow-y-auto px-2 py-3">
               {navItems.map((item) => (
                 <Link
                   key={item.key}

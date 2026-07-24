@@ -253,6 +253,10 @@ export const nl: PartialDictionary = {
       login: "Inloggen",
       logout: "Uitloggen",
       account: "Mijn account",
+      mainMenu: "Hoofdmenu",
+      menu: "Menu",
+      mobileMenu: "Mobiel menu",
+      countryCode: "Landcode",
     },
     states: {
       loading: "Laden…",
@@ -271,6 +275,8 @@ export const nl: PartialDictionary = {
   },
 
   home: {
+
+    whatsappMsg: "Hallo, ik zou graag informatie ontvangen over uw vertaaldienst.",
     seo: {
       title: "TercümExpert — Professionele vertaaldiensten",
       description:
@@ -448,6 +454,20 @@ export const nl: PartialDictionary = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "Bedrijfsnaam is verplicht.",
+
+      contactName: "De naam van de contactpersoon is verplicht.",
+
+      email: "Voer een geldig e-mailadres in.",
+
+      need: "Beschrijf kort uw behoeften (minimaal 10 tekens).",
+
+      consent: "Toestemming is vereist om door te gaan.",
+
+    },
     statsLabels: {
       corporate: "Zakelijke klanten",
       discount: "Korting bij bulkbestellingen",
@@ -637,6 +657,8 @@ export const nl: PartialDictionary = {
   },
 
   quote: {
+
+    whatsappMsg: "Hallo, ik zou graag informatie ontvangen over een prijsopgave.",
     cancelPolicy: "Let op: uw bestelling kan via uw bestelpagina worden geannuleerd totdat een vertaler eraan begint te werken, en uw betaling wordt terugbetaald. Zodra een vertaler de opdracht heeft aangenomen, is annuleren niet meer mogelijk.",
     "areas": {
       "academic": "Academische vertaling",
@@ -859,6 +881,8 @@ export const nl: PartialDictionary = {
   },
 
   order: {
+
+    whatsappMsg: "Hallo, ik zou graag informatie ontvangen over mijn bestelling #{no}.",
     cancel: {
       eligible: "Uw bestelling zit nog in de pool; u kunt deze annuleren en een terugbetaling ontvangen totdat een vertaler de opdracht aanneemt.",
       button: "Bestelling annuleren",
@@ -929,6 +953,8 @@ export const nl: PartialDictionary = {
   },
 
   faq: {
+
+    whatsappMsg: "Hallo, ik heb een vraag.",
     seo: {
       title: "Veelgestelde vragen",
       description: "Veelgestelde vragen over beëdigde vertaling, levertijd, prijzen, notariële bekrachtiging en zakelijke betalingstermijnen.",
@@ -947,6 +973,20 @@ export const nl: PartialDictionary = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "Volledige naam is verplicht.",
+
+      email: "Voer een geldig e-mailadres in.",
+
+      subject: "Onderwerp is verplicht.",
+
+      message: "Het bericht moet minimaal 10 tekens bevatten.",
+
+      consent: "Toestemming is vereist om door te gaan.",
+
+    },
       introTitle: `Welkom`,
       introDesc: `Mag ik eerst uw naam en e-mailadres, zodat ik u beter van dienst kan zijn?`,
       start: `Chat starten`,

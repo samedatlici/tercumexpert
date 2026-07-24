@@ -396,7 +396,7 @@ export default function QuotePage() {
     navigate(buildPath(locale, 'order', { slug: String(res.orderNo) }))
   }
 
-  const wa = whatsappLink('Merhaba, fiyat teklifi hakkında bilgi almak istiyorum.')
+  const wa = whatsappLink(q.whatsappMsg)
 
   return (
     <>

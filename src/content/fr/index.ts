@@ -253,6 +253,10 @@ export const fr: PartialDictionary = {
       login: "Se connecter",
       logout: "Se déconnecter",
       account: "Mon compte",
+      mainMenu: "Menu principal",
+      menu: "Menu",
+      mobileMenu: "Menu mobile",
+      countryCode: "Indicatif du pays",
     },
     states: {
       loading: "Chargement…",
@@ -271,6 +275,8 @@ export const fr: PartialDictionary = {
   },
 
   home: {
+
+    whatsappMsg: "Bonjour, je souhaiterais obtenir des informations sur votre service de traduction.",
     seo: {
       title: "TercümExpert — Services de traduction professionnelle",
       description:
@@ -448,6 +454,20 @@ export const fr: PartialDictionary = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "Le nom de l'entreprise est obligatoire.",
+
+      contactName: "Le nom de la personne à contacter est obligatoire.",
+
+      email: "Saisissez une adresse e-mail valide.",
+
+      need: "Veuillez décrire brièvement vos besoins (au moins 10 caractères).",
+
+      consent: "Votre consentement est requis pour continuer.",
+
+    },
     statsLabels: {
       corporate: "Clients entreprises",
       discount: "Remise sur commandes en volume",
@@ -637,6 +657,8 @@ export const fr: PartialDictionary = {
   },
 
   quote: {
+
+    whatsappMsg: "Bonjour, je souhaiterais obtenir des informations concernant un devis.",
     cancelPolicy: "À noter : votre commande peut être annulée depuis votre page de commande tant qu’un traducteur n’a pas commencé à travailler dessus, et votre paiement sera remboursé. Une fois qu’un traducteur a pris en charge la mission, l’annulation n’est plus possible.",
     "areas": {
       "academic": "Traduction académique",
@@ -859,6 +881,8 @@ export const fr: PartialDictionary = {
   },
 
   order: {
+
+    whatsappMsg: "Bonjour, je souhaiterais obtenir des informations concernant ma commande #{no}.",
     cancel: {
       eligible: "Votre commande est encore dans le pool ; vous pouvez l’annuler et être remboursé tant qu’un traducteur ne l’a pas prise en charge.",
       button: "Annuler la commande",
@@ -929,6 +953,8 @@ export const fr: PartialDictionary = {
   },
 
   faq: {
+
+    whatsappMsg: "Bonjour, j'ai une question.",
     seo: {
       title: "Foire aux questions",
       description: "Questions fréquentes sur la traduction assermentée, les délais de livraison, la tarification, la certification notariée et le paiement à terme pour entreprises.",
@@ -947,6 +973,20 @@ export const fr: PartialDictionary = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "Le nom complet est obligatoire.",
+
+      email: "Saisissez une adresse e-mail valide.",
+
+      subject: "L'objet est obligatoire.",
+
+      message: "Le message doit contenir au moins 10 caractères.",
+
+      consent: "Votre consentement est requis pour continuer.",
+
+    },
       introTitle: `Bienvenue`,
       introDesc: `Avant de commencer, puis-je avoir votre nom et votre adresse e-mail afin de mieux vous aider ?`,
       start: `Démarrer la discussion`,

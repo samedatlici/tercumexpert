@@ -305,7 +305,7 @@ function ApplicationForm({
     // Reddedilmiş kaydı yeniden gönder (UPDATE, status→pending) veya yeni kayıt (INSERT).
     const { error } = existingId
       ? await supabase.from('translators').update({ ...payload, status: 'pending' }).eq('id', existingId)
-      : await supabase.from('translators').insert({ user_id: userId, ...payload })
+      : await supabase.from('translators').insert({ user_id: userId, locale, ...payload })
     setBusy(false)
     if (error) {
       setErr(t.form.saveError)

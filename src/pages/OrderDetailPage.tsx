@@ -71,7 +71,7 @@ export default function OrderDetailPage() {
 
   const home = buildPath(locale, 'home')
   const wa = whatsappLink(
-    order ? `Merhaba, #${order.order_no} numaralı siparişim hakkında bilgi almak istiyorum.` : 'Merhaba',
+    order ? o.whatsappMsg.replace('{no}', String(order.order_no)) : '',
   )
 
   // Giriş yok → giriş iste.

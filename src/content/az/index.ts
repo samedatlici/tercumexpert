@@ -247,6 +247,10 @@ export const az: PartialDictionary = {
       login: 'Daxil ol',
       logout: 'Çıxış',
       account: 'Hesabım',
+      mainMenu: "Əsas menyu",
+      menu: "Menyu",
+      mobileMenu: "Mobil menyu",
+      countryCode: "Ölkə kodu",
     },
     states: {
       loading: 'Yüklənir…',
@@ -265,6 +269,8 @@ export const az: PartialDictionary = {
   },
 
   home: {
+
+    whatsappMsg: "Salam, tərcümə xidmətiniz haqqında məlumat almaq istəyirəm.",
     seo: {
       title: 'TercümExpert — Peşəkar Tərcümə Xidmətləri',
       description:
@@ -442,6 +448,20 @@ export const az: PartialDictionary = {
   },
 
   corporate: {
+
+    formErrors: {
+
+      company: "Şirkət adı tələb olunur.",
+
+      contactName: "Əlaqələndirici şəxsin adı tələb olunur.",
+
+      email: "Etibarlı bir e-poçt ünvanı daxil edin.",
+
+      need: "Zəhmət olmasa, ehtiyacınızı qısaca izah edin (ən azı 10 simvol).",
+
+      consent: "Davam etmək üçün razılıq tələb olunur.",
+
+    },
     statsLabels: {
       corporate: 'Korporativ müştərilər',
       discount: 'Toplu sifariş endirimi',
@@ -631,6 +651,8 @@ export const az: PartialDictionary = {
   },
 
   quote: {
+
+    whatsappMsg: "Salam, qiymət təklifi haqqında məlumat almaq istəyirəm.",
     cancelPolicy: "Qeyd: Sifarişiniz bir tərcüməçi üzərində işə başlayana qədər sifariş səhifənizdən ləğv edilə bilər və ödənişiniz geri qaytarılar. Bir tərcüməçi işi üstləndikdən sonra ləğv mümkün deyil.",
     "areas": {
       "academic": "Akademik tərcümə",
@@ -853,6 +875,8 @@ export const az: PartialDictionary = {
   },
 
   order: {
+
+    whatsappMsg: "Salam, #{no} nömrəli sifarişim haqqında məlumat almaq istəyirəm.",
     cancel: {
       eligible: "Sifarişiniz hələ hovuzdadır; bir tərcüməçi işi üstlənənə qədər onu ləğv edib ödənişin geri qaytarılmasını ala bilərsiniz.",
       button: "Sifarişi ləğv et",
@@ -923,6 +947,8 @@ export const az: PartialDictionary = {
   },
 
   faq: {
+
+    whatsappMsg: "Salam, bir sualım var.",
     seo: {
       title: 'Tez-tez Verilən Suallar',
       description: 'Andlı tərcümə, çatdırılma müddəti, qiymətqoyma, notariat təsdiqi və korporativ vaxt seçimləri haqqında tez-tez verilən suallar.',
@@ -941,6 +967,20 @@ export const az: PartialDictionary = {
   },
 
   contact: {
+
+    formErrors: {
+
+      name: "Ad və soyad tələb olunur.",
+
+      email: "Etibarlı bir e-poçt ünvanı daxil edin.",
+
+      subject: "Mövzu tələb olunur.",
+
+      message: "Mesaj ən azı 10 simvol olmalıdır.",
+
+      consent: "Davam etmək üçün razılıq tələb olunur.",
+
+    },
       introTitle: `Xoş gəlmisiniz`,
       introDesc: `Sizə daha yaxşı kömək edə bilməyim üçün əvvəlcə adınızı və e-poçt ünvanınızı ala bilərəmmi?`,
       start: `Söhbətə başlayın`,

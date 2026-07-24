@@ -7,11 +7,13 @@ import { ChatWidget } from '@/features/chatbot/ui/ChatWidget'
 import { SkipLink } from '@/components/common/SkipLink'
 import { isLocale, DEFAULT_LOCALE } from '@/app/config/locales'
 import { saveLocale } from '@/lib/locale-detect'
+import { useI18n } from '@/hooks/useI18n'
 
 function PageFallback() {
+  const { dict } = useI18n() // I18nProvider içinde render edilir → güvenli
   return (
     <div className="section flex min-h-[50vh] items-center justify-center">
-      <div className="size-8 animate-spin rounded-full border-2 border-border border-t-primary" aria-label="Yükleniyor" />
+      <div className="size-8 animate-spin rounded-full border-2 border-border border-t-primary" aria-label={dict.common.states.loading} />
     </div>
   )
 }

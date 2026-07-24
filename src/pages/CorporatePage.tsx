@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -14,17 +14,20 @@ import { company } from '@/app/config/site.config'
 
 const isPlaceholder = (v: string) => v.trim().startsWith('[')
 
-const schema = z.object({
-  company: z.string().min(2, 'Şirket adı zorunludur.'),
-  contactName: z.string().min(2, 'Yetkili adı zorunludur.'),
-  email: z.string().email('Geçerli bir e-posta girin.'),
-  phone: z.string().optional(),
-  need: z.string().min(10, 'Lütfen ihtiyacınızı kısaca açıklayın (en az 10 karakter).'),
-  consent: z.boolean().refine((v) => v === true, { message: 'Devam etmek için onay gereklidir.' }),
-  // Honeypot (bot koruması §29): boş kalmalı
-  company_website: z.string().max(0).optional(),
-})
-type CorporateForm = z.infer<typeof schema>
+interface CorpErrs { company: string; contactName: string; email: string; need: string; consent: string }
+// Doğrulama mesajları 14 dilden (dict.corporate.formErrors) gelir; şema bileşende kurulur.
+const makeSchema = (e: CorpErrs) =>
+  z.object({
+    company: z.string().min(2, e.company),
+    contactName: z.string().min(2, e.contactName),
+    email: z.string().email(e.email),
+    phone: z.string().optional(),
+    need: z.string().min(10, e.need),
+    consent: z.boolean().refine((v) => v === true, { message: e.consent }),
+    // Honeypot (bot koruması §29): boş kalmalı
+    company_website: z.string().max(0).optional(),
+  })
+type CorporateForm = z.infer<ReturnType<typeof makeSchema>>
 
 const fieldClass =
   'min-h-[44px] w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-base text-white placeholder:text-white/40 focus-visible:outline-none focus-visible:border-white/50'
@@ -33,6 +36,7 @@ export default function CorporatePage() {
   const { dict } = useI18n()
   const c = dict.corporate
   const [sent, setSent] = useState(false)
+  const schema = useMemo(() => makeSchema(c.formErrors), [c])
   const {
     register,
     control,

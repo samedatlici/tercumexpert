@@ -28,7 +28,7 @@ const WHY_ICONS: Record<string, IconName> = {
 export default function HomePage() {
   const { locale, dict } = useI18n()
   const home = dict.home
-  const wa = whatsappLink('Merhaba, çeviri hizmeti hakkında bilgi almak istiyorum.')
+  const wa = whatsappLink(home.whatsappMsg)
 
   return (
     <>
