@@ -1267,7 +1267,7 @@ interface Job {
   pages: number
   sourceFiles: JobFile[]
   translationFiles: JobFile[]
-  translatorInfo: { name: string | null; is_sworn: boolean } | null
+  translatorInfo: { name: string | null; is_sworn: boolean; status?: 'deleted' | 'banned' | null } | null
 }
 
 function WorkflowSection({
@@ -1449,6 +1449,8 @@ function JobCard({
           <span className="text-text-secondary">{t.jobs.translator}: </span>
           <span className="font-medium">{job.translatorInfo.name || '—'}</span>
           {job.translatorInfo.is_sworn && <span className="ms-2"><Pill tone="primary">{t.admin.swornBadge}</Pill></span>}
+          {job.translatorInfo.status === 'deleted' && <span className="ms-2"><Pill tone="dark">{t.jobs.trDeleted}</Pill></span>}
+          {job.translatorInfo.status === 'banned' && <span className="ms-2"><Pill tone="danger">{t.jobs.trBanned}</Pill></span>}
         </p>
       )}
 

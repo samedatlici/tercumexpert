@@ -81,7 +81,28 @@ function computeWallet(rows: LedgerRow[]) {
   return { total: Math.round(total), locked: Math.round(locked), withdrawable: Math.round(withdrawable), paid: Math.round(paid), entries }
 }
 
-interface AuthUser { id: string; email?: string; phone?: string; created_at?: string; user_metadata?: Record<string, unknown> }
+interface AuthUser { id: string; email?: string; phone?: string; created_at?: string; banned_until?: string | null; user_metadata?: Record<string, unknown> }
+/** Verilen kullanıcıların hesap durumları: 'deleted' (arşiv) | 'banned' (auth) | null. */
+async function accountStatusMap(userIds: string[]): Promise<Map<string, 'deleted' | 'banned' | null>> {
+  const map = new Map<string, 'deleted' | 'banned' | null>()
+  const ids = [...new Set(userIds.filter(Boolean))]
+  if (ids.length === 0) return map
+  const deleted = new Set<string>()
+  try {
+    const dRes = await fetch(`${SUPABASE_URL}/rest/v1/deleted_accounts?user_id=in.(${ids.join(',')})&select=user_id`, { headers: svcHeaders() })
+    if (dRes.ok) for (const d of (await dRes.json()) as Array<{ user_id: string }>) deleted.add(d.user_id)
+  } catch { /* yut */ }
+  const banned = new Set<string>()
+  try {
+    const users = await listAuthUsers()
+    const now = Date.now()
+    for (const u of users) {
+      if (u.banned_until) { const t = new Date(u.banned_until).getTime(); if (Number.isFinite(t) && t > now) banned.add(u.id) }
+    }
+  } catch { /* yut */ }
+  for (const id of ids) map.set(id, deleted.has(id) ? 'deleted' : banned.has(id) ? 'banned' : null)
+  return map
+}
 async function listAuthUsers(): Promise<AuthUser[]> {
   const out: AuthUser[] = []
   for (let page = 1; page <= 10; page++) {
@@ -411,7 +432,7 @@ export default async function handler(req: Request): Promise<Response> {
   if (action === 'adminPartners') {
     if (user.email !== ADMIN_EMAIL) return json({ error: 'forbidden' }, 403)
     const [parRes, refRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/partners?status=eq.approved&select=id,contact_name,company,sector,sector_other,country,city,ref_code,iban_verified&order=created_at.desc`, { headers: svcHeaders() }),
+      fetch(`${SUPABASE_URL}/rest/v1/partners?status=eq.approved&select=id,user_id,contact_name,company,sector,sector_other,country,city,ref_code,iban_verified&order=created_at.desc`, { headers: svcHeaders() }),
       fetch(`${SUPABASE_URL}/rest/v1/partner_referrals?select=user_id,partner_id`, { headers: svcHeaders() }),
     ])
     const partners = parRes.ok ? ((await parRes.json()) as Array<Record<string, unknown>>) : []
@@ -433,6 +454,8 @@ export default async function handler(req: Request): Promise<Response> {
         orderAgg[pid] = a
       }
     }
+    // Kaydı silinmiş / yasaklı partner rozeti (ciro/log görünümünde korunur + işaretlenir).
+    const statusMap = await accountStatusMap(partners.map((p) => p.user_id as string))
     const out = partners.map((p) => ({
       id: p.id, name: p.contact_name || '', company: p.company || '', sector: p.sector || '',
       sector_other: p.sector_other || '', country: p.country || '', city: p.city || '',
@@ -440,6 +463,7 @@ export default async function handler(req: Request): Promise<Response> {
       memberCount: memberCount[p.id as string] || 0,
       orderCount: orderAgg[p.id as string]?.count || 0,
       orderTotal: orderAgg[p.id as string]?.total || 0,
+      accountStatus: statusMap.get(p.user_id as string) ?? null,
     }))
     return json({ partners: out })
   }
@@ -452,6 +476,9 @@ export default async function handler(req: Request): Promise<Response> {
     const pRes = await fetch(`${SUPABASE_URL}/rest/v1/partners?id=eq.${pid}&select=*`, { headers: svcHeaders() })
     const partner = pRes.ok ? ((await pRes.json()) as Array<Record<string, unknown>>)[0] : null
     if (!partner) return json({ error: 'not_found' }, 404)
+    // Hesap durumu (kaydı silinmiş / yasaklı) — user_id silinmeden ÖNCE hesapla.
+    const stMap = await accountStatusMap([partner.user_id as string])
+    partner.accountStatus = stMap.get(partner.user_id as string) ?? null
     delete partner.user_id
     const refs = await referredUserIds(pid)
     const ids = refs.map((r) => r.user_id)

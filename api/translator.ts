@@ -264,13 +264,38 @@ async function signTranslationFiles(tf: unknown): Promise<Array<{ name: string; 
   return out
 }
 
-async function getTranslatorInfo(id: string): Promise<{ name: string | null; is_sworn: boolean } | null> {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/translators?id=eq.${id}&select=full_name,is_sworn`, {
+/** Bir kullanıcının hesap durumu: 'deleted' (arşivde) | 'banned' (auth ban) | null. */
+async function userAccountStatus(userId: string): Promise<'deleted' | 'banned' | null> {
+  try {
+    const dRes = await fetch(`${SUPABASE_URL}/rest/v1/deleted_accounts?user_id=eq.${userId}&select=user_id`, { headers: svcHeaders() })
+    if (dRes.ok && ((await dRes.json()) as unknown[]).length > 0) return 'deleted'
+  } catch { /* yut */ }
+  try {
+    const uRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${userId}`, { headers: svcHeaders() })
+    if (uRes.ok) {
+      const u = (await uRes.json()) as { banned_until?: string | null }
+      if (u.banned_until) {
+        const t = new Date(u.banned_until).getTime()
+        if (Number.isFinite(t) && t > Date.now()) return 'banned'
+      }
+    }
+  } catch { /* yut */ }
+  return null
+}
+
+async function getTranslatorInfo(
+  id: string,
+): Promise<{ name: string | null; is_sworn: boolean; status: 'deleted' | 'banned' | null } | null> {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/translators?id=eq.${id}&select=full_name,is_sworn,user_id`, {
     headers: svcHeaders(),
   })
   if (!r.ok) return null
-  const rows = (await r.json()) as Array<{ full_name: string | null; is_sworn: boolean }>
-  return rows[0] ? { name: rows[0].full_name, is_sworn: rows[0].is_sworn } : null
+  const rows = (await r.json()) as Array<{ full_name: string | null; is_sworn: boolean; user_id: string | null }>
+  const row = rows[0]
+  if (!row) return null
+  // Kaydı silinmiş / yasaklı tercüman rozeti için hesap durumu (admin log görünümü).
+  const status = row.user_id ? await userAccountStatus(row.user_id) : null
+  return { name: row.full_name, is_sworn: row.is_sworn, status }
 }
 
 async function fetchOrder(orderId: string): Promise<Record<string, unknown> | null> {

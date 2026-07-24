@@ -457,10 +457,18 @@ function ProfileTab({ partner, onSaved }: { partner: Partner; onSaved: () => voi
 }
 
 /* Dolgulu rozet (translator paneliyle aynı). */
-type PillTone = 'success' | 'neutral'
+type PillTone = 'success' | 'neutral' | 'danger' | 'dark'
 const PILL_TONE: Record<PillTone, string> = {
   success: 'border border-success bg-success text-white',
   neutral: 'border-2 border-border-strong bg-surface-muted text-text-secondary',
+  danger: 'border border-danger bg-danger text-white',
+  dark: 'border border-secondary bg-secondary text-white',
+}
+/** Kaydı silinmiş/yasaklı partner rozeti (ciro/log görünümü). */
+function AccountStatusPill({ status, pp }: { status?: 'deleted' | 'banned' | null; pp: any }) {
+  if (status === 'deleted') return <Pill tone="dark">{pp.delPartner}</Pill>
+  if (status === 'banned') return <Pill tone="danger">{pp.banPartner}</Pill>
+  return null
 }
 function Pill({ tone, children }: { tone: PillTone; children: ReactNode }) {
   return (
@@ -1538,6 +1546,7 @@ interface AdminPartner {
   memberCount: number
   orderCount: number
   orderTotal: number
+  accountStatus?: 'deleted' | 'banned' | null
 }
 
 function useSectorLabel() {
@@ -1613,8 +1622,11 @@ function PartnersTab() {
               {filtered.map((p) => (
                 <tr key={p.id} className="cursor-pointer bg-surface hover:bg-surface-muted" onClick={() => setOpenId(p.id)}>
                   <td className="whitespace-nowrap px-3 py-2 font-medium">
-                    {p.name || '—'}
-                    <span className="ms-2 rounded border border-border px-1.5 py-0.5 text-xs text-text-secondary">{sectorLabel(p.sector, p.sector_other)}</span>
+                    <span className="inline-flex flex-wrap items-center gap-1.5">
+                      {p.name || '—'}
+                      <span className="rounded border border-border px-1.5 py-0.5 text-xs text-text-secondary">{sectorLabel(p.sector, p.sector_other)}</span>
+                      <AccountStatusPill status={p.accountStatus} pp={pp} />
+                    </span>
                   </td>
                   <td className="px-3 py-2 text-text-secondary">{p.company || '—'}</td>
                   <td className="whitespace-nowrap px-3 py-2 text-text-secondary">{[p.city, countryDisplayName(p.country, locale, p.country)].filter(Boolean).join(' · ') || '—'}</td>
@@ -1673,7 +1685,10 @@ function PartnerDetail({ partnerId, onBack }: { partnerId: string; onBack: () =>
           <div className="rounded-lg border border-border bg-surface p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 className="text-lg font-bold">{data.partner.contact_name || data.partner.company || '—'}</h2>
+                <h2 className="flex flex-wrap items-center gap-2 text-lg font-bold">
+                  {data.partner.contact_name || data.partner.company || '—'}
+                  <AccountStatusPill status={data.partner.accountStatus} pp={pp} />
+                </h2>
                 <p className="text-sm text-text-secondary">
                   {[data.partner.company, sectorLabel(data.partner.sector ?? '', data.partner.sector_other ?? '')].filter(Boolean).join(' · ')}
                 </p>

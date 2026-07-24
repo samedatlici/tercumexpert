@@ -56,6 +56,27 @@ const ACCEPT =
 
 type Mode = 'file' | 'text'
 
+/**
+ * Dosyanın baytlarını HEMEN (taze/okunabilir haldeyken) belleğe alıp yeni bir File
+ * kopyası üretir. Neden: <input>'tan gelen File, bazı tarayıcılarda diskteki dosyaya
+ * REFERANS tutar. Bu File IndexedDB'ye yazılıp giriş için sayfa yeniden yüklendikten
+ * sonra geri okunmaya çalışıldığında okuma başarısız olabiliyordu → sipariş anında
+ * dosya yüklenemiyor ve tercüme havuzunda belge GÖRÜNMÜYORDU. Baytları en başta,
+ * disk referansı hâlâ geçerliyken kopyalayınca sorun ortadan kalkar (salt-bellek File
+ * yapısal kopya ile IndexedDB'de güvenle saklanır ve her zaman yeniden okunabilir).
+ */
+async function materializeFile(file: File): Promise<File> {
+  try {
+    const buf = await file.arrayBuffer()
+    return new File([buf], file.name, {
+      type: file.type || 'application/octet-stream',
+      lastModified: file.lastModified,
+    })
+  } catch {
+    return file // okunamazsa orijinali kullan (mevcut davranıştan kötü değil)
+  }
+}
+
 /** Fiyat formu taslağı (giriş için sayfadan ayrılınca seçimler kaybolmasın). */
 const QUOTE_DRAFT_KEY = 'te-quote-draft'
 
@@ -240,27 +261,31 @@ export default function QuotePage() {
   const processFiles = (list: FileList | File[]) => {
     setResult(null)
     setSizeError(false)
-    for (const f of Array.from(list)) {
-      if (f.size > MAX_SIZE) {
+    for (const original of Array.from(list)) {
+      if (original.size > MAX_SIZE) {
         setSizeError(true)
         continue
       }
       keyCounter.current += 1
       const key = `f${keyCounter.current}`
-      setFiles((prev) => [...prev, { key, file: f, name: f.name, words: 0, status: 'pending' }])
-      extractWordCount(f)
-        .then((res) => {
-          setFiles((prev) =>
-            prev.map((e) =>
-              e.key === key ? { ...e, words: res.status === 'ok' ? res.words : 0, status: res.status } : e,
-            ),
-          )
-          void archiveUpload(f, res.status === 'ok' ? res.words : 0)
-        })
-        .catch(() => {
-          setFiles((prev) => prev.map((e) => (e.key === key ? { ...e, status: 'error' as const } : e)))
-          void archiveUpload(f, 0)
-        })
+      // Baytları en başta belleğe al (taze dosya) → IndexedDB round-trip'inden sonra da
+      // güvenle yeniden okunabilir kalsın. Ardından listeye ekle ve kelime say.
+      void materializeFile(original).then((f) => {
+        setFiles((prev) => [...prev, { key, file: f, name: f.name, words: 0, status: 'pending' }])
+        extractWordCount(f)
+          .then((res) => {
+            setFiles((prev) =>
+              prev.map((e) =>
+                e.key === key ? { ...e, words: res.status === 'ok' ? res.words : 0, status: res.status } : e,
+              ),
+            )
+            void archiveUpload(f, res.status === 'ok' ? res.words : 0)
+          })
+          .catch(() => {
+            setFiles((prev) => prev.map((e) => (e.key === key ? { ...e, status: 'error' as const } : e)))
+            void archiveUpload(f, 0)
+          })
+      })
     }
     if (fileInputRef.current) fileInputRef.current.value = ''
   }

@@ -25,4 +25,6 @@ export interface Partner {
   note: string | null
   created_at: string
   updated_at: string
+  /** Admin ciro/log görünümü: hesap kaydı silinmiş/yasaklı mı (yalnız adminPartnerDetail doldurur). */
+  accountStatus?: 'deleted' | 'banned' | null
 }
