@@ -57,7 +57,36 @@ async function adminPost<T>(action: string, body?: Record<string, unknown>): Pro
 /* ------------------------------------------------------------------ */
 /* Sayfa                                                               */
 /* ------------------------------------------------------------------ */
-type Tab = 'chats' | 'customers' | 'uploads'
+type Tab = 'chats' | 'members' | 'customers' | 'translators' | 'partners' | 'manage' | 'uploads'
+
+/* Rozetler — marka paleti (yeşil/mavi/siyah/nötr; yasaklı=kırmızı). */
+const BADGE: Record<string, string> = {
+  green: 'border border-success bg-success/10 text-success',
+  blue: 'border border-primary bg-primary/10 text-primary',
+  dark: 'border border-secondary bg-secondary text-secondary-foreground',
+  outline: 'border border-border-strong bg-surface text-text-secondary',
+  gray: 'border border-border bg-surface-muted text-text-secondary',
+  red: 'border border-danger bg-danger/10 text-danger',
+}
+function Badge({ tone, children }: { tone: keyof typeof BADGE | string; children: React.ReactNode }) {
+  return <span className={cn('inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold', BADGE[tone] || BADGE.gray)}>{children}</span>
+}
+interface RoleFlags { isTranslator?: boolean; isPartner?: boolean; isCustomer?: boolean; referredByPartner?: boolean; banned?: boolean }
+/** Bir üyenin rozetleri (h: adminHub sözlüğü). includeCustomer=false ise Müşteri rozeti gizlenir. */
+function roleBadges(f: RoleFlags, h: any, opts?: { includeCustomer?: boolean; includeMember?: boolean }): { tone: string; label: string }[] {
+  const out: { tone: string; label: string }[] = []
+  if (opts?.includeCustomer && f.isCustomer) out.push({ tone: 'green', label: h.bCustomer })
+  if (f.isTranslator) out.push({ tone: 'blue', label: h.bTranslator })
+  if (f.isPartner) out.push({ tone: 'dark', label: h.bPartner })
+  if (f.referredByPartner) out.push({ tone: 'outline', label: h.bReferred })
+  if (opts?.includeMember && out.length === 0 && !f.banned) out.push({ tone: 'gray', label: h.bMember })
+  if (f.banned) out.push({ tone: 'red', label: h.bBanned })
+  return out
+}
+function BadgeRow({ items }: { items: { tone: string; label: string }[] }) {
+  if (items.length === 0) return null
+  return <span className="inline-flex flex-wrap gap-1">{items.map((b, i) => <Badge key={i} tone={b.tone}>{b.label}</Badge>)}</span>
+}
 
 export default function AdminPage() {
   const { locale, dict } = useI18n()
@@ -96,7 +125,11 @@ export default function AdminPage() {
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'chats', label: h.tabChats },
+    { key: 'members', label: h.tabMembers },
     { key: 'customers', label: h.tabCustomers },
+    { key: 'translators', label: h.tabTranslators },
+    { key: 'partners', label: h.tabPartners },
+    { key: 'manage', label: h.tabManage },
     { key: 'uploads', label: h.tabUploads },
   ]
 
@@ -120,7 +153,11 @@ export default function AdminPage() {
       </div>
 
       {tab === 'chats' && <ChatbotSection a={a} dict={dict} />}
+      {tab === 'members' && <MembersSection h={h} />}
       {tab === 'customers' && <CustomersSection h={h} />}
+      {tab === 'translators' && <TranslatorsSection h={h} />}
+      {tab === 'partners' && <PartnersSection h={h} />}
+      {tab === 'manage' && <ManageSection h={h} />}
       {tab === 'uploads' && <UploadsSection h={h} />}
     </Shell>
   )
@@ -259,6 +296,7 @@ function ChatbotSection({ a, dict }: { a: any; dict: any }) {
 interface Customer {
   id: string; name: string; email: string; phone: string
   createdAt: string; orderCount: number; orderTotal: number; lastOrder: string
+  isTranslator?: boolean; referredByPartner?: boolean
 }
 interface CustOrder {
   order_no: number; created_at: string; status: string; service: string
@@ -275,6 +313,7 @@ function CustomersSection({ h }: { h: any }) {
   const [rows, setRows] = useState<Customer[]>([])
   const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
   const [q, setQ] = useState('')
+  const [role, setRole] = useState('')
   const [sel, setSel] = useState<Customer | null>(null)
   const [detail, setDetail] = useState<CustDetail | null>(null)
   const [detailState, setDetailState] = useState<'idle' | 'loading'>('idle')
@@ -293,9 +332,13 @@ function CustomersSection({ h }: { h: any }) {
 
   const list = useMemo(() => {
     const s = q.trim().toLowerCase()
-    if (!s) return rows
-    return rows.filter((r) => (r.name + ' ' + r.email + ' ' + r.phone).toLowerCase().includes(s))
-  }, [rows, q])
+    return rows.filter((r) => {
+      if (s && !(r.name + ' ' + r.email + ' ' + r.phone).toLowerCase().includes(s)) return false
+      if (role === 'translator' && !r.isTranslator) return false
+      if (role === 'referred' && !r.referredByPartner) return false
+      return true
+    })
+  }, [rows, q, role])
 
   const openCustomer = (c: Customer) => {
     setSel(c)
@@ -367,12 +410,19 @@ function CustomersSection({ h }: { h: any }) {
     <div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-text-secondary">{h.custHint}</p>
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder={h.custSearch}
-          className="h-10 w-full max-w-xs rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong"
-        />
+        <div className="flex flex-wrap items-center gap-2">
+          <select value={role} onChange={(e) => setRole(e.target.value)} className="h-10 rounded-md border border-border bg-surface px-2 text-sm outline-none focus:border-border-strong">
+            <option value="">{h.filterAll}</option>
+            <option value="translator">{h.bTranslator}</option>
+            <option value="referred">{h.bReferred}</option>
+          </select>
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder={h.custSearch}
+            className="h-10 w-full max-w-xs rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong"
+          />
+        </div>
       </div>
       {list.length === 0 ? (
         <p className="py-10 text-center text-sm text-text-secondary">{h.custNone}</p>
@@ -391,7 +441,12 @@ function CustomersSection({ h }: { h: any }) {
             <tbody>
               {list.map((c) => (
                 <tr key={c.id} className="cursor-pointer border-t border-border hover:bg-surface-muted" onClick={() => openCustomer(c)}>
-                  <td className="px-3 py-2 font-medium">{c.name || h.upGuest}</td>
+                  <td className="px-3 py-2 font-medium">
+                    <span className="flex flex-wrap items-center gap-1.5">
+                      {c.name || h.upGuest}
+                      <BadgeRow items={roleBadges({ isTranslator: c.isTranslator, referredByPartner: c.referredByPartner }, h)} />
+                    </span>
+                  </td>
                   <td className="px-3 py-2 text-text-secondary">{c.email || '—'}</td>
                   <td className="px-3 py-2 text-text-secondary" dir="ltr">{c.phone || '—'}</td>
                   <td className="px-3 py-2 text-center">{c.orderCount}</td>
@@ -485,6 +540,302 @@ function UploadsSection({ h }: { h: any }) {
           </table>
         </div>
       )}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Ortak: arama + rol filtresi çubuğu                                  */
+/* ------------------------------------------------------------------ */
+function FilterBar({
+  hint, q, setQ, placeholder, role, setRole, roleOptions,
+}: {
+  hint: string; q: string; setQ: (v: string) => void; placeholder: string
+  role?: string; setRole?: (v: string) => void; roleOptions?: { value: string; label: string }[]
+}) {
+  return (
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <p className="text-sm text-text-secondary">{hint}</p>
+      <div className="flex flex-wrap items-center gap-2">
+        {roleOptions && setRole && (
+          <select value={role} onChange={(e) => setRole(e.target.value)} className="h-10 rounded-md border border-border bg-surface px-2 text-sm outline-none focus:border-border-strong">
+            {roleOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        )}
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={placeholder}
+          className="h-10 w-full max-w-xs rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-border-strong" />
+      </div>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Sekme: Üyeler (admin hariç herkes, rozetli)                         */
+/* ------------------------------------------------------------------ */
+interface Member {
+  id: string; name: string; email: string; phone: string; createdAt: string
+  isTranslator: boolean; isPartner: boolean; isCustomer: boolean; referredByPartner: boolean; banned: boolean
+}
+function useMembers(): { rows: Member[]; state: 'loading' | 'idle' | 'error'; setRows: React.Dispatch<React.SetStateAction<Member[]>> } {
+  const [rows, setRows] = useState<Member[]>([])
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  useEffect(() => {
+    let active = true
+    adminPost<{ members: Member[] }>('members').then((d) => {
+      if (!active) return
+      if (!d) return setState('error')
+      setRows(d.members || [])
+      setState('idle')
+    })
+    return () => { active = false }
+  }, [])
+  return { rows, state, setRows }
+}
+function filterMembers(rows: Member[], q: string, role: string): Member[] {
+  const s = q.trim().toLowerCase()
+  return rows.filter((r) => {
+    if (s && !(r.name + ' ' + r.email + ' ' + r.phone).toLowerCase().includes(s)) return false
+    if (role === 'customer' && !r.isCustomer) return false
+    if (role === 'translator' && !r.isTranslator) return false
+    if (role === 'partner' && !r.isPartner) return false
+    if (role === 'referred' && !r.referredByPartner) return false
+    if (role === 'banned' && !r.banned) return false
+    return true
+  })
+}
+
+function MembersSection({ h }: { h: any }) {
+  const { rows, state } = useMembers()
+  const [q, setQ] = useState('')
+  const [role, setRole] = useState('')
+  const list = useMemo(() => filterMembers(rows, q, role), [rows, q, role])
+  const roleOptions = [
+    { value: '', label: h.filterAll }, { value: 'customer', label: h.bCustomer },
+    { value: 'translator', label: h.bTranslator }, { value: 'partner', label: h.bPartner }, { value: 'referred', label: h.bReferred },
+  ]
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{h.loading}</p>
+  if (state === 'error') return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{h.loadError}</p>
+  return (
+    <div>
+      <FilterBar hint={h.memHint} q={q} setQ={setQ} placeholder={h.custSearch} role={role} setRole={setRole} roleOptions={roleOptions} />
+      {list.length === 0 ? <p className="py-10 text-center text-sm text-text-secondary">{h.memNone}</p> : (
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full min-w-[680px] text-sm">
+            <thead className="bg-surface-muted text-text-secondary"><tr>
+              <th className="px-3 py-2 text-start font-medium">{h.custName}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custEmail}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custPhone}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custJoined}</th>
+            </tr></thead>
+            <tbody>
+              {list.map((m) => (
+                <tr key={m.id} className="border-t border-border">
+                  <td className="px-3 py-2 font-medium"><span className="flex flex-wrap items-center gap-1.5">{m.name || h.upGuest}<BadgeRow items={roleBadges(m, h, { includeCustomer: true, includeMember: true })} /></span></td>
+                  <td className="px-3 py-2 text-text-secondary">{m.email || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary" dir="ltr">{m.phone || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary">{m.createdAt ? fmtDate(m.createdAt) : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Sekme: Tercümanlar dizini                                           */
+/* ------------------------------------------------------------------ */
+interface TranslatorDir { userId: string; name: string; email: string; phone: string; createdAt: string; roleCreatedAt: string }
+function TranslatorsSection({ h }: { h: any }) {
+  const [rows, setRows] = useState<TranslatorDir[]>([])
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const [q, setQ] = useState('')
+  useEffect(() => {
+    let active = true
+    adminPost<{ translators: TranslatorDir[] }>('translators').then((d) => {
+      if (!active) return
+      if (!d) return setState('error')
+      setRows(d.translators || [])
+      setState('idle')
+    })
+    return () => { active = false }
+  }, [])
+  const list = useMemo(() => {
+    const s = q.trim().toLowerCase()
+    if (!s) return rows
+    return rows.filter((r) => (r.name + ' ' + r.email + ' ' + r.phone).toLowerCase().includes(s))
+  }, [rows, q])
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{h.loading}</p>
+  if (state === 'error') return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{h.loadError}</p>
+  return (
+    <div>
+      <FilterBar hint={h.trHint} q={q} setQ={setQ} placeholder={h.custSearch} />
+      {list.length === 0 ? <p className="py-10 text-center text-sm text-text-secondary">{h.trNone}</p> : (
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full min-w-[720px] text-sm">
+            <thead className="bg-surface-muted text-text-secondary"><tr>
+              <th className="px-3 py-2 text-start font-medium">{h.custName}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custEmail}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custPhone}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custJoined}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.trJoinedRole}</th>
+            </tr></thead>
+            <tbody>
+              {list.map((t) => (
+                <tr key={t.userId} className="border-t border-border">
+                  <td className="px-3 py-2 font-medium">{t.name || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary">{t.email || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary" dir="ltr">{t.phone || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary">{t.createdAt ? fmtDate(t.createdAt) : '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary">{t.roleCreatedAt ? fmtDate(t.roleCreatedAt) : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Sekme: Partnerler dizini                                            */
+/* ------------------------------------------------------------------ */
+interface PartnerDir { userId: string; name: string; company: string; email: string; phone: string; siteCreatedAt: string; roleCreatedAt: string; status: string }
+function PartnersSection({ h }: { h: any }) {
+  const [rows, setRows] = useState<PartnerDir[]>([])
+  const [state, setState] = useState<'loading' | 'idle' | 'error'>('loading')
+  const [q, setQ] = useState('')
+  useEffect(() => {
+    let active = true
+    adminPost<{ partners: PartnerDir[] }>('partners').then((d) => {
+      if (!active) return
+      if (!d) return setState('error')
+      setRows(d.partners || [])
+      setState('idle')
+    })
+    return () => { active = false }
+  }, [])
+  const list = useMemo(() => {
+    const s = q.trim().toLowerCase()
+    if (!s) return rows
+    return rows.filter((r) => (r.name + ' ' + r.company + ' ' + r.email + ' ' + r.phone).toLowerCase().includes(s))
+  }, [rows, q])
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{h.loading}</p>
+  if (state === 'error') return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{h.loadError}</p>
+  return (
+    <div>
+      <FilterBar hint={h.prtHint} q={q} setQ={setQ} placeholder={h.custSearch} />
+      {list.length === 0 ? <p className="py-10 text-center text-sm text-text-secondary">{h.prtNone}</p> : (
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full min-w-[820px] text-sm">
+            <thead className="bg-surface-muted text-text-secondary"><tr>
+              <th className="px-3 py-2 text-start font-medium">{h.custName}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.prtCompany}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custEmail}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custPhone}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.custJoined}</th>
+              <th className="px-3 py-2 text-start font-medium">{h.prtJoinedRole}</th>
+            </tr></thead>
+            <tbody>
+              {list.map((p) => (
+                <tr key={p.userId} className="border-t border-border">
+                  <td className="px-3 py-2 font-medium">{p.name || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary">{p.company || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary">{p.email || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary" dir="ltr">{p.phone || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary">{p.siteCreatedAt ? fmtDate(p.siteCreatedAt) : '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary">{p.roleCreatedAt ? fmtDate(p.roleCreatedAt) : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Sekme: Üyeleri Yönet (yasakla / sil — onaylı)                       */
+/* ------------------------------------------------------------------ */
+function ConfirmDialog({ message, h, onYes, onNo, busy }: { message: string; h: any; onYes: () => void; onNo: () => void; busy: boolean }) {
+  return (
+    <div className="fixed inset-0 z-drawer flex items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true" onClick={onNo}>
+      <div className="w-full max-w-sm rounded-2xl bg-surface p-6 shadow-lg" onClick={(e) => e.stopPropagation()}>
+        <p className="text-sm text-text-primary">{message}</p>
+        <div className="mt-5 flex justify-end gap-2">
+          <Button type="button" intent="outline" size="sm" onClick={onNo} disabled={busy}>{h.confirmNo}</Button>
+          <Button type="button" intent="secondary" size="sm" onClick={onYes} disabled={busy}>{h.confirmYes}</Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+function ManageSection({ h }: { h: any }) {
+  const { rows, state, setRows } = useMembers()
+  const [q, setQ] = useState('')
+  const [role, setRole] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [notice, setNotice] = useState<string | null>(null)
+  const [confirm, setConfirm] = useState<{ kind: 'ban' | 'unban' | 'delete'; member: Member } | null>(null)
+  const list = useMemo(() => filterMembers(rows, q, role), [rows, q, role])
+  const roleOptions = [
+    { value: '', label: h.filterAll }, { value: 'customer', label: h.bCustomer }, { value: 'translator', label: h.bTranslator },
+    { value: 'partner', label: h.bPartner }, { value: 'referred', label: h.bReferred }, { value: 'banned', label: h.bBanned },
+  ]
+
+  const run = async () => {
+    if (!confirm) return
+    setBusy(true)
+    setNotice(null)
+    const { kind, member } = confirm
+    let ok = false
+    if (kind === 'delete') {
+      const r = await adminPost<{ ok: boolean }>('deleteUser', { userId: member.id })
+      ok = !!r?.ok
+      if (ok) setRows((prev) => prev.filter((x) => x.id !== member.id))
+    } else {
+      const r = await adminPost<{ ok: boolean }>('banUser', { userId: member.id, ban: kind === 'ban' })
+      ok = !!r?.ok
+      if (ok) setRows((prev) => prev.map((x) => (x.id === member.id ? { ...x, banned: kind === 'ban' } : x)))
+    }
+    setBusy(false)
+    setConfirm(null)
+    setNotice(ok ? h.actionDone : h.actionFail)
+  }
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{h.loading}</p>
+  if (state === 'error') return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{h.loadError}</p>
+  const confirmMsg = confirm ? (confirm.kind === 'delete' ? h.deleteConfirm : confirm.kind === 'ban' ? h.banConfirm : h.unbanConfirm) : ''
+  return (
+    <div>
+      <FilterBar hint={h.mgHint} q={q} setQ={setQ} placeholder={h.custSearch} role={role} setRole={setRole} roleOptions={roleOptions} />
+      {notice && <p className="mb-3 rounded-md border border-success/40 bg-success/10 p-3 text-sm text-success">{notice}</p>}
+      {list.length === 0 ? <p className="py-10 text-center text-sm text-text-secondary">{h.mgNone}</p> : (
+        <div className="space-y-2">
+          {list.map((m) => (
+            <article key={m.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-surface p-3.5">
+              <div className="min-w-0">
+                <span className="flex flex-wrap items-center gap-1.5 font-medium">{m.name || h.upGuest}<BadgeRow items={roleBadges(m, h, { includeCustomer: true, includeMember: true })} /></span>
+                <p className="mt-0.5 text-xs text-text-secondary">{[m.email, m.phone].filter(Boolean).join(' · ') || '—'}</p>
+              </div>
+              <div className="flex shrink-0 flex-wrap gap-2">
+                {m.banned ? (
+                  <Button type="button" intent="outline" size="sm" onClick={() => setConfirm({ kind: 'unban', member: m })}>{h.unbanBtn}</Button>
+                ) : (
+                  <Button type="button" intent="outline" size="sm" onClick={() => setConfirm({ kind: 'ban', member: m })}>{h.banBtn}</Button>
+                )}
+                <button type="button" onClick={() => setConfirm({ kind: 'delete', member: m })}
+                  className="inline-flex items-center rounded-md border border-danger px-3 py-1.5 text-sm font-medium text-danger hover:bg-danger/10">{h.deleteBtn}</button>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+      {confirm && <ConfirmDialog message={confirmMsg} h={h} busy={busy} onYes={run} onNo={() => setConfirm(null)} />}
     </div>
   )
 }
