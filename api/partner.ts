@@ -55,6 +55,68 @@ function gen6(): string {
   return String(Math.floor(100000 + Math.random() * 900000))
 }
 
+const LOCK_MS = 7 * 24 * 60 * 60 * 1000 // kazanç 7 gün kilitli, sonra çekilebilir
+
+interface LedgerRow { amount: number | string; status: string; created_at: string; paid_at: string | null; orders?: { order_no?: number } | null }
+/** partner_ledger satırlarından cüzdan özeti (translator computeWallet ile aynı). */
+function computeWallet(rows: LedgerRow[]) {
+  const now = Date.now()
+  let total = 0, locked = 0, withdrawable = 0, paid = 0
+  const entries = []
+  for (const e of rows) {
+    const amt = Number(e.amount) || 0
+    total += amt
+    const unlocked = now - new Date(e.created_at).getTime() >= LOCK_MS
+    if (e.status === 'paid') paid += amt
+    else if (unlocked) withdrawable += amt
+    else locked += amt
+    entries.push({
+      amount: Math.round(amt), status: e.status, created_at: e.created_at,
+      paid_at: e.paid_at ?? null, order_no: e.orders?.order_no ?? null,
+      unlocked: e.status !== 'paid' && unlocked,
+    })
+  }
+  return { total: Math.round(total), locked: Math.round(locked), withdrawable: Math.round(withdrawable), paid: Math.round(paid), entries }
+}
+
+interface AuthUser { id: string; email?: string; phone?: string; created_at?: string; user_metadata?: Record<string, unknown> }
+async function listAuthUsers(): Promise<AuthUser[]> {
+  const out: AuthUser[] = []
+  for (let page = 1; page <= 10; page++) {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?page=${page}&per_page=200`, { headers: svcHeaders() })
+    if (!r.ok) break
+    const d = (await r.json()) as { users?: AuthUser[] }
+    const users = d.users ?? []
+    out.push(...users)
+    if (users.length < 200) break
+  }
+  return out
+}
+function nameOf(u: AuthUser): string {
+  const m = u.user_metadata || {}
+  const full = (m.full_name as string) || ''
+  if (full.trim()) return full.trim()
+  return `${(m.first_name as string) || ''} ${(m.last_name as string) || ''}`.trim()
+}
+function phoneOf(u: AuthUser): string {
+  const m = u.user_metadata || {}
+  return (m.phone as string) || u.phone || ''
+}
+/** Çağıranın ONAYLI partner kaydı (yoksa null). */
+async function getApprovedPartner(userId: string): Promise<PartnerRow | null> {
+  const p = await getPartner(userId)
+  return p && p.status === 'approved' ? p : null
+}
+/** Bir partnerin getirdiği (referral) üye id'leri. */
+async function referredUserIds(partnerId: string): Promise<Array<{ user_id: string; created_at: string }>> {
+  const r = await fetch(
+    `${SUPABASE_URL}/rest/v1/partner_referrals?partner_id=eq.${partnerId}&select=user_id,created_at`,
+    { headers: svcHeaders() },
+  )
+  if (!r.ok) return []
+  return (await r.json()) as Array<{ user_id: string; created_at: string }>
+}
+
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') return json({ error: 'method' }, 405)
   if (!SERVICE_KEY) return json({ error: 'server_config' }, 200)
@@ -145,6 +207,76 @@ export default async function handler(req: Request): Promise<Response> {
       headers: svcHeaders(),
     })
     return json({ ok: true })
+  }
+
+  // ---------- Müşterilerim (partnerin getirdiği üyeler) ----------
+  if (action === 'customers') {
+    const partner = await getApprovedPartner(user.id)
+    if (!partner) return json({ error: 'forbidden' }, 403)
+    const refs = await referredUserIds(partner.id)
+    const ids = new Set(refs.map((r) => r.user_id))
+    const joinedAt = new Map(refs.map((r) => [r.user_id, r.created_at]))
+    if (ids.size === 0) return json({ customers: [] })
+    const [users, ordRes] = await Promise.all([
+      listAuthUsers(),
+      fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=in.(${[...ids].join(',')})&select=user_id,total`, { headers: svcHeaders() }),
+    ])
+    const orders = ordRes.ok ? ((await ordRes.json()) as Array<{ user_id: string; total: number }>) : []
+    const agg = new Map<string, { count: number; total: number }>()
+    for (const o of orders) {
+      if (!o.user_id) continue
+      const cur = agg.get(o.user_id) || { count: 0, total: 0 }
+      cur.count += 1
+      cur.total += Number(o.total) || 0
+      agg.set(o.user_id, cur)
+    }
+    const customers = users
+      .filter((u) => ids.has(u.id))
+      .map((u) => {
+        const a = agg.get(u.id)
+        return {
+          id: u.id, name: nameOf(u), email: u.email || '', phone: phoneOf(u),
+          joinedAt: joinedAt.get(u.id) || u.created_at || '',
+          orderCount: a?.count || 0, orderTotal: a?.total || 0,
+        }
+      })
+      .sort((x, y) => (y.joinedAt || '').localeCompare(x.joinedAt || ''))
+    return json({ customers })
+  }
+
+  // ---------- Müşterilerimin siparişleri (aşamalara göre; client filtreler) ----------
+  if (action === 'orders') {
+    const partner = await getApprovedPartner(user.id)
+    if (!partner) return json({ error: 'forbidden' }, 403)
+    const refs = await referredUserIds(partner.id)
+    const ids = refs.map((r) => r.user_id)
+    if (ids.length === 0) return json({ orders: [] })
+    const cols = 'order_no,created_at,status,work_status,service,source_lang,target_lang,word_count,total,user_id'
+    const [oRes, users] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/orders?user_id=in.(${ids.join(',')})&select=${cols}&order=created_at.desc`, { headers: svcHeaders() }),
+      listAuthUsers(),
+    ])
+    const rows = oRes.ok ? ((await oRes.json()) as Array<Record<string, unknown>>) : []
+    const nameMap = new Map(users.filter((u) => ids.includes(u.id)).map((u) => [u.id, nameOf(u)]))
+    const orders = rows.map((o) => ({
+      order_no: o.order_no, created_at: o.created_at, status: o.status,
+      work_status: o.work_status || 'available', service: o.service,
+      source_lang: o.source_lang, target_lang: o.target_lang, word_count: o.word_count,
+      total: o.total, customerName: nameMap.get(o.user_id as string) || '',
+    }))
+    return json({ orders })
+  }
+
+  // ---------- Cüzdan (partner_ledger) ----------
+  if (action === 'wallet') {
+    const partner = await getApprovedPartner(user.id)
+    if (!partner) return json({ error: 'forbidden' }, 403)
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/partner_ledger?partner_id=eq.${partner.id}&select=amount,status,created_at,paid_at,orders(order_no)&order=created_at.desc`,
+      { headers: svcHeaders() },
+    )
+    const rows = r.ok ? ((await r.json()) as LedgerRow[]) : []
+    return json({ wallet: computeWallet(rows) })
   }
 
   return json({ error: 'unknown_action' }, 400)

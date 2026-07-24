@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useI18n } from '@/hooks/useI18n'
 import { useAuth } from '@/app/providers/AuthProvider'
@@ -175,10 +175,12 @@ function PartnerPanel({ partner, onSaved }: { partner: Partner; onSaved: () => v
 
       {tab === 'profile' ? (
         <ProfileTab partner={partner} onSaved={onSaved} />
+      ) : tab === 'customers' ? (
+        <CustomersTab />
+      ) : tab === 'wallet' ? (
+        <WalletTab />
       ) : (
-        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-10 text-center">
-          <p className="text-sm text-text-secondary">{pp.soon}</p>
-        </div>
+        <OrdersTab stage={tab} />
       )}
     </div>
   )
@@ -655,6 +657,266 @@ function ApplicationForm({
         </Button>
         <p className="text-center text-xs text-text-muted">{pp.applyNote}</p>
       </form>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Faz 2b: Müşterilerim · Sipariş aşamaları · Cüzdan                    */
+/* ------------------------------------------------------------------ */
+function fmtDate(iso: string): string {
+  try {
+    return iso ? new Date(iso).toLocaleDateString() : '—'
+  } catch {
+    return '—'
+  }
+}
+
+function StatCard({ label, value, icon, accent }: { label: string; value: string; icon: IconName; accent?: string }) {
+  return (
+    <div className="rounded-lg border border-border bg-surface p-4">
+      <div className="flex items-center gap-1.5 text-text-secondary">
+        <Icon name={icon} className="size-4" />
+        <span className="text-xs font-medium">{label}</span>
+      </div>
+      <p className={cn('mt-1.5 text-xl font-bold', accent)}>{value}</p>
+    </div>
+  )
+}
+
+type LoadState = 'loading' | 'idle' | 'error'
+
+interface PartnerCustomer {
+  id: string
+  name: string
+  email: string
+  phone: string
+  joinedAt: string
+  orderCount: number
+  orderTotal: number
+}
+
+/* Müşterilerim — partnerin getirdiği üyeler + isim filtresi. */
+function CustomersTab() {
+  const { dict, formatCurrency } = useI18n()
+  const pp = dict.partnerPanel
+  const [rows, setRows] = useState<PartnerCustomer[]>([])
+  const [state, setState] = useState<LoadState>('loading')
+  const [q, setQ] = useState('')
+
+  useEffect(() => {
+    let active = true
+    partnerApi<{ customers?: PartnerCustomer[]; error?: string }>('customers')
+      .then((r) => {
+        if (!active) return
+        if (r.error) { setState('error'); return }
+        setRows(r.customers ?? [])
+        setState('idle')
+      })
+      .catch(() => active && setState('error'))
+    return () => { active = false }
+  }, [])
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{pp.loading}</p>
+  if (state === 'error') return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{pp.loadError}</p>
+
+  const filtered = rows.filter((c) => c.name.toLowerCase().includes(q.trim().toLowerCase()))
+
+  return (
+    <div className="space-y-4">
+      <input
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder={pp.custFilter}
+        className={`${inputClass} max-w-xs`}
+      />
+      {filtered.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-8 text-center text-sm text-text-secondary">{pp.custEmpty}</div>
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full text-sm">
+            <thead className="bg-surface-muted text-text-secondary">
+              <tr>
+                <th className="px-3 py-2 text-start font-medium">{pp.colName}</th>
+                <th className="px-3 py-2 text-start font-medium">{pp.colEmail}</th>
+                <th className="px-3 py-2 text-start font-medium">{pp.colPhone}</th>
+                <th className="px-3 py-2 text-start font-medium">{pp.colJoined}</th>
+                <th className="px-3 py-2 text-end font-medium">{pp.custOrderCount}</th>
+                <th className="px-3 py-2 text-end font-medium">{pp.custTotal}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {filtered.map((c) => (
+                <tr key={c.id} className="bg-surface">
+                  <td className="whitespace-nowrap px-3 py-2 font-medium">{c.name || '—'}</td>
+                  <td className="px-3 py-2 text-text-secondary" dir="ltr">{c.email || '—'}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-text-secondary" dir="ltr">{c.phone || '—'}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-text-secondary">{fmtDate(c.joinedAt)}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-end">{c.orderCount}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-end font-semibold">{formatCurrency(c.orderTotal)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  )
+}
+
+interface PartnerOrder {
+  order_no: number
+  created_at: string
+  status: string
+  work_status: string
+  service: string
+  source_lang: string
+  target_lang: string
+  word_count: number
+  total: number
+  customerName: string
+}
+
+/* Sekme → hangi work_status'ler o aşamaya girer. */
+const STAGE_STATUS: Record<string, string[]> = {
+  ordersNew: ['available'],
+  ordersActive: ['claimed', 'submitted'],
+  ordersDelivery: ['approved', 'shipped'],
+  ordersDone: ['completed'],
+}
+
+/* Sipariş aşama sekmesi — müşterilerin siparişleri (read-only). */
+function OrdersTab({ stage }: { stage: string }) {
+  const { dict, formatCurrency } = useI18n()
+  const pp = dict.partnerPanel
+  const [rows, setRows] = useState<PartnerOrder[]>([])
+  const [state, setState] = useState<LoadState>('loading')
+
+  useEffect(() => {
+    let active = true
+    partnerApi<{ orders?: PartnerOrder[]; error?: string }>('orders')
+      .then((r) => {
+        if (!active) return
+        if (r.error) { setState('error'); return }
+        setRows(r.orders ?? [])
+        setState('idle')
+      })
+      .catch(() => active && setState('error'))
+    return () => { active = false }
+  }, [])
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{pp.loading}</p>
+  if (state === 'error') return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{pp.loadError}</p>
+
+  const allowed = STAGE_STATUS[stage] ?? []
+  const filtered = rows.filter((o) => allowed.includes(o.work_status))
+
+  if (filtered.length === 0)
+    return <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-8 text-center text-sm text-text-secondary">{pp.ordEmpty}</div>
+
+  return (
+    <div className="overflow-x-auto rounded-lg border border-border">
+      <table className="w-full text-sm">
+        <thead className="bg-surface-muted text-text-secondary">
+          <tr>
+            <th className="px-3 py-2 text-start font-medium">{pp.colOrderNo}</th>
+            <th className="px-3 py-2 text-start font-medium">{pp.colCustomer}</th>
+            <th className="px-3 py-2 text-start font-medium">{pp.colService}</th>
+            <th className="px-3 py-2 text-start font-medium">{pp.colLangs}</th>
+            <th className="px-3 py-2 text-start font-medium">{pp.colDate}</th>
+            <th className="px-3 py-2 text-end font-medium">{pp.colAmount}</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-border">
+          {filtered.map((o) => (
+            <tr key={o.order_no} className="bg-surface">
+              <td className="whitespace-nowrap px-3 py-2 font-medium">#{o.order_no}</td>
+              <td className="whitespace-nowrap px-3 py-2">{o.customerName || '—'}</td>
+              <td className="px-3 py-2 text-text-secondary">{o.service || '—'}</td>
+              <td className="whitespace-nowrap px-3 py-2 text-text-secondary uppercase" dir="ltr">
+                {o.source_lang} → {o.target_lang}
+              </td>
+              <td className="whitespace-nowrap px-3 py-2 text-text-secondary">{fmtDate(o.created_at)}</td>
+              <td className="whitespace-nowrap px-3 py-2 text-end font-semibold">{formatCurrency(o.total)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+interface PartnerWallet {
+  total: number
+  locked: number
+  withdrawable: number
+  paid: number
+  entries: Array<{ amount: number; status: string; created_at: string; paid_at: string | null; order_no: number | null; unlocked: boolean }>
+}
+
+/* Cüzdan — partner_ledger (7 gün kilit). Etiketler translator.wallet'tan; ödeme notu partner'a özel. */
+function WalletTab() {
+  const { dict, formatCurrency } = useI18n()
+  const pp = dict.partnerPanel
+  const w = dict.translator.wallet
+  const [data, setData] = useState<PartnerWallet | null>(null)
+  const [state, setState] = useState<LoadState>('loading')
+
+  useEffect(() => {
+    let active = true
+    partnerApi<{ wallet?: PartnerWallet; error?: string }>('wallet')
+      .then((r) => {
+        if (!active) return
+        if (r.error || !r.wallet) { setState('error'); return }
+        setData(r.wallet)
+        setState('idle')
+      })
+      .catch(() => active && setState('error'))
+    return () => { active = false }
+  }, [])
+
+  if (state === 'loading') return <p className="py-10 text-center text-sm text-text-secondary">{pp.loading}</p>
+  if (state === 'error' || !data) return <p className="rounded-md border border-danger/40 bg-danger/10 p-4 text-sm text-danger">{pp.loadError}</p>
+
+  return (
+    <div className="space-y-4">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard label={w.total} value={formatCurrency(data.total)} icon="Wallet" />
+        <StatCard label={w.locked} value={formatCurrency(data.locked)} icon="Lock" accent="text-text-muted" />
+        <StatCard label={w.withdrawable} value={formatCurrency(data.withdrawable)} icon="Coins" accent="text-success" />
+        <StatCard label={w.paid} value={formatCurrency(data.paid)} icon="Check" accent="text-text-secondary" />
+      </div>
+      <p className="rounded-md border border-border bg-surface-muted/50 p-3 text-xs text-text-secondary">{pp.walPayInfo}</p>
+      {data.entries.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border bg-surface-muted/40 p-8 text-center text-sm text-text-secondary">{w.empty}</div>
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full text-sm">
+            <thead className="bg-surface-muted text-text-secondary">
+              <tr>
+                <th className="px-3 py-2 text-start font-medium">{w.entryOrder}</th>
+                <th className="px-3 py-2 text-start font-medium">{w.date}</th>
+                <th className="px-3 py-2 text-start font-medium">{w.statusCol}</th>
+                <th className="px-3 py-2 text-end font-medium">{w.amount}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {data.entries.map((e, i) => (
+                <tr key={i} className="bg-surface">
+                  <td className="whitespace-nowrap px-3 py-2 font-medium">{e.order_no ? `#${e.order_no}` : '—'}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-text-secondary">{fmtDate(e.created_at)}</td>
+                  <td className="px-3 py-2">
+                    <Pill tone={e.status === 'paid' || e.unlocked ? 'success' : 'neutral'}>
+                      {e.status === 'paid' ? w.statusPaid : e.unlocked ? w.statusUnlocked : w.statusPending}
+                    </Pill>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-2 text-end font-semibold">{formatCurrency(e.amount)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
