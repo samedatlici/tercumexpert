@@ -363,6 +363,7 @@ export const ar: PartialDictionary = {
       title: "المدونة",
       subtitle: "محتوى حديث من عالم الترجمة",
       viewAll: "عرض جميع مقالات المدونة",
+      empty: "محتوى مدوّنتنا سيصدر قريبًا جدًا. ترقّبوا.",
     },
     finalCta: {
       title: "ابدأ الآن",

@@ -153,6 +153,7 @@ export const en: PartialDictionary = {
       title: 'Blog',
       subtitle: 'Current content from the world of translation',
       viewAll: 'View All Blog Posts',
+      empty: 'Our blog content is coming very soon. Stay tuned.',
     },
     finalCta: {
       title: 'Get Started Now',

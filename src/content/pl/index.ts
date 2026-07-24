@@ -357,6 +357,7 @@ export const pl: PartialDictionary = {
       title: 'Blog',
       subtitle: 'Aktualne treści ze świata tłumaczeń',
       viewAll: 'Zobacz wszystkie wpisy na blogu',
+      empty: 'Treści na naszym blogu pojawią się już wkrótce. Bądź na bieżąco.',
     },
     finalCta: {
       title: 'Zacznij już teraz',

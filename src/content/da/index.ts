@@ -363,6 +363,7 @@ export const da: PartialDictionary = {
       title: "Blog",
       subtitle: "Aktuelt indhold fra oversættelsens verden",
       viewAll: "Se alle blogindlæg",
+      empty: "Vores blogindhold kommer meget snart. Hold dig opdateret.",
     },
     finalCta: {
       title: "Kom i gang nu",

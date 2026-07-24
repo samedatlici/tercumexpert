@@ -149,6 +149,7 @@ export const tr = {
       title: 'Blog',
       subtitle: 'Çeviri dünyasından güncel içerikler',
       viewAll: 'Tüm Blog Yazılarını Gör',
+      empty: 'Blog içeriklerimiz çok yakında burada olacak. Takipte kalın.',
     },
     finalCta: {
       title: 'Hemen Başlayın',

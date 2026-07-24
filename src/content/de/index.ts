@@ -363,6 +363,7 @@ export const de: PartialDictionary = {
       title: 'Blog',
       subtitle: 'Aktuelle Inhalte aus der Welt der Übersetzung',
       viewAll: 'Alle Blogbeiträge anzeigen',
+      empty: 'Unsere Blog-Inhalte sind in Kürze verfügbar. Bleiben Sie dran.',
     },
     finalCta: {
       title: 'Jetzt loslegen',

@@ -363,6 +363,7 @@ export const it: PartialDictionary = {
       title: "Blog",
       subtitle: "Contenuti di attualità dal mondo della traduzione",
       viewAll: "Vedi tutti gli articoli del blog",
+      empty: "I nostri contenuti del blog arriveranno molto presto. Resta sintonizzato.",
     },
     finalCta: {
       title: "Inizia subito",

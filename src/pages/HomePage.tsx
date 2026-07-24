@@ -8,6 +8,7 @@ import { buildPath } from '@/app/router/routes'
 import { SERVICES } from '@/app/config/services'
 import { STATISTICS, CORPORATE_STATS, statDisplay } from '@/app/config/statistics'
 import { whatsappLink } from '@/app/config/site.config'
+import { publishedPosts } from '@/content/blog'
 
 const HOW_ICONS: Record<string, IconName> = {
   upload: 'Upload',
@@ -29,6 +30,7 @@ export default function HomePage() {
   const { locale, dict } = useI18n()
   const home = dict.home
   const wa = whatsappLink(home.whatsappMsg)
+  const latestPosts = publishedPosts().slice(0, 3)
 
   return (
     <>
@@ -185,6 +187,42 @@ export default function HomePage() {
       </section>
 
       {/* İş Ortaklığı tanıtım bölümü kaldırıldı — sayfa gizli, yalnız doğrudan bağlantıyla erişilir. */}
+
+      {/* ============ BLOG (açık zemin — iki siyah bandı ayırır) ============ */}
+      <section className="section bg-surface-muted">
+        <div className="container-wide">
+          <SectionHead title={home.blogTeaser.title} subtitle={home.blogTeaser.subtitle} />
+          {latestPosts.length > 0 ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {latestPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  to={buildPath(locale, 'blogPost', { slug: post.slug })}
+                  className="group flex flex-col rounded-lg border border-border bg-surface p-6 transition-colors hover:border-primary"
+                >
+                  <Icon name={post.icon} className="size-10 text-primary" />
+                  <span className="mt-4 text-xs font-semibold uppercase tracking-wide text-primary">{post.category}</span>
+                  <h3 className="mt-2 text-lg font-bold group-hover:text-primary">{post.title}</h3>
+                  <p className="mt-2 flex-1 text-sm text-text-secondary">{post.excerpt}</p>
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
+                    {dict.common.actions.learnMore}
+                    <Icon name="ArrowRight" className="size-4 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-lg border border-dashed border-border bg-surface p-10 text-center text-text-secondary">
+              {home.blogTeaser.empty}
+            </div>
+          )}
+          <div className="mt-8 text-center">
+            <Link to={buildPath(locale, 'blog')}>
+              <Button intent="secondary" size="lg">{home.blogTeaser.viewAll}</Button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* ============ FINAL CTA (siyah bant) ============ */}
       <section className="bg-secondary py-16 text-text-inverse lg:py-20">

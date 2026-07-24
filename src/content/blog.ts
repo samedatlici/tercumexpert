@@ -13,6 +13,19 @@ export interface BlogPost {
   icon: IconName
   date: string
   author: string
+  /**
+   * Yayında mı? Yalnızca `published !== false` olan yazılar sitede (anasayfa + blog
+   * listesi) gösterilir. Aşağıdaki 4 örnek şimdilik `published: false` (taslak) —
+   * dosyada durur ama görünmez. Gerçek blog girişi eklerken bu alanı yazma (veya
+   * `published: true` yap); yazı otomatik olarak anasayfaya ve blog listesine düşer,
+   * en yeni tarih en solda/en üstte olacak şekilde sıralanır.
+   */
+  published?: boolean
+}
+
+/** Yayında yazıları en yeni tarih önce (en solda) olacak şekilde döndürür. */
+export function publishedPosts(): BlogPost[] {
+  return BLOG_POSTS.filter((p) => p.published !== false).sort((a, b) => b.date.localeCompare(a.date))
 }
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -25,6 +38,7 @@ export const BLOG_POSTS: BlogPost[] = [
     icon: 'FileText',
     date: '2026-06-10',
     author: 'TercümExpert',
+    published: false,
   },
   {
     slug: 'yeminli-tercume-nedir-hangi-belgelerde-gereklidir',
@@ -35,6 +49,7 @@ export const BLOG_POSTS: BlogPost[] = [
     icon: 'Scale',
     date: '2026-05-28',
     author: 'TercümExpert',
+    published: false,
   },
   {
     slug: 'apostil-sureci-uluslararasi-belge-onayi-rehberi',
@@ -45,6 +60,7 @@ export const BLOG_POSTS: BlogPost[] = [
     icon: 'Globe2',
     date: '2026-05-14',
     author: 'TercümExpert',
+    published: false,
   },
   {
     slug: 'vize-basvurularinda-en-sik-tercume-edilen-belgeler',
@@ -55,5 +71,6 @@ export const BLOG_POSTS: BlogPost[] = [
     icon: 'Stamp',
     date: '2026-04-30',
     author: 'TercümExpert',
+    published: false,
   },
 ]

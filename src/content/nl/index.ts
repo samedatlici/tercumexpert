@@ -363,6 +363,7 @@ export const nl: PartialDictionary = {
       title: "Blog",
       subtitle: "Actuele content uit de wereld van vertalen",
       viewAll: "Alle blogberichten bekijken",
+      empty: "Onze blogcontent komt zeer binnenkort. Blijf op de hoogte.",
     },
     finalCta: {
       title: "Begin nu",

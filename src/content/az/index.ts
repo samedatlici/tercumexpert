@@ -357,6 +357,7 @@ export const az: PartialDictionary = {
       title: 'Bloq',
       subtitle: 'Tərcümə dünyasından aktual məzmun',
       viewAll: 'Bütün Bloq Yazılarına Baxın',
+      empty: 'Blog məzmunumuz çox yaxında burada olacaq. İzləməyə davam edin.',
     },
     finalCta: {
       title: 'İndi Başlayın',
